@@ -1,0 +1,6 @@
+.vs/
+Debug/
+Temp/
+Shaders/
+*.VC.db
+*.VC.VC.opendb
