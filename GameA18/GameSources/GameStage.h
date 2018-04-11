@@ -16,8 +16,12 @@ namespace basecross {
 		void CreateViewLight();
 		//プレートの作成
 		void CreatePlate();
+		//かべ
+		void CreateWall();
 		//プレイヤーの作成
 		void CreatePlayer();
+		//白いブロックの作成
+		void CreateWhiteCube();
 	public:
 		//構築と破棄
 		GameStage() :Stage() {}

@@ -86,6 +86,8 @@ namespace basecross{
 		auto Accel = Force / GetMass();
 		//ターン時間を掛けたものを速度に加算する
 		Velo += (Accel * ElapsedTime);
+		//ヴェロシティのz方向を0にする
+		Velo.z = 0;
 		//速度を設定する
 		PtrRedit->SetVelocity(Velo);
 		//回転の計算
@@ -102,7 +104,7 @@ namespace basecross{
 		auto Ptr = GetComponent<Transform>();
 		Ptr->SetScale(0.25f, 0.25f, 0.25f);	//直径25センチの球体
 		Ptr->SetRotation(0.0f, 0.0f, 0.0f);
-		Ptr->SetPosition(0, 0.125f, 0);
+		Ptr->SetPosition(0, 0.125f, -0.25f);
 
 		//Rigidbodyをつける
 		auto PtrRedid = AddComponent<Rigidbody>();
@@ -132,7 +134,7 @@ namespace basecross{
 			//LookAtCameraに注目するオブジェクト（プレイヤー）の設定
 			PtrCamera->SetTargetObject(GetThis<GameObject>());
 			//注目点をオブジェクト位置から少し上方にする
-			PtrCamera->SetTargetToAt(Vec3(0, 0.25f, 0));
+			PtrCamera->SetTargetToAt(Vec3(0, 3.0f, -5.0f));
 		}
 	}
 

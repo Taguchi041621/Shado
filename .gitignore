@@ -1,6 +1,8 @@
 .vs/
 Debug/
 Temp/
+ipch/
 *.VC.db
 *.VC.VC.opendb
 *.sdf
+*.ipch
