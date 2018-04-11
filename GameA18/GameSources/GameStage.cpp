@@ -113,6 +113,16 @@ namespace basecross {
 			throw;
 		}
 	}
+	void GameStage::OnUpdate() {
+		//// OnGetDrawCamera()
+		//auto PtrCamera = dynamic_pointer_cast<LookAtCamera>(GetView());
+		//if (PtrCamera) {
+		//	//LookAtCameraである
+		//	auto p_pos = GetSharedObject(L"Player")->GetComponent<Transform>()->GetPosition();
+		//	//プレイヤーのpositionをカメラに設定
+		//	PtrCamera->SetEye(Vec3(p_pos.x, p_pos.y, -5.0f));
+		//}
+	}
 
 }
 //end basecross

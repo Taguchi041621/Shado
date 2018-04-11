@@ -402,117 +402,117 @@ namespace basecross {
 		bsm::Vec3 ArmVec = NewEye - NewAt;
 		//正規化しておく
 		ArmVec.normalize();
-		if (CntlVec[0].bConnected) {
-			//上下角度の変更
-			if (CntlVec[0].fThumbRY >= 0.1f || KeyData.m_bPushKeyTbl[VK_UP]) {
-				if (IsUDBaseMode()) {
-					pImpl->m_RadY += pImpl->m_CameraUpDownSpeed * ElapsedTime;
-				}
-				else {
-					pImpl->m_RadY -= pImpl->m_CameraUpDownSpeed * ElapsedTime;
-				}
-			}
-			else if (CntlVec[0].fThumbRY <= -0.1f || KeyData.m_bPushKeyTbl[VK_DOWN]) {
-				if (IsUDBaseMode()) {
-					pImpl->m_RadY -= pImpl->m_CameraUpDownSpeed * ElapsedTime;
-				}
-				else {
-					pImpl->m_RadY += pImpl->m_CameraUpDownSpeed * ElapsedTime;
-				}
-			}
-			if (pImpl->m_RadY > XM_PI * 4 / 9.0f) {
-				pImpl->m_RadY = XM_PI * 4 / 9.0f;
-			}
-			else if (pImpl->m_RadY <= pImpl->m_CameraUnderRot) {
-				//カメラが限界下に下がったらそれ以上下がらない
-				pImpl->m_RadY = pImpl->m_CameraUnderRot;
-			}
-			ArmVec.y = sin(pImpl->m_RadY);
-			//ここでY軸回転を作成
-			if (CntlVec[0].fThumbRX != 0 || KeyData.m_bPushKeyTbl[VK_LEFT] || KeyData.m_bPushKeyTbl[VK_RIGHT]) {
-				//回転スピードを反映
-				if (CntlVec[0].fThumbRX != 0) {
-					if (IsLRBaseMode()) {
-						pImpl->m_RadXZ += -CntlVec[0].fThumbRX * ElapsedTime * pImpl->m_RotSpeed;
-					}
-					else {
-						pImpl->m_RadXZ += CntlVec[0].fThumbRX * ElapsedTime * pImpl->m_RotSpeed;
-					}
-				}
-				else if (KeyData.m_bPushKeyTbl[VK_LEFT]) {
-					if (IsLRBaseMode()) {
-						pImpl->m_RadXZ += ElapsedTime * pImpl->m_RotSpeed;
-					}
-					else {
-						pImpl->m_RadXZ -= ElapsedTime * pImpl->m_RotSpeed;
-					}
-				}
-				else if (KeyData.m_bPushKeyTbl[VK_RIGHT]) {
-					if (IsLRBaseMode()) {
-						pImpl->m_RadXZ -= ElapsedTime * pImpl->m_RotSpeed;
-					}
-					else {
-						pImpl->m_RadXZ += ElapsedTime * pImpl->m_RotSpeed;
-					}
+		//if (CntlVec[0].bConnected) {
+		//	//上下角度の変更
+		//	if (CntlVec[0].fThumbRY >= 0.1f || KeyData.m_bPushKeyTbl[VK_UP]) {
+		//		if (IsUDBaseMode()) {
+		//			pImpl->m_RadY += pImpl->m_CameraUpDownSpeed * ElapsedTime;
+		//		}
+		//		else {
+		//			pImpl->m_RadY -= pImpl->m_CameraUpDownSpeed * ElapsedTime;
+		//		}
+		//	}
+		//	else if (CntlVec[0].fThumbRY <= -0.1f || KeyData.m_bPushKeyTbl[VK_DOWN]) {
+		//		if (IsUDBaseMode()) {
+		//			pImpl->m_RadY -= pImpl->m_CameraUpDownSpeed * ElapsedTime;
+		//		}
+		//		else {
+		//			pImpl->m_RadY += pImpl->m_CameraUpDownSpeed * ElapsedTime;
+		//		}
+		//	}
+		//	if (pImpl->m_RadY > XM_PI * 4 / 9.0f) {
+		//		pImpl->m_RadY = XM_PI * 4 / 9.0f;
+		//	}
+		//	else if (pImpl->m_RadY <= pImpl->m_CameraUnderRot) {
+		//		//カメラが限界下に下がったらそれ以上下がらない
+		//		pImpl->m_RadY = pImpl->m_CameraUnderRot;
+		//	}
+		//	ArmVec.y = sin(pImpl->m_RadY);
+		//	//ここでY軸回転を作成
+		//	if (CntlVec[0].fThumbRX != 0 || KeyData.m_bPushKeyTbl[VK_LEFT] || KeyData.m_bPushKeyTbl[VK_RIGHT]) {
+		//		//回転スピードを反映
+		//		if (CntlVec[0].fThumbRX != 0) {
+		//			if (IsLRBaseMode()) {
+		//				pImpl->m_RadXZ += -CntlVec[0].fThumbRX * ElapsedTime * pImpl->m_RotSpeed;
+		//			}
+		//			else {
+		//				pImpl->m_RadXZ += CntlVec[0].fThumbRX * ElapsedTime * pImpl->m_RotSpeed;
+		//			}
+		//		}
+		//		else if (KeyData.m_bPushKeyTbl[VK_LEFT]) {
+		//			if (IsLRBaseMode()) {
+		//				pImpl->m_RadXZ += ElapsedTime * pImpl->m_RotSpeed;
+		//			}
+		//			else {
+		//				pImpl->m_RadXZ -= ElapsedTime * pImpl->m_RotSpeed;
+		//			}
+		//		}
+		//		else if (KeyData.m_bPushKeyTbl[VK_RIGHT]) {
+		//			if (IsLRBaseMode()) {
+		//				pImpl->m_RadXZ -= ElapsedTime * pImpl->m_RotSpeed;
+		//			}
+		//			else {
+		//				pImpl->m_RadXZ += ElapsedTime * pImpl->m_RotSpeed;
+		//			}
 
-				}
-				if (abs(pImpl->m_RadXZ) >= XM_2PI) {
-					//1週回ったら0回転にする
-					pImpl->m_RadXZ = 0;
-				}
-			}
-			//クオータニオンでY回転（つまりXZベクトルの値）を計算
-			bsm::Quat QtXZ;
-			QtXZ.rotation(pImpl->m_RadXZ, bsm::Vec3(0, 1.0f, 0));
-			QtXZ.normalize();
-			//移動先行の行列計算することで、XZの値を算出
-			bsm::Mat4x4 Mat;
-			Mat.strTransformation(
-				bsm::Vec3(1.0f, 1.0f, 1.0f),
-				bsm::Vec3(0.0f, 0.0f, -1.0f),
-				QtXZ
-			);
+		//		}
+		//		if (abs(pImpl->m_RadXZ) >= XM_2PI) {
+		//			//1週回ったら0回転にする
+		//			pImpl->m_RadXZ = 0;
+		//		}
+		//	}
+		//	//クオータニオンでY回転（つまりXZベクトルの値）を計算
+		//	bsm::Quat QtXZ;
+		//	QtXZ.rotation(pImpl->m_RadXZ, bsm::Vec3(0, 1.0f, 0));
+		//	QtXZ.normalize();
+		//	//移動先行の行列計算することで、XZの値を算出
+		//	bsm::Mat4x4 Mat;
+		//	Mat.strTransformation(
+		//		bsm::Vec3(1.0f, 1.0f, 1.0f),
+		//		bsm::Vec3(0.0f, 0.0f, -1.0f),
+		//		QtXZ
+		//	);
 
-			bsm::Vec3 PosXZ = Mat.transInMatrix();
-			//XZの値がわかったので腕角度に代入
-			ArmVec.x = PosXZ.x;
-			ArmVec.z = PosXZ.z;
-			//腕角度を正規化
-			ArmVec.normalize();
+		//	bsm::Vec3 PosXZ = Mat.transInMatrix();
+		//	//XZの値がわかったので腕角度に代入
+		//	ArmVec.x = PosXZ.x;
+		//	ArmVec.z = PosXZ.z;
+		//	//腕角度を正規化
+		//	ArmVec.normalize();
 
-			auto TargetPtr = GetTargetObject();
-			if (TargetPtr) {
-				//目指したい場所
-				bsm::Vec3 ToAt = TargetPtr->GetComponent<Transform>()->GetWorldMatrix().transInMatrix();
-				ToAt += pImpl->m_TargetToAt;
-				NewAt = Lerp::CalculateLerp(GetAt(), ToAt, 0, 1.0f, 1.0, Lerp::Linear);
-			}
-			//アームの変更
-			//Dパッド下
-			if (CntlVec[0].wButtons & XINPUT_GAMEPAD_DPAD_DOWN) {
-				//カメラ位置を引く
-				pImpl->m_ArmLen += pImpl->m_ZoomSpeed;
-				if (pImpl->m_ArmLen >= pImpl->m_MaxArm) {
-					//m_MaxArm以上離れないようにする
-					pImpl->m_ArmLen = pImpl->m_MaxArm;
-				}
-			}
-			//Dパッド上
-			if (CntlVec[0].wButtons & XINPUT_GAMEPAD_DPAD_UP) {
-				//カメラ位置を寄る
-				pImpl->m_ArmLen -= pImpl->m_ZoomSpeed;
-				if (pImpl->m_ArmLen <= pImpl->m_MinArm) {
-					//m_MinArm以下近づかないようにする
-					pImpl->m_ArmLen = pImpl->m_MinArm;
-				}
-			}
-			////目指したい場所にアームの値と腕ベクトルでEyeを調整
-			bsm::Vec3 ToEye = NewAt + ArmVec * pImpl->m_ArmLen;
-			NewEye = Lerp::CalculateLerp(GetEye(), ToEye, 0, 1.0f, pImpl->m_ToTargetLerp, Lerp::Linear);
-		}
-		if (KeyData.m_bPressedKeyTbl[VK_LEFT]) {
-			int a = 0;
-		}
+		//	auto TargetPtr = GetTargetObject();
+		//	if (TargetPtr) {
+		//		//目指したい場所
+		//		bsm::Vec3 ToAt = TargetPtr->GetComponent<Transform>()->GetWorldMatrix().transInMatrix();
+		//		ToAt += pImpl->m_TargetToAt;
+		//		NewAt = Lerp::CalculateLerp(GetAt(), ToAt, 0, 1.0f, 1.0, Lerp::Linear);
+		//	}
+		//	//アームの変更
+		//	//Dパッド下
+		//	if (CntlVec[0].wButtons & XINPUT_GAMEPAD_DPAD_DOWN) {
+		//		//カメラ位置を引く
+		//		pImpl->m_ArmLen += pImpl->m_ZoomSpeed;
+		//		if (pImpl->m_ArmLen >= pImpl->m_MaxArm) {
+		//			//m_MaxArm以上離れないようにする
+		//			pImpl->m_ArmLen = pImpl->m_MaxArm;
+		//		}
+		//	}
+		//	//Dパッド上
+		//	if (CntlVec[0].wButtons & XINPUT_GAMEPAD_DPAD_UP) {
+		//		//カメラ位置を寄る
+		//		pImpl->m_ArmLen -= pImpl->m_ZoomSpeed;
+		//		if (pImpl->m_ArmLen <= pImpl->m_MinArm) {
+		//			//m_MinArm以下近づかないようにする
+		//			pImpl->m_ArmLen = pImpl->m_MinArm;
+		//		}
+		//	}
+		//	////目指したい場所にアームの値と腕ベクトルでEyeを調整
+		//	bsm::Vec3 ToEye = NewAt + ArmVec * pImpl->m_ArmLen;
+		//	NewEye = Lerp::CalculateLerp(GetEye(), ToEye, 0, 1.0f, pImpl->m_ToTargetLerp, Lerp::Linear);
+		//}
+		//if (KeyData.m_bPressedKeyTbl[VK_LEFT]) {
+		//	int a = 0;
+		//}
 
 
 
