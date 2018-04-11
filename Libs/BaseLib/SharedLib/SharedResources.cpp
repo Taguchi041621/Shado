@@ -480,39 +480,39 @@ namespace basecross {
 		//	//腕角度を正規化
 		//	ArmVec.normalize();
 
-		//	auto TargetPtr = GetTargetObject();
-		//	if (TargetPtr) {
-		//		//目指したい場所
-		//		bsm::Vec3 ToAt = TargetPtr->GetComponent<Transform>()->GetWorldMatrix().transInMatrix();
-		//		ToAt += pImpl->m_TargetToAt;
-		//		NewAt = Lerp::CalculateLerp(GetAt(), ToAt, 0, 1.0f, 1.0, Lerp::Linear);
-		//	}
-		//	//アームの変更
-		//	//Dパッド下
-		//	if (CntlVec[0].wButtons & XINPUT_GAMEPAD_DPAD_DOWN) {
-		//		//カメラ位置を引く
-		//		pImpl->m_ArmLen += pImpl->m_ZoomSpeed;
-		//		if (pImpl->m_ArmLen >= pImpl->m_MaxArm) {
-		//			//m_MaxArm以上離れないようにする
-		//			pImpl->m_ArmLen = pImpl->m_MaxArm;
-		//		}
-		//	}
-		//	//Dパッド上
-		//	if (CntlVec[0].wButtons & XINPUT_GAMEPAD_DPAD_UP) {
-		//		//カメラ位置を寄る
-		//		pImpl->m_ArmLen -= pImpl->m_ZoomSpeed;
-		//		if (pImpl->m_ArmLen <= pImpl->m_MinArm) {
-		//			//m_MinArm以下近づかないようにする
-		//			pImpl->m_ArmLen = pImpl->m_MinArm;
-		//		}
-		//	}
-		//	////目指したい場所にアームの値と腕ベクトルでEyeを調整
-		//	bsm::Vec3 ToEye = NewAt + ArmVec * pImpl->m_ArmLen;
-		//	NewEye = Lerp::CalculateLerp(GetEye(), ToEye, 0, 1.0f, pImpl->m_ToTargetLerp, Lerp::Linear);
+		auto TargetPtr = GetTargetObject();
+			if (TargetPtr) {
+				//目指したい場所
+				bsm::Vec3 ToAt = TargetPtr->GetComponent<Transform>()->GetWorldMatrix().transInMatrix();
+				ToAt += pImpl->m_TargetToAt;
+				NewAt = Lerp::CalculateLerp(GetAt(), ToAt, 0, 1.0f, 1.0, Lerp::Linear);
+			}
+			//アームの変更
+			//Dパッド下
+			if (CntlVec[0].wButtons & XINPUT_GAMEPAD_DPAD_DOWN) {
+				//カメラ位置を引く
+				pImpl->m_ArmLen += pImpl->m_ZoomSpeed;
+				if (pImpl->m_ArmLen >= pImpl->m_MaxArm) {
+					//m_MaxArm以上離れないようにする
+					pImpl->m_ArmLen = pImpl->m_MaxArm;
+				}
+			}
+			//Dパッド上
+			if (CntlVec[0].wButtons & XINPUT_GAMEPAD_DPAD_UP) {
+				//カメラ位置を寄る
+				pImpl->m_ArmLen -= pImpl->m_ZoomSpeed;
+				if (pImpl->m_ArmLen <= pImpl->m_MinArm) {
+					//m_MinArm以下近づかないようにする
+					pImpl->m_ArmLen = pImpl->m_MinArm;
+				}
+			}
+			////目指したい場所にアームの値と腕ベクトルでEyeを調整
+			bsm::Vec3 ToEye = NewAt + ArmVec * pImpl->m_ArmLen;
+			NewEye = Lerp::CalculateLerp(GetEye(), ToEye, 0, 1.0f, pImpl->m_ToTargetLerp, Lerp::Linear);
 		//}
-		//if (KeyData.m_bPressedKeyTbl[VK_LEFT]) {
-		//	int a = 0;
-		//}
+		if (KeyData.m_bPressedKeyTbl[VK_LEFT]) {
+			int a = 0;
+		}
 
 
 

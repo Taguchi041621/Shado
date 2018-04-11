@@ -127,6 +127,16 @@ namespace basecross{
 		PtrDraw->SetTextureResource(L"TRACE_TX");
 		//透明処理
 		SetAlphaActive(true);
+		//カメラを得る
+		auto PtrCamera = dynamic_pointer_cast<LookAtCamera>(OnGetDrawCamera());
+		if (PtrCamera) {
+			//LookAtCameraである
+			//LookAtCameraに注目するオブジェクト（プレイヤー）の設定
+			PtrCamera->SetTargetObject(GetThis<GameObject>());
+			//注目点をオブジェクト位置から少し上方にする
+			auto p_pos = GetThis<GameObject>()->GetComponent<Transform>()->GetPosition();
+			PtrCamera->SetTargetToAt(Vec3(p_pos.x, p_pos.y + 3.0f, -5.0f));
+		}
 	}
 
 	//更新
@@ -142,9 +152,9 @@ namespace basecross{
 			//LookAtCameraである
 			//LookAtCameraに注目するオブジェクト（プレイヤー）の設定
 			PtrCamera->SetTargetObject(GetThis<GameObject>());
-			//注目点をオブジェクト位置から少し上方にする
+			//playerの位置とカメラ位置を同期する
 			auto p_pos = GetThis<GameObject>()->GetComponent<Transform>()->GetPosition();
-			PtrCamera->SetTargetToAt(Vec3(p_pos.x, p_pos.y, -5.0f));
+			PtrCamera->SetEye(Vec3(p_pos.x, p_pos.y+10.0f, -20.0f));
 		}
 	}
 
