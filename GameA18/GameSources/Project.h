@@ -11,6 +11,8 @@
 #include "GameStage.h"
 #include "Character.h"
 #include "Player.h"
+#include "StageSelect.h"
+#include "TitleStage.h"
 #include "MyCamera.h"
 
 

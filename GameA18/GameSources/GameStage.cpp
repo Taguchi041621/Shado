@@ -123,8 +123,16 @@ namespace basecross {
 			throw;
 		}
 	}
+	//更新
 	void GameStage::OnUpdate() {
-	}
+		//コントローラの取得
+		auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
+		if (CntlVec[0].bConnected) {
+			//Bボタン
+			if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A) {
+				PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToTitleStage");
+			}
+		}
 
+	}//end basecross
 }
-//end basecross
