@@ -9,7 +9,8 @@ namespace basecross {
 	ShadowObject::ShadowObject(const shared_ptr<Stage>& StagePtr,
 		const Vec3& Scale, const Vec3& Rotation, const wstring& Mesh, GameObject& Obj)
 		: GameObject(StagePtr),
-		m_Scale(Scale), m_Rotation(Rotation), m_Mesh(Mesh), m_Obj(Obj)
+		m_Scale(Scale), m_Rotation(Rotation), m_Mesh(Mesh), m_Obj(Obj),
+		m_LightPosition(0.01f, 0.01f, -0.1f)
 	{
 	}
 
@@ -38,6 +39,32 @@ namespace basecross {
 	void ShadowObject::OnUpdate() {
 		//Vec3 ShadowToMe = ShadowLocation() - GetComponent<Transform>()->GetPosition();
 		GetComponent<Transform>()->SetPosition(ShadowLocation());
+		auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
+		if (CntlVec[0].bConnected) {
+			if (CntlVec[0].fThumbRX != 0 || CntlVec[0].fThumbRY != 0) {
+				//マルチライトを持ってくる
+				auto PtrLight = dynamic_pointer_cast<MultiLight>(GetStage()->GetLight());
+				//マルチライトの中のメインライトを持ってくる
+				auto mainIndex = PtrLight->GetMainIndex();
+				if (CntlVec[0].fThumbRX != 0 || CntlVec[0].fThumbRY != 0) {
+					//X方向にステックが倒れていたら
+					if (m_LightPosition.x <= 0.1f && CntlVec[0].fThumbRX > 0.4f) {
+						m_LightPosition.x += 0.1f * App::GetApp()->GetElapsedTime();
+					}
+					else if (m_LightPosition.x >= -0.1f && CntlVec[0].fThumbRX < -0.4f) {
+						m_LightPosition.x += -0.1f * App::GetApp()->GetElapsedTime();
+					}
+					//Y方向にスティックが倒れていたら
+					if (m_LightPosition.y <= 0.1f && CntlVec[0].fThumbRY > 0.4f) {
+						m_LightPosition.y += 0.1f * App::GetApp()->GetElapsedTime();
+					}
+					else if (m_LightPosition.y >= -0.1f && CntlVec[0].fThumbRY < -0.4f) {
+						m_LightPosition.y += -0.1f * App::GetApp()->GetElapsedTime();
+					}
+					PtrLight->GetLight(mainIndex).SetPositionToDirectional(m_LightPosition);
+				}
+			}
+		}
 	}
 
 	//物体の位置から、影の位置を導き出す

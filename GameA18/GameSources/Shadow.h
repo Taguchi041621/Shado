@@ -12,6 +12,7 @@ namespace basecross {
 		Vec3 m_Position;
 		wstring m_Mesh;
 		GameObject& m_Obj;
+		Vec3 m_LightPosition;
 	public:
 		//\’z‚Æ”jŠü
 		ShadowObject(const shared_ptr<Stage>& StagePtr,

@@ -15,6 +15,6 @@
 #include "TitleStage.h"
 #include "MyCamera.h"
 #include "Shadow.h"
-
+#include "MyLight.h"
 
 
