@@ -16,8 +16,8 @@ namespace basecross{
 	//構築と破棄
 	Player::Player(const shared_ptr<Stage>& StagePtr) :
 		GameObject(StagePtr),
-		m_MaxSpeed(10.0f),	//最高速度
-		m_Decel(0.95f),	//減速値
+		m_MaxSpeed(7.0f),	//最高速度
+		m_Decel(0.65f),	//減速値
 		m_Mass(0.5f)	//質量
 	{}
 
@@ -128,14 +128,9 @@ namespace basecross{
 		//透明処理
 		SetAlphaActive(true);
 		//カメラを得る
-		auto PtrCamera = dynamic_pointer_cast<LookAtCamera>(OnGetDrawCamera());
+		auto PtrCamera = dynamic_pointer_cast<MyCamera>(OnGetDrawCamera());
 		if (PtrCamera) {
-			//LookAtCameraである
-			//LookAtCameraに注目するオブジェクト（プレイヤー）の設定
 			PtrCamera->SetTargetObject(GetThis<GameObject>());
-			//注目点をオブジェクト位置から少し上方にする
-			auto p_pos = GetThis<GameObject>()->GetComponent<Transform>()->GetPosition();
-			PtrCamera->SetTargetToAt(Vec3(p_pos.x, p_pos.y + 3.0f, -5.0f));
 		}
 	}
 
