@@ -28,6 +28,8 @@ namespace basecross {
 		virtual ~GameStage() {}
 		//‰Šú‰»
 		virtual void OnCreate()override;
+		//XV
+		virtual void OnUpdate()override;
 	};
 
 

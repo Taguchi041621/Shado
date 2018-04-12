@@ -25,7 +25,8 @@ namespace basecross {
 		//デフォルトのライティングを指定
 		PtrMultiLight->SetDefaultLighting();
 		auto meinLight = PtrMultiLight->GetMainIndex();
-		PtrMultiLight->GetLight(meinLight).SetPositionToDirectional(0.0f, 0.0f, -0.1f);
+		//影を出すライトの初期角度を設定
+		PtrMultiLight->GetLight(meinLight).SetPositionToDirectional(0.01f, 0.01f, -0.1f);
 	}
 
 
@@ -36,7 +37,7 @@ namespace basecross {
 		auto PtrTrans = Ptr->GetComponent<Transform>();
 		Quat Qt;
 		Qt.rotationRollPitchYawFromVector(Vec3(XM_PIDIV2, 0, 0));
-		PtrTrans->SetScale(50.0f, 50.0f, 1.0f);
+		PtrTrans->SetScale(50.0f, 50.0f, 0.1f);
 		PtrTrans->SetQuaternion(Qt);
 		PtrTrans->SetPosition(0.0f, 0.0f, 0.0f);
 
@@ -73,8 +74,6 @@ namespace basecross {
 
 		Flt4 Color(0.0f, 0.5f, 1.0f, 0.6f);
 		DrawComp->SetColorAndAlpha(Color);
-		////描画コンポーネントテクスチャの設定
-		//DrawComp->SetTextureResource(L"SKY_TX");
 	}
 
 	//プレイヤーの作成
@@ -89,9 +88,20 @@ namespace basecross {
 		auto CubePtr = AddGameObject<WhiteCube>(
 			Vec3(1.0f, 1.0f, 1.0f),
 			Qt,
-			Vec3(0.0f, 2.0f, -4.0f)
+			Vec3(4.0f, 2.0f, -4.0f)
 			);
-		SetSharedGameObject(L"WhiteCube", CubePtr);
+		CubePtr = AddGameObject<WhiteCube>(
+			Vec3(1.0f, 1.0f, 1.0f),
+			Qt,
+			Vec3(1.0f, 3.0f, -6.0f)
+			);
+		CubePtr = AddGameObject<WhiteCube>(
+			Vec3(2.0f, 1.0f, 1.0f),
+			Qt,
+			Vec3(-1.0f, 2.0f, -6.0f)
+			);
+
+		//SetSharedGameObject(L"WhiteCube", CubePtr);
 	}
 
 
@@ -112,6 +122,8 @@ namespace basecross {
 		catch (...) {
 			throw;
 		}
+	}
+	void GameStage::OnUpdate() {
 	}
 
 }

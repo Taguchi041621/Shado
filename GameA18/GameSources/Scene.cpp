@@ -22,6 +22,8 @@ namespace basecross{
 		App::GetApp()->RegisterTexture(L"SKY_TX", strTexture);
 		strTexture = DataDir + L"trace.png";
 		App::GetApp()->RegisterTexture(L"TRACE_TX", strTexture);
+		strTexture = DataDir + L"Oreng.png";
+		App::GetApp()->RegisterTexture(L"Oreng_TX", strTexture);
 	}
 
 	void Scene::OnCreate() {

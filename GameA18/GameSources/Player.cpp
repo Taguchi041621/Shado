@@ -134,7 +134,8 @@ namespace basecross{
 			//LookAtCameraに注目するオブジェクト（プレイヤー）の設定
 			PtrCamera->SetTargetObject(GetThis<GameObject>());
 			//注目点をオブジェクト位置から少し上方にする
-			PtrCamera->SetTargetToAt(Vec3(0, 3.0f, -5.0f));
+			auto p_pos = GetThis<GameObject>()->GetComponent<Transform>()->GetPosition();
+			PtrCamera->SetTargetToAt(Vec3(p_pos.x, p_pos.y + 3.0f, -5.0f));
 		}
 	}
 
@@ -145,6 +146,16 @@ namespace basecross{
 		//重力を加える
 		auto PtrGrav = GetBehavior<Gravity>();
 		PtrGrav->Execute();
+		//カメラを得る
+		auto PtrCamera = dynamic_pointer_cast<LookAtCamera>(OnGetDrawCamera());
+		if (PtrCamera) {
+			//LookAtCameraである
+			//LookAtCameraに注目するオブジェクト（プレイヤー）の設定
+			PtrCamera->SetTargetObject(GetThis<GameObject>());
+			//playerの位置とカメラ位置を同期する
+			auto p_pos = GetThis<GameObject>()->GetComponent<Transform>()->GetPosition();
+			PtrCamera->SetEye(Vec3(p_pos.x, p_pos.y+10.0f, -20.0f));
+		}
 	}
 
 	void Player::OnUpdate2() {
