@@ -59,7 +59,7 @@ void StageSelect::OnUpdate() {
 	if (CntlVec[0].bConnected) {
 		//Aƒ{ƒ^ƒ“
 		if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A) {
-			PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToTitleStage");
+			PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameStage");
 		}
 	}
 
