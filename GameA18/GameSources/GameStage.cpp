@@ -89,9 +89,20 @@ namespace basecross {
 		auto CubePtr = AddGameObject<WhiteCube>(
 			Vec3(1.0f, 1.0f, 1.0f),
 			Qt,
-			Vec3(0.0f, 2.0f, -4.0f)
+			Vec3(4.0f, 2.0f, -4.0f)
 			);
-		SetSharedGameObject(L"WhiteCube", CubePtr);
+		CubePtr = AddGameObject<WhiteCube>(
+			Vec3(1.0f, 1.0f, 1.0f),
+			Qt,
+			Vec3(1.0f, 3.0f, -6.0f)
+			);
+		CubePtr = AddGameObject<WhiteCube>(
+			Vec3(2.0f, 1.0f, 1.0f),
+			Qt,
+			Vec3(-1.0f, 2.0f, -6.0f)
+			);
+
+		//SetSharedGameObject(L"WhiteCube", CubePtr);
 	}
 
 
