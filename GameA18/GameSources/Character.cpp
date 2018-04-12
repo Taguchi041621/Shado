@@ -104,18 +104,19 @@ namespace basecross{
 			//メインライトのポジションを出す
 			LightPos = MultiLightPtr->GetLight(mainIndex).m_Directional;
 		}
-
+		
+		auto LightHeight = AddComponent<Shadowmap>()->GetLightHeight();
 		//ライトと実体ブロックのXYZの差を出す
-		float m_X = LightPos.x - ObjPos.x;
-		float m_Y = LightPos.y - ObjPos.y;
-		float m_Z = LightPos.z - ObjPos.z;
-		//XYの差を、Y１分の変化量で出す
-		float m_DisplacementX = m_X / m_Z;
-		float m_DisplacementY = m_Y / m_Z;
+		float m_X = LightPos.x * LightHeight - ObjPos.x;
+		float m_Y = LightPos.y * LightHeight - ObjPos.y;
+		float m_Z = -LightPos.z * LightHeight - (-ObjPos.z);
+		auto AngleX = atan2(LightPos.x, LightPos.z);
+		auto AngleY = atan2(LightPos.y, LightPos.z);
+
 		//実体ブロックから壁までのY距離を単位変位値に乗算して、実体ブロックからの影のXYのずれを算出し代入
 		Vec3 m_kagePos;
-		m_kagePos.x = ObjPos.x + LightPos.x * m_DisplacementX;
-		m_kagePos.y = ObjPos.y + LightPos.y * m_DisplacementY;
+		m_kagePos.x = ObjPos.x - ObjPos.z * AngleX;
+		m_kagePos.y = ObjPos.y - ObjPos.z * AngleY;
 		m_kagePos.z = 0;
 
 		return m_kagePos;
