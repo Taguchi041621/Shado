@@ -16,7 +16,7 @@ namespace basecross {
 	void GameStage::CreateViewLight() {
 		auto PtrView = CreateView<SingleView>();
 		//ƒrƒ…[‚ÌƒJƒƒ‰‚Ìİ’è
-		auto PtrLookAtCamera = ObjectFactory::Create<LookAtCamera>();
+		auto PtrLookAtCamera = ObjectFactory::Create<MyCamera>(GetThis<GameStage>());
 		PtrView->SetCamera(PtrLookAtCamera);
 		PtrLookAtCamera->SetEye(Vec3(0.0f, 5.0f, -5.0f));
 		PtrLookAtCamera->SetAt(Vec3(0.0f, 0.0f, 0.0f));
