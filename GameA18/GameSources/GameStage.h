@@ -22,6 +22,8 @@ namespace basecross {
 		void CreatePlayer();
 		//白いブロックの作成
 		void CreateWhiteCube();
+		//
+		void CreateGoal();
 	public:
 		//構築と破棄
 		GameStage() :Stage() {}
@@ -30,6 +32,8 @@ namespace basecross {
 		virtual void OnCreate()override;
 		//更新
 		virtual void OnUpdate()override;
+		virtual void OnUpdate2()override;
+
 	};
 
 
