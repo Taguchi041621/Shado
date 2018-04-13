@@ -18,6 +18,7 @@ namespace basecross {
 	//初期化
 	void ShadowObject::OnCreate() {
 		m_Scale.z = 0.1f;
+		AddComponent<Rigidbody>();
 		auto PtrTransform = AddComponent<Transform>();
 		//影のポジションを出す
 		auto kagePos = ShadowLocation();
@@ -35,36 +36,42 @@ namespace basecross {
 		PtrDraw->SetOwnShadowActive(true);
 		PtrDraw->SetTextureResource(L"Oreng_TX");
 	}
+
 	//変化
 	void ShadowObject::OnUpdate() {
-		//Vec3 ShadowToMe = ShadowLocation() - GetComponent<Transform>()->GetPosition();
-		GetComponent<Transform>()->SetPosition(ShadowLocation());
+		//ライトを右スティックで動かす
 		auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
 		if (CntlVec[0].bConnected) {
+			//右スティックが動いていたら
 			if (CntlVec[0].fThumbRX != 0 || CntlVec[0].fThumbRY != 0) {
 				//マルチライトを持ってくる
 				auto PtrLight = dynamic_pointer_cast<MultiLight>(GetStage()->GetLight());
 				//マルチライトの中のメインライトを持ってくる
 				auto mainIndex = PtrLight->GetMainIndex();
-				if (CntlVec[0].fThumbRX != 0 || CntlVec[0].fThumbRY != 0) {
-					//X方向にステックが倒れていたら
-					if (m_LightPosition.x <= 0.1f && CntlVec[0].fThumbRX > 0.4f) {
-						m_LightPosition.x += 0.1f * App::GetApp()->GetElapsedTime();
-					}
-					else if (m_LightPosition.x >= -0.1f && CntlVec[0].fThumbRX < -0.4f) {
-						m_LightPosition.x += -0.1f * App::GetApp()->GetElapsedTime();
-					}
-					//Y方向にスティックが倒れていたら
-					if (m_LightPosition.y <= 0.1f && CntlVec[0].fThumbRY > 0.4f) {
-						m_LightPosition.y += 0.1f * App::GetApp()->GetElapsedTime();
-					}
-					else if (m_LightPosition.y >= -0.1f && CntlVec[0].fThumbRY < -0.4f) {
-						m_LightPosition.y += -0.1f * App::GetApp()->GetElapsedTime();
-					}
-					PtrLight->GetLight(mainIndex).SetPositionToDirectional(m_LightPosition);
+				//Elapsedタイムの取得
+				auto ElapsedTime = App::GetApp()->GetElapsedTime();
+				//X方向にステックが倒れていたら
+				if (m_LightPosition.x <= 0.1f && CntlVec[0].fThumbRX > 0.4f) {
+					m_LightPosition.x += 0.1f * ElapsedTime;
 				}
+				else if (m_LightPosition.x >= -0.1f && CntlVec[0].fThumbRX < -0.4f) {
+					m_LightPosition.x += -0.1f * ElapsedTime;
+				}
+				//Y方向にスティックが倒れていたら
+				if (m_LightPosition.y <= 0.1f && CntlVec[0].fThumbRY > 0.4f) {
+					m_LightPosition.y += 0.1f * ElapsedTime;
+				}
+				else if (m_LightPosition.y >= -0.1f && CntlVec[0].fThumbRY < -0.4f) {
+					m_LightPosition.y += -0.1f * ElapsedTime;
+				}
+				//変更したポジションを反映
+				PtrLight->GetLight(mainIndex).SetPositionToDirectional(m_LightPosition);
 			}
 		}
+
+		//ライトの位置から影の位置を計算し、ポジションを変える
+		//Vec3 ShadowToMe = ShadowLocation() - GetComponent<Transform>()->GetPosition();
+		GetComponent<Transform>()->SetPosition(ShadowLocation());
 	}
 
 	//物体の位置から、影の位置を導き出す
@@ -82,10 +89,7 @@ namespace basecross {
 		}
 
 		auto LightHeight = AddComponent<Shadowmap>()->GetLightHeight();
-		//ライトと実体ブロックのXYZの差を出す
-		float m_X = LightPos.x * LightHeight - ObjPos.x;
-		float m_Y = LightPos.y * LightHeight - ObjPos.y;
-		float m_Z = -LightPos.z * LightHeight - (-ObjPos.z);
+		//ライトの角度を出す
 		auto AngleX = atan2(LightPos.x, LightPos.z);
 		auto AngleY = atan2(LightPos.y, LightPos.z);
 
@@ -94,6 +98,15 @@ namespace basecross {
 		m_kagePos.x = ObjPos.x - ObjPos.z * AngleX;
 		m_kagePos.y = ObjPos.y - ObjPos.z * AngleY;
 		m_kagePos.z = 0;
+
+		if (AngleX < 0) {
+			AngleX *= -1.0f;
+		}
+		if (AngleY < 0) {
+			AngleY *= -1.0f;
+		}
+		//スケールにアングルの値足してみよーぜ
+		GetComponent<Transform>()->SetScale(m_Scale.x + AngleX, m_Scale.y + AngleY, 0.1f);
 
 		return m_kagePos;
 	}
