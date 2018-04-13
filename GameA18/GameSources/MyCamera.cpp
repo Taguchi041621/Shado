@@ -27,11 +27,6 @@ namespace basecross {
 	void MyCamera::OnUpdate() {
 		auto TargetPtr = m_TargetObject.lock();
 		if (TargetPtr) {
-			auto TargetPos = TargetPtr->GetComponent<Transform>()->GetPosition();
-			Vec3 ArmVec(0, 0.0f, -5.0f);
-			Vec3 Eye = TargetPos + ArmVec;
-			SetAt(TargetPos);
-			SetEye(Eye);
 		}
 	}
 }

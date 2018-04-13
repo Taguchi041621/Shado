@@ -99,7 +99,7 @@ namespace basecross{
 
 	//初期化
 	void Player::OnCreate() {
-
+		m_CameraNumber = 0;
 		//初期位置などの設定
 		auto Ptr = GetComponent<Transform>();
 		Ptr->SetScale(0.25f, 0.25f, 0.25f);	//直径25センチの球体
@@ -142,23 +142,79 @@ namespace basecross{
 		auto PtrGrav = GetBehavior<Gravity>();
 		PtrGrav->Execute();
 		//カメラを得る
-		auto PtrCamera = dynamic_pointer_cast<LookAtCamera>(OnGetDrawCamera());
-		if (PtrCamera) {
-			//LookAtCameraである
-			//LookAtCameraに注目するオブジェクト（プレイヤー）の設定
-			PtrCamera->SetTargetObject(GetThis<GameObject>());
-			//playerの位置とカメラ位置を同期する
-			auto p_pos = GetThis<GameObject>()->GetComponent<Transform>()->GetPosition();
-			PtrCamera->SetEye(Vec3(p_pos.x, p_pos.y+10.0f, -20.0f));
-		}
+		//auto PtrCamera = dynamic_pointer_cast<LookAtCamera>(OnGetDrawCamera());
+		//if (PtrCamera) {
+		//	//LookAtCameraである
+		//	//LookAtCameraに注目するオブジェクト（プレイヤー）の設定
+		//	PtrCamera->SetTargetObject(GetThis<GameObject>());
+		//	//playerの位置とカメラ位置を同期する
+		//	auto p_pos = GetThis<GameObject>()->GetComponent<Transform>()->GetPosition();
+		//	PtrCamera->SetEye(Vec3(p_pos.x, p_pos.y+10.0f, -20.0f));
+		//}
 	}
 
 	void Player::OnUpdate2() {
 		//文字列の表示
 		DrawStrings();
+
+		CameraChanger();
 	}
 
+	void Player::CameraChanger() {
+		auto PtrCamera = dynamic_pointer_cast<MyCamera>(OnGetDrawCamera());
 
+		auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
+		if (CntlVec[0].bConnected) {
+			if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) 
+			{
+				m_CameraNumber -= 1;
+			}
+			else if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER)
+			{
+				m_CameraNumber += 1;
+			}
+		}
+
+		if (m_CameraNumber < 0) {
+			m_CameraNumber = 2;
+		}
+		if (m_CameraNumber > 2) {
+			m_CameraNumber = 0;
+		}
+		switch (m_CameraNumber)
+		{
+		case 0:
+		{
+			auto TargetPos = this->GetComponent<Transform>()->GetPosition();
+			Vec3 ArmVec(0, 0.0f, -5.0f);
+			Vec3 Eye = TargetPos + ArmVec;
+			PtrCamera->SetAt(TargetPos);
+			PtrCamera->SetEye(Eye);
+
+		}
+			break;
+		case 1:
+		{
+			auto TargetPos = this->GetComponent<Transform>()->GetPosition();
+			Vec3 ArmVec(0, 0.0f, -10.0f);
+			Vec3 Eye = TargetPos + ArmVec;
+			PtrCamera->SetAt(TargetPos);
+			PtrCamera->SetEye(Eye);
+		}
+
+			break;
+		case 2:
+		{
+			auto TargetPos = this->GetComponent<Transform>()->GetPosition();
+			Vec3 ArmVec(0, 0.0f, -15.0f);
+			Vec3 Eye = TargetPos + ArmVec;
+			PtrCamera->SetAt(TargetPos);
+			PtrCamera->SetEye(Eye);
+		}
+
+			break;
+		}
+	}
 	//文字列の表示
 	void Player::DrawStrings() {
 

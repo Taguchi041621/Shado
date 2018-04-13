@@ -13,6 +13,7 @@ namespace basecross{
 	///	プレイヤー
 	//--------------------------------------------------------------------------------------
 	class Player : public GameObject {
+		int m_CameraNumber;
 		//最高速度
 		float m_MaxSpeed;
 		//減速率
@@ -99,6 +100,11 @@ namespace basecross{
 		*/
 		//--------------------------------------------------------------------------------------
 		virtual void OnUpdate2() override;
+
+		//LRが押されたときカメラを変える
+		void CameraChanger();
+
+		
 	};
 
 
