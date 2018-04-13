@@ -52,25 +52,26 @@ namespace basecross {
 				auto ElapsedTime = App::GetApp()->GetElapsedTime();
 				//X方向にステックが倒れていたら
 				if (m_LightPosition.x <= 0.1f && CntlVec[0].fThumbRX > 0.4f) {
-					m_LightPosition.x += 0.1f * ElapsedTime;
+					m_LightPosition.x += CntlVec[0].fThumbRX/10.0f * ElapsedTime;
 				}
 				else if (m_LightPosition.x >= -0.1f && CntlVec[0].fThumbRX < -0.4f) {
-					m_LightPosition.x += -0.1f * ElapsedTime;
+					m_LightPosition.x += CntlVec[0].fThumbRX/10.0f * ElapsedTime;
 				}
 				//Y方向にスティックが倒れていたら
 				if (m_LightPosition.y <= 0.1f && CntlVec[0].fThumbRY > 0.4f) {
-					m_LightPosition.y += 0.1f * ElapsedTime;
+					m_LightPosition.y += CntlVec[0].fThumbRY/10.0f * ElapsedTime;
 				}
 				else if (m_LightPosition.y >= -0.1f && CntlVec[0].fThumbRY < -0.4f) {
-					m_LightPosition.y += -0.1f * ElapsedTime;
+					m_LightPosition.y += CntlVec[0].fThumbRY/10.0f * ElapsedTime;
 				}
-				//変更したポジションを反映
+				//変更したライトのポジションを反映
 				PtrLight->GetLight(mainIndex).SetPositionToDirectional(m_LightPosition);
 			}
 		}
 
 		//ライトの位置から影の位置を計算し、ポジションを変える
 		//Vec3 ShadowToMe = ShadowLocation() - GetComponent<Transform>()->GetPosition();
+		//GetComponent<Rigidbody>()->SetVelocity(ShadowToMe*10.0f);
 		GetComponent<Transform>()->SetPosition(ShadowLocation());
 	}
 
@@ -105,9 +106,16 @@ namespace basecross {
 		if (AngleY < 0) {
 			AngleY *= -1.0f;
 		}
-		//スケールにアングルの値足してみよーぜ
+		//スケールにアングルの値足す
 		GetComponent<Transform>()->SetScale(m_Scale.x + AngleX, m_Scale.y + AngleY, m_ScaleZ);
 
 		return m_kagePos;
+	}
+	//前の位置と今の位置を比べてVec3を返す
+	Vec3 ShadowObject::GetPoorBefor() {
+		//前のポジションと今のポジションの差を出す
+		PoorBefor = ShadowLocation() - GetComponent<Transform>()->GetBeforePosition();
+		//差を返す
+		return PoorBefor;
 	}
 }

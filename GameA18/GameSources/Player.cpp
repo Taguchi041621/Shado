@@ -96,13 +96,21 @@ namespace basecross{
 			UtilPtr->RotToHead(Angle, 1.0f);
 		}
 	}
-	//衝突時にペアレント化する
-	//void Player::OnCollision(vector<shared_ptr<GameObject>>& OtherVec) {
-	//	auto shadowPtr = dynamic_pointer_cast<ShadowObject>(OtherVec.at(0));
-	//	if (shadowPtr) {
-	//		GetComponent<Transform>()->SetParent(OtherVec.at(0));
-	//	}
-	//}
+	//衝突している時
+	void Player::OnCollisionExcute(vector<shared_ptr<GameObject>>& OtherVec) {
+		for (auto obj : OtherVec) {
+			//シャドウオブジェクトを検出
+			auto ShadowPtr = dynamic_pointer_cast<ShadowObject>(obj);
+			//シャドウオブジェクトだったら
+			if (ShadowPtr) {
+				//シャドウオブジェクトの移動した距離を出す関数を呼び出し、
+				//プレイヤーのポジションに加える
+				auto pos = GetComponent<Transform>()->GetPosition() + ShadowPtr->GetPoorBefor();
+				//ポジションを適用する
+				GetComponent<Transform>()->SetPosition(pos);
+			}
+		}
+	}
 
 	//初期化
 	void Player::OnCreate() {
