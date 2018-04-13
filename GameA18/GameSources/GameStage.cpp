@@ -83,6 +83,7 @@ namespace basecross {
 		//シェア配列にプレイヤーを追加
 		SetSharedGameObject(L"Player", PlayerPtr);
 	}
+
 	void GameStage::CreateWhiteCube() {
 		Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
 		auto CubePtr = AddGameObject<WhiteCube>(
@@ -104,6 +105,14 @@ namespace basecross {
 		//SetSharedGameObject(L"WhiteCube", CubePtr);
 	}
 
+	void GameStage::CreateGoal() {
+		Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
+		auto CubePtr = AddGameObject<WhiteCube>(
+			Vec3(0.5f, 0.5f, -0.25f),		//スケール
+			Qt,							//角度
+			Vec3(4.0f, 0.125f, -0.20f)		//ポジション
+			);
+	}
 
 
 	void GameStage::OnCreate() {
@@ -118,6 +127,8 @@ namespace basecross {
 			CreatePlayer();
 			//白いブロックの作成
 			CreateWhiteCube();
+			//ゴールブロック
+			CreateGoal();
 		}
 		catch (...) {
 			throw;
@@ -128,11 +139,16 @@ namespace basecross {
 		//コントローラの取得
 		auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
 		if (CntlVec[0].bConnected) {
-			//Bボタン
+			//Aボタン
 			if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A) {
 				PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToTitleStage");
 			}
 		}
+	}
 
-	}//end basecross
+	void GameStage::OnUpdate2() {
+
+	}
+
+	//end basecross
 }
