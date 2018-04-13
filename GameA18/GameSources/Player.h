@@ -13,7 +13,10 @@ namespace basecross{
 	///	プレイヤー
 	//--------------------------------------------------------------------------------------
 	class Player : public GameObject {
+		//カメラの切り替えに使う
 		int m_CameraNumber;
+		//プレイヤーのHP
+		int m_PlayerHP;
 		//最高速度
 		float m_MaxSpeed;
 		//減速率
@@ -107,7 +110,8 @@ namespace basecross{
 		//LRが押されたときカメラを変える
 		void CameraChanger();
 
-		
+		//プレイヤーのHP
+		void PlayerHP();
 	};
 
 

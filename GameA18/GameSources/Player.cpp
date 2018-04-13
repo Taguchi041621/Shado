@@ -166,6 +166,8 @@ namespace basecross{
 		DrawStrings();
 
 		CameraChanger();
+
+		PlayerHP();
 	}
 
 	void Player::CameraChanger() {
@@ -221,6 +223,21 @@ namespace basecross{
 		}
 
 			break;
+		}
+	}
+	void Player::PlayerHP() {
+		m_PlayerHP = 3;
+
+		auto PlayerPos = this->GetComponent<Transform>()->GetPosition();
+		//—Ž‰ºŽ€
+		if (PlayerPos.y < -5)
+		{
+			m_PlayerHP = 0;
+		}
+
+		if (m_PlayerHP == 0)
+		{
+			PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToTitleStage");
 		}
 	}
 	//•¶Žš—ñ‚Ì•\Ž¦
