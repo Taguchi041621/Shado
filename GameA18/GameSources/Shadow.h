@@ -13,6 +13,7 @@ namespace basecross {
 		wstring m_Mesh;
 		GameObject& m_Obj;
 		float m_ScaleZ;
+		Vec3 PoorBefor;
 		Vec3 m_LightPosition;
 	public:
 		//構築と破棄
@@ -30,6 +31,8 @@ namespace basecross {
 		virtual void OnUpdate();
 		//影の場所を計算する
 		Vec3 ShadowLocation();
+		//1つ前の座標との差を出す
+		Vec3 GetPoorBefor();
 	};
 
 }
