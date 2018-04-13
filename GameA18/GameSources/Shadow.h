@@ -12,6 +12,7 @@ namespace basecross {
 		Vec3 m_Position;
 		wstring m_Mesh;
 		GameObject& m_Obj;
+		float m_ScaleZ;
 		Vec3 m_LightPosition;
 	public:
 		//\’z‚Æ”jŠü

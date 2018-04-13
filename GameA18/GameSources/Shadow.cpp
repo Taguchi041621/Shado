@@ -9,7 +9,7 @@ namespace basecross {
 	ShadowObject::ShadowObject(const shared_ptr<Stage>& StagePtr,
 		const Vec3& Scale, const Vec3& Rotation, const wstring& Mesh, GameObject& Obj)
 		: GameObject(StagePtr),
-		m_Scale(Scale), m_Rotation(Rotation), m_Mesh(Mesh), m_Obj(Obj),
+		m_Scale(Scale), m_Rotation(Rotation), m_Mesh(Mesh), m_Obj(Obj), m_ScaleZ(1.0f),
 		m_LightPosition(0.01f, 0.01f, -0.1f)
 	{
 	}
@@ -17,7 +17,7 @@ namespace basecross {
 	ShadowObject::~ShadowObject() {}
 	//初期化
 	void ShadowObject::OnCreate() {
-		m_Scale.z = 0.1f;
+		m_Scale.z = m_ScaleZ;
 		AddComponent<Rigidbody>();
 		auto PtrTransform = AddComponent<Transform>();
 		//影のポジションを出す
@@ -106,7 +106,7 @@ namespace basecross {
 			AngleY *= -1.0f;
 		}
 		//スケールにアングルの値足してみよーぜ
-		GetComponent<Transform>()->SetScale(m_Scale.x + AngleX, m_Scale.y + AngleY, 0.1f);
+		GetComponent<Transform>()->SetScale(m_Scale.x + AngleX, m_Scale.y + AngleY, m_ScaleZ);
 
 		return m_kagePos;
 	}

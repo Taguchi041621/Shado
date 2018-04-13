@@ -96,6 +96,13 @@ namespace basecross{
 			UtilPtr->RotToHead(Angle, 1.0f);
 		}
 	}
+	//衝突時にペアレント化する
+	//void Player::OnCollision(vector<shared_ptr<GameObject>>& OtherVec) {
+	//	auto shadowPtr = dynamic_pointer_cast<ShadowObject>(OtherVec.at(0));
+	//	if (shadowPtr) {
+	//		GetComponent<Transform>()->SetParent(OtherVec.at(0));
+	//	}
+	//}
 
 	//初期化
 	void Player::OnCreate() {
@@ -104,7 +111,7 @@ namespace basecross{
 		auto Ptr = GetComponent<Transform>();
 		Ptr->SetScale(0.25f, 0.25f, 0.25f);	//直径25センチの球体
 		Ptr->SetRotation(0.0f, 0.0f, 0.0f);
-		Ptr->SetPosition(0, 0.125f, -0.25f);
+		Ptr->SetPosition(0.0f, 3.5f, -0.1f);
 
 		//Rigidbodyをつける
 		auto PtrRedid = AddComponent<Rigidbody>();
@@ -138,6 +145,7 @@ namespace basecross{
 	void Player::OnUpdate() {
 		//プレイヤーの移動
 		MovePlayer();
+
 		//重力を加える
 		auto PtrGrav = GetBehavior<Gravity>();
 		PtrGrav->Execute();

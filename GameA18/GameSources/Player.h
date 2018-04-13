@@ -101,6 +101,9 @@ namespace basecross{
 		//--------------------------------------------------------------------------------------
 		virtual void OnUpdate2() override;
 
+		//virtual void OnCollision(vector<shared_ptr<GameObject>>& OtherVec) override;
+
+
 		//LR‚ª‰Ÿ‚³‚ê‚½‚Æ‚«ƒJƒƒ‰‚ğ•Ï‚¦‚é
 		void CameraChanger();
 
