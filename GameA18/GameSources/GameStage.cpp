@@ -107,10 +107,10 @@ namespace basecross {
 
 	void GameStage::CreateGoal() {
 		Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
-		auto CubePtr = AddGameObject<WhiteCube>(
-			Vec3(0.5f, 0.5f, -0.25f),		//スケール
+		auto CubePtr = AddGameObject<Goal>(
+			Vec3(0.25f, 0.5f, 0.25f),		//スケール
 			Qt,							//角度
-			Vec3(4.0f, 0.125f, -0.20f)		//ポジション
+			Vec3(4.0f, 0.125f, -0.25f)		//ポジション
 			);
 	}
 

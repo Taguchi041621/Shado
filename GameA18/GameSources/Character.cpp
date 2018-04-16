@@ -60,7 +60,7 @@ namespace basecross {
 	///	ゴールオブジェ
 	//--------------------------------------------------------------------------------------
 
-	CreateGoal::CreateGoal(const shared_ptr<Stage>& StagePtr,
+	Goal::Goal(const shared_ptr<Stage>& StagePtr,
 		const Vec3& StartScale, const Quat& StartQt, const Vec3& StartPos) :
 		GameObject(StagePtr),
 		m_StartScale(StartScale),
@@ -68,7 +68,7 @@ namespace basecross {
 		m_StartPos(StartPos)
 	{}
 
-	void CreateGoal::OnCreate() {
+	void Goal::OnCreate() {
 		vector<VertexPositionNormalTexture> vertices;
 		vector<VertexPositionNormal> new_vertices;
 
@@ -93,27 +93,30 @@ namespace basecross {
 		//影をつける
 		auto ShadowPtr = AddComponent<Shadowmap>();
 		ShadowPtr->SetMeshResource(L"DEFAULT_CAPSULE");
-		//--------------------------------------------------------
-		//オブジェクトの影のコンストラクタ呼び出し
-		GetStage()->AddGameObject<ShadowObject>(
-			GetComponent<Transform>()->GetScale(),
-			GetComponent<Transform>()->GetRotation(),
-			L"DEFAULT_CAPSULE",
-			*GetThis<GameObject>()
-			);
-
-		////Rigidbodyをつける
-		//auto PtrRedid = AddComponent<Rigidbody>();
-		////衝突判定をつける
-		//auto PtrCol = AddComponent<CollisionObb>();
-		////Fixdタイプ
-		//PtrCol->SetFixed(true);
 
 	}
 
-	void CreateGoal::OnUpdate() {
+	void Goal::OnUpdate() {
+		OnTriggerEnter();
 	}
 
+	void Goal::OnTriggerEnter()
+	{
+		SPHERE t;
+		t.m_Center = this->GetComponent<Transform>()->GetPosition();
+		t.m_Center.z = 0;
+		t.m_Radius = 0.20;
+
+		SPHERE p;
+		p.m_Center = GetStage()->GetSharedGameObject<Player>(L"Player")->GetComponent<Transform>()->GetPosition();
+		p.m_Center.z = 0;
+		p.m_Radius = 0.20;
+
+		if (HitTest::SPHERE_SPHERE(t, p))
+		{
+			PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToTitleStage");
+		}
+	}
 
 
 	//end basecross

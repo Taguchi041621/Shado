@@ -50,7 +50,7 @@ namespace basecross{
 		//}
 	};
 
-	class CreateGoal : public GameObject {
+	class Goal : public GameObject {
 		Vec3 m_StartScale;
 		Quat m_StartQt;
 		Vec3 m_StartPos;
@@ -65,14 +65,14 @@ namespace basecross{
 		@param[in]	StartPos	初期位置
 		*/
 		//--------------------------------------------------------------------------------------
-		CreateGoal(const shared_ptr<Stage>& StagePtr,
+		Goal(const shared_ptr<Stage>& StagePtr,
 			const Vec3& StartScale, const Quat& StartQt, const Vec3& StartPos);
 		//--------------------------------------------------------------------------------------
 		/*!
 		@brief デストラクタ
 		*/
 		//--------------------------------------------------------------------------------------
-		virtual ~CreateGoal() {}
+		virtual ~Goal() {}
 		//--------------------------------------------------------------------------------------
 		/*!
 		@brief 初期化
@@ -87,6 +87,8 @@ namespace basecross{
 		*/
 		//--------------------------------------------------------------------------------------
 		virtual void OnUpdate()override;
+
+		void OnTriggerEnter();
 
 		//virtual  const Light& OnGetDrawLight() const override {
 

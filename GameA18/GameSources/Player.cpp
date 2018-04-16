@@ -251,7 +251,6 @@ namespace basecross{
 	//•¶Žš—ñ‚Ì•\Ž¦
 	void Player::DrawStrings() {
 
-
 		auto fps = App::GetApp()->GetStepTimer().GetFramesPerSecond();
 		wstring FPS(L"FPS: ");
 		FPS += Util::UintToWStr(fps);
