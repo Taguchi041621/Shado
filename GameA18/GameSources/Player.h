@@ -15,6 +15,7 @@ namespace basecross{
 	class Player : public GameObject {
 		//カメラのZ軸の切り替え
 		float CameraPosZ;
+		bool CameraPosFlag;
 		//カメラの切り替えに使う
 		int m_CameraNumber;
 		//プレイヤーのHP

@@ -209,6 +209,14 @@ namespace basecross{
 		PtrCamera->SetAt(TargetPos);
 		PtrCamera->SetEye(Eye);
 
+		if (CameraPosZ > -10)
+		{
+			CameraPosFlag = true;
+		}
+		else if (CameraPosZ < -10)
+		{
+			CameraPosFlag = false;
+		}
 		switch (m_CameraNumber)
 		{
 		case 0:
@@ -217,8 +225,8 @@ namespace basecross{
 			{
 				break;
 			}
-			CameraPosZ += 0.1;
-			if (CameraPosZ < -5)
+			CameraPosZ += 0.2;
+			if (CameraPosZ > -5)
 			{
 				CameraPosZ = -5;
 			}
@@ -231,14 +239,20 @@ namespace basecross{
 			{
 				break;
 			}
-			if (CameraPosZ < -10) 
+			if (CameraPosFlag)
 			{
-				CameraPosZ -= 0.1;
+				CameraPosZ -= 0.2;
 			}
-			else if (CameraPosZ > -10)
+			else if (!CameraPosFlag)
 			{
-				CameraPosZ += 0.1;
+				CameraPosZ += 0.2;
 			}
+
+			if (CameraPosZ >= -10.2f && CameraPosZ <= -9.8f)
+			{
+				CameraPosZ = -10;
+			}
+
 			break;
 		}
 		case 2:
@@ -247,10 +261,10 @@ namespace basecross{
 			{
 				break;
 			}
-			CameraPosZ -= 0.1;
-			if (CameraPosZ > -15)
+			CameraPosZ -= 0.2;
+			if (CameraPosZ < -15)
 			{
-				CameraPosZ = 15;
+				CameraPosZ = -15;
 			}
 			break;
 		}
