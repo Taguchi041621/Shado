@@ -10,7 +10,7 @@ namespace basecross {
 		const Vec3& Scale, const Vec3& Rotation, const wstring& Mesh, GameObject& Obj)
 		: GameObject(StagePtr),
 		m_Scale(Scale), m_Rotation(Rotation), m_Mesh(Mesh), m_Obj(Obj), m_ScaleZ(1.0f),
-		m_LightAngle(0.0f, 0.0f, 0.0f), m_LightDistance(0.1f)
+		m_LightAngle(0.0f, 0.0f, 0.0f), m_LightDistance(0.1f),m_MaxAngle(0.8f)
 	{
 	}
 
@@ -89,17 +89,18 @@ namespace basecross {
 				//Elapsedタイムの取得
 				auto ElapsedTime = App::GetApp()->GetElapsedTime();
 				//X方向にステックが倒れていたら
-				if (m_LightAngle.x >= -0.9f && CntlVec[0].fThumbRX > 0.4f) {
+				if (m_LightAngle.x >= -m_MaxAngle && CntlVec[0].fThumbRX > 0.4f) {
 					m_LightAngle.x += -CntlVec[0].fThumbRX * ElapsedTime;
 				}
-				else if (m_LightAngle.x <= 0.9f && CntlVec[0].fThumbRX < -0.4f) {
+				else if (m_LightAngle.x <= m_MaxAngle && CntlVec[0].fThumbRX < -0.4f) {
 					m_LightAngle.x += -CntlVec[0].fThumbRX * ElapsedTime;
 				}
 				//Y方向にスティックが倒れていたら
-				if (m_LightAngle.y >= -0.9f && CntlVec[0].fThumbRY > 0.4f) {
-					m_LightAngle.y += -CntlVec[0].fThumbRY * ElapsedTime;
+				if (m_LightAngle.y >= -m_MaxAngle && CntlVec[0].fThumbRY > 0.4f) {
+					m_LightAngle.y +=
+						-CntlVec[0].fThumbRY * ElapsedTime;
 				}
-				else if (m_LightAngle.y <= 0.9f && CntlVec[0].fThumbRY < -0.4f) {
+				else if (m_LightAngle.y <= m_MaxAngle && CntlVec[0].fThumbRY < -0.4f) {
 					m_LightAngle.y += -CntlVec[0].fThumbRY * ElapsedTime;
 				}
 				//---------------------------------------------------------------------------------------
@@ -113,6 +114,8 @@ namespace basecross {
 				PtrLight->GetLight(mainIndex).SetPositionToDirectional(m_LightPosition);
 			}
 		}
+	}
+	void ShadowObject::OnUpdate2() {
 		//影のポジションの更新
 		GetComponent<Transform>()->SetPosition(ShadowLocation());
 	}

@@ -118,9 +118,19 @@ namespace basecross{
 			if (ShadowPtr) {
 				//シャドウオブジェクトの移動した距離を出す関数を呼び出し、
 				//プレイヤーのポジションに加える
-				auto pos = GetComponent<Transform>()->GetPosition() + ShadowPtr->GetPoorBefor();
+				//auto pos = GetComponent<Transform>()->GetPosition() + ShadowPtr->GetPoorBefor();
 				//ポジションを適用する
-				GetComponent<Transform>()->SetPosition(pos);
+				//GetComponent<Transform>()->SetPosition(pos);
+				GetComponent<Transform>()->SetParent(ShadowPtr);
+			}
+		}
+	}
+	void Player::OnCollisionExit(vector<shared_ptr<GameObject>>& OtherVec) {
+		for (auto obj : OtherVec) {
+			//シャドウオブジェクトを検出
+			auto ShadowPtr = dynamic_pointer_cast<ShadowObject>(obj);
+			if (ShadowPtr == GetComponent<Transform>()->GetParent()) {
+				GetComponent<Transform>()->SetParent(nullptr);
 			}
 		}
 	}
