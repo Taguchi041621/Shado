@@ -12,7 +12,7 @@ namespace basecross{
 	//--------------------------------------------------------------------------------------
 	///	プレイヤー
 	//--------------------------------------------------------------------------------------
-	class Player : public GameObject {
+	class Player : public SS5ssae {
 		//カメラのZ軸の切り替え
 		float CameraPosZ;
 		bool CameraPosFlag;
@@ -28,6 +28,10 @@ namespace basecross{
 		float m_Mass;
 		//文字列の表示
 		void DrawStrings();
+		//データとゲームとの変換行列
+		Mat4x4 m_ToAnimeMatrixLeft;
+		Mat4x4 m_ToAnimeMatrixRight;
+
 	public:
 		//構築と破棄
 		//--------------------------------------------------------------------------------------
@@ -36,7 +40,7 @@ namespace basecross{
 		@param[in]	StagePtr	ステージ
 		*/
 		//--------------------------------------------------------------------------------------
-		Player(const shared_ptr<Stage>& StagePtr);
+		Player(const shared_ptr<Stage>& StagePtr, const wstring& BaseDir);
 		//--------------------------------------------------------------------------------------
 		/*!
 		@brief	デストラクタ

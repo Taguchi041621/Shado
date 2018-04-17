@@ -14,12 +14,26 @@ namespace basecross{
 	//	用途: プレイヤー
 	//--------------------------------------------------------------------------------------
 	//構築と破棄
-	Player::Player(const shared_ptr<Stage>& StagePtr) :
-		GameObject(StagePtr),
+	Player::Player(const shared_ptr<Stage>& StagePtr, const wstring& BaseDir) :
+		SS5ssae(StagePtr, BaseDir, L"Idea1.ssae", L"Walk"),
 		m_MaxSpeed(7.0f),	//最高速度
 		m_Decel(0.65f),	//減速値
 		m_Mass(0.5f)	//質量
-	{}
+	{
+		m_ToAnimeMatrixLeft.affineTransformation(
+			Vec3(0.1f, 0.1f, 0.1f),
+			Vec3(0, 0, 0),
+			Vec3(0, 0, 0),
+			Vec3(0, -0.55f, 0.0f)
+		);
+		m_ToAnimeMatrixRight.affineTransformation(
+			Vec3(-0.1f, 0.1f, 0.1f),
+			Vec3(0, 0, 0),
+			Vec3(0, 0, 0),
+			Vec3(0, -0.55f, 0.0f)
+		);
+
+	}
 
 
 	Vec3 Player::GetMoveVector() const {
@@ -57,7 +71,6 @@ namespace basecross{
 			}
 		}
 		return Angle;
-
 	}
 
 	void Player::MovePlayer() {
@@ -121,6 +134,11 @@ namespace basecross{
 		Ptr->SetScale(0.25f, 0.25f, 0.25f);	//直径25センチの球体
 		Ptr->SetRotation(0.0f, 0.0f, 0.0f);
 		Ptr->SetPosition(0.0f, 3.5f, -0.1f);
+
+		//親クラスのクリエイトを呼ぶ
+		SS5ssae::OnCreate();
+		//値は秒あたりのフレーム数
+		SetFps(30.0f);
 
 		//Rigidbodyをつける
 		auto PtrRedid = AddComponent<Rigidbody>();

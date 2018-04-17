@@ -15,9 +15,9 @@ namespace basecross{
 	void Scene::CreateResourses() {
 		wstring DataDir;
 		//サンプルのためアセットディレクトリを取得
-		App::GetApp()->GetAssetsDirectory(DataDir);
+		//App::GetApp()->GetAssetsDirectory(DataDir);
 		//各ゲームは以下のようにデータディレクトリを取得すべき
-		//App::GetApp()->GetDataDirectory(DataDir);
+		App::GetApp()->GetDataDirectory(DataDir);
 		wstring strTexture = DataDir + L"sky.jpg";
 		App::GetApp()->RegisterTexture(L"SKY_TX", strTexture);
 		strTexture = DataDir + L"trace.png";

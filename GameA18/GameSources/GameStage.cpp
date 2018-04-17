@@ -78,8 +78,10 @@ namespace basecross {
 
 	//プレイヤーの作成
 	void GameStage::CreatePlayer() {
+		wstring DataDir;
+		App::GetApp()->GetDataDirectory(DataDir);
 		//プレーヤーの作成
-		auto PlayerPtr = AddGameObject<Player>();
+		auto PlayerPtr = AddGameObject<Player>(DataDir+L"Idea\\");
 		//シェア配列にプレイヤーを追加
 		SetSharedGameObject(L"Player", PlayerPtr);
 	}
