@@ -114,6 +114,10 @@ namespace basecross {
 			);
 	}
 
+	void GameStage::CreateKeyItem()
+	{
+		auto KeyPtr = AddGameObject<KeyItem>(Vec3(0.0f, 0.0f, -0.1));
+	}
 
 	void GameStage::OnCreate() {
 		try {
@@ -129,6 +133,8 @@ namespace basecross {
 			CreateWhiteCube();
 			//ゴールブロック
 			CreateGoal();
+			//鍵
+			CreateKeyItem();
 		}
 		catch (...) {
 			throw;

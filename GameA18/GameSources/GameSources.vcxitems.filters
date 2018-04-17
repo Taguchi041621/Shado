@@ -45,6 +45,9 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Enemy.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Item.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Character.cpp">
@@ -81,6 +84,9 @@
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Enemy.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Item.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>

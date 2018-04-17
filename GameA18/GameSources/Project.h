@@ -16,5 +16,5 @@
 #include "MyCamera.h"
 #include "Shadow.h"
 #include "MyLight.h"
-
+#include "Item.h"
 #include "Enemy.h"

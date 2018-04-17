@@ -24,6 +24,8 @@ namespace basecross {
 		void CreateWhiteCube();
 		//
 		void CreateGoal();
+		//
+		void CreateKeyItem();
 	public:
 		//\’z‚Æ”jŠü
 		GameStage() :Stage() {}
