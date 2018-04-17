@@ -20,6 +20,11 @@ namespace basecross {
 		}
 		return nullptr;
 	}
+
+	void MyCamera::SetToTargetLerp(float f)
+	{
+	}
+
 	void MyCamera::OnCreate() {
 		SetUp(Vec3(0, 1.0f, 0));
 		Camera::OnCreate();
@@ -29,4 +34,5 @@ namespace basecross {
 		if (TargetPtr) {
 		}
 	}
+
 }
