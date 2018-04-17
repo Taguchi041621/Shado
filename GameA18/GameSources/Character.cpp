@@ -92,7 +92,7 @@ namespace basecross {
 
 		//‰e‚ð‚Â‚¯‚é
 		auto ShadowPtr = AddComponent<Shadowmap>();
-		ShadowPtr->SetMeshResource(L"DEFAULT_CAPSULE");
+		ShadowPtr->SetMeshResource(L"DEFAULT_SQUARE");
 
 	}
 
@@ -114,7 +114,7 @@ namespace basecross {
 
 		if (HitTest::SPHERE_SPHERE(t, p))
 		{
-			PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToTitleStage");
+			PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToClearStage");
 		}
 	}
 

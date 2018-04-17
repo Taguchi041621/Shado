@@ -31,7 +31,7 @@ namespace basecross {
 		//Coll->SetFixed(true);
 		//auto PtrRegid = AddComponent<Rigidbody>();
 
-		auto PtrCol = AddComponent<Collision>();
+		auto PtrCol = AddComponent<CollisionSphere>();
 		PtrCol->SetIsHitAction(IsHitAction::None);
 
 		//‰e‚ð‚Â‚¯‚é

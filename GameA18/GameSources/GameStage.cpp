@@ -26,7 +26,7 @@ namespace basecross {
 		PtrMultiLight->SetDefaultLighting();
 		auto meinLight = PtrMultiLight->GetMainIndex();
 		//影を出すライトの初期角度を設定
-		PtrMultiLight->GetLight(meinLight).SetPositionToDirectional(0.01f, 0.01f, -0.1f);
+		PtrMultiLight->GetLight(meinLight).SetPositionToDirectional(0.00f, 0.00f, -0.1f);
 	}
 
 
@@ -78,8 +78,10 @@ namespace basecross {
 
 	//プレイヤーの作成
 	void GameStage::CreatePlayer() {
+		wstring DataDir;
+		App::GetApp()->GetDataDirectory(DataDir);
 		//プレーヤーの作成
-		auto PlayerPtr = AddGameObject<Player>();
+		auto PlayerPtr = AddGameObject<Player>(DataDir+L"Idea\\");
 		//シェア配列にプレイヤーを追加
 		SetSharedGameObject(L"Player", PlayerPtr);
 	}
@@ -142,19 +144,14 @@ namespace basecross {
 	}
 	//更新
 	void GameStage::OnUpdate() {
-		//コントローラの取得
-		auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
-		if (CntlVec[0].bConnected) {
-			//Aボタン
-			if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A) {
-				PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToTitleStage");
-			}
-		}
+		////コントローラの取得
+		//auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
+		//if (CntlVec[0].bConnected) {
+		//	//Aボタン
+		//	if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A) {
+		//		PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToTitleStage");
+		//	}
+		//}
 	}
-
-	void GameStage::OnUpdate2() {
-
-	}
-
 	//end basecross
 }
