@@ -274,7 +274,7 @@ namespace basecross{
 
 		if (m_PlayerHP == 0)
 		{
-			PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToTitleStage");
+			PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameOver");
 		}
 	}
 	//•¶Žš—ñ‚Ì•\Ž¦
