@@ -16,6 +16,7 @@ namespace basecross {
 		Vec3 PoorBefor;
 		Vec3 m_LightPosition;
 		Vec3 m_LightAngle;
+		float m_LightDistance;
 	public:
 		//\’z‚Æ”jŠü
 		ShadowObject(const shared_ptr<Stage>& StagePtr,

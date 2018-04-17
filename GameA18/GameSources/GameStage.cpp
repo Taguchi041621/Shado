@@ -26,7 +26,7 @@ namespace basecross {
 		PtrMultiLight->SetDefaultLighting();
 		auto meinLight = PtrMultiLight->GetMainIndex();
 		//‰e‚ðo‚·ƒ‰ƒCƒg‚Ì‰ŠúŠp“x‚ðÝ’è
-		PtrMultiLight->GetLight(meinLight).SetPositionToDirectional(0.01f, 0.01f, -0.1f);
+		PtrMultiLight->GetLight(meinLight).SetPositionToDirectional(0.00f, 0.00f, -0.1f);
 	}
 
 
