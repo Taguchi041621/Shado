@@ -114,6 +114,7 @@ namespace basecross{
 
 	//‰Šú‰»
 	void Player::OnCreate() {
+		CameraPosZ = -5;
 		m_CameraNumber = 0;
 		//‰ŠúˆÊ’u‚È‚Ç‚Ìİ’è
 		auto Ptr = GetComponent<Transform>();
@@ -199,38 +200,66 @@ namespace basecross{
 		if (m_CameraNumber > 2) {
 			m_CameraNumber = 0;
 		}
+		auto PtrMCamera = dynamic_pointer_cast<MyCamera>(GetStage()->GetView()->GetTargetCamera());
+		PtrMCamera->SetToTargetLerp(0.5);
+
+	    auto TargetPos = this->GetComponent<Transform>()->GetPosition();
+		Vec3 ArmVec(0, 0.0f, CameraPosZ);
+		Vec3 Eye = TargetPos + ArmVec;
+		PtrCamera->SetAt(TargetPos);
+		PtrCamera->SetEye(Eye);
+
 		switch (m_CameraNumber)
 		{
 		case 0:
 		{
-			auto TargetPos = this->GetComponent<Transform>()->GetPosition();
-			Vec3 ArmVec(0, 0.0f, -5.0f);
-			Vec3 Eye = TargetPos + ArmVec;
-			PtrCamera->SetAt(TargetPos);
-			PtrCamera->SetEye(Eye);
-
-		}
+			if (CameraPosZ == -5)
+			{
+				break;
+			}
+			CameraPosZ += 0.1;
+			if (CameraPosZ < -5)
+			{
+				CameraPosZ = -5;
+			}
 			break;
+		}
+
 		case 1:
 		{
-			auto TargetPos = this->GetComponent<Transform>()->GetPosition();
-			Vec3 ArmVec(0, 0.0f, -10.0f);
-			Vec3 Eye = TargetPos + ArmVec;
-			PtrCamera->SetAt(TargetPos);
-			PtrCamera->SetEye(Eye);
-		}
-
+			if (CameraPosZ == -10)
+			{
+				break;
+			}
+			if (CameraPosZ < -10) 
+			{
+				CameraPosZ -= 0.1;
+			}
+			else if (CameraPosZ > -10)
+			{
+				CameraPosZ += 0.1;
+			}
 			break;
+		}
 		case 2:
 		{
-			auto TargetPos = this->GetComponent<Transform>()->GetPosition();
-			Vec3 ArmVec(0, 0.0f, -15.0f);
-			Vec3 Eye = TargetPos + ArmVec;
-			PtrCamera->SetAt(TargetPos);
-			PtrCamera->SetEye(Eye);
+			if (CameraPosZ == -15)
+			{
+				break;
+			}
+			CameraPosZ -= 0.1;
+			if (CameraPosZ > -15)
+			{
+				CameraPosZ = 15;
+			}
+			break;
 		}
 
-			break;
+		case 3:
+		{
+
+		}
+		break;
 		}
 	}
 	void Player::PlayerHP() {
