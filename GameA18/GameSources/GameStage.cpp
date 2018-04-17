@@ -136,19 +136,14 @@ namespace basecross {
 	}
 	//更新
 	void GameStage::OnUpdate() {
-		//コントローラの取得
-		auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
-		if (CntlVec[0].bConnected) {
-			//Aボタン
-			if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A) {
-				PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToTitleStage");
-			}
-		}
+		////コントローラの取得
+		//auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
+		//if (CntlVec[0].bConnected) {
+		//	//Aボタン
+		//	if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A) {
+		//		PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToTitleStage");
+		//	}
+		//}
 	}
-
-	void GameStage::OnUpdate2() {
-
-	}
-
 	//end basecross
 }

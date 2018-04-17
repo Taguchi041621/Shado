@@ -28,6 +28,10 @@ namespace basecross{
 		App::GetApp()->RegisterTexture(L"TITLE_TX", strTexture);
 		strTexture = DataDir + L"Select.png";
 		App::GetApp()->RegisterTexture(L"SELECT_TX", strTexture);
+		strTexture = DataDir + L"Clear.png";
+		App::GetApp()->RegisterTexture(L"CLEAR_TX", strTexture);
+		strTexture = DataDir + L"GameOver.png";
+		App::GetApp()->RegisterTexture(L"GAMEOVER_TX", strTexture);
 	}
 
 	void Scene::OnCreate() {
@@ -49,12 +53,16 @@ namespace basecross{
 			ResetActiveStage<TitleStage>();
 		}
 		else if (event->m_MsgStr == L"ToStageSelect") {
-			//最初のアクティブステージの設定
 			ResetActiveStage<StageSelect>();
 		}
 		else if (event->m_MsgStr == L"ToGameStage") {
-			//最初のアクティブステージの設定
 			ResetActiveStage<GameStage>();
+		}
+		else if (event->m_MsgStr == L"ToGameOver") {
+			ResetActiveStage<GameOverStage>();
+		}
+		else if (event->m_MsgStr == L"ToClearStage") {
+			ResetActiveStage<ClearStage>();
 		}
 	}
 
