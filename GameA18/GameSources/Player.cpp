@@ -24,13 +24,13 @@ namespace basecross{
 			Vec3(0.1f, 0.1f, 0.1f),
 			Vec3(0, 0, 0),
 			Vec3(0, 0, 0),
-			Vec3(0, 0.5f, 0.0f)
+			Vec3(-0.3f, 0.5f, 0.0f)
 		);
 		m_ToAnimeMatrixRight.affineTransformation(
 			Vec3(-0.1f, 0.1f, 0.1f),
 			Vec3(0, 0, 0),
 			Vec3(0, 0, 0),
-			Vec3(0, 0.5f, 0.0f)
+			Vec3(0.3f, 0.5f, 0.0f)
 		);
 
 	}
