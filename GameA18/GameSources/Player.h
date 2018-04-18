@@ -13,6 +13,8 @@ namespace basecross{
 	///	プレイヤー
 	//--------------------------------------------------------------------------------------
 	class Player : public SS5ssae {
+
+		shared_ptr< StateMachine<Player> >  m_StateMachine;	//ステートマシーン
 		//カメラのZ軸の切り替え
 		float CameraPosZ;
 		bool CameraPosFlag;
@@ -120,6 +122,32 @@ namespace basecross{
 
 		//プレイヤーのHP
 		void PlayerHP();
+
+		//アクセサ
+		shared_ptr< StateMachine<Player> > GetStateMachine() const {
+			return m_StateMachine;
+		}
+
+		void AnimeChangeMotion(const wstring& key, bool looped);
+		void LoopedAnimeUpdateMotion();
+	};
+
+	//--------------------------------------------------------------------------------------
+	//	class WaitState : public ObjState<Player>;
+	//	用途: 待機状態
+	//--------------------------------------------------------------------------------------
+	class WaitState : public ObjState<Player>
+	{
+		WaitState() {}
+	public:
+		//ステートのインスタンス取得
+		static shared_ptr<WaitState> Instance();
+		//ステートに入ったときに呼ばれる関数
+		virtual void Enter(const shared_ptr<Player>& Obj)override;
+		//ステート実行中に毎ターン呼ばれる関数
+		virtual void Execute(const shared_ptr<Player>& Obj)override;
+		//ステートにから抜けるときに呼ばれる関数
+		virtual void Exit(const shared_ptr<Player>& Obj)override;
 	};
 
 

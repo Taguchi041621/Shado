@@ -150,36 +150,49 @@ namespace basecross{
 		//値は秒あたりのフレーム数
 		SetFps(30.0f);
 
+
+		//元となるオブジェクトからアニメーションオブジェクトへの行列の設定
+		SetToAnimeMatrix(m_ToAnimeMatrixLeft);
+
 		//Rigidbodyをつける
 		auto PtrRedid = AddComponent<Rigidbody>();
 		//衝突判定をつける
 		auto PtrCol = AddComponent<CollisionSphere>();
 		PtrCol->SetIsHitAction(IsHitAction::Auto);
+		//コリジョンを表示する場合は以下を設定
+		PtrCol->SetDrawActive(true);
 		//デバッグ用文字列をつける
 		auto PtrString = AddComponent<StringSprite>();
 		PtrString->SetText(L"");
 		PtrString->SetTextRect(Rect2D<float>(16.0f, 16.0f, 640.0f, 480.0f));
-		//影をつける（シャドウマップを描画する）
-		auto ShadowPtr = AddComponent<Shadowmap>();
-		//影の形（メッシュ）を設定
-		ShadowPtr->SetMeshResource(L"DEFAULT_SPHERE");
-		//描画コンポーネントの設定
-		auto PtrDraw = AddComponent<BcPNTStaticDraw>();
-		//描画するメッシュを設定
-		PtrDraw->SetMeshResource(L"DEFAULT_SPHERE");
-		//描画するテクスチャを設定
-		PtrDraw->SetTextureResource(L"TRACE_TX");
-		//透明処理
-		SetAlphaActive(true);
+
+
+		//Actionをつける
+		//レイヤー変更用
+		auto PtrAction = AddComponent<Action>();
+		//アクションは無効にしておく
+		PtrAction->SetUpdateActive(false);
+
 		//カメラを得る
 		auto PtrCamera = dynamic_pointer_cast<MyCamera>(OnGetDrawCamera());
 		if (PtrCamera) {
 			PtrCamera->SetTargetObject(GetThis<GameObject>());
 		}
+
+		//ステートマシンの構築
+		m_StateMachine = make_shared< StateMachine<Player> >(GetThis<Player>());
+		//最初のステートをWaitStateに設定
+		m_StateMachine->SetCurrentState(WaitState::Instance());
+		//WaitStateの初期化実行を行う
+		m_StateMachine->GetCurrentState()->Enter(GetThis<Player>());
 	}
 
 	//更新
 	void Player::OnUpdate() {
+
+		//ステートマシンのUpdateを行う
+		//この中でステートの切り替えが行われる
+		m_StateMachine->Update();
 		//プレイヤーの移動
 		MovePlayer();
 
@@ -196,6 +209,8 @@ namespace basecross{
 		//	auto p_pos = GetThis<GameObject>()->GetComponent<Transform>()->GetPosition();
 		//	PtrCamera->SetEye(Vec3(p_pos.x, p_pos.y+10.0f, -20.0f));
 		//}
+
+
 	}
 
 	void Player::OnUpdate2() {
@@ -205,6 +220,8 @@ namespace basecross{
 		CameraChanger();
 
 		PlayerHP();
+
+
 	}
 
 	void Player::CameraChanger() {
@@ -357,6 +374,42 @@ namespace basecross{
 		//文字列をつける
 		auto PtrString = GetComponent<StringSprite>();
 		PtrString->SetText(str);
+	}
+
+	void Player::LoopedAnimeUpdateMotion() {
+		float ElapsedTime = App::GetApp()->GetElapsedTime();
+		//アニメーションを更新する
+		UpdateAnimeTime(ElapsedTime);
+	}
+
+	void Player::AnimeChangeMotion(const wstring& key, bool looped) {
+		ChangeAnimation(key);
+		SetLooped(looped);
+	}
+
+	//--------------------------------------------------------------------------------------
+	//	class WaitState : public ObjState<Player>;
+	//	用途: 待機状態
+	//--------------------------------------------------------------------------------------
+	//ステートのインスタンス取得
+	shared_ptr<WaitState> WaitState::Instance() {
+		static shared_ptr<WaitState> instance;
+		if (!instance) {
+			instance = shared_ptr<WaitState>(new WaitState);
+		}
+		return instance;
+	}
+	//ステートに入ったときに呼ばれる関数
+	void WaitState::Enter(const shared_ptr<Player>& Obj) {
+		Obj->AnimeChangeMotion(L"Walk", true);
+	}
+	//ステート実行中に毎ターン呼ばれる関数
+	void WaitState::Execute(const shared_ptr<Player>& Obj) {
+		//アニメーション更新
+		Obj->LoopedAnimeUpdateMotion();
+	}
+	//ステートにから抜けるときに呼ばれる関数
+	void WaitState::Exit(const shared_ptr<Player>& Obj) {
 	}
 
 
