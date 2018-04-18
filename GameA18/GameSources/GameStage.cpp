@@ -118,7 +118,7 @@ namespace basecross {
 
 	void GameStage::CreateKeyItem()
 	{
-		auto KeyPtr = AddGameObject<KeyItem>(Vec3(0.0f, 0.0f, -0.1));
+		auto KeyPtr = AddGameObject<KeyItem>(Vec3(0.0f, 0.5f, 1.0f));
 	}
 
 	void GameStage::OnCreate() {

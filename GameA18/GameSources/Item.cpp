@@ -8,14 +8,12 @@ namespace basecross {
 	KeyItem::KeyItem(const shared_ptr<Stage>& StagePtr, const Vec3& StartPos) :
 		GameObject(StagePtr),
 		m_KeyPos(StartPos)
-
-
 	{}
 	void KeyItem::OnCreate()
 	{
 		auto PtrTransform = GetComponent<Transform>();
-		PtrTransform->SetPosition(0,0,-0.1);
-		PtrTransform->SetScale(0.25,0.5,0.25);
+		PtrTransform->SetPosition(0,0.5,-0.1);
+		PtrTransform->SetScale(0.25,0.25,0.25);
 
 		//ƒ^ƒO
 		AddTag(L"KeyItem");
@@ -27,15 +25,36 @@ namespace basecross {
 		PtrDraw->SetTextureResource(L"SKY_TX");
 
 
-		//auto Coll = AddComponent<CollisionObb>();
-		//Coll->SetFixed(true);
 		//auto PtrRegid = AddComponent<Rigidbody>();
 
-		auto PtrCol = AddComponent<CollisionSphere>();
-		PtrCol->SetIsHitAction(IsHitAction::None);
+		//auto PtrCol = AddComponent<CollisionSphere>();
+		//PtrCol->SetIsHitAction(IsHitAction::None);
 
 		//‰e‚ð‚Â‚¯‚é
 		//auto ShadowPtr = AddComponent<Shadowmap>();
 		//ShadowPtr->SetMeshResource(L"DEFAULT_CUBE");
+	}
+
+	void KeyItem::OnUpdate()
+	{
+		OnTriggerEnter();
+	}
+	//Œ®‚ª“–‚½‚Á‚½‚Æ‚«
+	void KeyItem::OnTriggerEnter()
+	{
+		SPHERE t;
+		t.m_Center = this->GetComponent<Transform>()->GetPosition();
+		t.m_Center.z = 0;
+		t.m_Radius = 0.20;
+
+		SPHERE p;
+		p.m_Center = GetStage()->GetSharedGameObject<Player>(L"Player")->GetComponent<Transform>()->GetPosition();
+		p.m_Center.z = 0;
+		p.m_Radius = 0.20;
+
+		if (HitTest::SPHERE_SPHERE(t, p))
+		{
+			GetStage()->RemoveGameObject<KeyItem>(GetThis<KeyItem>());
+		}
 	}
 }
