@@ -16,7 +16,7 @@ namespace basecross{
 	//構築と破棄
 	Player::Player(const shared_ptr<Stage>& StagePtr, const wstring& BaseDir) :
 		SS5ssae(StagePtr, BaseDir, L"Idea1.ssae", L"Walk"),
-		m_MaxSpeed(7.0f),	//最高速度
+		m_MaxSpeed(40.0f),	//最高速度
 		m_Decel(0.65f),	//減速値
 		m_Mass(0.5f)	//質量
 	{
@@ -24,91 +24,72 @@ namespace basecross{
 			Vec3(0.1f, 0.1f, 0.1f),
 			Vec3(0, 0, 0),
 			Vec3(0, 0, 0),
-			Vec3(0, -0.55f, 0.0f)
+			Vec3(0, 0.5f, 0.0f)
 		);
 		m_ToAnimeMatrixRight.affineTransformation(
 			Vec3(-0.1f, 0.1f, 0.1f),
 			Vec3(0, 0, 0),
 			Vec3(0, 0, 0),
-			Vec3(0, -0.55f, 0.0f)
+			Vec3(0, 0.5f, 0.0f)
 		);
 
 	}
 
 
-	Vec3 Player::GetMoveVector() const {
-		Vec3 Angle(0, 0, 0);
+	float Player::GetMoveVector() const {
+		float MoveX = 0;
 		//コントローラの取得
 		auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
 		if (CntlVec[0].bConnected) {
-			if (CntlVec[0].fThumbLX != 0 || CntlVec[0].fThumbLY != 0) {
-				float MoveLength = 0;	//動いた時のスピード
-				auto PtrTransform = GetComponent<Transform>();
-				auto PtrCamera = OnGetDrawCamera();
-				//進行方向の向きを計算
-				Vec3 Front = PtrTransform->GetPosition() - PtrCamera->GetEye();
-				Front.y = 0;
-				Front.normalize();
-				//進行方向向きからの角度を算出
-				float FrontAngle = atan2(Front.z, Front.x);
+			if (CntlVec[0].fThumbLX != 0) {
 				//コントローラの向き計算
-				float MoveX = CntlVec[0].fThumbLX;
-				float MoveZ = CntlVec[0].fThumbLY;
-				Vec2 MoveVec(MoveX, MoveZ);
-				float MoveSize = MoveVec.length();
-				//コントローラの向きから角度を計算
-				float CntlAngle = atan2(-MoveX, MoveZ);
-				//トータルの角度を算出
-				float TotalAngle = FrontAngle + CntlAngle;
-				//角度からベクトルを作成
-				Angle = Vec3(cos(TotalAngle), 0, sin(TotalAngle));
-				//正規化する
-				Angle.normalize();
-				//移動サイズを設定。
-				Angle *= MoveSize;
-				//Y軸は変化させない
-				Angle.y = 0;
+				MoveX = CntlVec[0].fThumbLX;
 			}
 		}
-		return Angle;
+		return MoveX;
 	}
 
-	void Player::MovePlayer() {
+	//モーションを実装する関数群
+	//移動して向きを移動方向にする
+	//移動距離を返す
+	float  Player::MoveRotationMotion() {
 		float ElapsedTime = App::GetApp()->GetElapsedTime();
-		Vec3 Angle = GetMoveVector();
-		//Rigidbodyを取り出す
-		auto PtrRedit = GetComponent<Rigidbody>();
-		auto Velo = PtrRedit->GetVelocity();
-		if (Angle.length() <= 0.0f && Velo.y == 0.0f) {
-			//コントローラを離したとき対策
-			Velo *= GetDecel();
-			PtrRedit->SetVelocity(Velo);
-			return;
-		}
+		auto MoveX = GetMoveVector();
 		//Transform
 		auto PtrTransform = GetComponent<Transform>();
+		//Rigidbodyを取り出す
+		auto PtrRedit = GetComponent<Rigidbody>();
 		//現在の速度を取り出す
+		auto Velo = PtrRedit->GetVelocity().x;
+		auto VeloY = PtrRedit->GetVelocity().y;
 		//目的地を最高速度を掛けて求める
-		auto Target = Angle * GetMaxSpeed();
+		auto Target = MoveX * m_MaxSpeed;
 		//目的地に向かうために力のかける方向を計算する
 		//Forceはフォースである
 		auto Force = Target - Velo;
-		//yは0にする
-		Force.y = 0;
 		//加速度を求める
-		auto Accel = Force / GetMass();
+		auto Accel = Force / m_Mass;
 		//ターン時間を掛けたものを速度に加算する
 		Velo += (Accel * ElapsedTime);
-		//ヴェロシティのz方向を0にする
-		Velo.z = 0;
+		//減速する
+		Velo *= m_Decel;
 		//速度を設定する
-		PtrRedit->SetVelocity(Velo);
-		//回転の計算
-		if (Angle.length() > 0.0f) {
-			auto UtilPtr = GetBehavior<UtilBehavior>();
-			UtilPtr->RotToHead(Angle, 1.0f);
+		Vec3 VecVelo(Velo, VeloY, 0);
+		PtrRedit->SetVelocity(VecVelo);
+		////回転の計算
+		//元となるオブジェクトからアニメーションオブジェクトへの行列の設定
+		//Transformのスケーリングを-1にすると衝突判定がうまくいかないので
+		//SpriteStdioの部分だけ変更する
+		if (MoveX >= 0.0f) {
+			SetToAnimeMatrix(m_ToAnimeMatrixRight);
 		}
+		else {
+			SetToAnimeMatrix(m_ToAnimeMatrixLeft);
+		}
+		//MoveXを返す
+		return MoveX;
 	}
+
 	//衝突している時
 	void Player::OnCollisionExcute(vector<shared_ptr<GameObject>>& OtherVec) {
 		for (auto obj : OtherVec) {
@@ -148,7 +129,7 @@ namespace basecross{
 		//親クラスのクリエイトを呼ぶ
 		SS5ssae::OnCreate();
 		//値は秒あたりのフレーム数
-		SetFps(30.0f);
+		SetFps(49.0f);
 
 
 		//元となるオブジェクトからアニメーションオブジェクトへの行列の設定
@@ -194,7 +175,7 @@ namespace basecross{
 		//この中でステートの切り替えが行われる
 		m_StateMachine->Update();
 		//プレイヤーの移動
-		MovePlayer();
+		MoveRotationMotion();
 
 		//重力を加える
 		auto PtrGrav = GetBehavior<Gravity>();
