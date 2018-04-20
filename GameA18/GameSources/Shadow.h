@@ -15,8 +15,6 @@ namespace basecross {
 		GameObject& m_Obj;
 		//スケールのZの固定値
 		float m_ScaleZ;
-		//前の位置との差
-		Vec3 PoorBefor;
 		//ライトの位置
 		Vec3 m_LightPosition;
 		//ライトの角度
@@ -42,8 +40,6 @@ namespace basecross {
 		virtual void OnUpdate2();
 		//影の場所を計算する
 		Vec3 ShadowLocation();
-		//1つ前の座標との差を出す
-		Vec3 GetPoorBefor();
 	};
 
 }
