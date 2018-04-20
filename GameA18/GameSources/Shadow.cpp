@@ -9,7 +9,7 @@ namespace basecross {
 	ShadowObject::ShadowObject(const shared_ptr<Stage>& StagePtr,
 		const Vec3& Scale, const Vec3& Rotation, const wstring& Mesh, GameObject& Obj)
 		: GameObject(StagePtr),
-		m_Scale(Scale), m_Rotation(Rotation), m_Mesh(Mesh), m_Obj(Obj), m_ScaleZ(1.0f),
+		m_Scale(Scale), m_Rotation(Rotation), m_Mesh(Mesh), m_Obj(Obj), m_ScaleZ(0.25f),
 		m_LightAngle(0.0f, 0.0f, 0.0f), m_LightDistance(0.1f),m_MaxAngle(0.8f)
 	{
 	}
@@ -37,12 +37,15 @@ namespace basecross {
 		PtrDraw->SetFogEnabled(true);
 		PtrDraw->SetMeshResource(m_Mesh);
 		PtrDraw->SetOwnShadowActive(true);
-		PtrDraw->SetTextureResource(L"Oreng_TX");
+		//PtrDraw->SetTextureResource(L"Oreng_TX");
+		//真っ黒
+		PtrDraw->SetColorAndAlpha(Col4(1.0f, 1.0f, 1.0f, 0.0f));
 	}
 
 	//変化
 	void ShadowObject::OnUpdate() {
 		auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
+		float speed = 0.6f;
 		if (CntlVec[0].bConnected) {
 			//右スティックが動いていたら
 			if (CntlVec[0].fThumbRX != 0 || CntlVec[0].fThumbRY != 0) {
@@ -54,18 +57,17 @@ namespace basecross {
 				auto ElapsedTime = App::GetApp()->GetElapsedTime();
 				//X方向にステックが倒れていたら
 				if (m_LightAngle.x >= -m_MaxAngle && CntlVec[0].fThumbRX > 0.4f) {
-					m_LightAngle.x += -CntlVec[0].fThumbRX * ElapsedTime;
+					m_LightAngle.x += -CntlVec[0].fThumbRX * ElapsedTime*speed;
 				}
 				else if (m_LightAngle.x <= m_MaxAngle && CntlVec[0].fThumbRX < -0.4f) {
-					m_LightAngle.x += -CntlVec[0].fThumbRX * ElapsedTime;
+					m_LightAngle.x += -CntlVec[0].fThumbRX * ElapsedTime*speed;
 				}
 				//Y方向にスティックが倒れていたら
 				if (m_LightAngle.y >= -m_MaxAngle && CntlVec[0].fThumbRY > 0.4f) {
-					m_LightAngle.y +=
-						-CntlVec[0].fThumbRY * ElapsedTime;
+					m_LightAngle.y += -CntlVec[0].fThumbRY * ElapsedTime*speed;
 				}
 				else if (m_LightAngle.y <= m_MaxAngle && CntlVec[0].fThumbRY < -0.4f) {
-					m_LightAngle.y += -CntlVec[0].fThumbRY * ElapsedTime;
+					m_LightAngle.y += -CntlVec[0].fThumbRY * ElapsedTime*speed;
 				}
 				//---------------------------------------------------------------------------------------
 				//角度からポジション出す

@@ -101,26 +101,46 @@ namespace basecross{
 				SPHERE t;
 				t.m_Center = GetComponent<Transform>()->GetPosition();
 				t.m_Center.z = 0;
-				t.m_Radius = 0.30;
+				t.m_Radius = GetComponent<Transform>()->GetScale().y/2;
 				//シャドウの判定
-				PLANE p;
+				float pull = 0.4f;//床上に少し押し出しする距離
 				auto objPos = obj->GetComponent<Transform>()->GetPosition();
 				auto objSca = obj->GetComponent<Transform>()->GetScale();
-				float pull = 0.4f;//床上に少し押し出しする距離
-								  //シャドウオブジェの上の方に横長の判定を作る
-				Plane4 pla = Plane4(objPos.x - objSca.x / 2, objPos.y + objSca.y / 2 + pull, objSca.x, objSca.y);
+				//シャドウオブジェの少し上の方まで伸びる判定を作る
+				OBB p(objSca, Vec3(1, 1, 1), objPos);
+				Vec3 HitPoint;
 				//イデアとシャドウの接触判定
-				if (!HitTest::SPHERE_PLANE(t, pla)) {
-					//ペアレント化を解く
-					GetComponent<Transform>()->SetParent(obj);
+				if (HitTest::SPHERE_OBB(t, p, HitPoint)) {
+					//ペアレント化する
+					GetComponent<Transform>()->SetParent(ShadowPtr);
+					GetComponent<Transform>()->SetWorldPosition(HitPoint);
 				}
-				GetComponent<Transform>()->SetParent(ShadowPtr);
 			}
 		}
 	}
 
 	//衝突している時
 	void Player::OnCollisionExcute(vector<shared_ptr<GameObject>>& OtherVec) {
+		for (auto &obj : OtherVec) {
+			if (GetComponent<Transform>()->GetParent() == obj) {
+				//イデアの判定
+				SPHERE t;
+				t.m_Center = GetComponent<Transform>()->GetPosition();
+				t.m_Center.z = 0;
+				t.m_Radius = GetComponent<Transform>()->GetScale().y/2;
+				//シャドウの判定
+				float pull = 0.4f;//床上に少し押し出しする距離
+				auto objPos = obj->GetComponent<Transform>()->GetPosition();
+				auto objSca = obj->GetComponent<Transform>()->GetScale();
+				//シャドウオブジェの少し上の方まで伸びる判定を作る
+				OBB p(objSca, Vec3(1, 1, 1), objPos);
+				Vec3 HitPoint;
+				//イデアとシャドウの接触判定
+				if (HitTest::SPHERE_OBB(t, p, HitPoint)) {
+					GetComponent<Transform>()->SetWorldPosition(HitPoint);
+				}
+			}
+		}
 	}
 
 	//衝突しなくなった時
@@ -134,20 +154,18 @@ namespace basecross{
 				SPHERE t;
 				t.m_Center = GetComponent<Transform>()->GetPosition();
 				t.m_Center.z = 0;
-				t.m_Radius = 0.30;
+				t.m_Radius = GetComponent<Transform>()->GetScale().y/2;
 				//シャドウの判定
 				float pull = 0.4f;//床上に少し押し出しする距離
 				auto objPos = obj->GetComponent<Transform>()->GetPosition();
 				auto objSca = obj->GetComponent<Transform>()->GetScale();
 				//シャドウオブジェの上の方に横長の判定を作る
-				objPos.y += pull;
 				OBB p(objSca,Vec3(1,1,1),objPos);
 				Vec3 HitPoint;
 				//イデアとシャドウの接触判定
 				if (!HitTest::SPHERE_OBB(t, p,HitPoint)){
 					//ペアレント化を解く
 					GetComponent<Transform>()->SetParent(nullptr);
-
 				}
 			}
 		}
@@ -210,6 +228,7 @@ namespace basecross{
 
 		//重力を加える
 		auto PtrGrav = GetBehavior<Gravity>();
+		PtrGrav->SetGravity(Vec3(0.0f,-4.9f,0.0f));
 		PtrGrav->Execute();
 		//カメラを得る
 		//auto PtrCamera = dynamic_pointer_cast<LookAtCamera>(OnGetDrawCamera());

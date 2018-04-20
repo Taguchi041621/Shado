@@ -157,7 +157,7 @@ namespace basecross {
 			//ビューとライトの作成
 			CreateViewLight();
 			//プレートの作成
-			CreatePlate();
+			//CreatePlate();
 			//壁
 			CreateWall();
 			//プレーヤーの作成
