@@ -160,7 +160,7 @@ namespace basecross{
 		auto Ptr = GetComponent<Transform>();
 		Ptr->SetScale(0.25f, 0.25f, 0.25f);	//直径25センチの球体
 		Ptr->SetRotation(0.0f, 0.0f, 0.0f);
-		Ptr->SetPosition(0.0f, 3.5f, -0.1f);
+		Ptr->SetPosition(-8.0f, 5.5f, -0.1f);
 
 		//親クラスのクリエイトを呼ぶ
 		SS5ssae::OnCreate();

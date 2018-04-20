@@ -12,7 +12,7 @@ namespace basecross {
 	void KeyItem::OnCreate()
 	{
 		auto PtrTransform = GetComponent<Transform>();
-		PtrTransform->SetPosition(0,0.5,-0.1);
+		PtrTransform->SetPosition(m_KeyPos);
 		PtrTransform->SetScale(0.25,0.25,0.25);
 
 		//ƒ^ƒO
@@ -48,7 +48,7 @@ namespace basecross {
 		t.m_Radius = 0.20;
 
 		SPHERE p;
-		p.m_Center = GetStage()->GetSharedGameObject<Player>(L"Player")->GetComponent<Transform>()->GetPosition();
+		p.m_Center = GetStage()->GetSharedGameObject<Player>(L"Player")->GetComponent<Transform>()->GetWorldPosition();
 		p.m_Center.z = 0;
 		p.m_Radius = 0.20;
 
