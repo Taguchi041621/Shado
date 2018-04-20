@@ -34,6 +34,8 @@ namespace basecross {
 		virtual void OnCreate()override;
 		//更新
 		virtual void OnUpdate()override;
+		//作るステージを選択する
+		void CreateStage(int num);
 
 	};
 

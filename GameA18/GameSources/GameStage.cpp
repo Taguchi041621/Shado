@@ -120,6 +120,37 @@ namespace basecross {
 	{
 		auto KeyPtr = AddGameObject<KeyItem>(Vec3(1.0f, 4.0f, -0.25f));
 	}
+	//ステージをスイッチ文で切り替える
+	void GameStage::CreateStage(int num) {
+		Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
+		switch (num){
+		case 1:
+			//実体ブロック
+			AddGameObject<WhiteCube>(
+				Vec3(3.0f, 1.0f, 1.0f),Qt,
+				Vec3(-7.0f, 4.0f, -10.0f)
+				);
+			AddGameObject<WhiteCube>(
+				Vec3(2.0f, 1.0f, 1.0f),Qt,
+				Vec3(-2.0f, 3.0f, -6.0f)
+				);
+			AddGameObject<WhiteCube>(
+				Vec3(3.0f, 1.0f, 1.0f),Qt,
+				Vec3(3.0f, 2.0f, -8.0f)
+				);
+			//ゴール
+			AddGameObject<Goal>(
+				Vec3(0.25f, 0.5f, 0.25f),		//スケール
+				Qt,							//角度
+				Vec3(5.0f, 2.8f, -0.25f)		//ポジション
+				);
+			//キー
+			AddGameObject<KeyItem>(Vec3(1.0f, 4.0f, -0.25f));
+			break;
+		default:
+			break;
+		}
+	}
 
 	void GameStage::OnCreate() {
 		try {
@@ -131,12 +162,13 @@ namespace basecross {
 			CreateWall();
 			//プレーヤーの作成
 			CreatePlayer();
-			//白いブロックの作成
-			CreateWhiteCube();
-			//ゴールブロック
-			CreateGoal();
-			//鍵
-			CreateKeyItem();
+			////白いブロックの作成
+			//CreateWhiteCube();
+			////ゴールブロック
+			//CreateGoal();
+			////鍵
+			//CreateKeyItem();
+			CreateStage(1);
 		}
 		catch (...) {
 			throw;

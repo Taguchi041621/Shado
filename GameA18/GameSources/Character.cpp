@@ -108,7 +108,7 @@ namespace basecross {
 		t.m_Radius = 0.20;
 
 		SPHERE p;
-		p.m_Center = GetStage()->GetSharedGameObject<Player>(L"Player")->GetComponent<Transform>()->GetPosition();
+		p.m_Center = GetStage()->GetSharedGameObject<Player>(L"Player")->GetComponent<Transform>()->GetWorldPosition();
 		p.m_Center.z = 0;
 		p.m_Radius = 0.20;
 

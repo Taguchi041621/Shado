@@ -136,11 +136,12 @@ namespace basecross{
 				t.m_Center.z = 0;
 				t.m_Radius = 0.30;
 				//シャドウの判定
+				float pull = 0.4f;//床上に少し押し出しする距離
 				auto objPos = obj->GetComponent<Transform>()->GetPosition();
 				auto objSca = obj->GetComponent<Transform>()->GetScale();
 				//シャドウオブジェの上の方に横長の判定を作る
+				objPos.y += pull;
 				OBB p(objSca,Vec3(1,1,1),objPos);
-				float pull = 0.4f;//床上に少し押し出しする距離
 				Vec3 HitPoint;
 				//イデアとシャドウの接触判定
 				if (!HitTest::SPHERE_OBB(t, p,HitPoint)){
