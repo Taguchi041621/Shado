@@ -8,7 +8,6 @@
 
 namespace basecross{
 
-
 	//--------------------------------------------------------------------------------------
 	///	プレイヤー
 	//--------------------------------------------------------------------------------------
@@ -33,7 +32,6 @@ namespace basecross{
 		//データとゲームとの変換行列
 		Mat4x4 m_ToAnimeMatrixLeft;
 		Mat4x4 m_ToAnimeMatrixRight;
-
 	public:
 		//構築と破棄
 		//--------------------------------------------------------------------------------------
@@ -105,8 +103,11 @@ namespace basecross{
 		//--------------------------------------------------------------------------------------
 		virtual void OnUpdate2() override;
 
+		//衝突したとき
+		virtual void OnCollision(vector<shared_ptr<GameObject>>& OtherVec) override;
 		//衝突しているとき
 		virtual void OnCollisionExcute(vector<shared_ptr<GameObject>>& OtherVec) override;
+		//衝突が終わった時
 		virtual void OnCollisionExit(vector<shared_ptr<GameObject>>& OtherVec) override;
 
 		//LRが押されたときカメラを変える
@@ -146,7 +147,6 @@ namespace basecross{
 		//ステートにから抜けるときに呼ばれる関数
 		virtual void Exit(const shared_ptr<Player>& Obj)override;
 	};
-
 
 
 }

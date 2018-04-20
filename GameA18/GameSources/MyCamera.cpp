@@ -32,6 +32,7 @@ namespace basecross {
 	void MyCamera::OnUpdate() {
 		auto TargetPtr = m_TargetObject.lock();
 		if (TargetPtr) {
+
 		}
 	}
 

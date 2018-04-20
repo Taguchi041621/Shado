@@ -90,28 +90,64 @@ namespace basecross{
 		return MoveX;
 	}
 
-	//衝突している時
-	void Player::OnCollisionExcute(vector<shared_ptr<GameObject>>& OtherVec) {
-		for (auto obj : OtherVec) {
+	void Player::OnCollision(vector<shared_ptr<GameObject>>& OtherVec) {
+		for (auto &obj : OtherVec) {
 			//シャドウオブジェクトを検出
 			auto ShadowPtr = dynamic_pointer_cast<ShadowObject>(obj);
-			//シャドウオブジェクトだったら
-			if (ShadowPtr) {
-				//シャドウオブジェクトの移動した距離を出す関数を呼び出し、
-				//プレイヤーのポジションに加える
-				//auto pos = GetComponent<Transform>()->GetPosition() + ShadowPtr->GetPoorBefor();
-				//ポジションを適用する
-				//GetComponent<Transform>()->SetPosition(pos);
+			//当たったのがシャドウオブジェクトで
+			//ペアレント化してるオブジェクトが無かったらペアレント化
+			if (ShadowPtr && !GetComponent<Transform>()->GetParent()) {
+				//イデアの判定
+				SPHERE t;
+				t.m_Center = GetComponent<Transform>()->GetPosition();
+				t.m_Center.z = 0;
+				t.m_Radius = 0.30;
+				//シャドウの判定
+				PLANE p;
+				auto objPos = obj->GetComponent<Transform>()->GetPosition();
+				auto objSca = obj->GetComponent<Transform>()->GetScale();
+				float pull = 0.4f;//床上に少し押し出しする距離
+								  //シャドウオブジェの上の方に横長の判定を作る
+				Plane4 pla = Plane4(objPos.x - objSca.x / 2, objPos.y + objSca.y / 2 + pull, objSca.x, objSca.y);
+				//イデアとシャドウの接触判定
+				if (!HitTest::SPHERE_PLANE(t, pla)) {
+					//ペアレント化を解く
+					GetComponent<Transform>()->SetParent(obj);
+				}
 				GetComponent<Transform>()->SetParent(ShadowPtr);
 			}
 		}
 	}
+
+	//衝突している時
+	void Player::OnCollisionExcute(vector<shared_ptr<GameObject>>& OtherVec) {
+	}
+
+	//衝突しなくなった時
 	void Player::OnCollisionExit(vector<shared_ptr<GameObject>>& OtherVec) {
-		for (auto obj : OtherVec) {
+		for (auto &obj : OtherVec) {
 			//シャドウオブジェクトを検出
 			auto ShadowPtr = dynamic_pointer_cast<ShadowObject>(obj);
+			//それが親のシャドウで
 			if (ShadowPtr == GetComponent<Transform>()->GetParent()) {
-				GetComponent<Transform>()->SetParent(nullptr);
+				//イデアの判定
+				SPHERE t;
+				t.m_Center = GetComponent<Transform>()->GetPosition();
+				t.m_Center.z = 0;
+				t.m_Radius = 0.30;
+				//シャドウの判定
+				auto objPos = obj->GetComponent<Transform>()->GetPosition();
+				auto objSca = obj->GetComponent<Transform>()->GetScale();
+				//シャドウオブジェの上の方に横長の判定を作る
+				OBB p(objSca,Vec3(1,1,1),objPos);
+				float pull = 0.4f;//床上に少し押し出しする距離
+				Vec3 HitPoint;
+				//イデアとシャドウの接触判定
+				if (!HitTest::SPHERE_OBB(t, p,HitPoint)){
+					//ペアレント化を解く
+					GetComponent<Transform>()->SetParent(nullptr);
+
+				}
 			}
 		}
 	}
@@ -153,12 +189,6 @@ namespace basecross{
 		auto PtrAction = AddComponent<Action>();
 		//アクションは無効にしておく
 		PtrAction->SetUpdateActive(false);
-
-		//カメラを得る
-		auto PtrCamera = dynamic_pointer_cast<MyCamera>(OnGetDrawCamera());
-		if (PtrCamera) {
-			PtrCamera->SetTargetObject(GetThis<GameObject>());
-		}
 
 		//ステートマシンの構築
 		m_StateMachine = make_shared< StateMachine<Player> >(GetThis<Player>());
@@ -229,7 +259,7 @@ namespace basecross{
 		auto PtrMCamera = dynamic_pointer_cast<MyCamera>(GetStage()->GetView()->GetTargetCamera());
 		PtrMCamera->SetToTargetLerp(0.5);
 
-	    auto TargetPos = this->GetComponent<Transform>()->GetPosition();
+	    auto TargetPos = this->GetComponent<Transform>()->GetWorldPosition();
 		Vec3 ArmVec(0, 0.0f, CameraPosZ);
 		Vec3 Eye = TargetPos + ArmVec;
 		PtrCamera->SetAt(TargetPos);
@@ -334,6 +364,13 @@ namespace basecross{
 		PositionStr += L"Y=" + Util::FloatToWStr(Pos.y, 6, Util::FloatModify::Fixed) + L",\t";
 		PositionStr += L"Z=" + Util::FloatToWStr(Pos.z, 6, Util::FloatModify::Fixed) + L"\n";
 
+		auto WPos = GetComponent<Transform>()->GetWorldPosition();
+		wstring WPositionStr(L"WPosition:\t");
+		WPositionStr += L"X=" + Util::FloatToWStr(WPos.x, 6, Util::FloatModify::Fixed) + L",\t";
+		WPositionStr += L"Y=" + Util::FloatToWStr(WPos.y, 6, Util::FloatModify::Fixed) + L",\t";
+		WPositionStr += L"Z=" + Util::FloatToWStr(WPos.z, 6, Util::FloatModify::Fixed) + L"\n";
+
+
 		wstring RididStr(L"Velocity:\t");
 		auto Velocity = GetComponent<Rigidbody>()->GetVelocity();
 		RididStr += L"X=" + Util::FloatToWStr(Velocity.x, 6, Util::FloatModify::Fixed) + L",\t";
@@ -351,7 +388,7 @@ namespace basecross{
 		else {
 			HitObjectStr += L"NULL\n";
 		}
-		wstring str = FPS + PositionStr + RididStr +  HitObjectStr;
+		wstring str = FPS + PositionStr +WPositionStr + RididStr +  HitObjectStr;
 		//文字列をつける
 		auto PtrString = GetComponent<StringSprite>();
 		PtrString->SetText(str);
@@ -392,7 +429,6 @@ namespace basecross{
 	//ステートにから抜けるときに呼ばれる関数
 	void WaitState::Exit(const shared_ptr<Player>& Obj) {
 	}
-
 
 }
 //end basecross

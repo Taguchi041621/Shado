@@ -148,11 +148,4 @@ namespace basecross {
 
 		return m_kagePos;
 	}
-	//前の位置と今の位置を比べてVec3を返す
-	Vec3 ShadowObject::GetPoorBefor() {
-		//前のポジションと今のポジションの差を出す
-		PoorBefor = ShadowLocation() - GetComponent<Transform>()->GetBeforePosition();
-		//差を返す
-		return PoorBefor;
-	}
 }
