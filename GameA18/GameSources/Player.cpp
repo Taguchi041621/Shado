@@ -100,19 +100,19 @@ namespace basecross{
 				//イデアの判定
 				SPHERE t;
 				t.m_Center = GetComponent<Transform>()->GetPosition();
-				t.m_Center.z = 0;
-				t.m_Radius = GetComponent<Transform>()->GetScale().y/2;
+				t.m_Radius = GetComponent<Transform>()->GetScale().y;
 				//シャドウの判定
-				float pull = 0.4f;//床上に少し押し出しする距離
-				auto objPos = obj->GetComponent<Transform>()->GetPosition();
-				auto objSca = obj->GetComponent<Transform>()->GetScale();
-				//シャドウオブジェの少し上の方まで伸びる判定を作る
-				OBB p(objSca, Vec3(1, 1, 1), objPos);
+				OBB p;
+				p.m_Center = obj->GetComponent<Transform>()->GetPosition();
+				//p.m_Center.y += obj->GetComponent<Transform>()->GetScale().y / 4;
+				p.m_Size = obj->GetComponent<Transform>()->GetScale()/2.0f;
+				//p.m_Size.y /= 2.0f;
 				Vec3 HitPoint;
 				//イデアとシャドウの接触判定
 				if (HitTest::SPHERE_OBB(t, p, HitPoint)) {
 					//ペアレント化する
 					GetComponent<Transform>()->SetParent(ShadowPtr);
+					HitPoint.y+= t.m_Radius = GetComponent<Transform>()->GetScale().y/2.0f;
 					GetComponent<Transform>()->SetWorldPosition(HitPoint);
 				}
 			}
@@ -126,17 +126,15 @@ namespace basecross{
 				//イデアの判定
 				SPHERE t;
 				t.m_Center = GetComponent<Transform>()->GetPosition();
-				t.m_Center.z = 0;
-				t.m_Radius = GetComponent<Transform>()->GetScale().y/2;
+				t.m_Radius = GetComponent<Transform>()->GetScale().y;
 				//シャドウの判定
-				float pull = 0.4f;//床上に少し押し出しする距離
-				auto objPos = obj->GetComponent<Transform>()->GetPosition();
-				auto objSca = obj->GetComponent<Transform>()->GetScale();
-				//シャドウオブジェの少し上の方まで伸びる判定を作る
-				OBB p(objSca, Vec3(1, 1, 1), objPos);
+				OBB p;
+				p.m_Center = obj->GetComponent<Transform>()->GetPosition();
+				p.m_Size = obj->GetComponent<Transform>()->GetScale()/2.0f;
 				Vec3 HitPoint;
 				//イデアとシャドウの接触判定
 				if (HitTest::SPHERE_OBB(t, p, HitPoint)) {
+					HitPoint.y += t.m_Radius = GetComponent<Transform>()->GetScale().y;
 					GetComponent<Transform>()->SetWorldPosition(HitPoint);
 				}
 			}
@@ -153,14 +151,11 @@ namespace basecross{
 				//イデアの判定
 				SPHERE t;
 				t.m_Center = GetComponent<Transform>()->GetPosition();
-				t.m_Center.z = 0;
-				t.m_Radius = GetComponent<Transform>()->GetScale().y/2;
+				t.m_Radius = GetComponent<Transform>()->GetScale().y;
 				//シャドウの判定
-				float pull = 0.4f;//床上に少し押し出しする距離
-				auto objPos = obj->GetComponent<Transform>()->GetPosition();
-				auto objSca = obj->GetComponent<Transform>()->GetScale();
-				//シャドウオブジェの上の方に横長の判定を作る
-				OBB p(objSca,Vec3(1,1,1),objPos);
+				OBB p;
+				p.m_Center = obj->GetComponent<Transform>()->GetPosition();
+				p.m_Size = obj->GetComponent<Transform>()->GetScale()/2.0f;
 				Vec3 HitPoint;
 				//イデアとシャドウの接触判定
 				if (!HitTest::SPHERE_OBB(t, p,HitPoint)){
@@ -179,7 +174,7 @@ namespace basecross{
 		auto Ptr = GetComponent<Transform>();
 		Ptr->SetScale(0.25f, 0.25f, 0.25f);	//直径25センチの球体
 		Ptr->SetRotation(0.0f, 0.0f, 0.0f);
-		Ptr->SetPosition(-8.0f, 5.5f, -0.1f);
+		Ptr->SetPosition(-8.0f, 5.5f, 0.0f);
 
 		//親クラスのクリエイトを呼ぶ
 		SS5ssae::OnCreate();
