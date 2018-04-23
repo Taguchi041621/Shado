@@ -72,7 +72,7 @@ namespace basecross {
 		//Ž©•ª‚É‰e‚ª‰f‚è‚±‚Þ‚æ‚¤‚É‚·‚é
 		DrawComp->SetOwnShadowActive(true);
 
-		Flt4 Color(0.0f, 0.5f, 1.0f, 0.6f);
+		Flt4 Color(1.0f, 1.0f, 1.0f, 0.7f);
 		DrawComp->SetColorAndAlpha(Color);
 	}
 

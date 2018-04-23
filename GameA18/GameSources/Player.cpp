@@ -112,7 +112,7 @@ namespace basecross{
 				if (HitTest::SPHERE_OBB(t, p, HitPoint)) {
 					//ペアレント化する
 					GetComponent<Transform>()->SetParent(ShadowPtr);
-					HitPoint.y+= t.m_Radius = GetComponent<Transform>()->GetScale().y/2.0f;
+					HitPoint.y += GetComponent<Transform>()->GetScale().y/2.0f;
 					GetComponent<Transform>()->SetWorldPosition(HitPoint);
 				}
 			}
@@ -134,7 +134,7 @@ namespace basecross{
 				Vec3 HitPoint;
 				//イデアとシャドウの接触判定
 				if (HitTest::SPHERE_OBB(t, p, HitPoint)) {
-					HitPoint.y += t.m_Radius = GetComponent<Transform>()->GetScale().y;
+					HitPoint.y += GetComponent<Transform>()->GetScale().y/2.0f;
 					GetComponent<Transform>()->SetWorldPosition(HitPoint);
 				}
 			}
@@ -151,7 +151,7 @@ namespace basecross{
 				//イデアの判定
 				SPHERE t;
 				t.m_Center = GetComponent<Transform>()->GetPosition();
-				t.m_Radius = GetComponent<Transform>()->GetScale().y;
+				t.m_Radius = GetComponent<Transform>()->GetScale().y/2.0f;
 				//シャドウの判定
 				OBB p;
 				p.m_Center = obj->GetComponent<Transform>()->GetPosition();
@@ -160,7 +160,7 @@ namespace basecross{
 				//イデアとシャドウの接触判定
 				if (!HitTest::SPHERE_OBB(t, p,HitPoint)){
 					//ペアレント化を解く
-					GetComponent<Transform>()->SetParent(nullptr);
+					GetComponent<Transform>()->ClearParent();
 				}
 			}
 		}
@@ -255,12 +255,10 @@ namespace basecross{
 
 		auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
 		if (CntlVec[0].bConnected) {
-			if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) 
-			{
+			if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) {
 				m_CameraNumber -= 1;
 			}
-			else if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER)
-			{
+			else if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER){
 				m_CameraNumber += 1;
 			}
 		}
@@ -280,68 +278,53 @@ namespace basecross{
 		PtrCamera->SetAt(TargetPos);
 		PtrCamera->SetEye(Eye);
 
-		if (CameraPosZ > -10)
-		{
+		if (CameraPosZ > -10){
 			CameraPosFlag = true;
 		}
-		else if (CameraPosZ < -10)
-		{
+		else if (CameraPosZ < -10){
 			CameraPosFlag = false;
 		}
-		switch (m_CameraNumber)
-		{
-		case 0:
-		{
-			if (CameraPosZ == -5)
-			{
+		switch (m_CameraNumber){
+		case 0:{
+			if (CameraPosZ == -5){
 				break;
 			}
 			CameraPosZ += 0.2;
-			if (CameraPosZ > -5)
-			{
+			if (CameraPosZ > -5){
 				CameraPosZ = -5;
 			}
 			break;
 		}
 
-		case 1:
-		{
-			if (CameraPosZ == -10)
-			{
+		case 1:{
+			if (CameraPosZ == -10){
 				break;
 			}
-			if (CameraPosFlag)
-			{
+			if (CameraPosFlag){
 				CameraPosZ -= 0.2;
 			}
-			else if (!CameraPosFlag)
-			{
+			else if (!CameraPosFlag){
 				CameraPosZ += 0.2;
 			}
 
-			if (CameraPosZ >= -10.2f && CameraPosZ <= -9.8f)
-			{
+			if (CameraPosZ >= -10.2f && CameraPosZ <= -9.8f){
 				CameraPosZ = -10;
 			}
 
 			break;
 		}
-		case 2:
-		{
-			if (CameraPosZ == -15)
-			{
+		case 2:{
+			if (CameraPosZ == -15){
 				break;
 			}
 			CameraPosZ -= 0.2;
-			if (CameraPosZ < -15)
-			{
+			if (CameraPosZ < -15){
 				CameraPosZ = -15;
 			}
 			break;
 		}
 
-		case 3:
-		{
+		case 3:{
 
 		}
 		break;
@@ -352,13 +335,11 @@ namespace basecross{
 
 		auto PlayerPos = this->GetComponent<Transform>()->GetPosition();
 		//落下死
-		if (PlayerPos.y < -5)
-		{
+		if (PlayerPos.y < -5){
 			m_PlayerHP = 0;
 		}
 
-		if (m_PlayerHP == 0)
-		{
+		if (m_PlayerHP == 0){
 			PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameOver");
 		}
 	}
