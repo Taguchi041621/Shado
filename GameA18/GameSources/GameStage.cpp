@@ -61,7 +61,7 @@ namespace basecross {
 		Qt.rotationRollPitchYawFromVector(Vec3(0, 0, XM_PIDIV2));
 		PtrTrans->SetScale(50.0f, 50.0f, 1.0f);
 		PtrTrans->SetQuaternion(Qt);
-		PtrTrans->SetPosition(0.0f, 0.0f, 0.0f);
+		PtrTrans->SetPosition(0.0f, 0.0f, 1.0f);
 
 		auto ColPtr = Ptr->AddComponent<CollisionRect>();
 		//描画コンポーネントの追加
@@ -138,6 +138,7 @@ namespace basecross {
 				Vec3(3.0f, 1.0f, 1.0f),Qt,
 				Vec3(3.0f, 2.0f, -8.0f)
 				);
+
 			//ゴール
 			AddGameObject<Goal>(
 				Vec3(0.25f, 0.5f, 0.25f),		//スケール
@@ -146,6 +147,11 @@ namespace basecross {
 				);
 			//キー
 			AddGameObject<KeyItem>(Vec3(1.0f, 4.0f, -0.25f));
+			//三角
+			AddGameObject<Triangle>(
+				Vec3(1.0f, 1.0f, 1.0f), Qt,
+				Vec3(3.0f, 4.0f, -6.0f)
+				);
 			break;
 		default:
 			break;

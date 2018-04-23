@@ -105,14 +105,14 @@ namespace basecross{
 				OBB p;
 				p.m_Center = obj->GetComponent<Transform>()->GetPosition();
 				//p.m_Center.y += obj->GetComponent<Transform>()->GetScale().y / 4;
-				p.m_Size = obj->GetComponent<Transform>()->GetScale()/2.0f;
+				p.m_Size = obj->GetComponent<Transform>()->GetScale() / 2.0f;
 				//p.m_Size.y /= 2.0f;
 				Vec3 HitPoint;
 				//イデアとシャドウの接触判定
 				if (HitTest::SPHERE_OBB(t, p, HitPoint)) {
 					//ペアレント化する
 					GetComponent<Transform>()->SetParent(ShadowPtr);
-					HitPoint.y += GetComponent<Transform>()->GetScale().y/2.0f;
+					HitPoint.y += GetComponent<Transform>()->GetScale().y / 2.0f;
 					GetComponent<Transform>()->SetWorldPosition(HitPoint);
 				}
 			}
@@ -130,11 +130,11 @@ namespace basecross{
 				//シャドウの判定
 				OBB p;
 				p.m_Center = obj->GetComponent<Transform>()->GetPosition();
-				p.m_Size = obj->GetComponent<Transform>()->GetScale()/2.0f;
+				p.m_Size = obj->GetComponent<Transform>()->GetScale() / 2.0f;
 				Vec3 HitPoint;
 				//イデアとシャドウの接触判定
 				if (HitTest::SPHERE_OBB(t, p, HitPoint)) {
-					HitPoint.y += GetComponent<Transform>()->GetScale().y/2.0f;
+					HitPoint.y += GetComponent<Transform>()->GetScale().y / 2.0f;
 					GetComponent<Transform>()->SetWorldPosition(HitPoint);
 				}
 			}

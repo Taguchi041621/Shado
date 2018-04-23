@@ -7,13 +7,13 @@ namespace basecross {
 	//	用途: オブジェクトの影
 	//--------------------------------------------------------------------------------------
 	ShadowObject::ShadowObject(const shared_ptr<Stage>& StagePtr,
-		const Vec3& Scale, const Vec3& Rotation, const wstring& Mesh, GameObject& Obj)
+		const Vec3& Scale, const Vec3& Rotation, GameObject& Obj)
 		: GameObject(StagePtr),
-		m_Scale(Scale), m_Rotation(Rotation), m_Mesh(Mesh), m_Obj(Obj), m_ScaleZ(0.25f),
+		m_Scale(Scale), m_Rotation(Rotation), m_Obj(Obj), m_ScaleZ(0.25f),
 		m_LightAngle(0.0f, 0.0f, 0.0f), m_LightDistance(0.1f),m_MaxAngle(0.8f)
 	{
 	}
-
+	
 	ShadowObject::~ShadowObject() {}
 	//初期化
 	void ShadowObject::OnCreate() {
@@ -23,7 +23,7 @@ namespace basecross {
 		m_LightPosition = MultiLightPtr->GetLight(mainIndex).m_Directional;
 		//スケールのZを固定の大きさに
 		m_Scale.z = m_ScaleZ;
-		AddComponent<Rigidbody>();
+		//AddComponent<Rigidbody>();
 		auto PtrTransform = AddComponent<Transform>();
 		//影のスケール,角度,ポジションの設定
 		PtrTransform->SetScale(m_Scale);
@@ -35,9 +35,9 @@ namespace basecross {
 
 		auto PtrDraw = AddComponent<BcPNTStaticDraw>();
 		PtrDraw->SetFogEnabled(true);
-		PtrDraw->SetMeshResource(m_Mesh);
+		//PtrDraw->SetMeshResource(m_Mesh);
+		PtrDraw->SetMeshResource(m_Obj.GetComponent<BcPNTStaticDraw>()->GetMeshResource());
 		PtrDraw->SetOwnShadowActive(true);
-		//PtrDraw->SetTextureResource(L"Oreng_TX");
 		//真っ黒
 		PtrDraw->SetColorAndAlpha(Col4(1.0f, 1.0f, 1.0f, 0.0f));
 	}
