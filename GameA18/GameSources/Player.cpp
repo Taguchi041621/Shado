@@ -168,8 +168,7 @@ namespace basecross{
 
 	//‰Šú‰»
 	void Player::OnCreate() {
-		CameraPosZ = -5;
-		m_CameraNumber = 0;
+		CameraPosZ = -10;
 		//‰ŠúˆÊ’u‚È‚Ç‚Ìİ’è
 		auto Ptr = GetComponent<Transform>();
 		Ptr->SetScale(0.25f, 0.25f, 0.25f);	//’¼Œa25ƒZƒ“ƒ`‚Ì‹…‘Ì
@@ -255,80 +254,25 @@ namespace basecross{
 
 		auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
 		if (CntlVec[0].bConnected) {
-			if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) {
-				m_CameraNumber -= 1;
+			if (CntlVec[0].wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) {
+				CameraPosZ += 0.2;
+				if (CameraPosZ >= -10) {
+					CameraPosZ = -10;
+				}
 			}
-			else if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER){
-				m_CameraNumber += 1;
+			else if (CntlVec[0].wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER){
+				CameraPosZ -= 0.2;
+				if (CameraPosZ <= -20) {
+					CameraPosZ = -20;
+				}
 			}
 		}
-
-		if (m_CameraNumber < 0) {
-			m_CameraNumber = 2;
-		}
-		if (m_CameraNumber > 2) {
-			m_CameraNumber = 0;
-		}
-		auto PtrMCamera = dynamic_pointer_cast<MyCamera>(GetStage()->GetView()->GetTargetCamera());
-		PtrMCamera->SetToTargetLerp(0.5);
 
 	    auto TargetPos = this->GetComponent<Transform>()->GetWorldPosition();
 		Vec3 ArmVec(0, 0.0f, CameraPosZ);
 		Vec3 Eye = TargetPos + ArmVec;
 		PtrCamera->SetAt(TargetPos);
 		PtrCamera->SetEye(Eye);
-
-		if (CameraPosZ > -10){
-			CameraPosFlag = true;
-		}
-		else if (CameraPosZ < -10){
-			CameraPosFlag = false;
-		}
-		switch (m_CameraNumber){
-		case 0:{
-			if (CameraPosZ == -5){
-				break;
-			}
-			CameraPosZ += 0.2;
-			if (CameraPosZ > -5){
-				CameraPosZ = -5;
-			}
-			break;
-		}
-
-		case 1:{
-			if (CameraPosZ == -10){
-				break;
-			}
-			if (CameraPosFlag){
-				CameraPosZ -= 0.2;
-			}
-			else if (!CameraPosFlag){
-				CameraPosZ += 0.2;
-			}
-
-			if (CameraPosZ >= -10.2f && CameraPosZ <= -9.8f){
-				CameraPosZ = -10;
-			}
-
-			break;
-		}
-		case 2:{
-			if (CameraPosZ == -15){
-				break;
-			}
-			CameraPosZ -= 0.2;
-			if (CameraPosZ < -15){
-				CameraPosZ = -15;
-			}
-			break;
-		}
-
-		case 3:{
-
-		}
-		break;
-		}
 	}
 	void Player::PlayerHP() {
 		m_PlayerHP = 3;
