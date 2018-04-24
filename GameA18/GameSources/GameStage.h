@@ -6,6 +6,9 @@
 #pragma once
 #include "stdafx.h"
 
+#define RadToDeg 180.0f / 3.1415f
+#define DegToRad 3.1415f/180.0f
+
 namespace basecross {
 
 	//--------------------------------------------------------------------------------------
@@ -26,6 +29,10 @@ namespace basecross {
 		void CreateGoal();
 		//
 		void CreateKeyItem();
+
+		CsvFile m_Csv;//CSV関連の変数
+					  //DataIDを管理するフラグ
+		bool dataIdFlag = false;
 	public:
 		//構築と破棄
 		GameStage() :Stage() {}
@@ -36,7 +43,7 @@ namespace basecross {
 		virtual void OnUpdate()override;
 		//作るステージを選択する
 		void CreateStage(int num);
-
+		void Csv();
 	};
 
 
