@@ -61,7 +61,7 @@ namespace basecross {
 		Qt.rotationRollPitchYawFromVector(Vec3(0, 0, XM_PIDIV2));
 		PtrTrans->SetScale(50.0f, 50.0f, 1.0f);
 		PtrTrans->SetQuaternion(Qt);
-		PtrTrans->SetPosition(0.0f, 0.0f, 1.0f);
+		PtrTrans->SetPosition(0.0f, 0.0f, 0.0f);
 
 		auto ColPtr = Ptr->AddComponent<CollisionRect>();
 		//描画コンポーネントの追加

@@ -40,6 +40,7 @@ namespace basecross {
 		PtrDraw->SetOwnShadowActive(true);
 		//真っ黒
 		PtrDraw->SetColorAndAlpha(Col4(1.0f, 1.0f, 1.0f, 0.0f));
+
 	}
 
 	//変化
@@ -100,11 +101,11 @@ namespace basecross {
 			AngleY *= -1.0f;
 		}
 
-
 		//ライトの角度と対応した実態ブロックの壁までの距離から影の位置を出す
 		Vec3 m_kagePos;
-		m_kagePos.x = ObjPos.x - ObjPos.z * m_LightAngle.x;
-		m_kagePos.y = ObjPos.y - ObjPos.z * m_LightAngle.y;
+		m_kagePos.x = ObjPos.x - ObjPos.z * tanf(m_LightAngle.x);
+		m_kagePos.y = ObjPos.y - ObjPos.z * tanf(m_LightAngle.y);
+
 		m_kagePos.z = 0;
 
 
