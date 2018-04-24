@@ -19,6 +19,10 @@ namespace basecross{
 		*/
 		//--------------------------------------------------------------------------------------
 		void CreateResourses();
+
+		//ゲームステージの作成用変数
+		int m_StageNumber=0;
+
 	public:
 		//--------------------------------------------------------------------------------------
 		/*!
@@ -46,6 +50,10 @@ namespace basecross{
 		*/
 		//--------------------------------------------------------------------------------------
 		virtual void OnEvent(const shared_ptr<Event>& event) override;
+
+		int GetStageNumber() {
+			return m_StageNumber;
+		}
 	};
 
 }
