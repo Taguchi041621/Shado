@@ -91,16 +91,17 @@ namespace basecross{
 	}
 
 	void Player::OnCollision(vector<shared_ptr<GameObject>>& OtherVec) {
+		auto playerTrans = GetComponent<Transform>();
 		for (auto &obj : OtherVec) {
 			//シャドウオブジェクトを検出
 			auto ShadowPtr = dynamic_pointer_cast<ShadowObject>(obj);
 			//当たったのがシャドウオブジェクトで
 			//ペアレント化してるオブジェクトが無かったらペアレント化
-			if (ShadowPtr && !GetComponent<Transform>()->GetParent()) {
+			if (ShadowPtr && !playerTrans->GetParent()) {
 				//イデアの判定
 				SPHERE t;
-				t.m_Center = GetComponent<Transform>()->GetPosition();
-				t.m_Radius = GetComponent<Transform>()->GetScale().y;
+				t.m_Center = playerTrans->GetPosition();
+				t.m_Radius = playerTrans->GetScale().y;
 				//シャドウの判定
 				OBB p;
 				p.m_Center = obj->GetComponent<Transform>()->GetPosition();
@@ -109,10 +110,16 @@ namespace basecross{
 				//イデアとシャドウの接触判定
 				if (HitTest::SPHERE_OBB(t, p, HitPoint)) {
 					//ペアレント化する
-					GetComponent<Transform>()->SetParent(ShadowPtr);
+					playerTrans->SetParent(ShadowPtr);
 					HitPoint.y += GetComponent<Transform>()->GetScale().y / 2.0f;
-					GetComponent<Transform>()->SetWorldPosition(HitPoint);
+					playerTrans->SetWorldPosition(HitPoint);
 				}
+			}
+			//当たってるオブジェクトが親オブジェクトじゃ無かったら
+			else if(!(playerTrans->GetParent() == ShadowPtr)){
+				//今の親を消して新たに親を設定する
+				playerTrans->ClearParent();
+				playerTrans->SetParent(ShadowPtr);
 			}
 		}
 	}
@@ -159,6 +166,7 @@ namespace basecross{
 				//if (!HitTest::SPHERE_OBB(t, p,HitPoint)){
 				auto shadowPos = ShadowPtr->GetComponent<Transform>()->GetWorldPosition();
 				auto shadowSca = ShadowPtr->GetComponent<Transform>()->GetScale();
+				//影オブジェの横に落ちてたら
 				if((shadowPos.x - shadowSca.x/2.0f) >= GetComponent<Transform>()->GetWorldPosition().x ||
 					(shadowPos.x + shadowSca.x/2.0f) <= GetComponent<Transform>()->GetWorldPosition().x){
 					//ペアレント化を解く
@@ -277,7 +285,7 @@ namespace basecross{
 
 		auto PlayerPos = this->GetComponent<Transform>()->GetPosition();
 		//落下死
-		if (PlayerPos.y < -5){
+		if (PlayerPos.y < -20.0f){
 			m_PlayerHP = 0;
 		}
 
