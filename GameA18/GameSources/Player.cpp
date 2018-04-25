@@ -104,9 +104,7 @@ namespace basecross{
 				//シャドウの判定
 				OBB p;
 				p.m_Center = obj->GetComponent<Transform>()->GetPosition();
-				//p.m_Center.y += obj->GetComponent<Transform>()->GetScale().y / 4;
 				p.m_Size = obj->GetComponent<Transform>()->GetScale() / 2.0f;
-				//p.m_Size.y /= 2.0f;
 				Vec3 HitPoint;
 				//イデアとシャドウの接触判定
 				if (HitTest::SPHERE_OBB(t, p, HitPoint)) {
@@ -126,7 +124,7 @@ namespace basecross{
 				//イデアの判定
 				SPHERE t;
 				t.m_Center = GetComponent<Transform>()->GetPosition();
-				t.m_Radius = GetComponent<Transform>()->GetScale().y;
+				t.m_Radius = GetComponent<Transform>()->GetScale().y; 
 				//シャドウの判定
 				OBB p;
 				p.m_Center = obj->GetComponent<Transform>()->GetPosition();
@@ -148,17 +146,21 @@ namespace basecross{
 			auto ShadowPtr = dynamic_pointer_cast<ShadowObject>(obj);
 			//それが親のシャドウで
 			if (ShadowPtr == GetComponent<Transform>()->GetParent()) {
-				//イデアの判定
-				SPHERE t;
-				t.m_Center = GetComponent<Transform>()->GetPosition();
-				t.m_Radius = GetComponent<Transform>()->GetScale().y/2.0f;
-				//シャドウの判定
-				OBB p;
-				p.m_Center = obj->GetComponent<Transform>()->GetPosition();
-				p.m_Size = obj->GetComponent<Transform>()->GetScale()/2.0f;
-				Vec3 HitPoint;
-				//イデアとシャドウの接触判定
-				if (!HitTest::SPHERE_OBB(t, p,HitPoint)){
+				////イデアの判定
+				//SPHERE t;
+				//t.m_Center = GetComponent<Transform>()->GetPosition();
+				//t.m_Radius = GetComponent<Transform>()->GetScale().y;
+				////シャドウの判定
+				//OBB p;
+				//p.m_Center = obj->GetComponent<Transform>()->GetPosition();
+				//p.m_Size = obj->GetComponent<Transform>()->GetScale()/2.0f;
+				//Vec3 HitPoint;
+				////イデアとシャドウの接触判定
+				//if (!HitTest::SPHERE_OBB(t, p,HitPoint)){
+				auto shadowPos = ShadowPtr->GetComponent<Transform>()->GetWorldPosition();
+				auto shadowSca = ShadowPtr->GetComponent<Transform>()->GetScale();
+				if((shadowPos.x - shadowSca.x/2.0f) >= GetComponent<Transform>()->GetWorldPosition().x ||
+					(shadowPos.x + shadowSca.x/2.0f) <= GetComponent<Transform>()->GetWorldPosition().x){
 					//ペアレント化を解く
 					GetComponent<Transform>()->ClearParent();
 				}
@@ -234,8 +236,6 @@ namespace basecross{
 		//	auto p_pos = GetThis<GameObject>()->GetComponent<Transform>()->GetPosition();
 		//	PtrCamera->SetEye(Vec3(p_pos.x, p_pos.y+10.0f, -20.0f));
 		//}
-
-
 	}
 
 	void Player::OnUpdate2() {
@@ -245,8 +245,6 @@ namespace basecross{
 		CameraChanger();
 
 		PlayerHP();
-
-
 	}
 
 	void Player::CameraChanger() {
