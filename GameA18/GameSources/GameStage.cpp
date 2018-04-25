@@ -88,6 +88,37 @@ namespace basecross {
 				auto PtrCube = AddGameObject<WhiteCube>(Scl, Qt, Pos);
 			}
 
+			if (MapVec[0] == L"Player")
+			{
+				stringflag = true;
+				wstring DataDir;
+				App::GetApp()->GetDataDirectory(DataDir);
+				//プレーヤーの作成
+				auto PlayerPtr = AddGameObject<Player>(DataDir + L"Idea\\");
+				//シェア配列にプレイヤーを追加
+				SetSharedGameObject(L"Player", PlayerPtr);
+				Pos.z = 0.0f;
+				PlayerPtr->GetComponent<Transform>()->SetPosition(Pos);
+			}
+
+			if (MapVec[0] == L"Goal")
+			{
+				stringflag = true;
+				Pos.z = 0.0f;
+				Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
+				auto CubePtr = AddGameObject<Goal>(
+					Vec3(0.25f, 0.5f, 0.25f),		//スケール
+					Qt,							//角度
+					Pos		//ポジション
+					);
+			}
+			if (MapVec[0] == L"Key")
+			{
+				stringflag = true;
+				Pos.z = 0.0f;
+				Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
+				AddGameObject<KeyItem>(Pos);
+			}
 			if (!stringflag)
 			{
 				throw BaseException
@@ -261,7 +292,7 @@ namespace basecross {
 			//壁
 			CreateWall();
 			//プレーヤーの作成
-			CreatePlayer();
+			//CreatePlayer();
 			////白いブロックの作成
 			//CreateWhiteCube();
 			////ゴールブロック
