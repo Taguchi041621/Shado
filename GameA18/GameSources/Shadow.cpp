@@ -35,12 +35,11 @@ namespace basecross {
 
 		auto PtrDraw = AddComponent<BcPNTStaticDraw>();
 		PtrDraw->SetFogEnabled(true);
-		//PtrDraw->SetMeshResource(m_Mesh);
+
 		PtrDraw->SetMeshResource(m_Obj.GetComponent<BcPNTStaticDraw>()->GetMeshResource());
 		PtrDraw->SetOwnShadowActive(true);
 		//真っ黒
 		PtrDraw->SetColorAndAlpha(Col4(1.0f, 1.0f, 1.0f, 0.0f));
-
 	}
 
 	//変化
@@ -83,6 +82,9 @@ namespace basecross {
 		}
 	}
 	void ShadowObject::OnUpdate2() {
+		//auto velo = ShadowLocation() - GetComponent<Transform>()->GetPosition();
+		//velo = velo / App::GetApp()->GetElapsedTime();
+		//GetComponent<Rigidbody>()->SetVelocity(velo);
 		//影のポジションの更新
 		GetComponent<Transform>()->SetPosition(ShadowLocation());
 	}
@@ -111,7 +113,7 @@ namespace basecross {
 
 		//スケールにアングルの値足す
 		GetComponent<Transform>()->SetScale(m_Scale.x + AngleX, m_Scale.y + AngleY, m_ScaleZ);
-		//m_kagePos.x += m_Scale.x + m_Obj.GetComponent<Transform>()->GetScale().x/2;
+		//m_kagePos.x += m_Obj.GetComponent<Transform>()->GetScale().x/2 - m_Scale.x;
 
 		return m_kagePos;
 	}
