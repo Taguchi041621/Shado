@@ -22,9 +22,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)MyCamera.cpp">
       <Filter>ソース</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)MyLight.cpp">
-      <Filter>ソース</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Player.cpp">
       <Filter>ソース</Filter>
     </ClCompile>
@@ -44,6 +41,9 @@
       <Filter>ソース</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)WinMain.cpp">
+      <Filter>ソース</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)LightController.cpp">
       <Filter>ソース</Filter>
     </ClCompile>
   </ItemGroup>
@@ -69,9 +69,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)MyCamera.h">
       <Filter>ヘッダー</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)MyLight.h">
-      <Filter>ヘッダー</Filter>
-    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Player.h">
       <Filter>ヘッダー</Filter>
     </ClInclude>
@@ -91,6 +88,9 @@
       <Filter>ヘッダー</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)TitleStage.h">
+      <Filter>ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)LightController.h">
       <Filter>ヘッダー</Filter>
     </ClInclude>
   </ItemGroup>

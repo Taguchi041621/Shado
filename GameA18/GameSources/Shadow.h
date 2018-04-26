@@ -14,14 +14,6 @@ namespace basecross {
 		GameObject& m_Obj;
 		//スケールのZの固定値
 		float m_ScaleZ;
-		//ライトの位置
-		Vec3 m_LightPosition;
-		//ライトの角度
-		Vec3 m_LightAngle;
-		//ライトの基本距離
-		float m_LightDistance;
-		//ライトの最大角度
-		float m_MaxAngle;
 	public:
 		//構築と破棄
 		ShadowObject(const shared_ptr<Stage>& StagePtr,
@@ -39,5 +31,54 @@ namespace basecross {
 		//影の場所を計算する
 		Vec3 ShadowLocation();
 	};
+	//------------------------------------------------------------------------------------------
+	///ゴールの役割をする影
+	//------------------------------------------------------------------------------------------
+	class ShadowGoal : public GameObject {
+		Vec3 m_Scale;
+		Vec3 m_Rotation;
+		Vec3 m_Position;
+		GameObject& m_Obj;
+		//スケールのZの固定値
+		float m_ScaleZ;
 
+		shared_ptr<MeshResource> m_MeshResource;
+	public:
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief コンストラクタ
+		@param[in]	StagePtr	ステージ
+		@param[in]	StartScale	初期スケール
+		@param[in]	StartQt	初期回転
+		@param[in]	StartPos	初期位置
+		*/
+		//--------------------------------------------------------------------------------------
+		ShadowGoal(const shared_ptr<Stage>& StagePtr,
+			const Vec3& m_Scale, const Vec3& Rotation, GameObject& Obj);
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief デストラクタ
+		*/
+		//--------------------------------------------------------------------------------------
+		virtual ~ShadowGoal() {}
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief 初期化
+		@return	なし
+		*/
+		//--------------------------------------------------------------------------------------
+		virtual void OnCreate() override;
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief 更新
+		@return	なし
+		*/
+		//--------------------------------------------------------------------------------------
+		virtual void OnUpdate()override;
+
+		void OnTriggerEnter();
+
+		//影の場所を計算する
+		Vec3 ShadowLocation();
+	};
 }

@@ -144,12 +144,19 @@ namespace basecross {
 
 		//影をつける
 		auto ShadowPtr = AddComponent<Shadowmap>();
-		ShadowPtr->SetMeshResource(L"DEFAULT_SQUARE");
+		ShadowPtr->SetMeshResource(m_MeshResource);
+		//------------------------------------------------------------------
+		//オブジェクトの影のコンストラクタ呼び出し
+		GetStage()->AddGameObject<ShadowGoal>(
+			GetComponent<Transform>()->GetScale(),
+			GetComponent<Transform>()->GetRotation(),
+			*GetThis<GameObject>()
+			);
 
 	}
 
 	void Goal::OnUpdate() {
-		OnTriggerEnter();
+		//OnTriggerEnter();
 	}
 
 	void Goal::OnTriggerEnter()

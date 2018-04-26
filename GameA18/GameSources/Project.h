@@ -17,6 +17,6 @@
 #include "GameOver.h"
 #include "MyCamera.h"
 #include "Shadow.h"
-#include "MyLight.h"
+#include "LightController.h"
 #include "Item.h"
 #include "Enemy.h"

@@ -104,12 +104,12 @@ namespace basecross {
 			if (MapVec[0] == L"Goal")
 			{
 				stringflag = true;
-				Pos.z = 0.0f;
+				Pos.z = -20.0f;
 				Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
 				auto CubePtr = AddGameObject<Goal>(
-					Vec3(0.25f, 0.5f, 0.25f),		//スケール
-					Qt,							//角度
-					Pos		//ポジション
+					Vec3(0.25f, 0.5f, 0.25f),//スケール
+					Qt,					//角度
+					Pos					//ポジション
 					);
 			}
 			if (MapVec[0] == L"Key")
@@ -152,6 +152,9 @@ namespace basecross {
 		auto meinLight = PtrMultiLight->GetMainIndex();
 		//影を出すライトの初期角度を設定
 		PtrMultiLight->GetLight(meinLight).SetPositionToDirectional(0.00f, 0.00f, -0.1f);
+		//ライトの処理をするオブジェ
+		auto ptrMyLight = AddGameObject<LightController>();
+		SetSharedGameObject(L"LightController", ptrMyLight);
 	}
 
 
@@ -266,9 +269,9 @@ namespace basecross {
 
 			//ゴール
 			AddGameObject<Goal>(
-				Vec3(0.25f, 0.5f, 0.25f),		//スケール
+				Vec3(0.25f, 0.5f, 0.25f),	//スケール
 				Qt,							//角度
-				Vec3(5.0f, 2.8f, -0.25f)		//ポジション
+				Vec3(5.0f, 2.8f, -0.25f)	//ポジション
 				);
 			//キー
 			AddGameObject<KeyItem>(Vec3(1.0f, 4.0f, -0.25f));
