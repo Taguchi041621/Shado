@@ -52,7 +52,7 @@ namespace basecross{
 		コントローラから方向ベクトルを得る
 		*/
 		//--------------------------------------------------------------------------------------
-		float GetMoveVector() const;
+		float GetMoveVector(int LR) const;
 		//--------------------------------------------------------------------------------------
 		/*!
 		@brief	最高速度を得る
@@ -108,6 +108,7 @@ namespace basecross{
 		virtual void OnCollisionExcute(vector<shared_ptr<GameObject>>& OtherVec) override;
 		//衝突が終わった時
 		virtual void OnCollisionExit(vector<shared_ptr<GameObject>>& OtherVec) override;
+
 
 		//LRが押されたときカメラを変える
 		void CameraChanger();

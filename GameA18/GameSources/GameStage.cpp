@@ -55,8 +55,7 @@ namespace basecross {
 
 		int Wcount = 0;
 		//最後まで読み込む
-		while (MapVec[0] != L"end")
-		{
+		while (MapVec[0] != L"end"){
 			//文字列があったかを判断
 			bool stringflag = false;
 			//ポジション、ローテーション、スケール
@@ -76,8 +75,7 @@ namespace basecross {
 			Vec3 Scl = Vec3((float)_wtof(MapVec[7].c_str()), (float)_wtof(MapVec[8].c_str()), (float)_wtof(MapVec[9].c_str()));
 			//auto UpGroup = GetSharedObjectGroup(L"UpdateObjectGroup");
 
-			if (MapVec[0] == L"Cube")
-			{
+			if (MapVec[0] == L"Cube"){
 				//FixedBox(const Vector3& Scale,const Vector3& Rotation,const Vector3& Position
 				//それぞれの値を入れる
 				//固定する値を設定
@@ -88,8 +86,7 @@ namespace basecross {
 				auto PtrCube = AddGameObject<WhiteCube>(Scl, Qt, Pos);
 			}
 
-			if (MapVec[0] == L"Player")
-			{
+			if (MapVec[0] == L"Player"){
 				stringflag = true;
 				wstring DataDir;
 				App::GetApp()->GetDataDirectory(DataDir);
@@ -101,10 +98,8 @@ namespace basecross {
 				PlayerPtr->GetComponent<Transform>()->SetPosition(Pos);
 			}
 
-			if (MapVec[0] == L"Goal")
-			{
+			if (MapVec[0] == L"Goal"){
 				stringflag = true;
-				Pos.z = -20.0f;
 				Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
 				auto CubePtr = AddGameObject<Goal>(
 					Vec3(0.25f, 0.5f, 0.25f),//スケール
@@ -112,15 +107,13 @@ namespace basecross {
 					Pos					//ポジション
 					);
 			}
-			if (MapVec[0] == L"Key")
-			{
+			if (MapVec[0] == L"Key"){
 				stringflag = true;
 				Pos.z = 0.0f;
 				Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
 				AddGameObject<KeyItem>(Pos);
 			}
-			if (!stringflag)
-			{
+			if (!stringflag){
 				throw BaseException
 				(
 					Util::IntToWStr(RowNum + 1) + L"行目",
@@ -187,11 +180,11 @@ namespace basecross {
 		auto PtrTrans = Ptr->GetComponent<Transform>();
 		Quat Qt;
 		Qt.rotationRollPitchYawFromVector(Vec3(0, 0, XM_PIDIV2));
-		PtrTrans->SetScale(50.0f, 50.0f, 1.0f);
+		PtrTrans->SetScale(80.0f, 80.0f, 1.0f);
 		PtrTrans->SetQuaternion(Qt);
 		PtrTrans->SetPosition(0.0f, 0.0f, 0.0f);
 
-		auto ColPtr = Ptr->AddComponent<CollisionRect>();
+		//auto ColPtr = Ptr->AddComponent<CollisionRect>();
 		//描画コンポーネントの追加
 		auto DrawComp = Ptr->AddComponent<BcPNTStaticDraw>();
 		//描画コンポーネントに形状（メッシュ）を設定

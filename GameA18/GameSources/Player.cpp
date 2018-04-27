@@ -24,27 +24,40 @@ namespace basecross{
 			Vec3(0.1f, 0.1f, 0.1f),
 			Vec3(0, 0, 0),
 			Vec3(0, 0, 0),
-			Vec3(-0.3f, 0.5f, 0.0f)
+			Vec3(0.0f, 0.5f, 0.0f)
 		);
 		m_ToAnimeMatrixRight.affineTransformation(
 			Vec3(-0.1f, 0.1f, 0.1f),
 			Vec3(0, 0, 0),
 			Vec3(0, 0, 0),
-			Vec3(0.3f, 0.5f, 0.0f)
+			Vec3(0.0f, 0.5f, 0.0f)
 		);
 
 	}
 
-
-	float Player::GetMoveVector() const {
+	//0を渡すと左、1を渡すと右のスティックのX値を返す
+	float Player::GetMoveVector(int LR) const {
 		float MoveX = 0;
 		//コントローラの取得
 		auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
 		if (CntlVec[0].bConnected) {
-			if (CntlVec[0].fThumbLX != 0) {
-				//コントローラの向き計算
-				MoveX = CntlVec[0].fThumbLX;
+			switch (LR){
+			case 0:
+				if (CntlVec[0].fThumbLX != 0) {
+					//コントローラの向き計算
+					MoveX = CntlVec[0].fThumbLX;
+				}
+				break;
+			case 1:
+				if (CntlVec[0].fThumbRX != 0) {
+					//コントローラの向き計算
+					MoveX = CntlVec[0].fThumbRX;
+				}
+				break;
+			default:
+				break;
 			}
+
 		}
 		return MoveX;
 	}
@@ -54,7 +67,7 @@ namespace basecross{
 	//移動距離を返す
 	float  Player::MoveRotationMotion() {
 		float ElapsedTime = App::GetApp()->GetElapsedTime();
-		auto MoveX = GetMoveVector();
+		auto MoveX = GetMoveVector(0);
 		//Transform
 		auto PtrTransform = GetComponent<Transform>();
 		//Rigidbodyを取り出す
@@ -77,19 +90,27 @@ namespace basecross{
 		Vec3 VecVelo(Velo, VeloY, 0);
 		PtrRedit->SetVelocity(VecVelo);
 		////回転の計算
+
+		//右スティックでもアニメーションを切り替える
+		if (GetMoveVector(1) > 0.0f) {
+			SetToAnimeMatrix(m_ToAnimeMatrixRight);
+		}
+		else if (GetMoveVector(1) <0.0f) {
+			SetToAnimeMatrix(m_ToAnimeMatrixLeft);
+		}
 		//元となるオブジェクトからアニメーションオブジェクトへの行列の設定
 		//Transformのスケーリングを-1にすると衝突判定がうまくいかないので
 		//SpriteStdioの部分だけ変更する
-		if (MoveX >= 0.0f) {
+		if (MoveX > 0.0f) {
 			SetToAnimeMatrix(m_ToAnimeMatrixRight);
 		}
-		else {
+		else if (MoveX < 0.0f) {
 			SetToAnimeMatrix(m_ToAnimeMatrixLeft);
 		}
 		//MoveXを返す
 		return MoveX;
 	}
-
+	//衝突時
 	void Player::OnCollision(vector<shared_ptr<GameObject>>& OtherVec) {
 		auto playerTrans = GetComponent<Transform>();
 		for (auto &obj : OtherVec) {
@@ -100,19 +121,23 @@ namespace basecross{
 			if (ShadowPtr && !playerTrans->GetParent()) {
 				//イデアの判定
 				SPHERE t;
-				t.m_Center = playerTrans->GetPosition();
+				t.m_Center = playerTrans->GetWorldPosition();
 				t.m_Radius = playerTrans->GetScale().y;
 				//シャドウの判定
 				OBB p;
-				p.m_Center = obj->GetComponent<Transform>()->GetPosition();
+				p.m_Center = obj->GetComponent<Transform>()->GetWorldPosition();
 				p.m_Size = obj->GetComponent<Transform>()->GetScale() / 2.0f;
+				p.m_Size.z = 2.0f;
 				Vec3 HitPoint;
 				//イデアとシャドウの接触判定
 				if (HitTest::SPHERE_OBB(t, p, HitPoint)) {
 					//ペアレント化する
 					playerTrans->SetParent(ShadowPtr);
-					HitPoint.y += GetComponent<Transform>()->GetScale().y / 2.0f;
-					playerTrans->SetWorldPosition(HitPoint);
+					//上方向のみめり込みを直す
+					if (HitPoint.y <= t.m_Center.y - t.m_Radius) {
+						HitPoint.y += t.m_Radius;
+						GetComponent<Transform>()->SetWorldPosition(HitPoint);
+					}
 				}
 			}
 			//当たってるオブジェクトが親オブジェクトじゃ無かったら
@@ -130,17 +155,21 @@ namespace basecross{
 			if (GetComponent<Transform>()->GetParent() == obj) {
 				//イデアの判定
 				SPHERE t;
-				t.m_Center = GetComponent<Transform>()->GetPosition();
-				t.m_Radius = GetComponent<Transform>()->GetScale().y; 
+				t.m_Center = GetComponent<Transform>()->GetWorldPosition();
+				t.m_Radius = GetComponent<Transform>()->GetScale().y/2; 
 				//シャドウの判定
 				OBB p;
-				p.m_Center = obj->GetComponent<Transform>()->GetPosition();
+				p.m_Center = obj->GetComponent<Transform>()->GetWorldPosition();
 				p.m_Size = obj->GetComponent<Transform>()->GetScale() / 2.0f;
+				p.m_Size.z = 2.0f;
 				Vec3 HitPoint;
 				//イデアとシャドウの接触判定
 				if (HitTest::SPHERE_OBB(t, p, HitPoint)) {
-					HitPoint.y += GetComponent<Transform>()->GetScale().y / 2.0f;
-					GetComponent<Transform>()->SetWorldPosition(HitPoint);
+					//上方向のみめり込みを直す
+					if (HitPoint.y <= t.m_Center.y - t.m_Radius) {
+						HitPoint.y += t.m_Radius;
+						GetComponent<Transform>()->SetWorldPosition(HitPoint);
+					}
 				}
 			}
 		}
@@ -197,7 +226,7 @@ namespace basecross{
 		//Rigidbodyをつける
 		auto PtrRedid = AddComponent<Rigidbody>();
 		//衝突判定をつける
-		auto PtrCol = AddComponent<CollisionSphere>();
+		auto PtrCol = AddComponent<CollisionObb>();
 		PtrCol->SetIsHitAction(IsHitAction::Auto);
 		//コリジョンを表示する場合は以下を設定
 		PtrCol->SetDrawActive(true);
