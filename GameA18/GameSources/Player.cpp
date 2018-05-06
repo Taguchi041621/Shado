@@ -16,21 +16,21 @@ namespace basecross{
 	//構築と破棄
 	Player::Player(const shared_ptr<Stage>& StagePtr, const wstring& BaseDir) :
 		SS5ssae(StagePtr, BaseDir, L"Idea1.ssae", L"Walk"),
-		m_MaxSpeed(40.0f),	//最高速度
+		m_MaxSpeed(20.0f),	//最高速度
 		m_Decel(0.65f),	//減速値
 		m_Mass(0.5f)	//質量
 	{
 		m_ToAnimeMatrixLeft.affineTransformation(
-			Vec3(0.1f, 0.1f, 0.1f),
+			Vec3(0.1f, 0.05f, 0.1f),
 			Vec3(0, 0, 0),
 			Vec3(0, 0, 0),
-			Vec3(0.0f, 0.5f, 0.0f)
+			Vec3(-0.5f, 0.0f, 0.0f)
 		);
 		m_ToAnimeMatrixRight.affineTransformation(
-			Vec3(-0.1f, 0.1f, 0.1f),
+			Vec3(-0.1f, 0.05f, 0.1f),
 			Vec3(0, 0, 0),
 			Vec3(0, 0, 0),
-			Vec3(0.0f, 0.5f, 0.0f)
+			Vec3(0.5f, 0.0f, 0.0f)
 		);
 
 	}
@@ -110,6 +110,11 @@ namespace basecross{
 		//MoveXを返す
 		return MoveX;
 	}
+
+	SPHERE Player::GetHitSphere() {
+		return m_HitSpere;
+	}
+
 	//衝突時
 	void Player::OnCollision(vector<shared_ptr<GameObject>>& OtherVec) {
 		auto playerTrans = GetComponent<Transform>();
@@ -117,34 +122,42 @@ namespace basecross{
 			//シャドウオブジェクトを検出
 			auto ShadowPtr = dynamic_pointer_cast<ShadowObject>(obj);
 			//当たったのがシャドウオブジェクトで
-			//ペアレント化してるオブジェクトが無かったらペアレント化
-			if (ShadowPtr && !playerTrans->GetParent()) {
-				//イデアの判定
-				SPHERE t;
-				t.m_Center = playerTrans->GetWorldPosition();
-				t.m_Radius = playerTrans->GetScale().y;
+			if (ShadowPtr) {
+				//当たり判定の更新
+				m_HitSpere.m_Center = playerTrans->GetWorldPosition();
+				//長方形の下の方に配置
+				m_HitSpere.m_Center.y += -playerTrans->GetScale().y * 0.5f;
 				//シャドウの判定
 				OBB p;
 				p.m_Center = obj->GetComponent<Transform>()->GetWorldPosition();
-				p.m_Size = obj->GetComponent<Transform>()->GetScale() / 2.0f;
-				p.m_Size.z = 2.0f;
+				p.m_Size = obj->GetComponent<Transform>()->GetScale() * 0.5f;
 				Vec3 HitPoint;
 				//イデアとシャドウの接触判定
-				if (HitTest::SPHERE_OBB(t, p, HitPoint)) {
-					//ペアレント化する
-					playerTrans->SetParent(ShadowPtr);
-					//上方向のみめり込みを直す
-					if (HitPoint.y <= t.m_Center.y - t.m_Radius) {
-						HitPoint.y += t.m_Radius;
-						GetComponent<Transform>()->SetWorldPosition(HitPoint);
+				if (HitTest::SPHERE_OBB(m_HitSpere, p, HitPoint)) {
+					//プレイヤーの判定よりも、ヒットポイントのYが低くて
+					//X幅の中に入っていたら
+					if ((m_HitSpere.m_Center.x - m_HitSpere.m_Radius) <= HitPoint.x
+						&& (m_HitSpere.m_Center.x + m_HitSpere.m_Radius) >= HitPoint.x
+						&& p.m_Center.y <= m_HitSpere.m_Center.y - m_HitSpere.m_Radius) {
+						//ペアレント化してるオブジェクトが無かったらペアレント化
+						if (!playerTrans->GetParent()) {
+							//ペアレント化する
+							playerTrans->SetParent(ShadowPtr);
+						}
+						//当たってるオブジェクトが親オブジェクトじゃ無かったら
+						else if (!(playerTrans->GetParent() == ShadowPtr)) {
+							//今の親を消して新たに親を設定する
+							playerTrans->ClearParent();
+							playerTrans->SetParent(ShadowPtr);
+						}
 					}
 				}
-			}
-			//当たってるオブジェクトが親オブジェクトじゃ無かったら
-			else if(!(playerTrans->GetParent() == ShadowPtr)){
-				//今の親を消して新たに親を設定する
-				playerTrans->ClearParent();
-				playerTrans->SetParent(ShadowPtr);
+				//-0.5下げているのに１を足して0.5上にして長方形の上のほうに配置
+				m_HitSpere.m_Center.y += playerTrans->GetScale().y;
+				//頭付近が当たったら死ぬ
+				if (HitTest::SPHERE_OBB(m_HitSpere, p, HitPoint)) {
+					PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameOver");
+				}
 			}
 		}
 	}
@@ -153,24 +166,12 @@ namespace basecross{
 	void Player::OnCollisionExcute(vector<shared_ptr<GameObject>>& OtherVec) {
 		for (auto &obj : OtherVec) {
 			if (GetComponent<Transform>()->GetParent() == obj) {
-				//イデアの判定
-				SPHERE t;
-				t.m_Center = GetComponent<Transform>()->GetWorldPosition();
-				t.m_Radius = GetComponent<Transform>()->GetScale().y/2; 
-				//シャドウの判定
-				OBB p;
-				p.m_Center = obj->GetComponent<Transform>()->GetWorldPosition();
-				p.m_Size = obj->GetComponent<Transform>()->GetScale() / 2.0f;
-				p.m_Size.z = 2.0f;
-				Vec3 HitPoint;
-				//イデアとシャドウの接触判定
-				if (HitTest::SPHERE_OBB(t, p, HitPoint)) {
-					//上方向のみめり込みを直す
-					if (HitPoint.y <= t.m_Center.y - t.m_Radius) {
-						HitPoint.y += t.m_Radius;
-						GetComponent<Transform>()->SetWorldPosition(HitPoint);
-					}
-				}
+				auto ParentTrans = obj->GetComponent<Transform>();
+				auto Ppos = GetComponent<Transform>()->GetWorldPosition();
+				Ppos.y = ParentTrans->GetPosition().y + ParentTrans->GetScale().y * 0.5f
+									+ GetComponent<Transform>()->GetScale().y * 0.5f;
+				//上方向のみめり込みを直す
+				GetComponent<Transform>()->SetWorldPosition(Ppos);
 			}
 		}
 	}
@@ -182,22 +183,11 @@ namespace basecross{
 			auto ShadowPtr = dynamic_pointer_cast<ShadowObject>(obj);
 			//それが親のシャドウで
 			if (ShadowPtr == GetComponent<Transform>()->GetParent()) {
-				////イデアの判定
-				//SPHERE t;
-				//t.m_Center = GetComponent<Transform>()->GetPosition();
-				//t.m_Radius = GetComponent<Transform>()->GetScale().y;
-				////シャドウの判定
-				//OBB p;
-				//p.m_Center = obj->GetComponent<Transform>()->GetPosition();
-				//p.m_Size = obj->GetComponent<Transform>()->GetScale()/2.0f;
-				//Vec3 HitPoint;
-				////イデアとシャドウの接触判定
-				//if (!HitTest::SPHERE_OBB(t, p,HitPoint)){
 				auto shadowPos = ShadowPtr->GetComponent<Transform>()->GetWorldPosition();
 				auto shadowSca = ShadowPtr->GetComponent<Transform>()->GetScale();
 				//影オブジェの横に落ちてたら
-				if((shadowPos.x - shadowSca.x/2.0f) >= GetComponent<Transform>()->GetWorldPosition().x ||
-					(shadowPos.x + shadowSca.x/2.0f) <= GetComponent<Transform>()->GetWorldPosition().x){
+				if((shadowPos.x - shadowSca.x * 0.5f) >= GetComponent<Transform>()->GetWorldPosition().x ||
+					(shadowPos.x + shadowSca.x * 0.5f) <= GetComponent<Transform>()->GetWorldPosition().x){
 					//ペアレント化を解く
 					GetComponent<Transform>()->ClearParent();
 				}
@@ -210,7 +200,7 @@ namespace basecross{
 		CameraPosZ = -10;
 		//初期位置などの設定
 		auto Ptr = GetComponent<Transform>();
-		Ptr->SetScale(0.25f, 0.25f, 0.25f);	//直径25センチの球体
+		Ptr->SetScale(0.25f, 0.50f, 0.25f);	//X,Z25、Y50の長方形
 		Ptr->SetRotation(0.0f, 0.0f, 0.0f);
 		Ptr->SetPosition(-8.0f, 5.5f, 0.0f);
 
@@ -227,6 +217,7 @@ namespace basecross{
 		auto PtrRedid = AddComponent<Rigidbody>();
 		//衝突判定をつける
 		auto PtrCol = AddComponent<CollisionObb>();
+		//auto PtrCol = AddComponent<CollisionSphere>();
 		PtrCol->SetIsHitAction(IsHitAction::Auto);
 		//コリジョンを表示する場合は以下を設定
 		PtrCol->SetDrawActive(true);
@@ -235,6 +226,8 @@ namespace basecross{
 		PtrString->SetText(L"");
 		PtrString->SetTextRect(Rect2D<float>(16.0f, 16.0f, 640.0f, 480.0f));
 
+		//球体の当たり判定のサイズを設定
+		m_HitSpere.m_Radius = Ptr->GetScale().x * 0.5f;
 
 		//Actionをつける
 		//レイヤー変更用
@@ -263,6 +256,8 @@ namespace basecross{
 		auto PtrGrav = GetBehavior<Gravity>();
 		PtrGrav->SetGravity(Vec3(0.0f,-4.9f,0.0f));
 		PtrGrav->Execute();
+
+
 		//カメラを得る
 		//auto PtrCamera = dynamic_pointer_cast<LookAtCamera>(OnGetDrawCamera());
 		//if (PtrCamera) {

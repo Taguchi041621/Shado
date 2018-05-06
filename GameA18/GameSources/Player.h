@@ -31,6 +31,7 @@ namespace basecross{
 		//データとゲームとの変換行列
 		Mat4x4 m_ToAnimeMatrixLeft;
 		Mat4x4 m_ToAnimeMatrixRight;
+		SPHERE m_HitSpere;
 	public:
 		//構築と破棄
 		//--------------------------------------------------------------------------------------
@@ -109,6 +110,7 @@ namespace basecross{
 		//衝突が終わった時
 		virtual void OnCollisionExit(vector<shared_ptr<GameObject>>& OtherVec) override;
 
+		SPHERE GetHitSphere();
 
 		//LRが押されたときカメラを変える
 		void CameraChanger();
