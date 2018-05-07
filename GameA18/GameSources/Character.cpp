@@ -19,30 +19,18 @@ namespace basecross {
 	{}
 
 	void WhiteCube::OnCreate() {
-		vector<VertexPositionNormalTexture> vertices;
-		vector<VertexPositionNormal> new_vertices;
-
-		vector<uint16_t> indices;
-		MeshUtill::CreateCube(1.0f, vertices, indices);
-		for (size_t i = 0; i < vertices.size(); i++) {
-			VertexPositionNormal new_v;
-			new_v.position = vertices[i].position;
-			new_v.normal = vertices[i].normal;
-			new_vertices.push_back(new_v);
-		}
-		m_MeshResource = MeshResource::CreateMeshResource(new_vertices, indices, false);
-
 		auto PtrTransform = GetComponent<Transform>();
 		PtrTransform->SetScale(m_StartScale);
 		PtrTransform->SetQuaternion(m_StartQt);
 		PtrTransform->SetPosition(m_StartPos);
 
 		auto PtrDraw = AddComponent<BcPNTStaticDraw>();
-		PtrDraw->SetMeshResource(m_MeshResource);
+		PtrDraw->SetMeshResource(L"DEFAULT_SQUARE");
+		PtrDraw->SetTextureResource(L"Red_TX");
 
 		//影をつける
 		auto ShadowPtr = AddComponent<Shadowmap>();
-		ShadowPtr->SetMeshResource(m_MeshResource);
+		ShadowPtr->SetMeshResource(L"DEFAULT_SQUARE");
 		//--------------------------------------------------------
 		//オブジェクトの影のコンストラクタ呼び出し
 		GetStage()->AddGameObject<ShadowObject>(

@@ -32,7 +32,7 @@ namespace basecross{
 		Mat4x4 m_ToAnimeMatrixLeft;
 		Mat4x4 m_ToAnimeMatrixRight;
 		SPHERE m_HitSpere;
-		OBB m_HitOBB;
+		OBB m_DieOBB;
 	public:
 		//\’z‚Æ”jŠü
 		//--------------------------------------------------------------------------------------
@@ -110,8 +110,6 @@ namespace basecross{
 		virtual void OnCollisionExcute(vector<shared_ptr<GameObject>>& OtherVec) override;
 		//Õ“Ë‚ªI‚í‚Á‚½
 		virtual void OnCollisionExit(vector<shared_ptr<GameObject>>& OtherVec) override;
-
-		SPHERE GetHitSphere();
 
 		//LR‚ª‰Ÿ‚³‚ê‚½‚Æ‚«ƒJƒƒ‰‚ğ•Ï‚¦‚é
 		void CameraChanger();

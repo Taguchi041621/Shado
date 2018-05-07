@@ -104,10 +104,6 @@ namespace basecross{
 		return MoveX;
 	}
 
-	SPHERE Player::GetHitSphere() {
-		return m_HitSpere;
-	}
-
 	//衝突時
 	void Player::OnCollision(vector<shared_ptr<GameObject>>& OtherVec) {
 		auto playerTrans = GetComponent<Transform>();
@@ -116,87 +112,30 @@ namespace basecross{
 			auto ShadowPtr = dynamic_pointer_cast<ShadowObject>(obj);
 			//当たったのがシャドウオブジェクトで
 			if (ShadowPtr) {
-				//当たり判定の更新
-				m_HitSpere.m_Center = playerTrans->GetWorldPosition();
-				//長方形の下の方に配置
-				m_HitSpere.m_Center.y += -playerTrans->GetScale().y * 0.5f;
 				//シャドウの判定
 				OBB p;
 				p.m_Center = ShadowPtr->GetComponent<Transform>()->GetWorldPosition();
 				p.m_Size = ShadowPtr->GetComponent<Transform>()->GetScale() * 0.5f;
 				Vec3 HitPoint;
-				//イデアとシャドウの接触判定
-				if (HitTest::SPHERE_OBB(m_HitSpere, p, HitPoint)) {
-					//プレイヤーの判定よりも、ヒットポイントのYが低くて
-					//X幅の中に入っていたら
-					if ((m_HitSpere.m_Center.x - m_HitSpere.m_Radius) <= HitPoint.x
-						&& (m_HitSpere.m_Center.x + m_HitSpere.m_Radius) >= HitPoint.x
-						&& p.m_Center.y <= m_HitSpere.m_Center.y - m_HitSpere.m_Radius) {
-						//ペアレント化してるオブジェクトが無かったらペアレント化
-						if (!playerTrans->GetParent()) {
-							//ペアレント化する
-							playerTrans->SetParent(ShadowPtr);
-						}
-						//当たってるオブジェクトが親オブジェクトじゃ無かったら
-						else if (!(playerTrans->GetParent() == ShadowPtr)) {
-							//今の親を消して新たに親を設定する
-							playerTrans->ClearParent();
-							playerTrans->SetParent(ShadowPtr);
-						}
+				//イデアの中心点からシャドウまでの最接近点の算出
+				HitTest::ClosestPtPointOBB(playerTrans->GetWorldPosition(), p, HitPoint);
+				//プレイヤーの判定よりも、ヒットポイントのYが低くて
+				//X幅の中に入っていたら
+				if ((playerTrans->GetWorldPosition().x - playerTrans->GetScale().x) <= HitPoint.x
+					&& (playerTrans->GetWorldPosition().x + playerTrans->GetScale().x) >= HitPoint.x
+					&& playerTrans->GetWorldPosition().y >= HitPoint.y) {
+					//ペアレント化してるオブジェクトが無かったらペアレント化
+					if (!playerTrans->GetParent()) {
+						//ペアレント化する
+						playerTrans->SetParent(ShadowPtr);
 					}
-				}
+					//当たってるオブジェクトが親オブジェクトじゃ無かったら
+					else if (!(playerTrans->GetParent() == ShadowPtr)) {
+						//今の親を消して新たに親を設定する
+						playerTrans->ClearParent();
+						playerTrans->SetParent(ShadowPtr);
+					}
 
-				bool isHit = false;
-				auto playerPos = playerTrans->GetPosition();
-				auto playerSca = playerTrans->GetScale() * 0.5f;
-				auto shadowPos = ShadowPtr->GetComponent<Transform>()->GetPosition();
-				auto shadowSca = ShadowPtr->GetComponent<Transform>()->GetScale() * 0.5f;
-				if (playerPos.x - playerSca.x < shadowPos.x + shadowSca.x && playerPos.x + playerSca.x > shadowPos.x - shadowSca.x &&
-					playerPos.y + playerSca.y < shadowPos.y + shadowSca.y && playerPos.y - playerSca.y > shadowPos.y - shadowSca.y) {
-					// 衝突が検出されました
-					isHit = true;
-				}
-				if (isHit) {
-					// 衝突しているので応答を行う
-					float diff[] = {
-						(shadowPos.x + shadowSca.x) - (playerPos.x - playerSca.x), // 右
-						(playerPos.x + playerSca.x) - (shadowPos.x - shadowSca.x), // 左
-						(shadowPos.y + shadowSca.y) - (playerPos.y - playerSca.y), // 上
-						(playerPos.y + playerSca.y) - (shadowPos.y - shadowSca.y), // 下
-					};
-					// 側面の距離が最小になっている要素を見つける
-					int min = 0;
-					for (int i = 0; i < 4; i++) {
-						if (diff[i] < diff[min]) {
-							min = i;
-						}
-					}
-					// 最小になっている方向に対して押し出しを行う
-					switch (min) {
-					case 0:
-						playerPos.x += diff[min];
-						break;
-					case 1:
-						playerPos.x -= diff[min];
-						break;
-					case 2:
-						playerPos.y += diff[min];
-						break;
-					case 3:
-						playerPos.y -= diff[min];
-						break;
-					default:
-						break;
-					}
-				}
-				// イデアに位置を反映させる
-				playerTrans->SetPosition(playerPos);
-
-				//-0.5下げているのに１を足して0.5上にして長方形の上のほうに配置
-				m_HitSpere.m_Center.y += playerTrans->GetScale().y;
-				//頭付近が当たったら死ぬ
-				if (HitTest::SPHERE_OBB(m_HitSpere, p, HitPoint)) {
-					PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameOver");
 				}
 			}
 		}
@@ -212,6 +151,18 @@ namespace basecross{
 									+ GetComponent<Transform>()->GetScale().y * 0.5f;
 				//上方向のみめり込みを直す
 				GetComponent<Transform>()->SetWorldPosition(Ppos);
+			}
+			OBB p;
+			p.m_Center = obj->GetComponent<Transform>()->GetWorldPosition();
+			p.m_Size = obj->GetComponent<Transform>()->GetScale() * 0.5f;
+
+			//当たり判定の更新
+			m_DieOBB.m_Center = GetComponent<Transform>()->GetWorldPosition();
+			//0.5上にして長方形の上のほうに配置
+			//m_DieOBB.m_Center.y += GetComponent<Transform>()->GetScale().y * 0.1f;
+			//頭付近が当たったら死ぬ
+			if (HitTest::OBB_OBB(m_DieOBB, p)) {
+				PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameOver");
 			}
 		}
 	}
@@ -269,8 +220,8 @@ namespace basecross{
 		//球体の当たり判定のサイズを設定
 		m_HitSpere.m_Radius = Ptr->GetScale().x * 0.5f;
 
-		m_HitOBB.m_Size.x = Ptr->GetScale().x * 0.5f;
-		m_HitOBB.m_Size.y = Ptr->GetScale().y * 0.5f;
+		m_DieOBB.m_Size.x = Ptr->GetScale().x * 0.3f;
+		m_DieOBB.m_Size.y = Ptr->GetScale().y * 0.3f;
 
 		//Actionをつける
 		//レイヤー変更用
