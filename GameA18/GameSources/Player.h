@@ -32,6 +32,7 @@ namespace basecross{
 		Mat4x4 m_ToAnimeMatrixLeft;
 		Mat4x4 m_ToAnimeMatrixRight;
 		SPHERE m_HitSpere;
+		OBB m_HitOBB;
 	public:
 		//ç\ízÇ∆îjä¸
 		//--------------------------------------------------------------------------------------

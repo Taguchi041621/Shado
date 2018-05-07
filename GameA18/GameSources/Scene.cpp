@@ -32,6 +32,8 @@ namespace basecross{
 		App::GetApp()->RegisterTexture(L"CLEAR_TX", strTexture);
 		strTexture = DataDir + L"GameOver.png";
 		App::GetApp()->RegisterTexture(L"GAMEOVER_TX", strTexture);
+		strTexture = DataDir + L"WallTexture.png";
+		App::GetApp()->RegisterTexture(L"WallTexture_TX", strTexture);
 	}
 
 	void Scene::OnCreate() {

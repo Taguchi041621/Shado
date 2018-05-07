@@ -91,13 +91,6 @@ namespace basecross{
 		PtrRedit->SetVelocity(VecVelo);
 		////回転の計算
 
-		//右スティックでもアニメーションを切り替える
-		if (GetMoveVector(1) > 0.0f) {
-			SetToAnimeMatrix(m_ToAnimeMatrixRight);
-		}
-		else if (GetMoveVector(1) <0.0f) {
-			SetToAnimeMatrix(m_ToAnimeMatrixLeft);
-		}
 		//元となるオブジェクトからアニメーションオブジェクトへの行列の設定
 		//Transformのスケーリングを-1にすると衝突判定がうまくいかないので
 		//SpriteStdioの部分だけ変更する
@@ -129,8 +122,8 @@ namespace basecross{
 				m_HitSpere.m_Center.y += -playerTrans->GetScale().y * 0.5f;
 				//シャドウの判定
 				OBB p;
-				p.m_Center = obj->GetComponent<Transform>()->GetWorldPosition();
-				p.m_Size = obj->GetComponent<Transform>()->GetScale() * 0.5f;
+				p.m_Center = ShadowPtr->GetComponent<Transform>()->GetWorldPosition();
+				p.m_Size = ShadowPtr->GetComponent<Transform>()->GetScale() * 0.5f;
 				Vec3 HitPoint;
 				//イデアとシャドウの接触判定
 				if (HitTest::SPHERE_OBB(m_HitSpere, p, HitPoint)) {
@@ -152,6 +145,53 @@ namespace basecross{
 						}
 					}
 				}
+
+				bool isHit = false;
+				auto playerPos = playerTrans->GetPosition();
+				auto playerSca = playerTrans->GetScale() * 0.5f;
+				auto shadowPos = ShadowPtr->GetComponent<Transform>()->GetPosition();
+				auto shadowSca = ShadowPtr->GetComponent<Transform>()->GetScale() * 0.5f;
+				if (playerPos.x - playerSca.x < shadowPos.x + shadowSca.x && playerPos.x + playerSca.x > shadowPos.x - shadowSca.x &&
+					playerPos.y + playerSca.y < shadowPos.y + shadowSca.y && playerPos.y - playerSca.y > shadowPos.y - shadowSca.y) {
+					// 衝突が検出されました
+					isHit = true;
+				}
+				if (isHit) {
+					// 衝突しているので応答を行う
+					float diff[] = {
+						(shadowPos.x + shadowSca.x) - (playerPos.x - playerSca.x), // 右
+						(playerPos.x + playerSca.x) - (shadowPos.x - shadowSca.x), // 左
+						(shadowPos.y + shadowSca.y) - (playerPos.y - playerSca.y), // 上
+						(playerPos.y + playerSca.y) - (shadowPos.y - shadowSca.y), // 下
+					};
+					// 側面の距離が最小になっている要素を見つける
+					int min = 0;
+					for (int i = 0; i < 4; i++) {
+						if (diff[i] < diff[min]) {
+							min = i;
+						}
+					}
+					// 最小になっている方向に対して押し出しを行う
+					switch (min) {
+					case 0:
+						playerPos.x += diff[min];
+						break;
+					case 1:
+						playerPos.x -= diff[min];
+						break;
+					case 2:
+						playerPos.y += diff[min];
+						break;
+					case 3:
+						playerPos.y -= diff[min];
+						break;
+					default:
+						break;
+					}
+				}
+				// イデアに位置を反映させる
+				playerTrans->SetPosition(playerPos);
+
 				//-0.5下げているのに１を足して0.5上にして長方形の上のほうに配置
 				m_HitSpere.m_Center.y += playerTrans->GetScale().y;
 				//頭付近が当たったら死ぬ
@@ -200,7 +240,7 @@ namespace basecross{
 		CameraPosZ = -10;
 		//初期位置などの設定
 		auto Ptr = GetComponent<Transform>();
-		Ptr->SetScale(0.25f, 0.50f, 0.25f);	//X,Z25、Y50の長方形
+		Ptr->SetScale(0.40f, 0.80f, 0.40f);	//X,Z25、Y50の長方形
 		Ptr->SetRotation(0.0f, 0.0f, 0.0f);
 		Ptr->SetPosition(-8.0f, 5.5f, 0.0f);
 
@@ -229,6 +269,9 @@ namespace basecross{
 		//球体の当たり判定のサイズを設定
 		m_HitSpere.m_Radius = Ptr->GetScale().x * 0.5f;
 
+		m_HitOBB.m_Size.x = Ptr->GetScale().x * 0.5f;
+		m_HitOBB.m_Size.y = Ptr->GetScale().y * 0.5f;
+
 		//Actionをつける
 		//レイヤー変更用
 		auto PtrAction = AddComponent<Action>();
@@ -249,8 +292,6 @@ namespace basecross{
 		//ステートマシンのUpdateを行う
 		//この中でステートの切り替えが行われる
 		m_StateMachine->Update();
-		//プレイヤーの移動
-		MoveRotationMotion();
 
 		//重力を加える
 		auto PtrGrav = GetBehavior<Gravity>();
@@ -271,6 +312,9 @@ namespace basecross{
 	}
 
 	void Player::OnUpdate2() {
+		//プレイヤーの移動
+		MoveRotationMotion();
+
 		//文字列の表示
 		DrawStrings();
 
