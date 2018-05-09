@@ -147,24 +147,20 @@ namespace basecross {
 		//OnTriggerEnter();
 	}
 
-	void Goal::OnTriggerEnter()
-	{
-		SPHERE t;
-		t.m_Center = this->GetComponent<Transform>()->GetPosition();
-		t.m_Center.z = 0;
-		t.m_Radius = 0.20;
+	void Goal::OnTriggerEnter(){
+		//SPHERE t;
+		//t.m_Center = this->GetComponent<Transform>()->GetPosition();
+		//t.m_Center.z = 0;
+		//t.m_Radius = 0.20;
 
-		SPHERE p;
-		p.m_Center = GetStage()->GetSharedGameObject<Player>(L"Player")->GetComponent<Transform>()->GetWorldPosition();
-		p.m_Center.z = 0;
-		p.m_Radius = 0.20;
+		//SPHERE p;
+		//p.m_Center = GetStage()->GetSharedGameObject<Player>(L"Player")->GetComponent<Transform>()->GetWorldPosition();
+		//p.m_Center.z = 0;
+		//p.m_Radius = 0.20;
 
-		if (HitTest::SPHERE_SPHERE(t, p))
-		{
-			PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToClearStage");
-		}
+		//if (HitTest::SPHERE_SPHERE(t, p)) {
+		//		PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToClearStage");
+		//}
 	}
-
-
 	//end basecross
 }

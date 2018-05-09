@@ -18,7 +18,8 @@ namespace basecross{
 		SS5ssae(StagePtr, BaseDir, L"Idea1.ssae", L"Walk"),
 		m_MaxSpeed(20.0f),	//最高速度
 		m_Decel(0.65f),	//減速値
-		m_Mass(0.5f)	//質量
+		m_Mass(0.5f),	//質量
+		m_Key(0)
 	{
 		m_ToAnimeMatrixLeft.affineTransformation(
 			Vec3(0.1f, 0.05f, 0.1f),
@@ -158,9 +159,7 @@ namespace basecross{
 
 			//当たり判定の更新
 			m_DieOBB.m_Center = GetComponent<Transform>()->GetWorldPosition();
-			//0.5上にして長方形の上のほうに配置
-			//m_DieOBB.m_Center.y += GetComponent<Transform>()->GetScale().y * 0.1f;
-			//頭付近が当たったら死ぬ
+			//頭中心あたりが当たったら死ぬ
 			if (HitTest::OBB_OBB(m_DieOBB, p)) {
 				PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameOver");
 			}
@@ -248,18 +247,6 @@ namespace basecross{
 		auto PtrGrav = GetBehavior<Gravity>();
 		PtrGrav->SetGravity(Vec3(0.0f,-4.9f,0.0f));
 		PtrGrav->Execute();
-
-
-		//カメラを得る
-		//auto PtrCamera = dynamic_pointer_cast<LookAtCamera>(OnGetDrawCamera());
-		//if (PtrCamera) {
-		//	//LookAtCameraである
-		//	//LookAtCameraに注目するオブジェクト（プレイヤー）の設定
-		//	PtrCamera->SetTargetObject(GetThis<GameObject>());
-		//	//playerの位置とカメラ位置を同期する
-		//	auto p_pos = GetThis<GameObject>()->GetComponent<Transform>()->GetPosition();
-		//	PtrCamera->SetEye(Vec3(p_pos.x, p_pos.y+10.0f, -20.0f));
-		//}
 	}
 
 	void Player::OnUpdate2() {
@@ -312,6 +299,16 @@ namespace basecross{
 			PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameOver");
 		}
 	}
+	//m_Keyを増やす
+	void Player::AddKey() {
+		m_Key += 1;
+	}
+	//m_Keyの値を取得する
+	int Player::GetKey() {
+		return m_Key;
+	}
+
+
 	//文字列の表示
 	void Player::DrawStrings() {
 

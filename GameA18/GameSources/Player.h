@@ -28,6 +28,8 @@ namespace basecross{
 		float m_Mass;
 		//文字列の表示
 		void DrawStrings();
+		//鍵の取得状況
+		int m_Key;
 		//データとゲームとの変換行列
 		Mat4x4 m_ToAnimeMatrixLeft;
 		Mat4x4 m_ToAnimeMatrixRight;
@@ -116,6 +118,11 @@ namespace basecross{
 
 		//プレイヤーのHP
 		void PlayerHP();
+
+		//鍵に触れたときに使う、m_Keyの値を増やす
+		void AddKey();
+		//m_Keyの値を取得する
+		int GetKey();
 
 		//アクセサ
 		shared_ptr< StateMachine<Player> > GetStateMachine() const {

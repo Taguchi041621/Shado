@@ -52,8 +52,8 @@ namespace basecross {
 		p.m_Center.z = 0;
 		p.m_Radius = 0.20;
 
-		if (HitTest::SPHERE_SPHERE(t, p))
-		{
+		if (HitTest::SPHERE_SPHERE(t, p)){
+			GetStage()->GetSharedGameObject<Player>(L"Player")->AddKey();
 			GetStage()->RemoveGameObject<KeyItem>(GetThis<KeyItem>());
 		}
 	}

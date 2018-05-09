@@ -125,7 +125,9 @@ namespace basecross {
 		p.m_Radius = 0.20;
 
 		if (HitTest::SPHERE_SPHERE(t, p)){
-			PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToClearStage");
+			if (GetStage()->GetSharedGameObject<Player>(L"Player")->GetKey() >= 1) {
+				PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToClearStage");
+			}
 		}
 	}
 	//物体とライトの位置から、影の位置を導き出す
