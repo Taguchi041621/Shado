@@ -9,7 +9,7 @@ namespace basecross
 		//ビューのカメラの設定
 		auto PtrCamera = ObjectFactory::Create<Camera>();
 		PtrView->SetCamera(PtrCamera);
-		PtrCamera->SetEye(Vec3(0.0f, 2.0f, -3.0f));
+		PtrCamera->SetEye(Vec3(0.0f, 2.0f, -4.0f));
 		PtrCamera->SetAt(Vec3(0.0f, 0.0f, 0.0f));
 		//マルチライトの作成
 		auto PtrMultiLight = CreateLight<MultiLight>();
@@ -24,8 +24,8 @@ namespace basecross
 		auto Ptr = AddGameObject<GameObject>();
 		auto PtrTrans = Ptr->GetComponent<Transform>();
 		Quat Qt;
-		Qt.rotationRollPitchYawFromVector(Vec3(XM_PIDIV2, 0, 0));
-		PtrTrans->SetScale(8.0f, 7.0f, 1.0f);
+		Qt.rotationRollPitchYawFromVector(Vec3(0.75, 0, 0));
+		PtrTrans->SetScale(7.0f, 6.0f, 1.0f);
 		PtrTrans->SetQuaternion(Qt);
 		PtrTrans->SetPosition(0.0f, 0.0f, 0.0f);
 
