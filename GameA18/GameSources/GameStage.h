@@ -17,8 +17,6 @@ namespace basecross {
 	class GameStage : public Stage {
 		//ビューの作成
 		void CreateViewLight();
-		//プレートの作成
-		void CreatePlate();
 		//かべ
 		void CreateWall();
 		//プレイヤーの作成
@@ -27,8 +25,6 @@ namespace basecross {
 		void CreateWhiteCube();
 		//
 		void CreateGoal();
-		//
-		void CreateKeyItem();
 
 		CsvFile m_Csv;//CSV関連の変数
 					  //DataIDを管理するフラグ

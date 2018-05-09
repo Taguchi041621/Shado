@@ -24,7 +24,8 @@ namespace basecross {
 		//描画するテクスチャを設定
 		PtrDraw->SetTextureResource(L"SKY_TX");
 
-
+		auto group = GetStage()->GetSharedObjectGroup(L"KeyGroup");
+		group->IntoGroup(GetThis<KeyItem>());
 		//auto PtrRegid = AddComponent<Rigidbody>();
 
 		//auto PtrCol = AddComponent<CollisionSphere>();

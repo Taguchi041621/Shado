@@ -125,7 +125,8 @@ namespace basecross {
 		p.m_Radius = 0.20;
 
 		if (HitTest::SPHERE_SPHERE(t, p)){
-			if (GetStage()->GetSharedGameObject<Player>(L"Player")->GetKey() >= 1) {
+			if (GetStage()->GetSharedGameObject<Player>(L"Player")->GetKey() >= 
+				GetStage()->GetSharedObjectGroup(L"KeyGroup")->size()) {
 				PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToClearStage");
 			}
 		}

@@ -29,8 +29,7 @@ namespace basecross {
 		//ファイルの指定
 		m_Csv.SetFileName(Map);
 
-		if (!m_Csv.ReadCsv())
-		{
+		if (!m_Csv.ReadCsv()){
 			//ファイルが存在しなかったとき
 			throw BaseException(
 				L"ファイルが見つかりませんでした",
@@ -114,8 +113,7 @@ namespace basecross {
 				AddGameObject<KeyItem>(Pos);
 			}
 			if (!stringflag){
-				throw BaseException
-				(
+				throw BaseException(
 					Util::IntToWStr(RowNum + 1) + L"行目",
 					MapVec[0].c_str(),
 					L"使用不可のオブジェクトです"
@@ -150,30 +148,6 @@ namespace basecross {
 		SetSharedGameObject(L"LightController", ptrMyLight);
 	}
 
-
-	//プレートの作成
-	void GameStage::CreatePlate() {
-		//ステージへのゲームオブジェクトの追加
-		auto Ptr = AddGameObject<GameObject>();
-		auto PtrTrans = Ptr->GetComponent<Transform>();
-		Quat Qt;
-		Qt.rotationRollPitchYawFromVector(Vec3(XM_PIDIV2, 0, 0));
-		PtrTrans->SetScale(50.0f, 50.0f, 0.1f);
-		PtrTrans->SetQuaternion(Qt);
-		PtrTrans->SetPosition(0.0f, 0.0f, 0.0f);
-
-		auto ColPtr = Ptr->AddComponent<CollisionRect>();
-		//描画コンポーネントの追加
-		auto DrawComp = Ptr->AddComponent<BcPNTStaticDraw>();
-		//描画コンポーネントに形状（メッシュ）を設定
-		DrawComp->SetMeshResource(L"DEFAULT_SQUARE");
-		DrawComp->SetFogEnabled(true);
-		//自分に影が映りこむようにする
-		DrawComp->SetOwnShadowActive(true);
-
-		//描画コンポーネントテクスチャの設定
-		DrawComp->SetTextureResource(L"SKY_TX");
-	}
 	void GameStage::CreateWall() {
 		//ステージへのゲームオブジェクトの追加
 		auto Ptr = AddGameObject<GameObject>();
@@ -184,6 +158,7 @@ namespace basecross {
 		PtrTrans->SetQuaternion(Qt);
 		PtrTrans->SetPosition(0.0f, 0.0f, 0.0f);
 
+		
 		//auto ColPtr = Ptr->AddComponent<CollisionRect>();
 		//描画コンポーネントの追加
 		auto DrawComp = Ptr->AddComponent<BcPNTStaticDraw>();
@@ -208,7 +183,7 @@ namespace basecross {
 		//シェア配列にプレイヤーを追加
 		SetSharedGameObject(L"Player", PlayerPtr);
 	}
-
+	
 	void GameStage::CreateWhiteCube() {
 		Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
 		auto CubePtr = AddGameObject<WhiteCube>(
@@ -239,17 +214,10 @@ namespace basecross {
 			);
 	}
 
-	void GameStage::CreateKeyItem()
-	{
-		auto KeyPtr = AddGameObject<KeyItem>(Vec3(1.0f, 4.0f, -0.25f));
-	}
-
 	void GameStage::OnCreate() {
 		try {
 			//ビューとライトの作成
 			CreateViewLight();
-			//プレートの作成
-			//CreatePlate();
 			//壁
 			CreateWall();
 			//プレーヤーの作成
@@ -258,8 +226,7 @@ namespace basecross {
 			//CreateWhiteCube();
 			////ゴールブロック
 			//CreateGoal();
-			////鍵
-			//CreateKeyItem();
+			CreateSharedObjectGroup(L"KeyGroup");
 
 			Csv();
 		}
