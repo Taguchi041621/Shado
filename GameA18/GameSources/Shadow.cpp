@@ -41,11 +41,9 @@ namespace basecross {
 	void ShadowObject::OnUpdate() {
 	}
 	void ShadowObject::OnUpdate2() {
-		//auto velo = ShadowLocation() - GetComponent<Transform>()->GetPosition();
-		//velo = velo / App::GetApp()->GetElapsedTime();
-		//GetComponent<Rigidbody>()->SetVelocity(velo);
 		//影のポジションの更新
 		GetComponent<Transform>()->SetPosition(ShadowLocation());
+
 	}
 
 	//物体とライトの位置から、影の位置を導き出す

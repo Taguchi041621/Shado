@@ -33,8 +33,11 @@ namespace basecross{
 		//データとゲームとの変換行列
 		Mat4x4 m_ToAnimeMatrixLeft;
 		Mat4x4 m_ToAnimeMatrixRight;
-		SPHERE m_HitSpere;
+		//死亡判定のためのOBB
 		OBB m_DieOBB;
+		//死亡状態を持つ変数[1:圧殺]
+		int m_Death;
+
 	public:
 		//構築と破棄
 		//--------------------------------------------------------------------------------------
@@ -123,6 +126,10 @@ namespace basecross{
 		void AddKey();
 		//m_Keyの値を取得する
 		int GetKey();
+		//m_Deathの値を取得する
+		int GetDeath();
+		//GameOverSceneを呼び出す
+		void GoGameOverScene();
 
 		//アクセサ
 		shared_ptr< StateMachine<Player> > GetStateMachine() const {
@@ -148,6 +155,22 @@ namespace basecross{
 	public:
 		//ステートのインスタンス取得
 		static shared_ptr<WaitState> Instance();
+		//ステートに入ったときに呼ばれる関数
+		virtual void Enter(const shared_ptr<Player>& Obj)override;
+		//ステート実行中に毎ターン呼ばれる関数
+		virtual void Execute(const shared_ptr<Player>& Obj)override;
+		//ステートにから抜けるときに呼ばれる関数
+		virtual void Exit(const shared_ptr<Player>& Obj)override;
+	};
+	//--------------------------------------------------------------------------------------
+	//	class DiedState : public ObjState<Player>;
+	//	用途: 死亡状態
+	//--------------------------------------------------------------------------------------
+	class DiedState : public ObjState<Player>{
+		DiedState() {}
+	public:
+		//ステートのインスタンス取得
+		static shared_ptr<DiedState> Instance();
 		//ステートに入ったときに呼ばれる関数
 		virtual void Enter(const shared_ptr<Player>& Obj)override;
 		//ステート実行中に毎ターン呼ばれる関数

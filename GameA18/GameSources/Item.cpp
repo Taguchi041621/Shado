@@ -13,7 +13,7 @@ namespace basecross {
 	{
 		auto PtrTransform = GetComponent<Transform>();
 		PtrTransform->SetPosition(m_KeyPos);
-		PtrTransform->SetScale(0.25,0.25,0.25);
+		PtrTransform->SetScale(0.25,0.50,0.25);
 
 		//É^ÉO
 		AddTag(L"KeyItem");

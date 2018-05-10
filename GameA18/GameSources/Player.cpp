@@ -19,7 +19,8 @@ namespace basecross{
 		m_MaxSpeed(20.0f),	//最高速度
 		m_Decel(0.65f),	//減速値
 		m_Mass(0.5f),	//質量
-		m_Key(0)
+		m_Key(0),		//鍵の取得状況
+		m_Death(0)		//死因を0(生存)に
 	{
 		m_ToAnimeMatrixLeft.affineTransformation(
 			Vec3(0.1f, 0.05f, 0.1f),
@@ -33,7 +34,6 @@ namespace basecross{
 			Vec3(0, 0, 0),
 			Vec3(0.5f, 0.0f, 0.0f)
 		);
-
 	}
 
 	//0を渡すと左、1を渡すと右のスティックのX値を返す
@@ -58,7 +58,6 @@ namespace basecross{
 			default:
 				break;
 			}
-
 		}
 		return MoveX;
 	}
@@ -124,7 +123,7 @@ namespace basecross{
 				//X幅の中に入っていたら
 				if ((playerTrans->GetWorldPosition().x - playerTrans->GetScale().x) <= HitPoint.x
 					&& (playerTrans->GetWorldPosition().x + playerTrans->GetScale().x) >= HitPoint.x
-					&& playerTrans->GetWorldPosition().y >= HitPoint.y) {
+					&& playerTrans->GetWorldPosition().y >= p.m_Center.y + p.m_Size.y) {
 					//ペアレント化してるオブジェクトが無かったらペアレント化
 					if (!playerTrans->GetParent()) {
 						//ペアレント化する
@@ -145,23 +144,25 @@ namespace basecross{
 	//衝突している時
 	void Player::OnCollisionExcute(vector<shared_ptr<GameObject>>& OtherVec) {
 		for (auto &obj : OtherVec) {
+			//それが親だったら
 			if (GetComponent<Transform>()->GetParent() == obj) {
+				//プレイヤーのYを親の上に乗るようにして
 				auto ParentTrans = obj->GetComponent<Transform>();
 				auto Ppos = GetComponent<Transform>()->GetWorldPosition();
 				Ppos.y = ParentTrans->GetPosition().y + ParentTrans->GetScale().y * 0.5f
 									+ GetComponent<Transform>()->GetScale().y * 0.5f;
-				//上方向のみめり込みを直す
+				//適用する
 				GetComponent<Transform>()->SetWorldPosition(Ppos);
 			}
+
 			OBB p;
 			p.m_Center = obj->GetComponent<Transform>()->GetWorldPosition();
 			p.m_Size = obj->GetComponent<Transform>()->GetScale() * 0.5f;
-
 			//当たり判定の更新
 			m_DieOBB.m_Center = GetComponent<Transform>()->GetWorldPosition();
 			//頭中心あたりが当たったら死ぬ
 			if (HitTest::OBB_OBB(m_DieOBB, p)) {
-				PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameOver");
+				m_Death = 1;
 			}
 		}
 	}
@@ -199,7 +200,6 @@ namespace basecross{
 		//値は秒あたりのフレーム数
 		SetFps(49.0f);
 
-
 		//元となるオブジェクトからアニメーションオブジェクトへの行列の設定
 		SetToAnimeMatrix(m_ToAnimeMatrixLeft);
 
@@ -215,9 +215,6 @@ namespace basecross{
 		auto PtrString = AddComponent<StringSprite>();
 		PtrString->SetText(L"");
 		PtrString->SetTextRect(Rect2D<float>(16.0f, 16.0f, 640.0f, 480.0f));
-
-		//球体の当たり判定のサイズを設定
-		m_HitSpere.m_Radius = Ptr->GetScale().x * 0.5f;
 
 		m_DieOBB.m_Size.x = Ptr->GetScale().x * 0.3f;
 		m_DieOBB.m_Size.y = Ptr->GetScale().y * 0.3f;
@@ -260,7 +257,7 @@ namespace basecross{
 
 		PlayerHP();
 	}
-
+	//カメラを引いたり近づけたりする
 	void Player::CameraChanger() {
 		auto PtrCamera = dynamic_pointer_cast<MyCamera>(OnGetDrawCamera());
 
@@ -286,12 +283,13 @@ namespace basecross{
 		PtrCamera->SetAt(TargetPos);
 		PtrCamera->SetEye(Eye);
 	}
+	//
 	void Player::PlayerHP() {
 		m_PlayerHP = 3;
 
 		auto PlayerPos = this->GetComponent<Transform>()->GetPosition();
 		//落下死
-		if (PlayerPos.y < -20.0f){
+		if (PlayerPos.y < -25.0f){
 			m_PlayerHP = 0;
 		}
 
@@ -307,7 +305,14 @@ namespace basecross{
 	int Player::GetKey() {
 		return m_Key;
 	}
-
+	//m_Deathの値を取得する
+	int Player::GetDeath() {
+		return m_Death;
+	}
+	//GameOverSceneに移行する
+	void Player::GoGameOverScene() {
+		PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameOver");
+	}
 
 	//文字列の表示
 	void Player::DrawStrings() {
@@ -387,9 +392,41 @@ namespace basecross{
 	void WaitState::Execute(const shared_ptr<Player>& Obj) {
 		//アニメーション更新
 		Obj->LoopedAnimeUpdateMotion();
+		//潰れて死んだらDiedアニメーションを流す
+		if (Obj->GetDeath() == 1) {
+			Obj->GetStateMachine()->ChangeState(DiedState::Instance());
+		}
 	}
 	//ステートにから抜けるときに呼ばれる関数
 	void WaitState::Exit(const shared_ptr<Player>& Obj) {
+	}
+
+	//--------------------------------------------------------------------------------------
+	//	class DiedState : public ObjState<Player>;
+	//	用途: 死亡状態
+	//--------------------------------------------------------------------------------------
+	//ステートのインスタンス取得
+	shared_ptr<DiedState> DiedState::Instance() {
+		static shared_ptr<DiedState> instance;
+		if (!instance) {
+			instance = shared_ptr<DiedState>(new DiedState);
+		}
+		return instance;
+	}
+	//ステートに入ったときに呼ばれる関数
+	void DiedState::Enter(const shared_ptr<Player>& Obj) {
+		Obj->AnimeChangeMotion(L"Died", false);
+	}
+	//ステート実行中に毎ターン呼ばれる関数
+	void DiedState::Execute(const shared_ptr<Player>& Obj) {
+		//アニメーション更新
+		Obj->LoopedAnimeUpdateMotion();
+		if (Obj->IsAnimeEnd()) {
+			Obj->GoGameOverScene();
+		}
+	}
+	//ステートにから抜けるときに呼ばれる関数
+	void DiedState::Exit(const shared_ptr<Player>& Obj) {
 	}
 
 }
