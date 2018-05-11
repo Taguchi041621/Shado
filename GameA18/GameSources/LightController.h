@@ -11,6 +11,8 @@ namespace basecross {
 		float m_MaxAngle;
 		//ライトの角度
 		Vec3 m_LightAngle;
+		//ライトを減速させる
+		float m_Speed;
 	public:
 		LightController(const shared_ptr<Stage>& StagePtr);
 		virtual ~LightController();

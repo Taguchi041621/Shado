@@ -4,7 +4,8 @@
 namespace basecross {
 	MyCamera::MyCamera(const shared_ptr<GameStage>&StagePtr) :
 		Camera(),
-		m_StagePtr(StagePtr)
+		m_StagePtr(StagePtr),
+		CameraPosZ(-20.0f)
 	{}
 
 	MyCamera::~MyCamera() {}
@@ -24,6 +25,31 @@ namespace basecross {
 	void MyCamera::SetToTargetLerp(float f)
 	{
 	}
+	//ÉJÉÅÉâÇà¯Ç¢ÇΩÇËãﬂÇ√ÇØÇΩÇËÇ∑ÇÈ
+	void MyCamera::CameraChanger() {
+		auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
+		if (CntlVec[0].bConnected) {
+			if (CntlVec[0].wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) {
+				CameraPosZ += 0.2;
+				if (CameraPosZ >= -10) {
+					CameraPosZ = -10;
+				}
+			}
+			else if (CntlVec[0].wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) {
+				CameraPosZ -= 0.2;
+				if (CameraPosZ <= -30) {
+					CameraPosZ = -30;
+				}
+			}
+		}
+
+		auto TargetPos = GetTargetObject()->GetComponent<Transform>()->GetWorldPosition();
+		Vec3 ArmVec(-5.0f, 5.0f, CameraPosZ);
+		Vec3 Eye = TargetPos + ArmVec;
+		SetAt(TargetPos);
+		SetEye(Eye);
+	}
+
 
 	void MyCamera::OnCreate() {
 		SetUp(Vec3(0, 1.0f, 0));
@@ -32,7 +58,8 @@ namespace basecross {
 	void MyCamera::OnUpdate() {
 		auto TargetPtr = m_TargetObject.lock();
 		if (TargetPtr) {
-
+			//ÉJÉÅÉâÇà¯Ç¢ÇΩÇËãﬂÇ√ÇØÇΩÇËÇ∑ÇÈ
+			CameraChanger();
 		}
 	}
 

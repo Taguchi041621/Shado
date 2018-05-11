@@ -118,18 +118,16 @@ namespace basecross{
 		//衝突が終わった時
 		virtual void OnCollisionExit(vector<shared_ptr<GameObject>>& OtherVec) override;
 
-		//LRが押されたときカメラを変える
-		void CameraChanger();
-
 		//プレイヤーのHP
 		void PlayerHP();
 
 		//鍵に触れたときに使う、m_Keyの値を増やす
-		void AddKey();
+		void AddKey() { m_Key += 1; }
 		//m_Keyの値を取得する
-		int GetKey();
+		int GetKey() { return m_Key; }
 		//m_Deathの値を取得する
-		int GetDeath();
+		int GetDeath() { return m_Death; }
+
 		//GameOverSceneを呼び出す
 		void GoGameOverScene();
 
