@@ -95,6 +95,8 @@ namespace basecross {
 				SetSharedGameObject(L"Player", PlayerPtr);
 				Pos.z = 0.0f;
 				PlayerPtr->GetComponent<Transform>()->SetPosition(Pos);
+				//カメラのターゲットに設定
+				dynamic_pointer_cast<MyCamera>(GetView()->GetTargetCamera())->SetTargetObject(PlayerPtr);
 			}
 
 			if (MapVec[0] == L"Goal"){
@@ -205,14 +207,6 @@ namespace basecross {
 		//SetSharedGameObject(L"WhiteCube", CubePtr);
 	}
 
-	void GameStage::CreateGoal() {
-		Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
-		auto CubePtr = AddGameObject<Goal>(
-			Vec3(0.25f, 0.5f, 0.25f),		//スケール
-			Qt,							//角度
-			Vec3(5.0f, 2.8f, -0.25f)		//ポジション
-			);
-	}
 
 	void GameStage::OnCreate() {
 		try {
@@ -224,8 +218,6 @@ namespace basecross {
 			//CreatePlayer();
 			////白いブロックの作成
 			//CreateWhiteCube();
-			////ゴールブロック
-			//CreateGoal();
 			CreateSharedObjectGroup(L"KeyGroup");
 
 			Csv();

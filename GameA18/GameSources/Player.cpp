@@ -188,7 +188,6 @@ namespace basecross{
 
 	//初期化
 	void Player::OnCreate() {
-		CameraPosZ = -20;
 		m_GameOverFlag = false;
 		//初期位置などの設定
 		auto Ptr = GetComponent<Transform>();
@@ -217,6 +216,7 @@ namespace basecross{
 		PtrString->SetText(L"");
 		PtrString->SetTextRect(Rect2D<float>(16.0f, 16.0f, 640.0f, 480.0f));
 
+		//死亡判定用OBBの大きさ設定
 		m_DieOBB.m_Size.x = Ptr->GetScale().x * 0.3f;
 		m_DieOBB.m_Size.y = Ptr->GetScale().y * 0.3f;
 
@@ -256,35 +256,7 @@ namespace basecross{
 		//文字列の表示
 		DrawStrings();
 
-		CameraChanger();
-
 		PlayerHP();
-	}
-	//カメラを引いたり近づけたりする
-	void Player::CameraChanger() {
-		auto PtrCamera = dynamic_pointer_cast<MyCamera>(OnGetDrawCamera());
-
-		auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
-		if (CntlVec[0].bConnected) {
-			if (CntlVec[0].wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) {
-				CameraPosZ += 0.2;
-				if (CameraPosZ >= -10) {
-					CameraPosZ = -10;
-				}
-			}
-			else if (CntlVec[0].wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER){
-				CameraPosZ -= 0.2;
-				if (CameraPosZ <= -30) {
-					CameraPosZ = -30;
-				}
-			}
-		}
-
-	    auto TargetPos = this->GetComponent<Transform>()->GetWorldPosition();
-		Vec3 ArmVec(-5.0f, 5.0f, CameraPosZ);
-		Vec3 Eye = TargetPos + ArmVec;
-		PtrCamera->SetAt(TargetPos);
-		PtrCamera->SetEye(Eye);
 	}
 	//
 	void Player::PlayerHP() {

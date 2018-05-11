@@ -118,9 +118,6 @@ namespace basecross{
 		//衝突が終わった時
 		virtual void OnCollisionExit(vector<shared_ptr<GameObject>>& OtherVec) override;
 
-		//LRが押されたときカメラを変える
-		void CameraChanger();
-
 		//プレイヤーのHP
 		void PlayerHP();
 
