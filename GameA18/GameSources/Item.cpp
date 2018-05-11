@@ -9,8 +9,7 @@ namespace basecross {
 		GameObject(StagePtr),
 		m_KeyPos(StartPos)
 	{}
-	void KeyItem::OnCreate()
-	{
+	void KeyItem::OnCreate(){
 		auto PtrTransform = GetComponent<Transform>();
 		PtrTransform->SetPosition(m_KeyPos);
 		PtrTransform->SetScale(0.25,0.50,0.25);
@@ -26,19 +25,23 @@ namespace basecross {
 
 		auto group = GetStage()->GetSharedObjectGroup(L"KeyGroup");
 		group->IntoGroup(GetThis<KeyItem>());
-		//auto PtrRegid = AddComponent<Rigidbody>();
-
-		//auto PtrCol = AddComponent<CollisionSphere>();
-		//PtrCol->SetIsHitAction(IsHitAction::None);
 
 		//‰e‚ð‚Â‚¯‚é
 		//auto ShadowPtr = AddComponent<Shadowmap>();
 		//ShadowPtr->SetMeshResource(L"DEFAULT_CUBE");
+
+		//-------------------------------------------------
+		//‰e‚Ìì¬
+		GetStage()->AddGameObject<ShadowKey>(
+			GetComponent<Transform>()->GetScale(),
+			GetComponent<Transform>()->GetRotation(),
+			*GetThis<GameObject>()
+			);
 	}
 
 	void KeyItem::OnUpdate()
 	{
-		OnTriggerEnter();
+		//OnTriggerEnter();
 	}
 	//Œ®‚ª“–‚½‚Á‚½‚Æ‚«
 	void KeyItem::OnTriggerEnter()

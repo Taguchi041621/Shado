@@ -188,7 +188,7 @@ namespace basecross{
 
 	//初期化
 	void Player::OnCreate() {
-		CameraPosZ = -10;
+		CameraPosZ = -20;
 		m_GameOverFlag = false;
 		//初期位置などの設定
 		auto Ptr = GetComponent<Transform>();
@@ -274,14 +274,14 @@ namespace basecross{
 			}
 			else if (CntlVec[0].wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER){
 				CameraPosZ -= 0.2;
-				if (CameraPosZ <= -20) {
-					CameraPosZ = -20;
+				if (CameraPosZ <= -30) {
+					CameraPosZ = -30;
 				}
 			}
 		}
 
 	    auto TargetPos = this->GetComponent<Transform>()->GetWorldPosition();
-		Vec3 ArmVec(0, 0.0f, CameraPosZ);
+		Vec3 ArmVec(-5.0f, 5.0f, CameraPosZ);
 		Vec3 Eye = TargetPos + ArmVec;
 		PtrCamera->SetAt(TargetPos);
 		PtrCamera->SetEye(Eye);
@@ -299,18 +299,6 @@ namespace basecross{
 		if (m_PlayerHP == 0){
 			PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameOver");
 		}
-	}
-	//m_Keyを増やす
-	void Player::AddKey() {
-		m_Key += 1;
-	}
-	//m_Keyの値を取得する
-	int Player::GetKey() {
-		return m_Key;
-	}
-	//m_Deathの値を取得する
-	int Player::GetDeath() {
-		return m_Death;
 	}
 	//GameOverSceneに移行する
 	void Player::GoGameOverScene() {

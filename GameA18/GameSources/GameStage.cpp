@@ -108,7 +108,7 @@ namespace basecross {
 			}
 			if (MapVec[0] == L"Key"){
 				stringflag = true;
-				Pos.z = 0.0f;
+				//Pos.z = -15.0f;
 				Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
 				AddGameObject<KeyItem>(Pos);
 			}
@@ -134,7 +134,7 @@ namespace basecross {
 		//ビューのカメラの設定
 		auto PtrLookAtCamera = ObjectFactory::Create<MyCamera>(GetThis<GameStage>());
 		PtrView->SetCamera(PtrLookAtCamera);
-		PtrLookAtCamera->SetEye(Vec3(0.0f, 5.0f, -5.0f));
+		//PtrLookAtCamera->SetEye(Vec3(0.0f, 5.0f, -5.0f));
 		PtrLookAtCamera->SetAt(Vec3(0.0f, 0.0f, 0.0f));
 		//マルチライトの作成
 		auto PtrMultiLight = CreateLight<MultiLight>();
@@ -156,7 +156,7 @@ namespace basecross {
 		Qt.rotationRollPitchYawFromVector(Vec3(0, 0, XM_PIDIV2));
 		PtrTrans->SetScale(80.0f, 80.0f, 1.0f);
 		PtrTrans->SetQuaternion(Qt);
-		PtrTrans->SetPosition(0.0f, 0.0f, 0.0f);
+		PtrTrans->SetPosition(0.0f, 0.0f, 0.5f);
 
 		
 		//auto ColPtr = Ptr->AddComponent<CollisionRect>();
