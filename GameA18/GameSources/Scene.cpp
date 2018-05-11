@@ -36,6 +36,22 @@ namespace basecross{
 		App::GetApp()->RegisterTexture(L"WallTexture_TX", strTexture);
 		strTexture = DataDir + L"Red.tga";
 		App::GetApp()->RegisterTexture(L"Red_TX", strTexture);
+
+
+
+
+
+		//”Žš
+		strTexture = DataDir + L"number_0.png";
+		App::GetApp()->RegisterTexture(L"0_TX", strTexture);
+		strTexture = DataDir + L"number_1.png";
+		App::GetApp()->RegisterTexture(L"1_TX", strTexture);
+		strTexture = DataDir + L"number_2.png";
+		App::GetApp()->RegisterTexture(L"2_TX", strTexture);
+		strTexture = DataDir + L"number_3.png";
+		App::GetApp()->RegisterTexture(L"3_TX", strTexture);
+		strTexture = DataDir + L"number_4.png";
+		App::GetApp()->RegisterTexture(L"4_TX", strTexture);
 	}
 
 	void Scene::OnCreate() {

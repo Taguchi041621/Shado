@@ -48,11 +48,29 @@ void StageSelect::CreateTitleSprite()
 		Vec2(1280.0f, 800.0f), Vec3(0, 0.0f, 0.1f));
 }
 
+void StageSelect::StageNumberSprite()
+{
+	auto Zero = AddGameObject<Sprite>(L"0_TX", false,
+		Vec2(200.0f, 200.0f), Vec3(-500, 0.0f, 0.1f));
+	SetSharedGameObject(L"0", Zero);
+	auto One = AddGameObject<Sprite>(L"1_TX", false,
+		Vec2(200.0f, 200.0f), Vec3(-200, 0.0f, 0.1f));
+	SetSharedGameObject(L"1", One);
+	auto Two = AddGameObject<Sprite>(L"2_TX", false,
+		Vec2(200.0f, 200.0f), Vec3(100, 0.0f, 0.1f));
+	SetSharedGameObject(L"2", Two);
+	auto Three = AddGameObject<Sprite>(L"3_TX", false,
+		Vec2(200.0f, 200.0f), Vec3(400, 0.0f, 0.1f));
+	SetSharedGameObject(L"3", Three);
+}
+
 void StageSelect::OnCreate()
 {
+	m_StageNumber = 0;
 	CreateViewLight();
 	//スプライトの作成
 	CreateTitleSprite();
+	StageNumberSprite();
 
 }
 
@@ -61,11 +79,68 @@ void StageSelect::OnUpdate() {
 	//コントローラの取得
 	auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
 	if (CntlVec[0].bConnected) {
+				if (CntlVec[0].fThumbLX < -0.5) {
+					if (onectrl == false)
+					{
+						onectrl = true;
+						m_StageNumber += -1;
+					}
+				}
+				else if (CntlVec[0].fThumbLX > 0.5) {
+					if (onectrl == false)
+					{
+						onectrl = true;
+						m_StageNumber += 1;
+					}
+				}
+				else
+				{
+					onectrl = false;
+				}
+
+				if (m_StageNumber < 0) {
+					m_StageNumber = 3;
+				}
+				else if (m_StageNumber > 3) {
+					m_StageNumber = 0;
+				}
 		//Aボタン
 		if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A) {
 			PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameStage");
 		}
 	}
+
+	auto Zero = GetSharedGameObject<Sprite>(L"0");
+	auto One = GetSharedGameObject<Sprite>(L"1");
+	auto Two = GetSharedGameObject<Sprite>(L"2");
+	auto Three = GetSharedGameObject<Sprite>(L"3");
+	switch (m_StageNumber) {
+	case 0:
+		Zero->SetActionflag(true);
+		One->SetActionflag(false);
+		Two->SetActionflag(false);
+		Three->SetActionflag(false);
+		break;
+	case 1:
+		Zero->SetActionflag(false);
+		One->SetActionflag(true);
+		Two->SetActionflag(false);
+		Three->SetActionflag(false);
+		break;
+	case 2:
+		Zero->SetActionflag(false);
+		One->SetActionflag(false);
+		Two->SetActionflag(true);
+		Three->SetActionflag(false);
+		break;
+	case 3:
+		Zero->SetActionflag(false);
+		One->SetActionflag(false);
+		Two->SetActionflag(false);
+		Three->SetActionflag(true);
+		break;
+	}
+	
 
 }
 
