@@ -12,40 +12,42 @@ namespace basecross {
 	}
 	//アップデート
 	void LightController::OnUpdate() {
-		auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
-		float speed = 0.6f;
-		//右スティックが動いていたら
-		if (CntlVec[0].fThumbRX != 0 || CntlVec[0].fThumbRY != 0) {
-			//Elapsedタイムの取得
-			auto ElapsedTime = App::GetApp()->GetElapsedTime();
-			//X方向にステックが倒れていたら
-			if (m_LightAngle.x >= -m_MaxAngle && CntlVec[0].fThumbRX > 0.4f) {
-				m_LightAngle.x += -CntlVec[0].fThumbRX * ElapsedTime*speed;
-			}
-			else if (m_LightAngle.x <= m_MaxAngle && CntlVec[0].fThumbRX < -0.4f) {
-				m_LightAngle.x += -CntlVec[0].fThumbRX * ElapsedTime*speed;
-			}
-			//Y方向にスティックが倒れていたら
-			if (m_LightAngle.y >= -m_MaxAngle && CntlVec[0].fThumbRY > 0.4f) {
-				m_LightAngle.y += -CntlVec[0].fThumbRY * ElapsedTime*speed;
-			}
-			else if (m_LightAngle.y <= m_MaxAngle && CntlVec[0].fThumbRY < -0.4f) {
-				m_LightAngle.y += -CntlVec[0].fThumbRY * ElapsedTime*speed;
-			}
+		if (!GetStage()->GetSharedGameObject<Player>(L"Player")->GetGameOverFlag()) {
+			auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
+			float speed = 0.6f;
+			//右スティックが動いていたら
+			if (CntlVec[0].fThumbRX != 0 || CntlVec[0].fThumbRY != 0) {
+				//Elapsedタイムの取得
+				auto ElapsedTime = App::GetApp()->GetElapsedTime();
+				//X方向にステックが倒れていたら
+				if (m_LightAngle.x >= -m_MaxAngle && CntlVec[0].fThumbRX > 0.4f) {
+					m_LightAngle.x += -CntlVec[0].fThumbRX * ElapsedTime*speed;
+				}
+				else if (m_LightAngle.x <= m_MaxAngle && CntlVec[0].fThumbRX < -0.4f) {
+					m_LightAngle.x += -CntlVec[0].fThumbRX * ElapsedTime*speed;
+				}
+				//Y方向にスティックが倒れていたら
+				if (m_LightAngle.y >= -m_MaxAngle && CntlVec[0].fThumbRY > 0.4f) {
+					m_LightAngle.y += -CntlVec[0].fThumbRY * ElapsedTime*speed;
+				}
+				else if (m_LightAngle.y <= m_MaxAngle && CntlVec[0].fThumbRY < -0.4f) {
+					m_LightAngle.y += -CntlVec[0].fThumbRY * ElapsedTime*speed;
+				}
 
-			//---------------------------------------------------------------------------------------
-			//角度からポジション出す
-			m_LightPosition.x = -m_LightDistance * sinf(m_LightAngle.x);
-			float xZ = -m_LightDistance * cosf(m_LightAngle.x);
-			//X軸に角度を反映させた後のZ軸を基準にY軸方向の計算をする
-			m_LightPosition.y = xZ * sinf(m_LightAngle.y);
-			m_LightPosition.z = xZ * cosf(m_LightAngle.y);
-			//マルチライトを持ってくる
-			auto PtrLight = dynamic_pointer_cast<MultiLight>(GetStage()->GetLight());
-			//マルチライトの中のメインライトを持ってくる
-			auto mainIndex = PtrLight->GetMainIndex();
-			//変更したライトのポジションを反映
-			PtrLight->GetLight(mainIndex).SetPositionToDirectional(m_LightPosition);
+				//---------------------------------------------------------------------------------------
+				//角度からポジション出す
+				m_LightPosition.x = -m_LightDistance * sinf(m_LightAngle.x);
+				float xZ = -m_LightDistance * cosf(m_LightAngle.x);
+				//X軸に角度を反映させた後のZ軸を基準にY軸方向の計算をする
+				m_LightPosition.y = xZ * sinf(m_LightAngle.y);
+				m_LightPosition.z = xZ * cosf(m_LightAngle.y);
+				//マルチライトを持ってくる
+				auto PtrLight = dynamic_pointer_cast<MultiLight>(GetStage()->GetLight());
+				//マルチライトの中のメインライトを持ってくる
+				auto mainIndex = PtrLight->GetMainIndex();
+				//変更したライトのポジションを反映
+				PtrLight->GetLight(mainIndex).SetPositionToDirectional(m_LightPosition);
+			}
 		}
 	}
 

@@ -189,6 +189,7 @@ namespace basecross{
 	//初期化
 	void Player::OnCreate() {
 		CameraPosZ = -10;
+		m_GameOverFlag = false;
 		//初期位置などの設定
 		auto Ptr = GetComponent<Transform>();
 		Ptr->SetScale(0.40f, 0.80f, 0.40f);	//X,Z25、Y50の長方形
@@ -248,7 +249,9 @@ namespace basecross{
 
 	void Player::OnUpdate2() {
 		//プレイヤーの移動
-		MoveRotationMotion();
+		if (!GetStage()->GetSharedGameObject<Player>(L"Player")->GetGameOverFlag()) {
+			MoveRotationMotion();
+		}
 
 		//文字列の表示
 		DrawStrings();
@@ -416,6 +419,7 @@ namespace basecross{
 	//ステートに入ったときに呼ばれる関数
 	void DiedState::Enter(const shared_ptr<Player>& Obj) {
 		Obj->AnimeChangeMotion(L"Died", false);
+		Obj->SetGameOverFlag(true);
 	}
 	//ステート実行中に毎ターン呼ばれる関数
 	void DiedState::Execute(const shared_ptr<Player>& Obj) {

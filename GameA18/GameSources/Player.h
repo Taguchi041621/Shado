@@ -38,6 +38,8 @@ namespace basecross{
 		//死亡状態を持つ変数[1:圧殺]
 		int m_Death;
 
+		bool m_GameOverFlag;
+
 	public:
 		//構築と破棄
 		//--------------------------------------------------------------------------------------
@@ -143,6 +145,9 @@ namespace basecross{
 		//移動して向きを移動方向にする
 		//移動距離を返す
 		float MoveRotationMotion();
+		//ゲームオーバー管理
+		void SetGameOverFlag(bool f) { m_GameOverFlag = f; }
+		bool GetGameOverFlag() { return m_GameOverFlag; }
 	};
 
 	//--------------------------------------------------------------------------------------
