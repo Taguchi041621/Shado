@@ -12,7 +12,8 @@ namespace basecross {
 	}
 	//アップデート
 	void LightController::OnUpdate() {
-		if (!GetStage()->GetSharedGameObject<Player>(L"Player")->GetGameOverFlag()) {
+		if (!GetStage()->GetSharedGameObject<Player>(L"Player")->GetGameOverFlag() &&
+			GetStage()->GetSharedGameObject<Player>(L"Player")->GetComponent<Transform>()->GetParent()) {
 			auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
 			//右スティックが動いていたら
 			if (CntlVec[0].fThumbRX != 0 || CntlVec[0].fThumbRY != 0) {

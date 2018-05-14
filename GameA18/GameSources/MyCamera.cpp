@@ -44,7 +44,7 @@ namespace basecross {
 		}
 
 		auto TargetPos = GetTargetObject()->GetComponent<Transform>()->GetWorldPosition();
-		Vec3 ArmVec(-5.0f, 5.0f, CameraPosZ);
+		Vec3 ArmVec(0.0f, 0.0f, CameraPosZ);
 		Vec3 Eye = TargetPos + ArmVec;
 		SetAt(TargetPos);
 		SetEye(Eye);
