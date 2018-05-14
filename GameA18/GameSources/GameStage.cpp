@@ -24,7 +24,7 @@ namespace basecross {
 
 		//ファイル名の設定
 		//wstring Map = Path + L"Stage_" + Util::IntToWStr(ScenePtr->GetStageNumber()) + L".csv";
-		wstring Map = DataDir + L"Stage_0.csv";
+		wstring Map = DataDir + L"Stage_" + Util::IntToWStr(ScenePtr->GetStageNumber()) + L".csv";
 
 		//ファイルの指定
 		m_Csv.SetFileName(Map);
@@ -34,7 +34,7 @@ namespace basecross {
 			throw BaseException(
 				L"ファイルが見つかりませんでした",
 				Map,
-				L"パスが間違っているorファイルが存在しない\nさっさと確認してやり直せ"
+				L"パスが間違っているorファイルが存在しない\n"
 			);
 		}
 		else {

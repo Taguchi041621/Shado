@@ -51,6 +51,10 @@ namespace basecross{
 		//--------------------------------------------------------------------------------------
 		virtual void OnEvent(const shared_ptr<Event>& event) override;
 
+		void SetStageNumber(int n) {
+			m_StageNumber = n;
+		}
+
 		int GetStageNumber() {
 			return m_StageNumber;
 		}

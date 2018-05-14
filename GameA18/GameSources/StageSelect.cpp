@@ -114,30 +114,36 @@ void StageSelect::OnUpdate() {
 	auto One = GetSharedGameObject<Sprite>(L"1");
 	auto Two = GetSharedGameObject<Sprite>(L"2");
 	auto Three = GetSharedGameObject<Sprite>(L"3");
+	auto ScenePtr = App::GetApp()->GetScene<Scene>();
 	switch (m_StageNumber) {
+		
 	case 0:
 		Zero->SetActionflag(true);
 		One->SetActionflag(false);
 		Two->SetActionflag(false);
 		Three->SetActionflag(false);
+		ScenePtr->SetStageNumber(m_StageNumber);
 		break;
 	case 1:
 		Zero->SetActionflag(false);
 		One->SetActionflag(true);
 		Two->SetActionflag(false);
 		Three->SetActionflag(false);
+		ScenePtr->SetStageNumber(m_StageNumber);
 		break;
 	case 2:
 		Zero->SetActionflag(false);
 		One->SetActionflag(false);
 		Two->SetActionflag(true);
 		Three->SetActionflag(false);
+		ScenePtr->SetStageNumber(m_StageNumber);
 		break;
 	case 3:
 		Zero->SetActionflag(false);
 		One->SetActionflag(false);
 		Two->SetActionflag(false);
 		Three->SetActionflag(true);
+		ScenePtr->SetStageNumber(m_StageNumber);
 		break;
 	}
 	
