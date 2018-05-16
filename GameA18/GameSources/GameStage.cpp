@@ -175,52 +175,30 @@ namespace basecross {
 		Flt4 Color(1.0f, 1.0f, 1.0f, 0.7f);
 		DrawComp->SetColorAndAlpha(Color);
 	}
-
-	//プレイヤーの作成
-	void GameStage::CreatePlayer() {
-		wstring DataDir;
-		App::GetApp()->GetDataDirectory(DataDir);
-		//プレーヤーの作成
-		auto PlayerPtr = AddGameObject<Player>(DataDir+L"Idea\\");
-		//シェア配列にプレイヤーを追加
-		SetSharedGameObject(L"Player", PlayerPtr);
+	void GameStage::CreateHaveKeys() {
+		auto group = GetSharedObjectGroup(L"KeyGroup");
+		for (int i = 0; i < group->size(); i++) {
+			//鍵のグループに入ってる数、表示する
+			auto key = AddGameObject<HaveKeys>((wstring)L"Red_TX",i);
+			if (i == 0) {
+				SetSharedGameObject(L"HaveKey", key);
+			}
+		}
 	}
-	
-	void GameStage::CreateWhiteCube() {
-		Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
-		auto CubePtr = AddGameObject<WhiteCube>(
-			Vec3(3.0f, 1.0f, 1.0f),
-			Qt,
-			Vec3(-7.0f, 4.0f, -10.0f)
-			);
-		CubePtr = AddGameObject<WhiteCube>(
-			Vec3(2.0f, 1.0f, 1.0f),
-			Qt,
-			Vec3(-2.0f, 3.0f, -6.0f)
-			);
-		CubePtr = AddGameObject<WhiteCube>(
-			Vec3(3.0f, 1.0f, 1.0f),
-			Qt,
-			Vec3(3.0f, 2.0f, -8.0f)
-			);
-
-		//SetSharedGameObject(L"WhiteCube", CubePtr);
-	}
-
-
 	void GameStage::OnCreate() {
 		try {
 			//ビューとライトの作成
 			CreateViewLight();
 			//壁
 			CreateWall();
-			//プレーヤーの作成
-			//CreatePlayer();
-			////白いブロックの作成
-			//CreateWhiteCube();
+			//クリエイトした鍵のグループ
 			CreateSharedObjectGroup(L"KeyGroup");
+			//
+			CreateSharedObjectGroup(L"HaveKeysGroup");
 
 			Csv();
+			//鍵の数に応じて作るため、鍵ができてから呼び出す
+			CreateHaveKeys();
 		}
 		catch (...) {
 			throw;

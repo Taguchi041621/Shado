@@ -57,5 +57,45 @@ namespace basecross
 			PtrTransform->SetScale(m_StartScale.x, m_StartScale.y, 1.0f);
 		}
 	};
-//end basecross
+	//-------------------------------------------------------------------------------------
+	///ステージ上の鍵の数と現在取得した鍵の数を表示する
+	//-------------------------------------------------------------------------------------
+	HaveKeys::HaveKeys(const shared_ptr<Stage>& StagePtr,wstring& TextureKey,int order)
+		: GameObject(StagePtr),m_TextureKey(TextureKey),m_order(order)
+	{
+	};
+	//--------------------------------------------------------------------------------------
+	/*!
+	@brief デストラクタ
+	*/
+	//--------------------------------------------------------------------------------------
+	HaveKeys::~HaveKeys() {};
+	//--------------------------------------------------------------------------------------
+	/*!
+	@brief 初期化
+	@return	なし
+	*/
+	//--------------------------------------------------------------------------------------
+	void HaveKeys::OnCreate() {
+		//鍵を取った時に行うクリエイト
+		if (m_TextureKey == (wstring)L"0_TX") {
+			GetStage()->AddGameObject<Sprite>(m_TextureKey, true,
+				Vec2(50.0f, 100.0f), Vec3(-600.0f + (50.0f * m_order), -350.0f, 0.0f));
+			return;
+		}
+		//ステージができたときに行うクリエイト
+		GetStage()->AddGameObject<Sprite>(m_TextureKey, true,
+			Vec2(50.0f, 100.0f),Vec3(-600.0f + (50.0f * m_order), -350.0f, 0.1f));
+		//最初からある方をグループに登録する
+		auto group = GetStage()->GetSharedObjectGroup(L"HaveKeysGroup");
+		group->IntoGroup(GetThis<HaveKeys>());
+	};
+	//--------------------------------------------------------------------------------------
+	/*!
+	@brief 更新
+	@return	なし
+	*/
+	//--------------------------------------------------------------------------------------
+	void HaveKeys::OnUpdate() {};
+	//end basecross
 }

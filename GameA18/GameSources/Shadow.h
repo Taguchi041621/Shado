@@ -91,7 +91,8 @@ namespace basecross {
 		GameObject& m_Obj;
 		//スケールのZの固定値
 		float m_ScaleZ;
-
+		//持っている鍵の数
+		int m_Key;
 		shared_ptr<MeshResource> m_MeshResource;
 	public:
 		//--------------------------------------------------------------------------------------

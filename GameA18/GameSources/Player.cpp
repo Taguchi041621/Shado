@@ -295,7 +295,7 @@ namespace basecross{
 		PositionStr += L"Z=" + Util::FloatToWStr(Pos.z, 6, Util::FloatModify::Fixed) + L"\n";
 
 		auto WPos = GetComponent<Transform>()->GetWorldPosition();
-		wstring WPositionStr(L"WPosition:\t");
+		wstring WPositionStr(L"WPosition:");
 		WPositionStr += L"X=" + Util::FloatToWStr(WPos.x, 6, Util::FloatModify::Fixed) + L",\t";
 		WPositionStr += L"Y=" + Util::FloatToWStr(WPos.y, 6, Util::FloatModify::Fixed) + L",\t";
 		WPositionStr += L"Z=" + Util::FloatToWStr(WPos.z, 6, Util::FloatModify::Fixed) + L"\n";

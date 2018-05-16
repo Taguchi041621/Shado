@@ -19,13 +19,8 @@ namespace basecross {
 		void CreateViewLight();
 		//かべ
 		void CreateWall();
-		//プレイヤーの作成
-		void CreatePlayer();
-		//白いブロックの作成
-		void CreateWhiteCube();
-		//
-		void CreateGoal();
-
+		//鍵の取得状況表示
+		void CreateHaveKeys();
 		CsvFile m_Csv;//CSV関連の変数
 					  //DataIDを管理するフラグ
 		bool dataIdFlag = false;

@@ -102,7 +102,7 @@ namespace basecross {
 		PtrDraw->SetOwnShadowActive(true);
 
 		//真っ赤
-		PtrDraw->SetColorAndAlpha(Col4(1.0f, 0.0f, 0.0f, 1.0f));
+		PtrDraw->SetColorAndAlpha(Col4(1.0f, 0.4f, 0.0f, 1.0f));
 	}
 
 	void ShadowGoal::OnUpdate() {
@@ -152,7 +152,7 @@ namespace basecross {
 	ShadowKey::ShadowKey(const shared_ptr<Stage>& StagePtr,
 		const Vec3& Scale, const Vec3& Rotation, GameObject& Obj)
 		: GameObject(StagePtr),
-		m_Scale(Scale), m_Rotation(Rotation), m_Obj(Obj), m_ScaleZ(0.05f)
+		m_Scale(Scale), m_Rotation(Rotation), m_Obj(Obj), m_ScaleZ(0.05f),m_Key(0)
 	{}
 
 	void ShadowKey::OnCreate() {
@@ -171,8 +171,8 @@ namespace basecross {
 		PtrDraw->SetMeshResource(m_Obj.GetComponent<BcPNTStaticDraw>()->GetMeshResource());
 		PtrDraw->SetOwnShadowActive(true);
 
-		//真っ赤
-		PtrDraw->SetColorAndAlpha(Col4(0.0f, 0.0f, 1.0f, 1.0f));
+		//青
+		PtrDraw->SetColorAndAlpha(Col4(0.0f, 4.0f, 1.0f, 1.0f));
 	}
 
 	void ShadowKey::OnUpdate() {
@@ -190,9 +190,15 @@ namespace basecross {
 		p.m_Center = GetStage()->GetSharedGameObject<Player>(L"Player")->GetComponent<Transform>()->GetWorldPosition();
 		p.m_Center.z = 0;
 		p.m_Size = GetStage()->GetSharedGameObject<Player>(L"Player")->GetComponent<Transform>()->GetScale() * 0.5f;
-		//プレイヤーがゴールに触れたかを調べる判定
+		//プレイヤーが鍵に触れたかを調べる判定
 		if (HitTest::OBB_OBB(t, p)) {
+			//鍵の所持数の表示を変える
+			GetStage()->AddGameObject<HaveKeys>((wstring)L"0_TX",m_Key);
+			//プレイヤーの所持鍵数を増やす
 			GetStage()->GetSharedGameObject<Player>(L"Player")->AddKey();
+			//影の方で持ってる鍵の所持数を増やす
+			m_Key += 1;
+			//鍵を消す
 			GetStage()->RemoveGameObject<ShadowKey>(GetThis<ShadowKey>());
 		}
 	}
