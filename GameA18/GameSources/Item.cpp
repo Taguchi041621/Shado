@@ -12,7 +12,7 @@ namespace basecross {
 	void KeyItem::OnCreate(){
 		auto PtrTransform = GetComponent<Transform>();
 		PtrTransform->SetPosition(m_KeyPos);
-		PtrTransform->SetScale(0.25,0.50,0.25);
+		PtrTransform->SetScale(0.50,1.00,0.50);
 
 		//タグ
 		AddTag(L"KeyItem");
@@ -21,7 +21,7 @@ namespace basecross {
 		//描画するメッシュを設定
 		PtrDraw->SetMeshResource(L"DEFAULT_CUBE");
 		//描画するテクスチャを設定
-		PtrDraw->SetTextureResource(L"SKY_TX");
+		PtrDraw->SetTextureResource(L"Key_TX");
 
 		auto group = GetStage()->GetSharedObjectGroup(L"KeyGroup");
 		group->IntoGroup(GetThis<KeyItem>());

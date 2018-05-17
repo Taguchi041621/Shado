@@ -179,7 +179,7 @@ namespace basecross {
 		auto group = GetSharedObjectGroup(L"KeyGroup");
 		for (int i = 0; i < group->size(); i++) {
 			//鍵のグループに入ってる数、表示する
-			auto key = AddGameObject<HaveKeys>((wstring)L"Red_TX",i);
+			auto key = AddGameObject<HaveKeys>((wstring)L"UI_Key_TX",i);
 			if (i == 0) {
 				SetSharedGameObject(L"HaveKey", key);
 			}

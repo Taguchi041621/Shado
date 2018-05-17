@@ -78,7 +78,7 @@ namespace basecross
 	//--------------------------------------------------------------------------------------
 	void HaveKeys::OnCreate() {
 		//鍵を取った時に行うクリエイト
-		if (m_TextureKey == (wstring)L"0_TX") {
+		if (m_TextureKey == (wstring)L"Key_TX") {
 			GetStage()->AddGameObject<Sprite>(m_TextureKey, true,
 				Vec2(50.0f, 100.0f), Vec3(-600.0f + (50.0f * m_order), -350.0f, 0.0f));
 			return;

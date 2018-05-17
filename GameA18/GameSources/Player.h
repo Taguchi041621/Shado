@@ -166,6 +166,22 @@ namespace basecross{
 		virtual void Exit(const shared_ptr<Player>& Obj)override;
 	};
 	//--------------------------------------------------------------------------------------
+	//	class WalkState : public ObjState<Player>;
+	//	用途: 歩き状態
+	//--------------------------------------------------------------------------------------
+	class WalkState : public ObjState<Player>{
+		WalkState() {}
+	public:
+		//ステートのインスタンス取得
+		static shared_ptr<WalkState> Instance();
+		//ステートに入ったときに呼ばれる関数
+		virtual void Enter(const shared_ptr<Player>& Obj)override;
+		//ステート実行中に毎ターン呼ばれる関数
+		virtual void Execute(const shared_ptr<Player>& Obj)override;
+		//ステートにから抜けるときに呼ばれる関数
+		virtual void Exit(const shared_ptr<Player>& Obj)override;
+	};
+	//--------------------------------------------------------------------------------------
 	//	class DiedState : public ObjState<Player>;
 	//	用途: 死亡状態
 	//--------------------------------------------------------------------------------------

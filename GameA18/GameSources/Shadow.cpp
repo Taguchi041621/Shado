@@ -168,11 +168,12 @@ namespace basecross {
 		auto PtrDraw = AddComponent<BcPNTStaticDraw>();
 		PtrDraw->SetFogEnabled(true);
 		//実体から形を持ってくる
-		PtrDraw->SetMeshResource(m_Obj.GetComponent<BcPNTStaticDraw>()->GetMeshResource());
-		PtrDraw->SetOwnShadowActive(true);
+		PtrDraw->SetMeshResource(L"DEFAULT_SQUARE" );
+		//PtrDraw->SetOwnShadowActive(true);
 
-		//青
-		PtrDraw->SetColorAndAlpha(Col4(0.0f, 4.0f, 1.0f, 1.0f));
+		//鍵のテクスチャ
+		PtrDraw->SetTextureResource(L"Key_TX");
+		PtrDraw->SetAlpha(1.0f);
 	}
 
 	void ShadowKey::OnUpdate() {
@@ -193,7 +194,7 @@ namespace basecross {
 		//プレイヤーが鍵に触れたかを調べる判定
 		if (HitTest::OBB_OBB(t, p)) {
 			//鍵の所持数の表示を変える
-			GetStage()->AddGameObject<HaveKeys>((wstring)L"0_TX",m_Key);
+			GetStage()->AddGameObject<HaveKeys>((wstring)L"Key_TX",m_Key);
 			//プレイヤーの所持鍵数を増やす
 			GetStage()->GetSharedGameObject<Player>(L"Player")->AddKey();
 			//影の方で持ってる鍵の所持数を増やす

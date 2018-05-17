@@ -15,7 +15,7 @@ namespace basecross{
 	//--------------------------------------------------------------------------------------
 	//構築と破棄
 	Player::Player(const shared_ptr<Stage>& StagePtr, const wstring& BaseDir) :
-		SS5ssae(StagePtr, BaseDir, L"Idea1.ssae", L"Walk"),
+		SS5ssae(StagePtr, BaseDir, L"Idea1.ssae", L"Wait"),
 		m_MaxSpeed(50.0f),	//最高速度
 		m_Decel(0.65f),	//減速値
 		m_Mass(0.5f),	//質量
@@ -349,19 +349,55 @@ namespace basecross{
 	}
 	//ステートに入ったときに呼ばれる関数
 	void WaitState::Enter(const shared_ptr<Player>& Obj) {
-		Obj->AnimeChangeMotion(L"Walk", true);
+		Obj->AnimeChangeMotion(L"Wait", true);
 	}
 	//ステート実行中に毎ターン呼ばれる関数
 	void WaitState::Execute(const shared_ptr<Player>& Obj) {
+		//アニメーション更新
+		Obj->LoopedAnimeUpdateMotion();
+		//潰れて死んだらDiedアニメを流す
+		if (Obj->GetDeath() == 1) {
+			Obj->GetStateMachine()->ChangeState(DiedState::Instance());
+		}
+		//左スティックの値が0以外ならWalkアニメを流す
+		if (Obj->GetMoveVector(0)) {
+			Obj->GetStateMachine()->ChangeState(WalkState::Instance());
+		}
+	}
+	//ステートから抜けるときに呼ばれる関数
+	void WaitState::Exit(const shared_ptr<Player>& Obj) {
+	}
+	//--------------------------------------------------------------------------------------
+	//	class WalkState : public ObjState<Player>;
+	//	用途: 歩き状態
+	//--------------------------------------------------------------------------------------
+	//ステートのインスタンス取得
+	shared_ptr<WalkState> WalkState::Instance() {
+		static shared_ptr<WalkState> instance;
+		if (!instance) {
+			instance = shared_ptr<WalkState>(new WalkState);
+		}
+		return instance;
+	}
+	//ステートに入ったときに呼ばれる関数
+	void WalkState::Enter(const shared_ptr<Player>& Obj) {
+		Obj->AnimeChangeMotion(L"Walk", true);
+	}
+	//ステート実行中に毎ターン呼ばれる関数
+	void WalkState::Execute(const shared_ptr<Player>& Obj) {
 		//アニメーション更新
 		Obj->LoopedAnimeUpdateMotion();
 		//潰れて死んだらDiedアニメーションを流す
 		if (Obj->GetDeath() == 1) {
 			Obj->GetStateMachine()->ChangeState(DiedState::Instance());
 		}
+		//左スティックの値が0(入力されなくなった)ならWaitアニメを流す
+		if (Obj->GetMoveVector(0) == 0.0f) {
+			Obj->GetStateMachine()->ChangeState(WaitState::Instance());
+		}
 	}
 	//ステートにから抜けるときに呼ばれる関数
-	void WaitState::Exit(const shared_ptr<Player>& Obj) {
+	void WalkState::Exit(const shared_ptr<Player>& Obj) {
 	}
 
 	//--------------------------------------------------------------------------------------
