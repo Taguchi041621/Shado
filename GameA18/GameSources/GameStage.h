@@ -24,6 +24,12 @@ namespace basecross {
 		CsvFile m_Csv;//CSV関連の変数
 					  //DataIDを管理するフラグ
 		bool dataIdFlag = false;
+
+		bool m_ClearFlag;
+
+		//フェードの作成
+		void CreateFadeOutSprite();
+		void CreateFadeSprite();
 	public:
 		//構築と破棄
 		GameStage() :Stage() {}
@@ -33,6 +39,9 @@ namespace basecross {
 		//更新
 		virtual void OnUpdate()override;
 		void Csv();
+
+		bool GetClearFlag() { return m_ClearFlag; }
+		void SetClearFlag(bool f) { m_ClearFlag = f; }
 	};
 
 

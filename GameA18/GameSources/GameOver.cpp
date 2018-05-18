@@ -48,13 +48,30 @@ namespace basecross
 		AddGameObject<Sprite>(L"GAMEOVER_TX", false,
 			Vec2(1280.0f, 800.0f), Vec3(0, 0.0f, 0.1f));
 	}
+	void GameOverStage::CreateFadeOutSprite()
+	{
+		auto Fade = AddGameObject<SpriteFadeOut>(L"Shadow_TX", true,
+			Vec2(50000 / 4, 30000 / 4), Vec3(0.0f, 0.0f, 0.1f));
+		SetSharedGameObject(L"FadeOut", Fade);
+
+	}
+
+	void GameOverStage::CreateFadeSprite()
+	{
+		auto Fade = AddGameObject<SpriteFade>(L"Shadow_TX", true,
+			Vec2(840, 600), Vec3(900.0f, 0.0f, 0.1f));
+		SetSharedGameObject(L"FadeIn", Fade);
+
+	}
 
 	void GameOverStage::OnCreate()
 	{
+		m_SelectFlag = false;
 		CreateViewLight();
 		//スプライトの作成
 		CreateTitleSprite();
-
+		CreateFadeOutSprite();
+		CreateFadeSprite();
 	}
 
 	//更新
@@ -63,8 +80,11 @@ namespace basecross
 		auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
 		if (CntlVec[0].bConnected) {
 			//Aボタン
-			if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A) {
-				PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToStageSelect");
+			if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A && !m_SelectFlag) {
+				auto FadeIn = GetSharedGameObject<SpriteFade>(L"FadeIn");
+				FadeIn->SetActionflag(true);
+				m_SelectFlag = true;
+				PostEvent(2.4f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToStageSelect");
 			}
 		}
 	}

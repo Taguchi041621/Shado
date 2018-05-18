@@ -38,6 +38,7 @@ namespace basecross{
 		//死亡状態を持つ変数[1:圧殺]
 		int m_Death;
 
+		bool m_GameClearFlag;
 		bool m_GameOverFlag;
 
 		shared_ptr<MultiAudioObject> m_AudioObjectPtr;
@@ -152,6 +153,9 @@ namespace basecross{
 		//ゲームオーバー管理
 		void SetGameOverFlag(bool f) { m_GameOverFlag = f; }
 		bool GetGameOverFlag() { return m_GameOverFlag; }
+
+		void SetGameClearFlag(bool f) { m_GameClearFlag = f; }
+		bool GetGameClearFlag() { return m_GameClearFlag; }
 	};
 
 	//--------------------------------------------------------------------------------------

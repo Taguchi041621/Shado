@@ -129,6 +129,22 @@ namespace basecross {
 
 	}
 
+	void GameStage::CreateFadeOutSprite()
+	{
+		auto Fade = AddGameObject<SpriteFadeOut>(L"Shadow_TX", true,
+			Vec2(50000 / 4, 30000 / 4), Vec3(0.0f, 0.0f, 0.1f));
+		SetSharedGameObject(L"FadeOut", Fade);
+
+	}
+
+	void GameStage::CreateFadeSprite()
+	{
+		auto Fade = AddGameObject<SpriteFade>(L"Shadow_TX", true,
+			Vec2(840, 600), Vec3(900.0f, 0.0f, 0.1f));
+		SetSharedGameObject(L"FadeIn", Fade);
+
+	}
+
 
 	//ビューとライトの作成
 	void GameStage::CreateViewLight() {
@@ -186,6 +202,7 @@ namespace basecross {
 		}
 	}
 	void GameStage::OnCreate() {
+		m_ClearFlag = false;
 		try {
 			//ビューとライトの作成
 			CreateViewLight();
@@ -199,6 +216,10 @@ namespace basecross {
 			Csv();
 			//鍵の数に応じて作るため、鍵ができてから呼び出す
 			CreateHaveKeys();
+
+			//フェード
+			CreateFadeOutSprite();
+			CreateFadeSprite();
 		}
 		catch (...) {
 			throw;
@@ -206,6 +227,18 @@ namespace basecross {
 	}
 	//更新
 	void GameStage::OnUpdate() {
+		auto Fade = GetSharedGameObject<SpriteFade>(L"FadeIn");
+		auto PtrPlayer = GetSharedGameObject<Player>(L"Player");
+		if (PtrPlayer->GetGameOverFlag() && !m_ClearFlag) {
+			Fade->SetActionflag(true);
+			PostEvent(2.4f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameOver");
+			m_ClearFlag = true;
+		}
+		if (PtrPlayer->GetGameClearFlag() && !m_ClearFlag) {
+			Fade->SetActionflag(true);
+			PostEvent(2.4f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToClear");
+			m_ClearFlag = true;
+		}
 		////コントローラの取得
 		//auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
 		//if (CntlVec[0].bConnected) {

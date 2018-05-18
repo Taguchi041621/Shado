@@ -12,6 +12,8 @@ namespace basecross
 		void CreateTitleSprite();
 
 		void CreateFadeSprite();
+
+		bool m_SelectFlag;
 	public:
 		//\’z‚Æ”jŠü
 		TitleStage() :Stage() {}

@@ -40,7 +40,7 @@ namespace basecross
 		PtrDraw->SetTextureResource(m_TextureKey);
 
 		auto ActionPtr = AddComponent<Action>();
-		ActionPtr->AddScaleTo(1.5f, Vec3(0.0f, m_StartScale.y, 0.0f));
+		ActionPtr->AddScaleTo(0.5f, Vec3(0.0f, 0, 0.0f));
 		ActionPtr->SetLooped(true);
 		ActionPtr->Run();
 	}
@@ -49,13 +49,13 @@ namespace basecross
 		auto ActionPtr = AddComponent<Action>();
 		auto PtrTransform = GetComponent<Transform>();
 		float ElapsedTime = App::GetApp()->GetElapsedTime();
-		if (m_Actionflag == true) {
+		//if (m_Actionflag == true) {
 			ActionPtr->Run();
-		}
-		if (m_Actionflag == false) {
-			ActionPtr->Stop();
-			PtrTransform->SetScale(m_StartScale.x, m_StartScale.y, 1.0f);
-		}
+		//}
+		//if (m_Actionflag == false) {
+		//	ActionPtr->Stop();
+		//	PtrTransform->SetScale(m_StartScale.x, m_StartScale.y, 1.0f);
+		//}
 	}
 	//end basecross
 }

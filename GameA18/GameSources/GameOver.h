@@ -10,6 +10,10 @@ namespace basecross
 		void CreateViewLight();
 		//スプライトの作成
 		void CreateTitleSprite();
+		//フェードの作成
+		void CreateFadeOutSprite();
+		void CreateFadeSprite();
+		bool m_SelectFlag;
 	public:
 		//構築と破棄
 		GameOverStage() :Stage() {}

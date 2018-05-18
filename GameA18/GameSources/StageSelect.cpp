@@ -48,14 +48,21 @@ void StageSelect::CreateTitleSprite()
 		Vec2(1280.0f, 800.0f), Vec3(0, 0.0f, 0.1f));
 }
 
-void StageSelect::CreateFadeSprite()
+void StageSelect::CreateFadeOutSprite()
 {
 	auto Fade = AddGameObject<SpriteFadeOut>(L"Shadow_TX", true,
-		Vec2(3000, 1400), Vec3(0.0f, 0.0f, 0.1f));
-	SetSharedGameObject(L"Shadow_TX", Fade);
+		Vec2(50000/4, 30000/4), Vec3(0.0f, 0.0f, 0.1f));
+	SetSharedGameObject(L"FadeOut", Fade);
 
 }
 
+void StageSelect::CreateFadeSprite()
+{
+	auto Fade = AddGameObject<SpriteFade>(L"Shadow_TX", true,
+		Vec2(840, 600), Vec3(900.0f, 0.0f, 0.1f));
+	SetSharedGameObject(L"FadeIn", Fade);
+
+}
 void StageSelect::StageNumberSprite()
 {
 	auto Zero = AddGameObject<Sprite>(L"0_TX", false,
@@ -74,52 +81,56 @@ void StageSelect::StageNumberSprite()
 
 void StageSelect::OnCreate()
 {
+	m_SelectFlag = true;
 	m_StageNumber = 0;
 	CreateViewLight();
 	//スプライトの作成
 	CreateTitleSprite();
-	CreateFadeSprite();
 	StageNumberSprite();
-
+	CreateFadeOutSprite();
+	CreateFadeSprite();
 }
+
+
 
 //更新
 void StageSelect::OnUpdate() {
-
-	auto Fade = GetSharedGameObject<SpriteFadeOut>(L"Shadow_TX");
-	Fade->SetActionflag(true);
-
 	//コントローラの取得
 	auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
-	if (CntlVec[0].bConnected) {
-				if (CntlVec[0].fThumbLX < -0.5) {
-					if (onectrl == false)
-					{
-						onectrl = true;
-						m_StageNumber += -1;
-					}
-				}
-				else if (CntlVec[0].fThumbLX > 0.5) {
-					if (onectrl == false)
-					{
-						onectrl = true;
-						m_StageNumber += 1;
-					}
-				}
-				else
+	if(m_SelectFlag){
+		if (CntlVec[0].bConnected) {
+			if (CntlVec[0].fThumbLX < -0.5) {
+				if (onectrl == false)
 				{
-					onectrl = false;
+					onectrl = true;
+					m_StageNumber += -1;
 				}
+			}
+			else if (CntlVec[0].fThumbLX > 0.5) {
+				if (onectrl == false)
+				{
+					onectrl = true;
+					m_StageNumber += 1;
+				}
+			}
+			else
+			{
+				onectrl = false;
+			}
 
-				if (m_StageNumber < 0) {
-					m_StageNumber = 3;
-				}
-				else if (m_StageNumber > 3) {
-					m_StageNumber = 0;
-				}
-		//Aボタン
-		if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A) {
-			PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameStage");
+			if (m_StageNumber < 0) {
+				m_StageNumber = 3;
+			}
+			else if (m_StageNumber > 3) {
+				m_StageNumber = 0;
+			}
+			//Aボタン
+			if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A) {
+				auto FadeIn = GetSharedGameObject<SpriteFade>(L"FadeIn");
+				FadeIn->SetActionflag(true);
+				m_SelectFlag = false;
+				PostEvent(2.4f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameStage");
+			}
 		}
 	}
 

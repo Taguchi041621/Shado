@@ -236,27 +236,30 @@ namespace basecross{
 
 	//更新
 	void Player::OnUpdate() {
+		if (!m_GameOverFlag || !m_GameClearFlag) {
+			//ステートマシンのUpdateを行う
+			//この中でステートの切り替えが行われる
+			m_StateMachine->Update();
 
-		//ステートマシンのUpdateを行う
-		//この中でステートの切り替えが行われる
-		m_StateMachine->Update();
-
-		//重力を加える
-		auto PtrGrav = GetBehavior<Gravity>();
-		PtrGrav->SetGravity(Vec3(0.0f,-4.9f,0.0f));
-		PtrGrav->Execute();
+			//重力を加える
+			auto PtrGrav = GetBehavior<Gravity>();
+			PtrGrav->SetGravity(Vec3(0.0f, -4.9f, 0.0f));
+			PtrGrav->Execute();
+		}
 	}
 
 	void Player::OnUpdate2() {
-		//プレイヤーの移動
-		if (!GetStage()->GetSharedGameObject<Player>(L"Player")->GetGameOverFlag()) {
-			MoveRotationMotion();
+		if (!m_GameOverFlag || !m_GameClearFlag) {
+			//プレイヤーの移動
+			if (!GetStage()->GetSharedGameObject<Player>(L"Player")->GetGameOverFlag()) {
+				MoveRotationMotion();
+			}
+
+			//文字列の表示
+			DrawStrings();
+
+			PlayerHP();
 		}
-
-		//文字列の表示
-		DrawStrings();
-
-		PlayerHP();
 	}
 	//
 	void Player::PlayerHP() {
@@ -268,17 +271,17 @@ namespace basecross{
 			m_PlayerHP = 0;
 		}
 
-		if (m_PlayerHP == 0){
-			PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameOver");
+		if (m_PlayerHP == 0&& !m_GameOverFlag){
+			m_GameOverFlag = true;
 		}
 	}
 	//GameOverSceneに移行する
 	void Player::GoGameOverScene() {
-		PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameOver");
+		m_GameOverFlag = true;
 	}
 	//GameOverSceneに移行する
 	void Player::GoGameClearScene() {
-		PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToClearStage");
+		m_GameClearFlag = true;
 	}
 	void Player::InGoal() {
 		GetStateMachine()->ChangeState(GoalState::Instance());

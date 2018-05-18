@@ -51,13 +51,14 @@ namespace basecross
 	void TitleStage::CreateFadeSprite()
 	{
 		auto Fade = AddGameObject<SpriteFade>(L"Shadow_TX", true,
-			Vec2(840, 600), Vec3(800.0f, 0.0f, 0.1f));
+			Vec2(840, 600), Vec3(900.0f, 0.0f, 0.1f));
 		SetSharedGameObject(L"Shadow_TX", Fade);
 
 	}
 
 	void TitleStage::OnCreate()
 	{
+		m_SelectFlag = false;
 		CreateViewLight();
 		//スプライトの作成
 		CreateTitleSprite();
@@ -71,10 +72,11 @@ namespace basecross
 		auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
 		if (CntlVec[0].bConnected) {
 			//Aボタン
-			if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A) {
+			if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A&&!m_SelectFlag) {
 				auto Fade = GetSharedGameObject<SpriteFade>(L"Shadow_TX");
 				Fade->SetActionflag(true);
-				PostEvent(3.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToStageSelect");
+				PostEvent(2.4f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToStageSelect");
+				m_SelectFlag = true;
 			}
 		}
 	}
