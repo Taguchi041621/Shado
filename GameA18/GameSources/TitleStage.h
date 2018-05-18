@@ -10,6 +10,8 @@ namespace basecross
 		void CreateViewLight();
 		//スプライトの作成
 		void CreateTitleSprite();
+
+		void CreateFadeSprite();
 	public:
 		//構築と破棄
 		TitleStage() :Stage() {}

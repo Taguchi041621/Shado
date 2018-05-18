@@ -49,6 +49,9 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)UI.cpp">
       <Filter>ソース</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Fade.cpp">
+      <Filter>ソース</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Character.h">
@@ -97,6 +100,9 @@
       <Filter>ヘッダー</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)UI.h">
+      <Filter>ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Fade.h">
       <Filter>ヘッダー</Filter>
     </ClInclude>
   </ItemGroup>

@@ -21,3 +21,4 @@
 #include "Item.h"
 #include "Enemy.h"
 #include "UI.h"
+#include "Fade.h"

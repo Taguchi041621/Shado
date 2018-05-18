@@ -30,7 +30,6 @@ namespace basecross
 		//PtrTrans->SetScale(7.0f, 6.0f, 1.0f);
 		//PtrTrans->SetQuaternion(Qt);
 		//PtrTrans->SetPosition(0.0f, 0.0f, 0.0f);
-
 		//auto ColPtr = Ptr->AddComponent<CollisionRect>();
 		////描画コンポーネントの追加
 		//auto DrawComp = Ptr->AddComponent<BcPNTStaticDraw>();
@@ -49,11 +48,20 @@ namespace basecross
 			Vec2(1280.0f, 800.0f), Vec3(0, 0.0f, 0.1f));
 	}
 
+	void TitleStage::CreateFadeSprite()
+	{
+		auto Fade = AddGameObject<SpriteFade>(L"Shadow_TX", true,
+			Vec2(840, 600), Vec3(800.0f, 0.0f, 0.1f));
+		SetSharedGameObject(L"Shadow_TX", Fade);
+
+	}
+
 	void TitleStage::OnCreate()
 	{
 		CreateViewLight();
 		//スプライトの作成
 		CreateTitleSprite();
+		CreateFadeSprite();
 
 	}
 
@@ -64,10 +72,11 @@ namespace basecross
 		if (CntlVec[0].bConnected) {
 			//Aボタン
 			if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A) {
-				PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToStageSelect");
+				auto Fade = GetSharedGameObject<SpriteFade>(L"Shadow_TX");
+				Fade->SetActionflag(true);
+				PostEvent(3.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToStageSelect");
 			}
 		}
-
 	}
 
 }

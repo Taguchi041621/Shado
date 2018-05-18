@@ -10,6 +10,9 @@ namespace basecross
 		//スプライトの作成
 		void CreateTitleSprite();
 
+		//フェードアウトの作成
+		void CreateFadeSprite();
+
 		//ステージ番号の作成
 		void StageNumberSprite();
 
