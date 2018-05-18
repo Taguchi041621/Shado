@@ -130,6 +130,10 @@ namespace basecross{
 
 		//GameOverSceneを呼び出す
 		void GoGameOverScene();
+		//GameClearSceneを呼び出す
+		void GoGameClearScene();
+		//ゴールに入った時に呼ぶ、クリア演出をする
+		void InGoal();
 
 		//アクセサ
 		shared_ptr< StateMachine<Player> > GetStateMachine() const {
@@ -152,8 +156,7 @@ namespace basecross{
 	//	class WaitState : public ObjState<Player>;
 	//	用途: 待機状態
 	//--------------------------------------------------------------------------------------
-	class WaitState : public ObjState<Player>
-	{
+	class WaitState : public ObjState<Player>{
 		WaitState() {}
 	public:
 		//ステートのインスタンス取得
@@ -190,6 +193,22 @@ namespace basecross{
 	public:
 		//ステートのインスタンス取得
 		static shared_ptr<DiedState> Instance();
+		//ステートに入ったときに呼ばれる関数
+		virtual void Enter(const shared_ptr<Player>& Obj)override;
+		//ステート実行中に毎ターン呼ばれる関数
+		virtual void Execute(const shared_ptr<Player>& Obj)override;
+		//ステートにから抜けるときに呼ばれる関数
+		virtual void Exit(const shared_ptr<Player>& Obj)override;
+	};
+	//--------------------------------------------------------------------------------------
+	//	class GoalState : public ObjState<Player>;
+	//	用途: ゴール状態
+	//--------------------------------------------------------------------------------------
+	class GoalState : public ObjState<Player> {
+		GoalState() {}
+	public:
+		//ステートのインスタンス取得
+		static shared_ptr<GoalState> Instance();
 		//ステートに入ったときに呼ばれる関数
 		virtual void Enter(const shared_ptr<Player>& Obj)override;
 		//ステート実行中に毎ターン呼ばれる関数

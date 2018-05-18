@@ -122,9 +122,12 @@ namespace basecross {
 		p.m_Size = GetStage()->GetSharedGameObject<Player>(L"Player")->GetComponent<Transform>()->GetScale() * 0.5f;
 		//プレイヤーがゴールに触れたかを調べる判定
 		if (HitTest::OBB_OBB(t, p)){
-			if (GetStage()->GetSharedGameObject<Player>(L"Player")->GetKey() >= 
-				GetStage()->GetSharedObjectGroup(L"KeyGroup")->size()) {
-				PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToClearStage");
+			if (!GetStage()->GetSharedGameObject<Player>(L"Player")->GetGameOverFlag()) {
+				if (GetStage()->GetSharedGameObject<Player>(L"Player")->GetKey() >=
+					GetStage()->GetSharedObjectGroup(L"KeyGroup")->size()) {
+					GetStage()->GetSharedGameObject<Player>(L"Player")->InGoal();
+					//PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToClearStage");
+				}
 			}
 		}
 	}
@@ -194,7 +197,7 @@ namespace basecross {
 		//プレイヤーが鍵に触れたかを調べる判定
 		if (HitTest::OBB_OBB(t, p)) {
 			//鍵の所持数の表示を変える
-			GetStage()->AddGameObject<HaveKeys>((wstring)L"Key_TX",m_Key);
+			GetStage()->AddGameObject<HaveKeys>((wstring)L"UI_Key_TX",m_Key);
 			//プレイヤーの所持鍵数を増やす
 			GetStage()->GetSharedGameObject<Player>(L"Player")->AddKey();
 			//影の方で持ってる鍵の所持数を増やす

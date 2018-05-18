@@ -20,8 +20,9 @@ namespace basecross {
 		auto PtrDraw = AddComponent<BcPNTStaticDraw>();
 		//描画するメッシュを設定
 		PtrDraw->SetMeshResource(L"DEFAULT_CUBE");
-		//描画するテクスチャを設定
-		PtrDraw->SetTextureResource(L"Key_TX");
+		////描画するテクスチャを設定
+		//PtrDraw->SetTextureResource(L"UI_Key_TX");
+		PtrDraw->SetDrawActive(false);
 
 		auto group = GetStage()->GetSharedObjectGroup(L"KeyGroup");
 		group->IntoGroup(GetThis<KeyItem>());

@@ -276,6 +276,13 @@ namespace basecross{
 	void Player::GoGameOverScene() {
 		PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameOver");
 	}
+	//GameOverSceneに移行する
+	void Player::GoGameClearScene() {
+		PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToClearStage");
+	}
+	void Player::InGoal() {
+		GetStateMachine()->ChangeState(GoalState::Instance());
+	}
 
 	//文字列の表示
 	void Player::DrawStrings() {
@@ -414,19 +421,54 @@ namespace basecross{
 	}
 	//ステートに入ったときに呼ばれる関数
 	void DiedState::Enter(const shared_ptr<Player>& Obj) {
+		//死亡アニメを呼び出す
 		Obj->AnimeChangeMotion(L"Died", false);
+		//操作を受け付けなくする
 		Obj->SetGameOverFlag(true);
+		//Velocityを0にする
+		Obj->GetComponent<Rigidbody>()->SetVelocityZero();
 	}
 	//ステート実行中に毎ターン呼ばれる関数
 	void DiedState::Execute(const shared_ptr<Player>& Obj) {
 		//アニメーション更新
 		Obj->LoopedAnimeUpdateMotion();
+		//アニメーションが終わったら
 		if (Obj->IsAnimeEnd()) {
+			//ゲームオーバーシーンに遷移する
 			Obj->GoGameOverScene();
 		}
 	}
 	//ステートにから抜けるときに呼ばれる関数
 	void DiedState::Exit(const shared_ptr<Player>& Obj) {
+	}
+	//--------------------------------------------------------------------------------------
+	//	class GoalState : public ObjState<Player>;
+	//	用途: ゴール到達状態
+	//--------------------------------------------------------------------------------------
+	//ステートのインスタンス取得
+	shared_ptr<GoalState> GoalState::Instance() {
+		static shared_ptr<GoalState> instance;
+		if (!instance) {
+			instance = shared_ptr<GoalState>(new GoalState);
+		}
+		return instance;
+	}
+	//ステートに入ったときに呼ばれる関数
+	void GoalState::Enter(const shared_ptr<Player>& Obj) {
+		Obj->AnimeChangeMotion(L"curtsey", false);
+		Obj->SetGameOverFlag(true);
+		Obj->GetComponent<Rigidbody>()->SetVelocityZero();
+	}
+	//ステート実行中に毎ターン呼ばれる関数
+	void GoalState::Execute(const shared_ptr<Player>& Obj) {
+		//アニメーション更新
+		Obj->LoopedAnimeUpdateMotion();
+		if (Obj->IsAnimeEnd()) {
+			Obj->GoGameClearScene();
+		}
+	}
+	//ステートにから抜けるときに呼ばれる関数
+	void GoalState::Exit(const shared_ptr<Player>& Obj) {
 	}
 
 }

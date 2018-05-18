@@ -38,8 +38,11 @@ namespace basecross{
 		App::GetApp()->RegisterTexture(L"Red_TX", strTexture);
 		strTexture = DataDir + L"Key.png";
 		App::GetApp()->RegisterTexture(L"Key_TX", strTexture);
-		strTexture = DataDir + L"UI_Key_None.png";
+		strTexture = DataDir + L"UI_Key.png";
 		App::GetApp()->RegisterTexture(L"UI_Key_TX", strTexture);
+		strTexture = DataDir + L"UI_Key_None.png";
+		App::GetApp()->RegisterTexture(L"UI_Key_None_TX", strTexture);
+
 		//”Žš
 		strTexture = DataDir + L"number_0.png";
 		App::GetApp()->RegisterTexture(L"0_TX", strTexture);
