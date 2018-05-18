@@ -357,7 +357,7 @@ namespace basecross{
 	//ステートに入ったときに呼ばれる関数
 	void WaitState::Enter(const shared_ptr<Player>& Obj) {
 
-		Obj->AnimeChangeMotion(L"Walk", true);
+		Obj->AnimeChangeMotion(L"Wait_1", true);
 		//---------------------------------------------------------------
 		wstring DataDir;
 		//サンプルのためアセットディレクトリを取得
@@ -443,7 +443,7 @@ namespace basecross{
 	//ステートに入ったときに呼ばれる関数
 	void DiedState::Enter(const shared_ptr<Player>& Obj) {
 		//死亡アニメを呼び出す
-		Obj->AnimeChangeMotion(L"Died", false);
+		Obj->AnimeChangeMotion(L"Died_1", false);
 		//操作を受け付けなくする
 		Obj->SetGameOverFlag(true);
 		//Velocityを0にする
@@ -496,7 +496,8 @@ namespace basecross{
 	}
 	//ステートに入ったときに呼ばれる関数
 	void GoalState::Enter(const shared_ptr<Player>& Obj) {
-		Obj->AnimeChangeMotion(L"curtsey", false);
+		Obj->SetFps(60.0f);
+		Obj->AnimeChangeMotion(L"curtsey", true);
 		Obj->SetGameOverFlag(true);
 		Obj->GetComponent<Rigidbody>()->SetVelocityZero();
 	}

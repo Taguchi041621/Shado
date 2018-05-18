@@ -104,7 +104,8 @@
 		<value>Idea1.ssae</value>
 	</animepackNames>
 	<lastAnimeFile>Idea1.ssae</lastAnimeFile>
-	<lastAnimeName>Damaged</lastAnimeName>
+	<lastAnimeName>Wait_1</lastAnimeName>
 	<lastCellMapFile>Idea1.ssce</lastCellMapFile>
-	<lastCell>Head1</lastCell>
+	<lastCell>BODY1</lastCell>
+	<lastPart>BODY1</lastPart>
 </SpriteStudioProject>
