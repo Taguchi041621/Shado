@@ -40,6 +40,8 @@ namespace basecross{
 
 		bool m_GameOverFlag;
 
+		shared_ptr<MultiAudioObject> m_AudioObjectPtr;
+		wstring m_StopNowMusic;
 	public:
 		//構築と破棄
 		//--------------------------------------------------------------------------------------
@@ -154,6 +156,9 @@ namespace basecross{
 	//--------------------------------------------------------------------------------------
 	class WaitState : public ObjState<Player>
 	{
+		shared_ptr<MultiAudioObject> m_AudioObjectPtr;
+		wstring m_StopNowMusic;
+
 		WaitState() {}
 	public:
 		//ステートのインスタンス取得
@@ -170,6 +175,9 @@ namespace basecross{
 	//	用途: 死亡状態
 	//--------------------------------------------------------------------------------------
 	class DiedState : public ObjState<Player>{
+		shared_ptr<MultiAudioObject> m_AudioObjectPtr;
+		wstring m_StopNowMusic;
+
 		DiedState() {}
 	public:
 		//ステートのインスタンス取得

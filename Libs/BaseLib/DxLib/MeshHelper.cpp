@@ -203,8 +203,7 @@ namespace basecross {
 	void MeshUtill::CreateCapsule(float diameter,
 		const bsm::Vec3& PointA, const bsm::Vec3& PointB,
 		size_t tessellation,
-		vector<VertexPositionNormalTexture>& vertices, vector<uint16_t>& indices,
-		bool landscape) {
+		vector<VertexPositionNormalTexture>& vertices, vector<uint16_t>& indices) {
 		try {
 			if (tessellation < 3) {
 				// èâä˙âªé∏îs
@@ -282,19 +281,6 @@ namespace basecross {
 			}
 			//RHÇ©ÇÁLHÇ…ïœçX
 			ReverseWinding(indices, vertices);
-
-			//â°Ç…êQÇπÇÈ
-			if (landscape) {
-				bsm::Mat4x4 mat = (bsm::Mat4x4)XMMatrixRotationZ(XM_PIDIV2);
-				for (auto& v : vertices) {
-					float tmp = -v.position.y;
-					v.position.y = v.position.x;
-					v.position.x = tmp;
-					v.normal *= mat;
-					v.normal.normalize();
-				}
-			}
-
 		}
 		catch (...) {
 			throw;
@@ -302,8 +288,7 @@ namespace basecross {
 	}
 
 	void MeshUtill::CreateCylinder(float height, float diameter, size_t tessellation,
-		vector<VertexPositionNormalTexture>& vertices, vector<uint16_t>& indices,
-		bool landscape)
+		vector<VertexPositionNormalTexture>& vertices, vector<uint16_t>& indices)
 	{
 		try {
 
@@ -348,18 +333,6 @@ namespace basecross {
 			CreateCylinderCap(vertices, indices, tessellation, height, radius, false);
 			//RHÇ©ÇÁLHÇ…ïœçX
 			ReverseWinding(indices, vertices);
-			//â°Ç…êQÇπÇÈ
-			if (landscape) {
-				bsm::Mat4x4 mat = (bsm::Mat4x4)XMMatrixRotationZ(XM_PIDIV2);
-				for (auto& v : vertices) {
-					float tmp = -v.position.y;
-					v.position.y = v.position.x;
-					v.position.x = tmp;
-					v.normal *= mat;
-					v.normal.normalize();
-				}
-			}
-
 
 
 		}

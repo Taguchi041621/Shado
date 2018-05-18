@@ -12,6 +12,8 @@ namespace basecross{
 	///	ゲームシーン
 	//--------------------------------------------------------------------------------------
 	class Scene : public SceneBase {
+		shared_ptr<MultiAudioObject> m_AudioObjectPtr;
+		wstring m_StopNowMusic;
 		//--------------------------------------------------------------------------------------
 		/*!
 		@brief リソースの作成

@@ -12,8 +12,6 @@
 #include "../DxLib/XmlDoc.h"
 //シンプルな計算クラス
 #include "../DxLib/BaseMath.h"
-//物理計算
-#include "../DxLib/physics_effects/include/physics_effects.h"
 //衝突判定、補間処理用ユーティリティ
 #include "../DxLib/TransHelper.h"
 //頂点定義、
@@ -24,10 +22,5 @@
 #include "../DxLib/App.h"
 //デバイスなど
 #include "DeviceResources.h"
-//物理計算インターフェイス
-#include "../DxLib/BasePhysics.h"
-
-
-
 
 

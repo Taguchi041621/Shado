@@ -350,6 +350,26 @@ namespace basecross{
 	//ステートに入ったときに呼ばれる関数
 	void WaitState::Enter(const shared_ptr<Player>& Obj) {
 		Obj->AnimeChangeMotion(L"Walk", true);
+		//---------------------------------------------------------------
+		wstring DataDir;
+		//サンプルのためアセットディレクトリを取得
+		//App::GetApp()->GetAssetsDirectory(DataDir);
+		//各ゲームは以下のようにデータディレクトリを取得すべき
+		App::GetApp()->GetDataDirectory(DataDir);
+
+		if (m_StopNowMusic != L"")
+		{
+			m_AudioObjectPtr->Stop(m_StopNowMusic);
+		}
+
+		wstring GameOver = DataDir + L"BGMSE\\walk.wav";
+		App::GetApp()->RegisterWav(L"walk", GameOver);
+
+		m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
+		m_AudioObjectPtr->AddAudioResource(L"walk");
+		m_AudioObjectPtr->Start(L"walk", XAUDIO2_LOOP_INFINITE, 0.1f);
+		m_StopNowMusic = L"walk";
+		//----------------------------------------------------------------
 	}
 	//ステート実行中に毎ターン呼ばれる関数
 	void WaitState::Execute(const shared_ptr<Player>& Obj) {
@@ -380,6 +400,26 @@ namespace basecross{
 	void DiedState::Enter(const shared_ptr<Player>& Obj) {
 		Obj->AnimeChangeMotion(L"Died", false);
 		Obj->SetGameOverFlag(true);
+		//---------------------------------------------------------------
+		wstring DataDir;
+		//サンプルのためアセットディレクトリを取得
+		//App::GetApp()->GetAssetsDirectory(DataDir);
+		//各ゲームは以下のようにデータディレクトリを取得すべき
+		App::GetApp()->GetDataDirectory(DataDir);
+
+		wstring GameOver = DataDir + L"BGMSE\\Dead.wav";
+		App::GetApp()->RegisterWav(L"dead", GameOver);
+
+		if (m_StopNowMusic != L"")
+		{
+			m_AudioObjectPtr->Stop(m_StopNowMusic);
+		}
+
+		m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
+		m_AudioObjectPtr->AddAudioResource(L"dead");
+		m_AudioObjectPtr->Start(L"dead", XAUDIO2_NO_LOOP_REGION, 0.1f);
+		m_StopNowMusic = L"dead";
+		//----------------------------------------------------------------
 	}
 	//ステート実行中に毎ターン呼ばれる関数
 	void DiedState::Execute(const shared_ptr<Player>& Obj) {

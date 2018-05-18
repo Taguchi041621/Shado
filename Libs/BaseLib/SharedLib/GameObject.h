@@ -43,9 +43,13 @@ namespace basecross {
 		}
 		map<type_index, shared_ptr<Component> >& GetCompoMap() const;
 		void RemoveTgtComponent(type_index TypeIndex);
+
 		map<type_index, shared_ptr<Behavior> >& GetBehaviorMap() const;
 		shared_ptr<Behavior> SearchBehavior(type_index TypeIndex)const;
 		void AddMakedBehavior(type_index TypeIndex, const shared_ptr<Behavior>& Ptr);
+
+
+
 	public:
 		//--------------------------------------------------------------------------------------
 		/*!
@@ -163,6 +167,7 @@ namespace basecross {
 		*/
 		//--------------------------------------------------------------------------------------
 		void  SetDrawLayer(int l);
+
 		//--------------------------------------------------------------------------------------
 		/*!
 		@brief	タグのセットを得る
@@ -761,6 +766,8 @@ namespace basecross {
 			}
 			return nullptr;
 		}
+
+
 		//--------------------------------------------------------------------------------------
 		/*!
 		@brief	行動の検索。
@@ -783,6 +790,9 @@ namespace basecross {
 			}
 			return false;
 		}
+
+
+
 		//--------------------------------------------------------------------------------------
 		/*!
 		@brief	コンポーネントの更新処理
@@ -900,13 +910,6 @@ namespace basecross {
 		*/
 		//--------------------------------------------------------------------------------------
 		virtual void OnDraw()override;
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	ゲームオブジェクト内の削除（ステージからよばれる）
-		@return	なし
-		*/
-		//--------------------------------------------------------------------------------------
-		virtual void DestroyGameObject();
 	private:
 		// pImplイディオム
 		struct Impl;
@@ -1565,7 +1568,9 @@ namespace basecross {
 
 
 
-	class PhysicsManager;
+
+
+
 	//--------------------------------------------------------------------------------------
 	//	ステージクラス
 	//--------------------------------------------------------------------------------------
@@ -1624,28 +1629,6 @@ namespace basecross {
 		shared_ptr<ParticleManager> GetParticleManager(bool AddType) const;
 		//--------------------------------------------------------------------------------------
 		/*!
-		@brief	物理計算オブジェクトを得る
-		@return	物理計算オブジェクト
-		*/
-		//--------------------------------------------------------------------------------------
-		BasePhysics& GetBasePhysics() const;
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	物理計算が有効かどうかを得る
-		@return	物理計算が有効かどうか
-		*/
-		//--------------------------------------------------------------------------------------
-		bool IsPhysicsActive() const;
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	物理計算が有効かどうかを設定する
-		@param[in]	b	物理計算が有効かどうか
-		@return	なし
-		*/
-		//--------------------------------------------------------------------------------------
-		void SetPhysicsActive(bool b);
-		//--------------------------------------------------------------------------------------
-		/*!
 		@brief	ゲームオブジェクトの配列を得る
 		@return	ゲームオブジェクトの配列
 		*/
@@ -1653,25 +1636,11 @@ namespace basecross {
 		vector< shared_ptr<GameObject> >& GetGameObjectVec();
 		//--------------------------------------------------------------------------------------
 		/*!
-		@brief	ゲームオブジェクトの配列を得る(const)
-		@return	ゲームオブジェクトの配列
-		*/
-		//--------------------------------------------------------------------------------------
-		vector< shared_ptr<GameObject> >& GetGameObjectVec() const;
-		//--------------------------------------------------------------------------------------
-		/*!
 		@brief	子ステージの配列を得る
 		@return	子ステージの配列
 		*/
 		//--------------------------------------------------------------------------------------
 		vector< shared_ptr<Stage> >& GetChileStageVec();
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	子ステージの配列を得る(const)
-		@return	子ステージの配列
-		*/
-		//--------------------------------------------------------------------------------------
-		vector< shared_ptr<Stage> >& GetChileStageVec() const;
 		//--------------------------------------------------------------------------------------
 		/*!
 		@brief	子ステージを作成する
@@ -1868,7 +1837,7 @@ namespace basecross {
 					//例外発生
 					wstring keyerr = Key;
 					throw BaseException(
-						L"指定のキーのグループはT型に変換できません",
+						L"指定のきーのグループはT型に変換できません",
 						keyerr,
 						L"Stage::GetSharedObjectGroup<T>()"
 					);
@@ -1885,55 +1854,6 @@ namespace basecross {
 		*/
 		//--------------------------------------------------------------------------------------
 		void SetSharedObjectGroup(const wstring& Key, const shared_ptr<GameObjectGroup>& NewPtr);
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	指定のタグをもつゲームオブジェクトの配列を取得する
-		@param[in]	Tag	検索するタグ
-		@param[out]	取得するゲームオブジェクトの配列
-		@return	なし
-		*/
-		//--------------------------------------------------------------------------------------
-		void GetUsedTagObjectVec(const wstring& Tag,vector<shared_ptr<GameObject>>& ObjVec) const {
-			for (auto& v : GetGameObjectVec()) {
-				if (v->FindTag(Tag)) {
-					ObjVec.push_back(v);
-				}
-			}
-		}
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	ゲームオブジェクトで指定のコンポーネントの親か子のコンポーネントを持つ場合そのコンポーネントの配列を取得する
-		@tparam	T	検索するコンポーネント型
-		@param[out]	取得するコンポーネントの配列
-		@return	なし
-		*/
-		//--------------------------------------------------------------------------------------
-		template<typename T>
-		void GetUsedDynamicCompoentVec(vector<shared_ptr<T>>& CompVec) const{
-			for (auto& v : GetGameObjectVec()) {
-				auto ptr = v->GetDynamicComponent<T>(false);
-				if (ptr) {
-					CompVec.push_back(ptr);
-				}
-			}
-		}
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	指定のコンポーネントの親か子のコンポーネントを持つオブジェクトの配列を設定する
-		@tparam	T	検索するコンポーネント型
-		@param[out]	取得するゲームオブジェクトの配列
-		@return	なし
-		*/
-		//--------------------------------------------------------------------------------------
-		template<typename T>
-		void GetUsedDynamicCompoentObjectVec(vector<shared_ptr<GameObject>>& GameObjectVec)const {
-			for (auto& v : GetGameObjectVec()) {
-				auto ptr = v->GetDynamicComponent<T>(false);
-				if (ptr) {
-					GameObjectVec.push_back(v);
-				}
-			}
-		}
 		//--------------------------------------------------------------------------------------
 		/*!
 		@brief	ビューをセットする
@@ -2075,13 +1995,6 @@ namespace basecross {
 		*/
 		//--------------------------------------------------------------------------------------
 		virtual void OnDraw()override {}
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	ステージ内の削除（シーンからよばれる）
-		@return	なし
-		*/
-		//--------------------------------------------------------------------------------------
-		virtual void DestroyStage();
 	private:
 		// pImplイディオム
 		struct Impl;
@@ -2107,11 +2020,11 @@ namespace basecross {
 		//--------------------------------------------------------------------------------------
 		/*!
 		@brief	現在のステージを得る
-		@param[in]	ExceptionActive	失敗事例外にするかどうか。
-		@return	現在のステージ
+		@return	現在のステージ（失敗事例外）
 		*/
 		//--------------------------------------------------------------------------------------
-		shared_ptr<Stage> GetActiveStage(bool ExceptionActive = true) const;
+		shared_ptr<Stage> GetActiveStage() const;
+
 		//--------------------------------------------------------------------------------------
 		/*!
 		@brief	画面をクリアする色を得る
@@ -2157,11 +2070,6 @@ namespace basecross {
 		//--------------------------------------------------------------------------------------
 		template<typename T, typename... Ts>
 		shared_ptr<T> ResetActiveStage(Ts&&... params) {
-			auto ActStagePtr = GetActiveStage(false);
-			if (ActStagePtr) {
-				//破棄を伝える
-				ActStagePtr->DestroyStage();
-			}
 			auto Ptr = ObjectFactory::Create<T>(params...);
 			auto StagePtr = dynamic_pointer_cast<Stage>(Ptr);
 			if (!StagePtr) {
@@ -2185,11 +2093,6 @@ namespace basecross {
 		//--------------------------------------------------------------------------------------
 		template<typename T, typename... Ts>
 		shared_ptr<T> ResetActiveStageWithParam(Ts&&... params) {
-			auto ActStagePtr = GetActiveStage(false);
-			if (ActStagePtr) {
-				//破棄を伝える
-				ActStagePtr->DestroyStage();
-			}
 			auto Ptr = ObjectFactory::CreateWithParam<T>(params...);
 			auto StagePtr = dynamic_pointer_cast<Stage>(Ptr);
 			if (!StagePtr) {
@@ -2202,6 +2105,7 @@ namespace basecross {
 			SetActiveStage(StagePtr);
 			return Ptr;
 		}
+
 		//--------------------------------------------------------------------------------------
 		/*!
 		@brief	シーンを変化させる
@@ -2216,13 +2120,6 @@ namespace basecross {
 		*/
 		//--------------------------------------------------------------------------------------
 		virtual void OnDraw()override;
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	シーン削除
-		@return	なし
-		*/
-		//--------------------------------------------------------------------------------------
-		virtual void OnDestroy()override;
 	private:
 		// pImplイディオム
 		struct Impl;

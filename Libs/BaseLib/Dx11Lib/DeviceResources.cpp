@@ -175,11 +175,21 @@ namespace basecross {
 
 
 	//--------------------------------------------------------------------------------------
-	///	メッシュリソース
+	//	class MeshResource : public MeshResource;
+	/*!
+	@brief Dx11プリミティブメッシュクラス.<br />
+	プリミティブメッシュは、スタティック関数を使って生成する
+	*/
 	//--------------------------------------------------------------------------------------
 	//構築
 	MeshResource::MeshResource() :
-		BaseResource()
+		BaseResource(),
+		m_IsSkining(false),
+		m_BoneCount(0),
+		m_SampleCount(0),
+		m_MeshTypeIndex(typeid(VertexPosition)),	//便宜上VertexPositionに初期化
+		m_NumStride(sizeof(VertexPosition)),
+		m_PrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST)
 	{}
 	//破棄
 	MeshResource::~MeshResource() {}
@@ -357,19 +367,31 @@ namespace basecross {
 		}
 	}
 
-	void MeshResource::ReadBaseData(BinaryReader& Reader, const wstring& BinDataDir, const wstring& BinDataFile,
+	void MeshResource::ReadBaseData(const wstring& BinDataDir, const wstring& BinDataFile,
 		vector<VertexPositionNormalTexture>& vertices, vector<VertexPositionNormalTangentTexture>& vertices_withtan,
 		vector<uint16_t>& indices, vector<MaterialEx>& materials) {
 		vertices.clear();
 		vertices_withtan.clear();
 		indices.clear();
 		materials.clear();
+		wstring DataFile = BinDataDir + BinDataFile;
+		BinaryReader Reader(DataFile);
+		//ヘッダの読み込み
+		auto pHeader = Reader.ReadArray<char>(16);
+		string str = pHeader;
+		if (str != "BDV1.0") {
+			throw BaseException(
+				L"データ形式が違います",
+				DataFile,
+				L"MeshResource::ReadBaseData()"
+			);
+		}
 		//頂点の読み込み
 		auto blockHeader = Reader.Read<BlockHeader>();
 		if (!(blockHeader.m_Type == BlockType::Vertex || blockHeader.m_Type == BlockType::VertexWithTangent)) {
 			throw BaseException(
 				L"頂点のヘッダが違います",
-				BinDataFile,
+				DataFile,
 				L"MeshResource::ReadBaseData()"
 			);
 		}
@@ -412,7 +434,7 @@ namespace basecross {
 		else {
 			throw BaseException(
 				L"頂点の型が違います",
-				BinDataFile,
+				DataFile,
 				L"MeshResource::ReadBaseData()"
 			);
 		}
@@ -422,7 +444,7 @@ namespace basecross {
 		if (blockHeader.m_Type != BlockType::Index) {
 			throw BaseException(
 				L"インデックスのヘッダが違います",
-				BinDataFile,
+				DataFile,
 				L"MeshResource::ReadBaseData()"
 			);
 		}
@@ -439,7 +461,7 @@ namespace basecross {
 		if (blockHeader.m_Type != BlockType::MaterialCount) {
 			throw BaseException(
 				L"マテリアル数のヘッダが違います",
-				BinDataFile,
+				DataFile,
 				L"MeshResource::ReadBaseData()"
 			);
 		}
@@ -450,7 +472,7 @@ namespace basecross {
 			if (blockHeader.m_Type != BlockType::Material) {
 				throw BaseException(
 					L"マテリアルのヘッダが違います",
-					BinDataFile,
+					DataFile,
 					L"MeshResource::ReadBaseData()"
 				);
 			}
@@ -499,29 +521,42 @@ namespace basecross {
 		if (blockHeader.m_Type != BlockType::End) {
 			throw BaseException(
 				L"Endヘッダが違います",
-				BinDataFile,
+				DataFile,
 				L"MeshResource::ReadBaseData()"
 			);
 		}
-
 	}
-	void MeshResource::ReadBaseBoneData(BinaryReader& Reader, const wstring& BinDataDir, const wstring& BinDataFile,
+
+
+
+	void MeshResource::ReadBaseBoneData(const wstring& BinDataDir, const wstring& BinDataFile,
 		vector<VertexPositionNormalTextureSkinning>& vertices, vector<VertexPositionNormalTangentTextureSkinning>& vertices_withtan,
 		vector<uint16_t>& indices, vector<MaterialEx>& materials,
 		vector<bsm::Mat4x4>& bonematrix, UINT& BoneCount, UINT& SampleCount) {
-
 		vertices.clear();
 		vertices_withtan.clear();
 		indices.clear();
 		materials.clear();
 		bonematrix.clear();
 
+		wstring DataFile = BinDataDir + BinDataFile;
+		BinaryReader Reader(DataFile);
+		//ヘッダの読み込み
+		auto pHeader = Reader.ReadArray<char>(16);
+		string str = pHeader;
+		if (str != "BDV1.0") {
+			throw BaseException(
+				L"データ形式が違います",
+				DataFile,
+				L"MeshResource::ReadBaseBoneData()"
+			);
+		}
 		//頂点の読み込み
 		auto blockHeader = Reader.Read<BlockHeader>();
 		if (!(blockHeader.m_Type == BlockType::SkinedVertex || blockHeader.m_Type == BlockType::SkinedVertexWithTangent)) {
 			throw BaseException(
 				L"頂点(スキン処理)のヘッダが違います",
-				BinDataFile,
+				DataFile,
 				L"MeshResource::ReadBaseBoneData()"
 			);
 		}
@@ -571,12 +606,14 @@ namespace basecross {
 
 		}
 
+
+
 		//インデックスの読み込み
 		blockHeader = Reader.Read<BlockHeader>();
 		if (blockHeader.m_Type != BlockType::Index) {
 			throw BaseException(
 				L"インデックスのヘッダが違います",
-				BinDataFile,
+				DataFile,
 				L"MeshResource::ReadBaseBoneData()"
 			);
 		}
@@ -593,7 +630,7 @@ namespace basecross {
 		if (blockHeader.m_Type != BlockType::MaterialCount) {
 			throw BaseException(
 				L"マテリアル数のヘッダが違います",
-				BinDataFile,
+				DataFile,
 				L"MeshResource::ReadBaseData()"
 			);
 		}
@@ -604,7 +641,7 @@ namespace basecross {
 			if (blockHeader.m_Type != BlockType::Material) {
 				throw BaseException(
 					L"マテリアルのヘッダが違います",
-					BinDataFile,
+					DataFile,
 					L"MeshResource::ReadBaseBoneData()"
 				);
 			}
@@ -652,7 +689,7 @@ namespace basecross {
 		if (blockHeader.m_Type != BlockType::BoneCount) {
 			throw BaseException(
 				L"ボーン数のヘッダが違います",
-				BinDataFile,
+				DataFile,
 				L"MeshResource::ReadBaseBoneData()"
 			);
 		}
@@ -662,7 +699,7 @@ namespace basecross {
 		if (blockHeader.m_Type != BlockType::AnimeMatrix) {
 			throw BaseException(
 				L"アニメーション行列のヘッダが違います",
-				BinDataFile,
+				DataFile,
 				L"MeshResource::ReadBaseBoneData()"
 			);
 		}
@@ -686,14 +723,17 @@ namespace basecross {
 		if (blockHeader.m_Type != BlockType::End) {
 			throw BaseException(
 				L"終了ヘッダが違います",
-				BinDataFile,
+				DataFile,
 				L"MeshResource::ReadBaseBoneData()"
 			);
 		}
+
+
 	}
 
-	shared_ptr<MeshResource> MeshResource::CreateStaticModelMeshBase(BinaryReader& Reader, const wstring& BinDataDir,
-		const wstring& BinDataFile, bool AccessWrite) {
+
+
+	shared_ptr<MeshResource> MeshResource::CreateStaticModelMesh(const wstring& BinDataDir, const wstring& BinDataFile, bool AccessWrite) {
 		try {
 			//頂点配列
 			vector<VertexPositionNormalTexture> vertices;
@@ -703,11 +743,11 @@ namespace basecross {
 			vector<uint16_t> indices;
 			//マテリアルを設定する配列
 			vector<MaterialEx> Materials;
-			ReadBaseData(Reader, BinDataDir, BinDataFile, vertices, new_pntnt_vertices, indices, Materials);
+			ReadBaseData(BinDataDir, BinDataFile, vertices, new_pntnt_vertices, indices, Materials);
 			auto Ptr = MeshResource::CreateMeshResource<VertexPositionNormalTexture>(vertices, indices, AccessWrite);
-			Ptr->m_MeshPrimData.m_MaterialExVec.clear();
+			Ptr->m_MaterialExVec.clear();
 			for (auto& v : Materials) {
-				Ptr->m_MeshPrimData.m_MaterialExVec.push_back(v);
+				Ptr->m_MaterialExVec.push_back(v);
 			}
 			return Ptr;
 		}
@@ -716,8 +756,7 @@ namespace basecross {
 		}
 	}
 
-	shared_ptr<MeshResource> MeshResource::CreateStaticModelMeshWithTangentBase(BinaryReader& Reader, const wstring& BinDataDir,
-		const wstring& BinDataFile, bool AccessWrite) {
+	shared_ptr<MeshResource> MeshResource::CreateStaticModelMeshWithTangent(const wstring& BinDataDir, const wstring& BinDataFile, bool AccessWrite) {
 		try {
 			//頂点配列
 			vector<VertexPositionNormalTexture> vertices;
@@ -727,7 +766,7 @@ namespace basecross {
 			vector<uint16_t> indices;
 			//マテリアルを設定する配列
 			vector<MaterialEx> Materials;
-			ReadBaseData(Reader, BinDataDir, BinDataFile, vertices, new_pntnt_vertices, indices, Materials);
+			ReadBaseData(BinDataDir, BinDataFile, vertices, new_pntnt_vertices,indices, Materials);
 			if (vertices.size() > 0) {
 				//binデータにはタンジェントは入ってなかった
 				new_pntnt_vertices.clear();
@@ -744,9 +783,9 @@ namespace basecross {
 				MeshUtill::SetNormalTangent(new_pntnt_vertices);
 			}
 			auto Ptr = MeshResource::CreateMeshResource<VertexPositionNormalTangentTexture>(new_pntnt_vertices, indices, AccessWrite);
-			Ptr->m_MeshPrimData.m_MaterialExVec.clear();
+			Ptr->m_MaterialExVec.clear();
 			for (auto& v : Materials) {
-				Ptr->m_MeshPrimData.m_MaterialExVec.push_back(v);
+				Ptr->m_MaterialExVec.push_back(v);
 			}
 			return Ptr;
 		}
@@ -757,7 +796,7 @@ namespace basecross {
 
 
 
-	shared_ptr<MeshResource> MeshResource::CreateBoneModelMeshBase(BinaryReader& Reader, const wstring& BinDataDir,
+	shared_ptr<MeshResource> MeshResource::CreateBoneModelMesh(const wstring& BinDataDir,
 		const wstring& BinDataFile, bool AccessWrite) {
 		try {
 			//頂点配列
@@ -774,35 +813,37 @@ namespace basecross {
 			UINT BoneCount;
 			//サンプル数
 			UINT SampleCount;
-			ReadBaseBoneData(Reader, BinDataDir, BinDataFile, vertices, new_pntnt_vertices,
+			ReadBaseBoneData(BinDataDir, BinDataFile, vertices, new_pntnt_vertices,
 				indices, Materials,
 				SampleMatrices, BoneCount, SampleCount);
 			auto Ptr = MeshResource::CreateMeshResource<VertexPositionNormalTextureSkinning>(vertices, indices, AccessWrite);
-			Ptr->GetMaterialExVec().clear();
+			Ptr->m_MaterialExVec.clear();
 			for (auto& v : Materials) {
-				Ptr->GetMaterialExVec().push_back(v);
+				Ptr->m_MaterialExVec.push_back(v);
 			}
-			Ptr->m_MeshPrimData.m_SampleMatrixVec.clear();
+			Ptr->m_SampleMatrixVec.clear();
 			for (auto& v : SampleMatrices) {
-				Ptr->m_MeshPrimData.m_SampleMatrixVec.push_back(v);
+				Ptr->m_SampleMatrixVec.push_back(v);
 			}
-			Ptr->m_MeshPrimData.m_BoneCount = BoneCount;
-			Ptr->m_MeshPrimData.m_SampleCount = SampleCount;
-			Ptr->m_MeshPrimData.m_IsSkining = true;
+			Ptr->m_BoneCount = BoneCount;
+			Ptr->m_SampleCount = SampleCount;
+			Ptr->m_IsSkining = true;
 			return Ptr;
 		}
 		catch (...) {
 			throw;
 		}
+
 	}
 
-	shared_ptr<MeshResource> MeshResource::CreateBoneModelMeshWithTangentBase(BinaryReader& Reader, const wstring& BinDataDir,
+	shared_ptr<MeshResource> MeshResource::CreateBoneModelMeshWithTangent(const wstring& BinDataDir,
 		const wstring& BinDataFile, bool AccessWrite) {
 		try {
 			//頂点配列
 			vector<VertexPositionNormalTextureSkinning> vertices;
 			//タンジェント付きにコンバートする配列
 			vector<VertexPositionNormalTangentTextureSkinning> new_pntnt_vertices;
+
 			//インデックスを作成するための配列
 			vector<uint16_t> indices;
 			//マテリアルを設定する配列
@@ -813,7 +854,7 @@ namespace basecross {
 			UINT BoneCount;
 			//サンプル数
 			UINT SampleCount;
-			ReadBaseBoneData(Reader, BinDataDir, BinDataFile, vertices, new_pntnt_vertices,
+			ReadBaseBoneData(BinDataDir, BinDataFile, vertices, new_pntnt_vertices,
 				indices, Materials,
 				SampleMatrices, BoneCount, SampleCount);
 			if (vertices.size() > 0) {
@@ -835,271 +876,311 @@ namespace basecross {
 			}
 
 			auto Ptr = MeshResource::CreateMeshResource<VertexPositionNormalTangentTextureSkinning>(new_pntnt_vertices, indices, AccessWrite);
-			Ptr->m_MeshPrimData.m_MaterialExVec.clear();
+			Ptr->m_MaterialExVec.clear();
 			for (auto& v : Materials) {
-				Ptr->m_MeshPrimData.m_MaterialExVec.push_back(v);
+				Ptr->m_MaterialExVec.push_back(v);
 			}
-			Ptr->m_MeshPrimData.m_SampleMatrixVec.clear();
+			Ptr->m_SampleMatrixVec.clear();
 			for (auto& v : SampleMatrices) {
-				Ptr->m_MeshPrimData.m_SampleMatrixVec.push_back(v);
+				Ptr->m_SampleMatrixVec.push_back(v);
 			}
-			Ptr->m_MeshPrimData.m_BoneCount = BoneCount;
-			Ptr->m_MeshPrimData.m_SampleCount = SampleCount;
-			Ptr->m_MeshPrimData.m_IsSkining = true;
+			Ptr->m_BoneCount = BoneCount;
+			Ptr->m_SampleCount = SampleCount;
+			Ptr->m_IsSkining = true;
 			return Ptr;
 		}
 		catch (...) {
 			throw;
 		}
-	}
-
-
-
-	shared_ptr<MeshResource> MeshResource::CreateStaticModelMesh(const wstring& BinDataDir, const wstring& BinDataFile, bool AccessWrite) {
-		try {
-			wstring DataFile = BinDataDir + BinDataFile;
-			BinaryReader Reader(DataFile);
-			//ヘッダの読み込み
-			auto pHeader = Reader.ReadArray<char>(16);
-			string str = pHeader;
-			if (str != "BDV1.0") {
-				throw BaseException(
-					L"データ形式が違います",
-					DataFile,
-					L"MeshResource::CreateStaticModelMesh()"
-				);
-			}
-			return CreateStaticModelMeshBase(Reader,BinDataDir,BinDataFile,AccessWrite);
-		}
-		catch (...) {
-			throw;
-		}
-	}
-
-	shared_ptr<MeshResource> MeshResource::CreateStaticModelMeshWithTangent(const wstring& BinDataDir, const wstring& BinDataFile, bool AccessWrite) {
-		try {
-			wstring DataFile = BinDataDir + BinDataFile;
-			BinaryReader Reader(DataFile);
-			//ヘッダの読み込み
-			auto pHeader = Reader.ReadArray<char>(16);
-			string str = pHeader;
-			if (str != "BDV1.0") {
-				throw BaseException(
-					L"データ形式が違います",
-					DataFile,
-					L"MeshResource::CreateStaticModelMeshWithTangent()"
-				);
-			}
-			return CreateStaticModelMeshWithTangentBase(Reader,BinDataDir,BinDataFile,AccessWrite);
-		}
-		catch (...) {
-			throw;
-		}
-	}
-
-
-	shared_ptr<MeshResource> MeshResource::CreateBoneModelMesh(const wstring& BinDataDir,
-		const wstring& BinDataFile, bool AccessWrite) {
-		try {
-			wstring DataFile = BinDataDir + BinDataFile;
-			BinaryReader Reader(DataFile);
-			//ヘッダの読み込み
-			auto pHeader = Reader.ReadArray<char>(16);
-			string str = pHeader;
-			if (str != "BDV1.0") {
-				throw BaseException(
-					L"データ形式が違います",
-					DataFile,
-					L"MeshResource::CreateBoneModelMesh()"
-				);
-			}
-			return CreateBoneModelMeshBase(Reader,BinDataDir,BinDataFile,AccessWrite);
-		}
-		catch (...) {
-			throw;
-		}
 
 	}
 
-	shared_ptr<MeshResource> MeshResource::CreateBoneModelMeshWithTangent(const wstring& BinDataDir,
-		const wstring& BinDataFile, bool AccessWrite) {
-		try {
-			wstring DataFile = BinDataDir + BinDataFile;
-			BinaryReader Reader(DataFile);
-			//ヘッダの読み込み
-			auto pHeader = Reader.ReadArray<char>(16);
-			string str = pHeader;
-			if (str != "BDV1.0") {
-				throw BaseException(
-					L"データ形式が違います",
-					DataFile,
-					L"MeshResource::CreateBoneModelMeshWithTangent()"
-				);
-			}
-			return CreateBoneModelMeshWithTangentBase(Reader,BinDataDir,BinDataFile,AccessWrite);
-		}
-		catch (...) {
-			throw;
-		}
-	}
+
 
 	//--------------------------------------------------------------------------------------
-	///	マルチメッシュリソース
+	//	struct MultiAudioObject::Impl;
+	//	用途: Implイディオム
 	//--------------------------------------------------------------------------------------
-	MultiMeshResource::MultiMeshResource() :
-		BaseResource()
+	struct MultiAudioObject::Impl {
+		map<wstring, SoundItem> m_SoundMap;
+		Impl()
+		{}
+		~Impl() {
+		}
+		SoundItem* GetItem(const wstring& ResKey) {
+			auto it = m_SoundMap.find(ResKey);
+			if (it != m_SoundMap.end()) {
+				//同じ名前が見つかった
+				return &it->second;
+			}
+			return nullptr;
+		}
+		void RemoveItem(const wstring& ResKey) {
+			auto it = m_SoundMap.find(ResKey);
+			if (it != m_SoundMap.end()) {
+				//同じ名前が見つかった
+				//Mapから削除
+				m_SoundMap.erase(it);
+			}
+		}
+		void Start(const SoundItem* pItem, const XAUDIO2_BUFFER& Buffer, float Volume = 1.0f);
+		void Stop(const SoundItem* pItem);
+	};
+
+	void MultiAudioObject::Impl::Start(const SoundItem* pItem, const XAUDIO2_BUFFER& Buffer, float Volume) {
+		if (!pItem->m_SourceVoice) {
+			throw BaseException(
+				L"サウンドボイスが不定です",
+				L"if (!pItem->m_pSourceVoice)",
+				L"MultiAudioObject::Impl::Start()"
+			);
+		}
+		ThrowIfFailed(
+			pItem->m_SourceVoice->Stop(),
+			L"サウンドエフェクト用サウンドボイスの停止に失敗しました",
+			L"pItem->m_pSourceVoice->Stop()",
+			L"MultiAudioObject::Impl::Start()"
+		);
+		ThrowIfFailed(
+			pItem->m_SourceVoice->FlushSourceBuffers(),
+			L"サウンドエフェクト用サウンドボイスのバッファのフラッシュに失敗しました",
+			L"pItem->m_pSourceVoice->FlushSourceBuffers()",
+			L"MultiAudioObject::Impl::Start()"
+		);
+		if (pItem->m_AudioResource.expired()) {
+			throw BaseException(
+				L"オーディオリソースが有効ではありません",
+				L"if (pImpl->m_AudioResource.expired())",
+				L"MultiAudioObject::Impl::Start()"
+			);
+		}
+		ThrowIfFailed(
+			pItem->m_SourceVoice->SetVolume(Volume),
+			L"サウンドエフェクト用サウンドのボリューム設定に失敗しました",
+			L"pItem->m_pSourceVoice->SetVolume()",
+			L"MultiAudioObject::Impl::Start()"
+		);
+
+		ThrowIfFailed(
+			pItem->m_SourceVoice->SubmitSourceBuffer(&Buffer),
+			L"サウンドエフェクト用サウンドのソースバッファ設定に失敗しました",
+			L"pItem->m_pSourceVoice->SubmitSourceBuffer(&buffer)",
+			L"MultiAudioObject::Impl::Start()"
+		);
+
+		ThrowIfFailed(
+			pItem->m_SourceVoice->Start(),
+			L"サウンドエフェクト用サウンドのスタートに失敗しました",
+			L"pItem->m_pSourceVoice->Start()",
+			L"MultiAudioObject::Impl::Start()"
+		);
+	}
+
+	void MultiAudioObject::Impl::Stop(const SoundItem* pItem) {
+		if (!pItem->m_SourceVoice) {
+			throw BaseException(
+				L"サウンドボイスが不定です",
+				L"if (!pItem->m_pSourceVoice)",
+				L"MultiAudioObject::Impl::Stop()"
+			);
+		}
+		ThrowIfFailed(
+			pItem->m_SourceVoice->Stop(),
+			L"サウンドエフェクト用サウンドボイスの停止に失敗しました",
+			L"pItem->m_pSourceVoice->Stop()",
+			L"MultiAudioObject::Impl::Stop()"
+		);
+		ThrowIfFailed(
+			pItem->m_SourceVoice->FlushSourceBuffers(),
+			L"サウンドエフェクト用サウンドボイスのバッファのフラッシュに失敗しました",
+			L"pItem->m_pSourceVoice->FlushSourceBuffers()",
+			L"MultiAudioObject::Impl::Stop()"
+		);
+	}
+
+
+	//--------------------------------------------------------------------------------------
+	//	class MultiAudioObject: public Object;
+	//	用途: マルチオーディオ
+	// ＊コンポーネントではないのでシーンに持たせることができる
+	//--------------------------------------------------------------------------------------
+	//構築と破棄
+	MultiAudioObject::MultiAudioObject() :
+		pImpl(new Impl())
 	{}
-	//破棄
-	MultiMeshResource::~MultiMeshResource() {}
+	MultiAudioObject::~MultiAudioObject() {}
 
-
-	shared_ptr<MultiMeshResource> MultiMeshResource::CreateStaticModelMultiMesh(const wstring& BinDataDir,
-		const wstring& BinDataFile, bool AccessWrite) {
+	//アクセサ
+	shared_ptr<AudioResource> MultiAudioObject::AddAudioResource(const wstring& ResKey) {
 		try {
-			wstring DataFile = BinDataDir + BinDataFile;
-			BinaryReader Reader(DataFile);
-			//ヘッダの読み込み
-			auto pHeader = Reader.ReadArray<char>(16);
-			string str = pHeader;
-			if (str != "BDV1.1") {
-				throw BaseException(
-					L"データ形式が違います",
-					DataFile,
-					L"MultiMeshResource::CreateStaticModelMultiMesh()"
-				);
+			if (!App::GetApp()->GetAudioManager()->IsAudioAvailable()) {
+				return nullptr;
 			}
-			//メッシュ数の読み込み
-			auto blockHeader = Reader.Read<BlockHeader>();
-			if (!(blockHeader.m_Type == BlockType::MashCount)) {
-				throw BaseException(
-					L"メッシュy数のヘッダが違います",
-					BinDataFile,
-					L"MultiMeshResource::CreateStaticModelMultiMesh()"
-				);
-			}
-			auto MultiMeshPtr = CreateMultiMeshResource();
-			for (size_t i = 0; i < blockHeader.m_Size; i++) {
-				auto MeshPtr = MeshResource::CreateStaticModelMeshBase(Reader, BinDataDir, BinDataFile, AccessWrite);
-				MultiMeshPtr->AddMesh(MeshPtr);
-			}
-			return MultiMeshPtr;
-		}
-		catch (...) {
-			throw;
-		}
 
-	}
-
-
-	shared_ptr<MultiMeshResource> MultiMeshResource::CreateStaticModelMultiMeshWithTangent(const wstring& BinDataDir,
-		const wstring& BinDataFile, bool AccessWrite) {
-		try {
-			wstring DataFile = BinDataDir + BinDataFile;
-			BinaryReader Reader(DataFile);
-			//ヘッダの読み込み
-			auto pHeader = Reader.ReadArray<char>(16);
-			string str = pHeader;
-			if (str != "BDV1.1") {
+			if (ResKey == L"") {
 				throw BaseException(
-					L"データ形式が違います",
-					DataFile,
-					L"MultiMeshResource::CreateStaticModelMultiMeshWithTangent()"
+					L"オーディオリソース名が空白です",
+					L"if (ResKey == L\"\")",
+					L"MultiAudioObject::AddAudioResource()"
 				);
 			}
-			//メッシュ数の読み込み
-			auto blockHeader = Reader.Read<BlockHeader>();
-			if (!(blockHeader.m_Type == BlockType::MashCount)) {
-				throw BaseException(
-					L"メッシュy数のヘッダが違います",
-					BinDataFile,
-					L"MultiMeshResource::CreateStaticModelMultiMeshWithTangent()"
-				);
+			auto pItem = pImpl->GetItem(ResKey);
+			if (pItem) {
+				//同じ名前が見つかった
+				if (!pItem->m_AudioResource.expired()) {
+					return pItem->m_AudioResource.lock();
+				}
+				else {
+					throw BaseException(
+						L"同じ名前のオーディオリソースがありましたが、リソースが無効です",
+						ResKey,
+						L"MultiAudioObject::AddAudioResource()"
+					);
+				}
 			}
-			auto MultiMeshPtr = CreateMultiMeshResource();
-			for (size_t i = 0; i < blockHeader.m_Size; i++) {
-				auto MeshPtr = MeshResource::CreateStaticModelMeshWithTangentBase(Reader, BinDataDir, BinDataFile, AccessWrite);
-				MultiMeshPtr->AddMesh(MeshPtr);
-			}
-			return MultiMeshPtr;
+			auto SoundRes = App::GetApp()->GetResource<AudioResource>(ResKey);
+			SoundItem Item;
+			Item.m_AudioResource = SoundRes;
+			auto Engine = App::GetApp()->GetAudioManager()->GetSoundEffectEngine();
+
+			ThrowIfFailed(
+				Engine->CreateSourceVoice(&Item.m_SourceVoice, SoundRes->GetOutputWaveFormatEx()),
+				L"サウンドエフェクト用サウンドボイスの作成に失敗しました",
+				L"Engine->CreateSourceVoice(&pImpl->m_pSourceVoice, SountRes->GetOutputWaveFormatEx())",
+				L"MultiAudioObject::AddAudioResource()"
+			);
+			pImpl->m_SoundMap[ResKey] = Item;
+			return SoundRes;
 		}
 		catch (...) {
 			throw;
 		}
 	}
-
-
-	shared_ptr<MultiMeshResource> MultiMeshResource::CreateBoneModelMultiMesh(const wstring& BinDataDir,
-		const wstring& BinDataFile, bool AccessWrite) {
-		try {
-			wstring DataFile = BinDataDir + BinDataFile;
-			BinaryReader Reader(DataFile);
-			//ヘッダの読み込み
-			auto pHeader = Reader.ReadArray<char>(16);
-			string str = pHeader;
-			if (str != "BDV1.1") {
-				throw BaseException(
-					L"データ形式が違います",
-					DataFile,
-					L"MultiMeshResource::CreateBoneModelMultiMesh()"
-				);
-			}
-			//メッシュ数の読み込み
-			auto blockHeader = Reader.Read<BlockHeader>();
-			if (!(blockHeader.m_Type == BlockType::MashCount)) {
-				throw BaseException(
-					L"メッシュy数のヘッダが違います",
-					BinDataFile,
-					L"MultiMeshResource::CreateBoneModelMultiMesh()"
-				);
-			}
-			auto MultiMeshPtr = CreateMultiMeshResource();
-			for (size_t i = 0; i < blockHeader.m_Size; i++) {
-				auto MeshPtr = MeshResource::CreateBoneModelMeshBase(Reader, BinDataDir, BinDataFile, AccessWrite);
-				MultiMeshPtr->AddMesh(MeshPtr);
-			}
-			return MultiMeshPtr;
+	void MultiAudioObject::RemoveAudioResource(const wstring& ResKey) {
+		if (!App::GetApp()->GetAudioManager()->IsAudioAvailable()) {
+			return;
 		}
-		catch (...) {
-			throw;
+		if (ResKey == L"") {
+			throw BaseException(
+				L"オーディオリソース名が空白です",
+				L"if (ResKey == L\"\")",
+				L"MultiAudioObject::RemoveAudioResource()"
+			);
+		}
+		pImpl->RemoveItem(ResKey);
+	}
+
+
+	shared_ptr<AudioResource> MultiAudioObject::GetAudioResource(const wstring& ResKey, bool ExceptionActive) const {
+		if (!App::GetApp()->GetAudioManager()->IsAudioAvailable()) {
+			return nullptr;
+		}
+		if (ResKey == L"") {
+			if (ExceptionActive) {
+				throw BaseException(
+					L"オーディオリソース名が空白です",
+					L"if (ResKey == L\"\")",
+					L"MultiAudioObject::GetAudioResource()"
+				);
+			}
+			else {
+				return nullptr;
+			}
+		}
+		auto pItem = pImpl->GetItem(ResKey);
+		if (pItem) {
+			//同じ名前が見つかった
+			if (!pItem->m_AudioResource.expired()) {
+				return pItem->m_AudioResource.lock();
+			}
+			else {
+				if (ExceptionActive) {
+					throw BaseException(
+						L"同じ名前のオーディオリソースがありましたが、リソースが無効です",
+						ResKey,
+						L"MultiAudioObject::AddAudioResource()"
+					);
+				}
+				else {
+					return nullptr;
+				}
+			}
+		}
+		else {
+			if (ExceptionActive) {
+				throw BaseException(
+					L"指定の名前のオーディオリソースがありません",
+					ResKey,
+					L"MultiAudioObject::GetAudioResource()"
+				);
+			}
+			else {
+				return nullptr;
+			}
 		}
 	}
 
-	shared_ptr<MultiMeshResource> MultiMeshResource::CreateBoneModelMultiMeshWithTangent(const wstring& BinDataDir,
-		const wstring& BinDataFile, bool AccessWrite){
-		try {
-			wstring DataFile = BinDataDir + BinDataFile;
-			BinaryReader Reader(DataFile);
-			//ヘッダの読み込み
-			auto pHeader = Reader.ReadArray<char>(16);
-			string str = pHeader;
-			if (str != "BDV1.1") {
-				throw BaseException(
-					L"データ形式が違います",
-					DataFile,
-					L"MultiMeshResource::CreateBoneModelMultiMeshWithTangent()"
-				);
-			}
-			//メッシュ数の読み込み
-			auto blockHeader = Reader.Read<BlockHeader>();
-			if (!(blockHeader.m_Type == BlockType::MashCount)) {
-				throw BaseException(
-					L"メッシュy数のヘッダが違います",
-					BinDataFile,
-					L"MultiMeshResource::CreateBoneModelMultiMeshWithTangent()"
-				);
-			}
-			auto MultiMeshPtr = CreateMultiMeshResource();
-			for (size_t i = 0; i < blockHeader.m_Size; i++) {
-				auto MeshPtr = MeshResource::CreateBoneModelMeshWithTangentBase(Reader, BinDataDir, BinDataFile, AccessWrite);
-				MultiMeshPtr->AddMesh(MeshPtr);
-			}
-			return MultiMeshPtr;
+	void MultiAudioObject::Start(const wstring& ResKey, const XAUDIO2_BUFFER& Buffer, float Volume) {
+		if (!App::GetApp()->GetAudioManager()->IsAudioAvailable()) {
+			return;
 		}
-		catch (...) {
-			throw;
+		auto pItem = pImpl->GetItem(ResKey);
+		if (!pItem) {
+			throw BaseException(
+				L"指定の名前のオーディオリソースがありません",
+				ResKey,
+				L"MultiAudioObject::Start()"
+			);
 		}
-
+		pImpl->Start(pItem, Buffer, Volume);
 	}
+
+	void MultiAudioObject::Start(const wstring& ResKey, size_t LoopCount, float Volume) {
+		if (!App::GetApp()->GetAudioManager()->IsAudioAvailable()) {
+			return;
+		}
+		auto pItem = pImpl->GetItem(ResKey);
+		if (!pItem) {
+			throw BaseException(
+				L"指定の名前のオーディオリソースがありません",
+				ResKey,
+				L"MultiAudioObject::Start()"
+			);
+		}
+		if (pItem->m_AudioResource.expired()) {
+			throw BaseException(
+				L"オーディオリソースが有効ではありません",
+				ResKey,
+				L"MultiAudioObject::Start()"
+			);
+		}
+		XAUDIO2_BUFFER buffer = { 0 };
+		auto ResPtr = pItem->m_AudioResource.lock();
+		buffer.AudioBytes = ResPtr->GetSoundData().size();
+		buffer.LoopCount = LoopCount;
+		buffer.pAudioData = &ResPtr->GetSoundData().front();
+		buffer.Flags = XAUDIO2_END_OF_STREAM;
+		//pImplの関数を呼ぶ
+		pImpl->Start(pItem, buffer, Volume);
+	}
+	void MultiAudioObject::Stop(const wstring& ResKey) {
+		if (!App::GetApp()->GetAudioManager()->IsAudioAvailable()) {
+			return;
+		}
+		auto pItem = pImpl->GetItem(ResKey);
+		if (!pItem) {
+			throw BaseException(
+				L"指定の名前のオーディオリソースがありません",
+				ResKey,
+				L"MultiAudioObject::Stop()"
+			);
+		}
+		pImpl->Stop(pItem);
+	}
+
+
+
+
 
 
 	//--------------------------------------------------------------------------------------
