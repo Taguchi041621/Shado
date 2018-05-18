@@ -402,85 +402,85 @@ namespace basecross {
 		bsm::Vec3 ArmVec = NewEye - NewAt;
 		//³‹K‰»‚µ‚Ä‚¨‚­
 		ArmVec.normalize();
-		//if (CntlVec[0].bConnected) {
-		//	//ã‰ºŠp“x‚Ì•ÏX
-		//	if (CntlVec[0].fThumbRY >= 0.1f || KeyData.m_bPushKeyTbl[VK_UP]) {
-		//		if (IsUDBaseMode()) {
-		//			pImpl->m_RadY += pImpl->m_CameraUpDownSpeed * ElapsedTime;
-		//		}
-		//		else {
-		//			pImpl->m_RadY -= pImpl->m_CameraUpDownSpeed * ElapsedTime;
-		//		}
-		//	}
-		//	else if (CntlVec[0].fThumbRY <= -0.1f || KeyData.m_bPushKeyTbl[VK_DOWN]) {
-		//		if (IsUDBaseMode()) {
-		//			pImpl->m_RadY -= pImpl->m_CameraUpDownSpeed * ElapsedTime;
-		//		}
-		//		else {
-		//			pImpl->m_RadY += pImpl->m_CameraUpDownSpeed * ElapsedTime;
-		//		}
-		//	}
-		//	if (pImpl->m_RadY > XM_PI * 4 / 9.0f) {
-		//		pImpl->m_RadY = XM_PI * 4 / 9.0f;
-		//	}
-		//	else if (pImpl->m_RadY <= pImpl->m_CameraUnderRot) {
-		//		//ƒJƒƒ‰‚ªŒÀŠE‰º‚É‰º‚ª‚Á‚½‚ç‚»‚êˆÈã‰º‚ª‚ç‚È‚¢
-		//		pImpl->m_RadY = pImpl->m_CameraUnderRot;
-		//	}
-		//	ArmVec.y = sin(pImpl->m_RadY);
-		//	//‚±‚±‚ÅYŽ²‰ñ“]‚ðì¬
-		//	if (CntlVec[0].fThumbRX != 0 || KeyData.m_bPushKeyTbl[VK_LEFT] || KeyData.m_bPushKeyTbl[VK_RIGHT]) {
-		//		//‰ñ“]ƒXƒs[ƒh‚ð”½‰f
-		//		if (CntlVec[0].fThumbRX != 0) {
-		//			if (IsLRBaseMode()) {
-		//				pImpl->m_RadXZ += -CntlVec[0].fThumbRX * ElapsedTime * pImpl->m_RotSpeed;
-		//			}
-		//			else {
-		//				pImpl->m_RadXZ += CntlVec[0].fThumbRX * ElapsedTime * pImpl->m_RotSpeed;
-		//			}
-		//		}
-		//		else if (KeyData.m_bPushKeyTbl[VK_LEFT]) {
-		//			if (IsLRBaseMode()) {
-		//				pImpl->m_RadXZ += ElapsedTime * pImpl->m_RotSpeed;
-		//			}
-		//			else {
-		//				pImpl->m_RadXZ -= ElapsedTime * pImpl->m_RotSpeed;
-		//			}
-		//		}
-		//		else if (KeyData.m_bPushKeyTbl[VK_RIGHT]) {
-		//			if (IsLRBaseMode()) {
-		//				pImpl->m_RadXZ -= ElapsedTime * pImpl->m_RotSpeed;
-		//			}
-		//			else {
-		//				pImpl->m_RadXZ += ElapsedTime * pImpl->m_RotSpeed;
-		//			}
+		if (CntlVec[0].bConnected) {
+			//ã‰ºŠp“x‚Ì•ÏX
+			if (CntlVec[0].fThumbRY >= 0.1f || KeyData.m_bPushKeyTbl[VK_UP]) {
+				if (IsUDBaseMode()) {
+					pImpl->m_RadY += pImpl->m_CameraUpDownSpeed * ElapsedTime;
+				}
+				else {
+					pImpl->m_RadY -= pImpl->m_CameraUpDownSpeed * ElapsedTime;
+				}
+			}
+			else if (CntlVec[0].fThumbRY <= -0.1f || KeyData.m_bPushKeyTbl[VK_DOWN]) {
+				if (IsUDBaseMode()) {
+					pImpl->m_RadY -= pImpl->m_CameraUpDownSpeed * ElapsedTime;
+				}
+				else {
+					pImpl->m_RadY += pImpl->m_CameraUpDownSpeed * ElapsedTime;
+				}
+			}
+			if (pImpl->m_RadY > XM_PI * 4 / 9.0f) {
+				pImpl->m_RadY = XM_PI * 4 / 9.0f;
+			}
+			else if (pImpl->m_RadY <= pImpl->m_CameraUnderRot) {
+				//ƒJƒƒ‰‚ªŒÀŠE‰º‚É‰º‚ª‚Á‚½‚ç‚»‚êˆÈã‰º‚ª‚ç‚È‚¢
+				pImpl->m_RadY = pImpl->m_CameraUnderRot;
+			}
+			ArmVec.y = sin(pImpl->m_RadY);
+			//‚±‚±‚ÅYŽ²‰ñ“]‚ðì¬
+			if (CntlVec[0].fThumbRX != 0 || KeyData.m_bPushKeyTbl[VK_LEFT] || KeyData.m_bPushKeyTbl[VK_RIGHT]) {
+				//‰ñ“]ƒXƒs[ƒh‚ð”½‰f
+				if (CntlVec[0].fThumbRX != 0) {
+					if (IsLRBaseMode()) {
+						pImpl->m_RadXZ += -CntlVec[0].fThumbRX * ElapsedTime * pImpl->m_RotSpeed;
+					}
+					else {
+						pImpl->m_RadXZ += CntlVec[0].fThumbRX * ElapsedTime * pImpl->m_RotSpeed;
+					}
+				}
+				else if (KeyData.m_bPushKeyTbl[VK_LEFT]) {
+					if (IsLRBaseMode()) {
+						pImpl->m_RadXZ += ElapsedTime * pImpl->m_RotSpeed;
+					}
+					else {
+						pImpl->m_RadXZ -= ElapsedTime * pImpl->m_RotSpeed;
+					}
+				}
+				else if (KeyData.m_bPushKeyTbl[VK_RIGHT]) {
+					if (IsLRBaseMode()) {
+						pImpl->m_RadXZ -= ElapsedTime * pImpl->m_RotSpeed;
+					}
+					else {
+						pImpl->m_RadXZ += ElapsedTime * pImpl->m_RotSpeed;
+					}
 
-		//		}
-		//		if (abs(pImpl->m_RadXZ) >= XM_2PI) {
-		//			//1T‰ñ‚Á‚½‚ç0‰ñ“]‚É‚·‚é
-		//			pImpl->m_RadXZ = 0;
-		//		}
-		//	}
-		//	//ƒNƒI[ƒ^ƒjƒIƒ“‚ÅY‰ñ“]i‚Â‚Ü‚èXZƒxƒNƒgƒ‹‚Ì’lj‚ðŒvŽZ
-		//	bsm::Quat QtXZ;
-		//	QtXZ.rotation(pImpl->m_RadXZ, bsm::Vec3(0, 1.0f, 0));
-		//	QtXZ.normalize();
-		//	//ˆÚ“®æs‚Ìs—ñŒvŽZ‚·‚é‚±‚Æ‚ÅAXZ‚Ì’l‚ðŽZo
-		//	bsm::Mat4x4 Mat;
-		//	Mat.strTransformation(
-		//		bsm::Vec3(1.0f, 1.0f, 1.0f),
-		//		bsm::Vec3(0.0f, 0.0f, -1.0f),
-		//		QtXZ
-		//	);
+				}
+				if (abs(pImpl->m_RadXZ) >= XM_2PI) {
+					//1T‰ñ‚Á‚½‚ç0‰ñ“]‚É‚·‚é
+					pImpl->m_RadXZ = 0;
+				}
+			}
+			//ƒNƒI[ƒ^ƒjƒIƒ“‚ÅY‰ñ“]i‚Â‚Ü‚èXZƒxƒNƒgƒ‹‚Ì’lj‚ðŒvŽZ
+			bsm::Quat QtXZ;
+			QtXZ.rotation(pImpl->m_RadXZ, bsm::Vec3(0, 1.0f, 0));
+			QtXZ.normalize();
+			//ˆÚ“®æs‚Ìs—ñŒvŽZ‚·‚é‚±‚Æ‚ÅAXZ‚Ì’l‚ðŽZo
+			bsm::Mat4x4 Mat;
+			Mat.strTransformation(
+				bsm::Vec3(1.0f, 1.0f, 1.0f),
+				bsm::Vec3(0.0f, 0.0f, -1.0f),
+				QtXZ
+			);
 
-		//	bsm::Vec3 PosXZ = Mat.transInMatrix();
-		//	//XZ‚Ì’l‚ª‚í‚©‚Á‚½‚Ì‚Å˜rŠp“x‚É‘ã“ü
-		//	ArmVec.x = PosXZ.x;
-		//	ArmVec.z = PosXZ.z;
-		//	//˜rŠp“x‚ð³‹K‰»
-		//	ArmVec.normalize();
+			bsm::Vec3 PosXZ = Mat.transInMatrix();
+			//XZ‚Ì’l‚ª‚í‚©‚Á‚½‚Ì‚Å˜rŠp“x‚É‘ã“ü
+			ArmVec.x = PosXZ.x;
+			ArmVec.z = PosXZ.z;
+			//˜rŠp“x‚ð³‹K‰»
+			ArmVec.normalize();
 
-		auto TargetPtr = GetTargetObject();
+			auto TargetPtr = GetTargetObject();
 			if (TargetPtr) {
 				//–ÚŽw‚µ‚½‚¢êŠ
 				bsm::Vec3 ToAt = TargetPtr->GetComponent<Transform>()->GetWorldMatrix().transInMatrix();
@@ -509,7 +509,7 @@ namespace basecross {
 			////–ÚŽw‚µ‚½‚¢êŠ‚ÉƒA[ƒ€‚Ì’l‚Æ˜rƒxƒNƒgƒ‹‚ÅEye‚ð’²®
 			bsm::Vec3 ToEye = NewAt + ArmVec * pImpl->m_ArmLen;
 			NewEye = Lerp::CalculateLerp(GetEye(), ToEye, 0, 1.0f, pImpl->m_ToTargetLerp, Lerp::Linear);
-		//}
+		}
 		if (KeyData.m_bPressedKeyTbl[VK_LEFT]) {
 			int a = 0;
 		}

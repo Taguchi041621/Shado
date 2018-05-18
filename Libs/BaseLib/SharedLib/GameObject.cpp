@@ -153,6 +153,12 @@ namespace basecross {
 		pImpl->m_BehaviorMap[TypeIndex] = Ptr;
 	}
 
+
+
+
+
+
+
 	GameObject::GameObject(const shared_ptr<Stage>& StagePtr) :
 		ObjectInterface(),
 		ShapeInterface(),
@@ -376,33 +382,6 @@ namespace basecross {
 		//GameObject::Draw()を呼び出す
 		ComponentDraw();
 	}
-
-	void GameObject::DestroyGameObject() {
-		auto TMptr = GetComponent<Transform>();
-		auto RigidPtr = GetComponent<Rigidbody>(false);
-		//マップを検証してOnDestroy
-		list<type_index>::iterator it = pImpl->m_CompOrder.begin();
-		while (it != pImpl->m_CompOrder.end()) {
-			map<type_index, shared_ptr<Component> >::const_iterator it2;
-			it2 = pImpl->m_CompMap.find(*it);
-			if (it2 != pImpl->m_CompMap.end()) {
-				//指定の型のコンポーネントが見つかった
-				if (it2->second->IsUpdateActive()) {
-					it2->second->OnDestroy();
-				}
-			}
-			it++;
-		}
-		if (RigidPtr) {
-			//RigidbodyがあればOnDestroy()
-			RigidPtr->OnDestroy();
-		}
-		//TransformのOnDestroy
-		TMptr->OnDestroy();
-		//自分自身のOnDestroy()
-		OnDestroy();
-	}
-
 
 
 	//--------------------------------------------------------------------------------------
@@ -995,8 +974,8 @@ namespace basecross {
 		//3Dの透明と非透明を分離する配列
 		vector< shared_ptr<GameObject> > m_Object3DNormalVec;
 		vector< shared_ptr<GameObject> > m_Object3DAlphaVec;
-		//物理計算
-		BasePhysics m_BasePhysics;
+
+
 		//現在Drawされているビューのインデックス
 		size_t m_DrawViewIndex;
 		//ビューのポインタ
@@ -1011,13 +990,11 @@ namespace basecross {
 		weak_ptr<Stage> m_ParentStage;		//親ステージ
 		//シャドウマップを使うかどうか
 		bool m_IsShadowmapDraw;
-		//物理計算を使うかどうか
-		bool m_IsPhysicsActive;
+
 		Impl() :
 			m_UpdateActive(true),
 			m_DrawViewIndex(0),
-			m_IsShadowmapDraw(true),
-			m_IsPhysicsActive(false)
+			m_IsShadowmapDraw(true)
 		{}
 		~Impl() {}
 		void RemoveTargetGameObject(const shared_ptr<GameObject>& targetobj);
@@ -1026,8 +1003,6 @@ namespace basecross {
 		auto it = m_GameObjectVec.begin();
 		while (it != m_GameObjectVec.end()) {
 			if (*it == targetobj) {
-				//削除されることをオブジェクトに伝える
-				targetobj->DestroyGameObject();
 				m_GameObjectVec.erase(it);
 				return;
 			}
@@ -1106,31 +1081,7 @@ namespace basecross {
 		}
 	}
 
-	BasePhysics& Stage::GetBasePhysics() const {
-		if (!IsPhysicsActive()) {
-			throw BaseException(
-				L"物理演算が無効になっています。有効にしてから取得してください。",
-				L"if (!IsPhysicsActive())",
-				L"Stage::GetBasePhysics()()"
-			);
-		}
-		return pImpl->m_BasePhysics;
-	}
-
-
-	bool Stage::IsPhysicsActive() const {
-		return pImpl->m_IsPhysicsActive;
-		
-	}
-	void Stage::SetPhysicsActive(bool b) {
-		pImpl->m_IsPhysicsActive = b;
-	}
-
-
-
 	vector< shared_ptr<GameObject> >& Stage::GetGameObjectVec() { return pImpl->m_GameObjectVec; }
-	vector< shared_ptr<GameObject> >& Stage::GetGameObjectVec() const{ return pImpl->m_GameObjectVec; }
-
 
 	//追加や削除待ちになってるオブジェクトを追加・削除する
 	void Stage::SetWaitToObjectVec(){
@@ -1246,10 +1197,6 @@ namespace basecross {
 	vector< shared_ptr<Stage> >& Stage::GetChileStageVec() {
 		return pImpl->m_ChildStageVec;
 	}
-	vector< shared_ptr<Stage> >& Stage::GetChileStageVec() const {
-		return pImpl->m_ChildStageVec;
-	}
-
 	void Stage::AddChileStageBase(const shared_ptr<Stage>& ChildStage) {
 		pImpl->m_ChildStageVec.push_back(ChildStage);
 		ChildStage->SetParentStage(GetThis<Stage>());
@@ -1311,8 +1258,6 @@ namespace basecross {
 		pImpl->m_AddParticleManager = ObjectFactory::Create<ParticleManager>(GetThis<Stage>(),true);
 		//コリジョン管理者の作成
 		pImpl->m_CollisionManager = ObjectFactory::Create<CollisionManager>(GetThis<Stage>());
-		//物理計算リセット
-		pImpl->m_BasePhysics.Reset();
 	}
 
 
@@ -1332,6 +1277,7 @@ namespace basecross {
 				}
 			}
 		}
+
 		//配置オブジェクトの更新処理
 		for (auto ptr : GetGameObjectVec()) {
 			if (ptr->IsUpdateActive()) {
@@ -1342,10 +1288,7 @@ namespace basecross {
 		if (IsUpdateActive()) {
 			OnUpdate();
 		}
-		//物理オブジェクトの更新
-		if (IsPhysicsActive()) {
-			pImpl->m_BasePhysics.Update();
-		}
+
 		//配置オブジェクトのコンポーネント更新
 		for (auto ptr : GetGameObjectVec()) {
 			if (ptr->IsUpdateActive()) {
@@ -1408,6 +1351,7 @@ namespace basecross {
 	void Stage::SetShadowmapDraw(bool b) {
 		pImpl->m_IsShadowmapDraw = b;
 	}
+
 
 	//ステージ内のシャドウマップ描画（ステージからよばれる）
 	void Stage::DrawShadowmapStage() {
@@ -1585,20 +1529,6 @@ namespace basecross {
 			PtrChileStage->RenderStage();
 		}
 	}
-
-	void Stage::DestroyStage() {
-		//子供ステージの削除処理
-		for (auto PtrChileStage : pImpl->m_ChildStageVec) {
-			PtrChileStage->DestroyStage();
-		}
-		//配置オブジェクトの削除処理
-		for (auto ptr : GetGameObjectVec()) {
-				ptr->DestroyGameObject();
-		}
-		//自身の削除処理
-		OnDestroy();
-	}
-
 
 
 
@@ -1780,44 +1710,6 @@ namespace basecross {
 			App::GetApp()->RegisterResource(L"DEFAULT_PNTnT_ICOSAHEDRON", MeshResource::CreateMeshResource(new_pntnt_vertices, indices, false));
 			vertices.clear();
 			indices.clear();
-			//物理ワイフレーム用
-			MeshUtill::CreateSphere(2.0f, 6, vertices, indices);
-			vector<VertexPositionColor> col_vertices;
-			for (auto& v : vertices) {
-				VertexPositionColor vertex;
-				vertex.position = v.position;
-				vertex.color = Col4(1.0f, 1.0f, 1.0f, 1.0f);
-				col_vertices.push_back(vertex);
-			}
-			App::GetApp()->RegisterResource(L"PSWIRE_PC_SPHERE", MeshResource::CreateMeshResource(col_vertices, indices, false));
-			vertices.clear();
-			indices.clear();
-			col_vertices.clear();
-
-			MeshUtill::CreateCube(2.0f, vertices, indices);
-			for (auto& v : vertices) {
-				VertexPositionColor vertex;
-				vertex.position = v.position;
-				vertex.color = Col4(1.0f, 1.0f, 1.0f, 1.0f);
-				col_vertices.push_back(vertex);
-			}
-			App::GetApp()->RegisterResource(L"PSWIRE_PC_CUBE", MeshResource::CreateMeshResource(col_vertices, indices, false));
-			vertices.clear();
-			indices.clear();
-			col_vertices.clear();
-
-
-			MeshUtill::CreateCylinder(2.0f, 2.0f, 12,vertices,indices);
-			for (auto& v : vertices) {
-				VertexPositionColor vertex;
-				vertex.position = v.position;
-				vertex.color = Col4(1.0f, 1.0f, 1.0f, 1.0f);
-				col_vertices.push_back(vertex);
-			}
-			App::GetApp()->RegisterResource(L"PSWIRE_PC_CYLINDER", MeshResource::CreateMeshResource(col_vertices, indices, false));
-			vertices.clear();
-			indices.clear();
-			col_vertices.clear();
 
 
 
@@ -1828,19 +1720,14 @@ namespace basecross {
 	}
 	SceneBase::~SceneBase() {}
 
-	shared_ptr<Stage> SceneBase::GetActiveStage(bool ExceptionActive) const {
+	shared_ptr<Stage> SceneBase::GetActiveStage() const {
 		if (!pImpl->m_ActiveStage) {
 			//アクティブなステージが無効なら
-			if (ExceptionActive) {
-				throw BaseException(
-					L"アクティブなステージがありません",
-					L"if(!m_ActiveStage.get())",
-					L"SceneBase::GetActiveStage()"
-				);
-			}
-			else {
-				return nullptr;
-			}
+			throw BaseException(
+				L"アクティブなステージがありません",
+				L"if(!m_ActiveStage.get())",
+				L"SceneBase::GetActiveStage()"
+			);
 		}
 		return pImpl->m_ActiveStage;
 	}
@@ -1870,12 +1757,6 @@ namespace basecross {
 			Dev->ClearDefaultViews(GetClearColor());
 			pImpl->m_ActiveStage->RenderStage();
 
-		}
-	}
-
-	void SceneBase::OnDestroy() {
-		if (pImpl->m_ActiveStage) {
-			pImpl->m_ActiveStage->DestroyStage();
 		}
 	}
 

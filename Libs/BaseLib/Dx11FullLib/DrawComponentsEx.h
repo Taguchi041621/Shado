@@ -8,6 +8,9 @@
 #include "stdafx.h"
 
 namespace basecross {
+	//--------------------------------------------------------------------------------------
+	///	Basicシェーダー
+	//--------------------------------------------------------------------------------------
 
 	//--------------------------------------------------------------------------------------
 	///	Basicシェーダー用コンスタントバッファ
@@ -129,6 +132,10 @@ namespace basecross {
 	//バイアス付き影付きBone
 	DECLARE_DX11_VERTEX_SHADER(BcVSPNTBonePLBnShadow, VertexPositionNormalTextureSkinning)
 
+
+	
+
+
 	//--------------------------------------------------------------------------------------
 	/// PNTピクセルシェーダ(ピクセルライティング)
 	//--------------------------------------------------------------------------------------
@@ -156,340 +163,61 @@ namespace basecross {
 	/// PNTnTピクセルシェーダ(ピクセルライティング)
 	//--------------------------------------------------------------------------------------
 	//影無し
-	DECLARE_DX11_PIXEL_SHADER(BcPSPNTnTPL)
+	DECLARE_DX11_PIXEL_SHADER(BcPSPNTnTPL);
 	//影つき
 	DECLARE_DX11_PIXEL_SHADER(BcPSPNTnTPLShadow);
 
+
+
+
 	//--------------------------------------------------------------------------------------
-	///	Bc描画オブジェクトの親
+	///	Basic描画コンポーネントの親(3D描画)
 	//--------------------------------------------------------------------------------------
-	class BcBaseDraw : public DrawComponent{
+	class BcStaticBaseDraw : public DrawComponent, public TextureDrawInterface {
 	protected:
 		//--------------------------------------------------------------------------------------
 		/*!
-		@brief コンストラクタ
-		@param[in]	StagePtr	ステージのポインタ
+		@brief	プロテクトコンストラクタ
+		@param[in]	GameObjectPtr	ゲームオブジェクト
 		*/
 		//--------------------------------------------------------------------------------------
-		explicit BcBaseDraw(const shared_ptr<GameObject>& GameObjectPtr);
+		explicit BcStaticBaseDraw(const shared_ptr<GameObject>& GameObjectPtr);
 		//--------------------------------------------------------------------------------------
 		/*!
-		@brief デストラクタ
+		@brief	プロテクトデストラクタ
 		*/
 		//--------------------------------------------------------------------------------------
-		virtual ~BcBaseDraw();
+		virtual	~BcStaticBaseDraw();
 		//--------------------------------------------------------------------------------------
 		/*!
 		@brief	コンスタントバッファの設定
-		@param[out]	BcCb	設定するコンスタントバッファ構造体
-		@param[in]	data	メッシュのデータ
+		@param[out]	BcCb	設定する構造体
 		@return	なし
 		*/
 		//--------------------------------------------------------------------------------------
-		void SetConstants(BasicConstants& BcCb, const MeshPrimData& data);
+		void SetConstants(BasicConstants& BcCb, bool shadowUse = false);
 		//--------------------------------------------------------------------------------------
 		/*!
-		@brief	スタティックメッシュの描画
-		@tparam[in]	T_VShader	使用する頂点シェーダ
-		@tparam[in]	T_PShader	使用するピクセルシェーダ
-		@param[in]	data	メッシュのデータ
+		@brief	テクスチャとサンプラーの設定（タンジェント無し）
+		@param[in]	pD3D11DeviceContext	デバイスコンテキスト
+		@param[in]	TexRes	テクスチャリソース
 		@return	なし
 		*/
 		//--------------------------------------------------------------------------------------
-		template<typename T_VShader, typename T_PShader>
-		void DrawStatic(const MeshPrimData& data) {
-			auto Dev = App::GetApp()->GetDeviceResources();
-			auto pD3D11DeviceContext = Dev->GetD3DDeviceContext();
-			auto RenderState = Dev->GetRenderState();
-			//NULLのシェーダリソースの準備
-			ID3D11ShaderResourceView* pNull[D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT] = { nullptr };
-			//サンプラーの準備
-			ID3D11SamplerState* pNullSR[D3D11_COMMONSHADER_SAMPLER_SLOT_COUNT] = { nullptr };
-			//各オブジェクト共通処理
-			//シェーダの設定
-			//頂点シェーダ
-			pD3D11DeviceContext->VSSetShader(T_VShader::GetPtr()->GetShader(), nullptr, 0);
-			//インプットレイアウトの設定
-			pD3D11DeviceContext->IASetInputLayout(T_VShader::GetPtr()->GetInputLayout());
-			//ピクセルシェーダ
-			pD3D11DeviceContext->PSSetShader(T_PShader::GetPtr()->GetShader(), nullptr, 0);
-			//ライトを設定
-			SetLightingParamaters();
-			//個別処理
-			BasicConstants BcCb;
-			//コンスタントバッファの作成
-			SetConstants(BcCb, data);
-			//テクスチャ
-			auto shTex = GetTextureResource();
-			if (shTex) {
-				//テクスチャがある
-				BcCb.activeFlg.y = 1;
-			}
-			else {
-				//描画コンポーネントにはテクスチャがない
-				if (shTex = data.m_TextureResource.lock()) {
-					//テクスチャがある
-					BcCb.activeFlg.y = 1;
-				}
-				else {
-					BcCb.activeFlg.y = 0;
-				}
-			}
-			//コンスタントバッファの更新
-			pD3D11DeviceContext->UpdateSubresource(CBBasic::GetPtr()->GetBuffer(), 0, nullptr, &BcCb, 0, 0);
-			//コンスタントバッファの設定
-			ID3D11Buffer* pConstantBuffer = CBBasic::GetPtr()->GetBuffer();
-			ID3D11Buffer* pNullConstantBuffer = nullptr;
-			//頂点シェーダに渡す
-			pD3D11DeviceContext->VSSetConstantBuffers(0, 1, &pConstantBuffer);
-			//ピクセルシェーダに渡す
-			pD3D11DeviceContext->PSSetConstantBuffers(0, 1, &pConstantBuffer);
-			//ストライドとオフセット
-			UINT stride = data.m_NumStride;
-			UINT offset = 0;
-			//描画方法のセット
-			pD3D11DeviceContext->IASetPrimitiveTopology(data.m_PrimitiveTopology);
-			//頂点バッファのセット
-			pD3D11DeviceContext->IASetVertexBuffers(0, 1, data.m_VertexBuffer.GetAddressOf(), &stride, &offset);
-			//インデックスバッファのセット
-			pD3D11DeviceContext->IASetIndexBuffer(data.m_IndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
-			//各レンダリングステートの設定
-			//ブレンドステート
-			RenderState->SetBlendState(pD3D11DeviceContext, GetBlendState());
-			//デプスステンシルステート
-			RenderState->SetDepthStencilState(pD3D11DeviceContext, GetDepthStencilState());
-			//テクスチャとサンプラー
-			if (shTex) {
-				pD3D11DeviceContext->PSSetShaderResources(0, 1, shTex->GetShaderResourceView().GetAddressOf());
-				//サンプラーを設定
-				RenderState->SetSamplerState(pD3D11DeviceContext, GetSamplerState(), 0);
-				//法線マップ
-				if (GetNormalMapTextureResource()) {
-					if (IsOwnShadowActive()) {
-						//２番目に入れる
-						pD3D11DeviceContext->PSSetShaderResources(2, 1, GetNormalMapTextureResource()->GetShaderResourceView().GetAddressOf());
-						//サンプラーを設定
-						RenderState->SetSamplerState(pD3D11DeviceContext, GetSamplerState(), 2);
-					}
-					else {
-						//1番目に入れる
-						pD3D11DeviceContext->PSSetShaderResources(1, 1, GetNormalMapTextureResource()->GetShaderResourceView().GetAddressOf());
-						//サンプラーを設定
-						RenderState->SetSamplerState(pD3D11DeviceContext, GetSamplerState(), 1);
-					}
-				}
-			}
-			else {
-				//シェーダーリソースもクリア
-				pD3D11DeviceContext->PSSetShaderResources(0, D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT, pNull);
-				//サンプラーもクリア
-				RenderState->SetSamplerAllClear(pD3D11DeviceContext);
-			}
-			//影とサンプラー
-			if (IsOwnShadowActive()) {
-				//シャドウマップのレンダラーターゲット
-				auto ShadowmapPtr = Dev->GetShadowMapRenderTarget();
-				ID3D11ShaderResourceView* pShadowSRV = ShadowmapPtr->GetShaderResourceView();
-				pD3D11DeviceContext->PSSetShaderResources(1, 1, &pShadowSRV);
-				//シャドウマップサンプラー
-				ID3D11SamplerState* pShadowSampler = RenderState->GetComparisonLinear();
-				pD3D11DeviceContext->PSSetSamplers(1, 1, &pShadowSampler);
-			}
-			//ラスタライザステートと描画
-			if (GetRasterizerState() == RasterizerState::DoubleDraw) {
-				//透明処理用
-				//ラスタライザステート(裏描画)
-				pD3D11DeviceContext->RSSetState(RenderState->GetCullFront());
-				//描画
-				pD3D11DeviceContext->DrawIndexed(data.m_NumIndicis, 0, 0);
-				//ラスタライザステート（表描画）
-				pD3D11DeviceContext->RSSetState(RenderState->GetCullBack());
-				//描画
-				pD3D11DeviceContext->DrawIndexed(data.m_NumIndicis, 0, 0);
-			}
-			else {
-				RenderState->SetRasterizerState(pD3D11DeviceContext, GetRasterizerState());
-				//描画
-				pD3D11DeviceContext->DrawIndexed(data.m_NumIndicis, 0, 0);
-			}
-			//後始末
-//			Dev->InitializeStates();
-		}
+		void SetTextureAndSampler(ID3D11DeviceContext2* pD3D11DeviceContext, const shared_ptr<TextureResource>& TexRes);
 		//--------------------------------------------------------------------------------------
 		/*!
-		@brief	モデルメッシュの描画
-		@tparam[in]	T_VShader	使用する頂点シェーダ
-		@tparam[in]	T_PShader	使用するピクセルシェーダ
-		@param[in]	data	メッシュのデータ
+		@brief	テクスチャとサンプラーの設定（タンジェントつき）
+		@param[in]	pD3D11DeviceContext	デバイスコンテキスト
+		@param[in]	IsOwnShadow	自己影が有効かどうか
+		@param[in]	TexRes	テクスチャリソース
+		@param[in]	NormalTexRes	法線マップテクスチャリソース
 		@return	なし
 		*/
 		//--------------------------------------------------------------------------------------
-		template<typename T_VShader, typename T_PShader>
-		void DrawModel(const MeshPrimData& data) {
-			auto Dev = App::GetApp()->GetDeviceResources();
-			auto pD3D11DeviceContext = Dev->GetD3DDeviceContext();
-			auto RenderState = Dev->GetRenderState();
-			//NULLのシェーダリソースの準備
-			ID3D11ShaderResourceView* pNull[D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT] = { nullptr };
-			//サンプラーの準備
-			ID3D11SamplerState* pSamplerClamp = RenderState->GetLinearClamp();
-			ID3D11SamplerState* pSamplerWrap = RenderState->GetLinearWrap();
-			ID3D11SamplerState* pNullSR[D3D11_COMMONSHADER_SAMPLER_SLOT_COUNT] = { nullptr };
-			//各オブジェクト共通処理
-			//シェーダの設定
-			//頂点シェーダ
-			pD3D11DeviceContext->VSSetShader(T_VShader::GetPtr()->GetShader(), nullptr, 0);
-			//インプットレイアウトの設定
-			pD3D11DeviceContext->IASetInputLayout(T_VShader::GetPtr()->GetInputLayout());
-			//ピクセルシェーダ
-			pD3D11DeviceContext->PSSetShader(T_PShader::GetPtr()->GetShader(), nullptr, 0);
-			//ストライドとオフセット
-			UINT stride = data.m_NumStride;
-			UINT offset = 0;
-			//描画方法のセット
-			pD3D11DeviceContext->IASetPrimitiveTopology(data.m_PrimitiveTopology);
-			//頂点バッファのセット
-			pD3D11DeviceContext->IASetVertexBuffers(0, 1, data.m_VertexBuffer.GetAddressOf(), &stride, &offset);
-			//インデックスバッファのセット
-			pD3D11DeviceContext->IASetIndexBuffer(data.m_IndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
-			//各レンダリングステートの設定
-			//ブレンドステート
-			RenderState->SetBlendState(pD3D11DeviceContext, GetBlendState());
-			//デプスステンシルステート
-			RenderState->SetDepthStencilState(pD3D11DeviceContext, GetDepthStencilState());
-			//影とサンプラー
-			if (GetOwnShadowActive()) {
-				//シャドウマップのレンダラーターゲット
-				auto ShadowmapPtr = Dev->GetShadowMapRenderTarget();
-				ID3D11ShaderResourceView* pShadowSRV = ShadowmapPtr->GetShaderResourceView();
-				pD3D11DeviceContext->PSSetShaderResources(1, 1, &pShadowSRV);
-				//シャドウマップサンプラー
-				ID3D11SamplerState* pShadowSampler = RenderState->GetComparisonLinear();
-				pD3D11DeviceContext->PSSetSamplers(1, 1, &pShadowSampler);
-			}
-			//ライトを設定
-			SetLightingParamaters();
-			BasicConstants BcCb;
-			//コンスタントバッファの作成
-			SetConstants(BcCb, data);
-			//メッシュ内のマテリアルの配列
-			auto& MatVec = data.m_MaterialExVec;
-			size_t MatIndex = 0;
-			for (auto& m : MatVec) {
-				if (m.m_TextureResource) {
-					//テクスチャがある
-					BcCb.activeFlg.y = 1;
-				}
-				else {
-					//テクスチャがない
-					BcCb.activeFlg.y = 0;
-				}
-				if (IsModelDiffusePriority()) {
-					BcCb.diffuseColor = m.m_Diffuse;
-				}
-				if (IsModelEmissivePriority()) {
-					bsm::Col4 Em4 = m.m_Emissive;
-					Em4.w = 0.0f;
-					BcCb.emissiveColor = Em4;
-				}
-				//コンスタントバッファの更新
-				pD3D11DeviceContext->UpdateSubresource(CBBasic::GetPtr()->GetBuffer(), 0, nullptr, &BcCb, 0, 0);
-				//コンスタントバッファの設定
-				ID3D11Buffer* pConstantBuffer = CBBasic::GetPtr()->GetBuffer();
-				ID3D11Buffer* pNullConstantBuffer = nullptr;
-				//頂点シェーダに渡す
-				pD3D11DeviceContext->VSSetConstantBuffers(0, 1, &pConstantBuffer);
-				//ピクセルシェーダに渡す
-				pD3D11DeviceContext->PSSetConstantBuffers(0, 1, &pConstantBuffer);
-				if (BcCb.activeFlg.y) {
-					//シェーダにテクスチャの設定がされている
-					//サンプラーの設定
-					RenderState->SetSamplerState(pD3D11DeviceContext, GetSamplerState(), 0);
-					//テクスチャの選択
-					if (IsModelTextureEnabled()) {
-						//モデルのテクスチャが有効
-						pD3D11DeviceContext->PSSetShaderResources(0, 1, m.m_TextureResource->GetShaderResourceView().GetAddressOf());
-					}
-					else {
-						//モデルのテクスチャが無効
-						auto shTex = GetTextureResource();
-						if (shTex) {
-							//コンポーネントにテクスチャがある
-							pD3D11DeviceContext->PSSetShaderResources(0, 1, shTex->GetShaderResourceView().GetAddressOf());
-						}
-						else {
-							//コンポーネントにテクスチャがない
-							BcCb.activeFlg.y = 0;
-						}
-					}
-					if (BcCb.activeFlg.y) {
-						//法線マップ
-						if (GetNormalMapTextureResourceVec().size() > MatIndex) {
-							//複数の法線マップがある
-							auto& normalVec = GetNormalMapTextureResourceVec();
-							auto normalShptr = normalVec[MatIndex].lock();
-							if (GetOwnShadowActive()) {
-								//２番目に入れる
-								pD3D11DeviceContext->PSSetShaderResources(2, 1, normalShptr->GetShaderResourceView().GetAddressOf());
-								//サンプラーを設定
-								RenderState->SetSamplerState(pD3D11DeviceContext, GetSamplerState(), 2);
-							}
-							else {
-								//1番目に入れる
-								pD3D11DeviceContext->PSSetShaderResources(1, 1, normalShptr->GetShaderResourceView().GetAddressOf());
-								//サンプラーを設定
-								RenderState->SetSamplerState(pD3D11DeviceContext,GetSamplerState(), 1);
-							}
-						}
-						else if (GetNormalMapTextureResource()) {
-							//そうではなくて一つだけ法線マップがある
-							if (GetOwnShadowActive()) {
-								//２番目に入れる
-								pD3D11DeviceContext->PSSetShaderResources(2, 1, GetNormalMapTextureResource()->GetShaderResourceView().GetAddressOf());
-								//サンプラーを設定
-								RenderState->SetSamplerState(pD3D11DeviceContext, GetSamplerState(), 2);
-							}
-							else {
-								//1番目に入れる
-								pD3D11DeviceContext->PSSetShaderResources(1, 1, GetNormalMapTextureResource()->GetShaderResourceView().GetAddressOf());
-								//サンプラーを設定
-								RenderState->SetSamplerState(pD3D11DeviceContext, GetSamplerState(), 1);
-							}
-						}
-					}
-					else {
-						//シェーダーリソースもクリア
-						pD3D11DeviceContext->PSSetShaderResources(0, D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT, pNull);
-						//サンプラーもクリア
-						RenderState->SetSamplerAllClear(pD3D11DeviceContext);
-					}
-				}
-				else {
-					//シェーダーリソースもクリア
-					pD3D11DeviceContext->PSSetShaderResources(0, D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT, pNull);
-					//サンプラーもクリア
-					RenderState->SetSamplerAllClear(pD3D11DeviceContext);
-				}
-				//ラスタライザステートと描画
-				if (GetRasterizerState() == RasterizerState::DoubleDraw) {
-					//透明処理用
-					//ラスタライザステート(裏描画)
-					pD3D11DeviceContext->RSSetState(RenderState->GetCullFront());
-					//描画
-					pD3D11DeviceContext->DrawIndexed(m.m_IndexCount, m.m_StartIndex, 0);
-					//ラスタライザステート（表描画）
-					pD3D11DeviceContext->RSSetState(RenderState->GetCullBack());
-					//描画
-					pD3D11DeviceContext->DrawIndexed(m.m_IndexCount, m.m_StartIndex, 0);
-				}
-				else {
-					RenderState->SetRasterizerState(pD3D11DeviceContext, GetRasterizerState());
-					//描画
-					pD3D11DeviceContext->DrawIndexed(m.m_IndexCount, m.m_StartIndex, 0);
-				}
-				MatIndex++;
-			}
-		}
+		void SetTextureAndSamplerWithTangent(ID3D11DeviceContext2* pD3D11DeviceContext,bool IsOwnShadow,
+			const shared_ptr<TextureResource>& TexRes,
+			const shared_ptr<TextureResource>& NormalTexRes);
 	public:
 		//--------------------------------------------------------------------------------------
 		/*!
@@ -581,53 +309,6 @@ namespace basecross {
 		*/
 		//--------------------------------------------------------------------------------------
 		void SetMeshResource(const wstring& MeshKey);
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	テクスチャリソースの設定
-		@param[in]	TextureRes	テクスチャリソース
-		@return	なし
-		*/
-		//--------------------------------------------------------------------------------------
-		void SetTextureResource(const shared_ptr<TextureResource>& TextureRes);
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	テクスチャリソースの設定
-		@param[in]	TextureKey	登録されているテクスチャキー
-		@return	なし
-		*/
-		//--------------------------------------------------------------------------------------
-		void SetTextureResource(const wstring& TextureKey);
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	テクスチャリソースの取得
-		@return	テクスチャリソース
-		*/
-		//--------------------------------------------------------------------------------------
-		shared_ptr<TextureResource> GetTextureResource() const;
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	マルチメッシュリソースを得る
-		@param[in]	ExceptionActive	エラー時に例外が発生するかどうか
-		@return	メッシュリソース
-		*/
-		//--------------------------------------------------------------------------------------
-		shared_ptr<MultiMeshResource> GetMultiMeshResource() const;
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	マルチメッシュリソースを設定する
-		@param[in]	MeshResourcePtr	メッシュリソース
-		@return	なし
-		*/
-		//--------------------------------------------------------------------------------------
-		virtual void SetMultiMeshResource(const shared_ptr<MultiMeshResource>& MeshResourcePtr);
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	マルチメッシュリソースを設定する
-		@param[in]	ResKey	メッシュリソースのキー
-		@return	なし
-		*/
-		//--------------------------------------------------------------------------------------
-		void SetMultiMeshResource(const wstring& ResKey);
 		//--------------------------------------------------------------------------------------
 		/*!
 		@brief	エミッシブ色の取得
@@ -884,7 +565,7 @@ namespace basecross {
 		@return	なし
 		*/
 		//--------------------------------------------------------------------------------------
-		void SetLightDirection(int whichLight, const bsm::Vec3& value);
+		void SetLightDirection(int whichLight,const bsm::Vec3& value);
 		//--------------------------------------------------------------------------------------
 		/*!
 		@brief	指定のライトのデフューズ色を得る
@@ -901,7 +582,7 @@ namespace basecross {
 		@return	なし
 		*/
 		//--------------------------------------------------------------------------------------
-		void SetLightDiffuseColor(int whichLight, const bsm::Col4& value);
+		void SetLightDiffuseColor(int whichLight,const bsm::Col4& value);
 		//--------------------------------------------------------------------------------------
 		/*!
 		@brief	指定のライトのスペキュラー色を得る
@@ -988,6 +669,284 @@ namespace basecross {
 		void SetFogColor(const bsm::Col4& col);
 		//--------------------------------------------------------------------------------------
 		/*!
+		@brief	ライティングなしのスタティックメッシュの描画
+		@tparam[in]	T_VShader	使用する頂点シェーダ
+		@tparam[in]	T_PShader	使用するピクセルシェーダ
+		@return	なし
+		*/
+		//--------------------------------------------------------------------------------------
+		template<typename T_VShader, typename T_PShader>
+		void DrawStaticNoLight() {
+			auto PtrStage = GetGameObject()->GetStage();
+			if (!PtrStage) {
+				return;
+			}
+			//メッシュがなければ描画しない
+			auto MeshRes = GetMeshResource();
+			if (!MeshRes) {
+				throw BaseException(
+					L"メッシュが作成されていません",
+					L"if (!MeshRes)",
+					L"BcStaticBaseDraw::DrawStaticNoLight()"
+				);
+			}
+			auto shTex = GetTextureResource();
+			auto Dev = App::GetApp()->GetDeviceResources();
+			auto pD3D11DeviceContext = Dev->GetD3DDeviceContext();
+			auto RenderState = Dev->GetRenderState();
+			ID3D11ShaderResourceView* pNull[D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT] = { nullptr };
+			ID3D11SamplerState* pNullSR[D3D11_COMMONSHADER_SAMPLER_SLOT_COUNT] = { nullptr };
+
+			//コンスタントバッファの設定
+			BasicConstants BcCb;
+			SetConstants(BcCb);
+			if (shTex) {
+				//テクスチャがある
+				BcCb.activeFlg.y = 1;
+			}
+			else {
+				//テクスチャがない
+				BcCb.activeFlg.y = 0;
+			}
+			//コンスタントバッファの更新
+			pD3D11DeviceContext->UpdateSubresource(CBBasic::GetPtr()->GetBuffer(), 0, nullptr, &BcCb, 0, 0);
+			//コンスタントバッファの設定
+			ID3D11Buffer* pConstantBuffer = CBBasic::GetPtr()->GetBuffer();
+			ID3D11Buffer* pNullConstantBuffer = nullptr;
+			//頂点シェーダに渡す
+			pD3D11DeviceContext->VSSetConstantBuffers(0, 1, &pConstantBuffer);
+			//ピクセルシェーダに渡す
+			pD3D11DeviceContext->PSSetConstantBuffers(0, 1, &pConstantBuffer);
+
+			//シェーダの設定
+			pD3D11DeviceContext->VSSetShader(T_VShader::GetPtr()->GetShader(), nullptr, 0);
+			//インプットレイアウトの設定
+			pD3D11DeviceContext->IASetInputLayout(T_VShader::GetPtr()->GetInputLayout());
+			//ピクセルシェーダ
+			pD3D11DeviceContext->PSSetShader(T_PShader::GetPtr()->GetShader(), nullptr, 0);
+
+
+			//テクスチャとサンプラー
+			if (shTex) {
+				pD3D11DeviceContext->PSSetShaderResources(0, 1, shTex->GetShaderResourceView().GetAddressOf());
+				//サンプラーは設定に任せる
+				SetDeviceSamplerState();
+			}
+			else {
+				//シェーダーリソースもクリア
+				pD3D11DeviceContext->PSSetShaderResources(0, D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT, pNull);
+				//サンプラーもクリア
+				pD3D11DeviceContext->PSSetSamplers(0, D3D11_COMMONSHADER_SAMPLER_SLOT_COUNT, pNullSR);
+			}
+
+			//ストライドとオフセット
+			UINT stride = MeshRes->GetNumStride();
+			UINT offset = 0;
+			//頂点バッファのセット
+			pD3D11DeviceContext->IASetVertexBuffers(0, 1, MeshRes->GetVertexBuffer().GetAddressOf(), &stride, &offset);
+			//インデックスバッファのセット
+			pD3D11DeviceContext->IASetIndexBuffer(MeshRes->GetIndexBuffer().Get(), DXGI_FORMAT_R16_UINT, 0);
+			//描画方法（3角形）
+			pD3D11DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+			//デプスステンシルステートは設定に任せる
+			SetDeviceDepthStencilState();
+			//透明処理なら
+			if (GetGameObject()->GetAlphaActive()) {
+				//ブレンドステート
+				//透明処理
+				if (GetBlendState() == BlendState::Additive) {
+					pD3D11DeviceContext->OMSetBlendState(RenderState->GetAdditive(), nullptr, 0xffffffff);
+				}
+				else {
+					pD3D11DeviceContext->OMSetBlendState(RenderState->GetAlphaBlendEx(), nullptr, 0xffffffff);
+				}
+				//ラスタライザステート(裏描画)
+				pD3D11DeviceContext->RSSetState(RenderState->GetCullFront());
+				//描画
+				pD3D11DeviceContext->DrawIndexed(MeshRes->GetNumIndicis(), 0, 0);
+				//ラスタライザステート（表描画）
+				pD3D11DeviceContext->RSSetState(RenderState->GetCullBack());
+				//描画
+				pD3D11DeviceContext->DrawIndexed(MeshRes->GetNumIndicis(), 0, 0);
+			}
+			else {
+				//透明処理しない
+				//ブレンドステートは設定に任せる
+				SetDeviceBlendState();
+				//ラスタライザステートは設定に任せる
+				SetDeviceRasterizerState();
+				//描画
+				pD3D11DeviceContext->DrawIndexed(MeshRes->GetNumIndicis(), 0, 0);
+			}
+			//後始末
+			Dev->InitializeStates();
+		}
+	private:
+		// pImplイディオム
+		struct Impl;
+		unique_ptr<Impl> pImpl;
+	};
+
+	//--------------------------------------------------------------------------------------
+	///	BasicPC描画コンポーネント
+	//--------------------------------------------------------------------------------------
+	class BcPCStaticDraw : public BcStaticBaseDraw {
+	protected:
+	public:
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief	コンストラクタ
+		@param[in]	GameObjectPtr	ゲームオブジェクト
+		*/
+		//--------------------------------------------------------------------------------------
+		explicit BcPCStaticDraw(const shared_ptr<GameObject>& GameObjectPtr);
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief	デストラクタ
+		*/
+		//--------------------------------------------------------------------------------------
+		virtual ~BcPCStaticDraw();
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief	OnCreate処理
+		@return	なし
+		*/
+		//--------------------------------------------------------------------------------------
+		virtual void OnCreate()override;
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief	OnUpdate処理（空関数）
+		@return	なし
+		*/
+		//--------------------------------------------------------------------------------------
+		virtual void OnUpdate()override {}
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief	OnDraw処理
+		@return	なし
+		*/
+		//--------------------------------------------------------------------------------------
+		virtual void OnDraw()override;
+	private:
+		// pImplイディオム
+		struct Impl;
+		unique_ptr<Impl> pImpl;
+	};
+
+	//--------------------------------------------------------------------------------------
+	///	BasicPT描画コンポーネント
+	//--------------------------------------------------------------------------------------
+	class BcPTStaticDraw : public BcStaticBaseDraw {
+	protected:
+	public:
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief	コンストラクタ
+		@param[in]	GameObjectPtr	ゲームオブジェクト
+		*/
+		//--------------------------------------------------------------------------------------
+		explicit BcPTStaticDraw(const shared_ptr<GameObject>& GameObjectPtr);
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief	デストラクタ
+		*/
+		//--------------------------------------------------------------------------------------
+		virtual ~BcPTStaticDraw();
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief	OnCreate処理
+		@return	なし
+		*/
+		//--------------------------------------------------------------------------------------
+		virtual void OnCreate()override;
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief	OnUpdate処理（空関数）
+		@return	なし
+		*/
+		//--------------------------------------------------------------------------------------
+		virtual void OnUpdate()override {}
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief	OnDraw処理
+		@return	なし
+		*/
+		//--------------------------------------------------------------------------------------
+		virtual void OnDraw()override;
+	private:
+		// pImplイディオム
+		struct Impl;
+		unique_ptr<Impl> pImpl;
+	};
+
+	//--------------------------------------------------------------------------------------
+	///	BasicPCT描画コンポーネント
+	//--------------------------------------------------------------------------------------
+	class BcPCTStaticDraw : public BcStaticBaseDraw {
+	protected:
+	public:
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief	コンストラクタ
+		@param[in]	GameObjectPtr	ゲームオブジェクト
+		*/
+		//--------------------------------------------------------------------------------------
+		explicit BcPCTStaticDraw(const shared_ptr<GameObject>& GameObjectPtr);
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief	デストラクタ
+		*/
+		//--------------------------------------------------------------------------------------
+		virtual ~BcPCTStaticDraw();
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief	OnCreate処理
+		@return	なし
+		*/
+		//--------------------------------------------------------------------------------------
+		virtual void OnCreate()override;
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief	OnUpdate処理（空関数）
+		@return	なし
+		*/
+		//--------------------------------------------------------------------------------------
+		virtual void OnUpdate()override {}
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief	OnDraw処理
+		@return	なし
+		*/
+		//--------------------------------------------------------------------------------------
+		virtual void OnDraw()override;
+	private:
+		// pImplイディオム
+		struct Impl;
+		unique_ptr<Impl> pImpl;
+	};
+
+
+	//--------------------------------------------------------------------------------------
+	///	BasicPNT描画コンポーネント
+	//--------------------------------------------------------------------------------------
+	class BcPNTStaticDraw : public BcStaticBaseDraw {
+	protected:
+	public:
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief	コンストラクタ
+		@param[in]	GameObjectPtr	ゲームオブジェクト
+		*/
+		//--------------------------------------------------------------------------------------
+		explicit BcPNTStaticDraw(const shared_ptr<GameObject>& GameObjectPtr);
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief	デストラクタ
+		*/
+		//--------------------------------------------------------------------------------------
+		virtual ~BcPNTStaticDraw();
+		//--------------------------------------------------------------------------------------
+		/*!
 		@brief	影を描画するかどうか得る
 		@return	影を描画すればtrue
 		*/
@@ -1008,6 +967,53 @@ namespace basecross {
 		*/
 		//--------------------------------------------------------------------------------------
 		void SetOwnShadowActive(bool b);
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief	OnCreate処理
+		@return	なし
+		*/
+		//--------------------------------------------------------------------------------------
+		virtual void OnCreate()override;
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief	OnUpdate処理（空関数）
+		@return	なし
+		*/
+		//--------------------------------------------------------------------------------------
+		virtual void OnUpdate()override {}
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief	OnDraw処理
+		@return	なし
+		*/
+		//--------------------------------------------------------------------------------------
+		virtual void OnDraw()override;
+	private:
+		// pImplイディオム
+		struct Impl;
+		unique_ptr<Impl> pImpl;
+	};
+
+
+	//--------------------------------------------------------------------------------------
+	///	BasicPNTモデル描画コンポーネント
+	//--------------------------------------------------------------------------------------
+	class BcPNTStaticModelDraw : public BcPNTStaticDraw {
+	protected:
+	public:
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief	コンストラクタ
+		@param[in]	GameObjectPtr	ゲームオブジェクト
+		*/
+		//--------------------------------------------------------------------------------------
+		explicit BcPNTStaticModelDraw(const shared_ptr<GameObject>& GameObjectPtr);
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief	デストラクタ
+		*/
+		//--------------------------------------------------------------------------------------
+		virtual ~BcPNTStaticModelDraw();
 		//--------------------------------------------------------------------------------------
 		/*!
 		@brief	デフィーズ色をモデル設定優先かどうか得る
@@ -1073,51 +1079,63 @@ namespace basecross {
 		@return	なし
 		*/
 		//--------------------------------------------------------------------------------------
-		void SetModelTextureEnabled(bool b);
+		void SeModelTextureEnabled(bool b);
 		//--------------------------------------------------------------------------------------
 		/*!
-		@brief	法線マップテクスチャリソースの取得
-		@return	法線マップテクスチャリソース
-		*/
-		//--------------------------------------------------------------------------------------
-		shared_ptr<TextureResource> GetNormalMapTextureResource() const;
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	法線マップテクスチャリソースの設定
-		@param[in]	TextureRes	テクスチャリソース
+		@brief	OnCreate処理
 		@return	なし
 		*/
 		//--------------------------------------------------------------------------------------
-		void SetNormalMapTextureResource(const shared_ptr<TextureResource>& TextureRes);
+		virtual void OnCreate()override;
 		//--------------------------------------------------------------------------------------
 		/*!
-		@brief	法線マップテクスチャリソースの設定
-		@param[in]	TextureKey	テクスチャキー
+		@brief	OnDraw処理
 		@return	なし
 		*/
 		//--------------------------------------------------------------------------------------
-		void SetNormalMapTextureResource(const wstring& TextureKey);
+		virtual void OnDraw()override;
+	private:
+		// pImplイディオム
+		struct Impl;
+		unique_ptr<Impl> pImpl;
+	};
+
+
+	//--------------------------------------------------------------------------------------
+	///	BcPNTBoneModelDraw描画コンポーネント（ボーンモデル描画用）
+	//--------------------------------------------------------------------------------------
+	class BcPNTBoneModelDraw : public BcPNTStaticModelDraw {
+	protected:
+	public:
 		//--------------------------------------------------------------------------------------
 		/*!
-		@brief	法線マップテクスチャリソース配列の取得
-		@return	法線マップテクスチャリソース配列
+		@brief	コンストラクタ
+		@param[in]	GameObjectPtr	ゲームオブジェクト
 		*/
 		//--------------------------------------------------------------------------------------
-		const vector<weak_ptr<TextureResource>>& GetNormalMapTextureResourceVec() const;
+		explicit BcPNTBoneModelDraw(const shared_ptr<GameObject>& GameObjectPtr);
 		//--------------------------------------------------------------------------------------
 		/*!
-		@brief	法線マップテクスチャリソース配列の取得
-		@return	法線マップテクスチャリソース配列
+		@brief	デストラクタ
 		*/
 		//--------------------------------------------------------------------------------------
-		vector<weak_ptr<TextureResource>>& GetNormalMapTextureResourceVec();
+		virtual ~BcPNTBoneModelDraw();
 		//--------------------------------------------------------------------------------------
 		/*!
-		@brief ボーンの初期化
+		@brief	メッシュリソースの設定
+		@param[in]	MeshRes	メッシュリソース
 		@return	なし
 		*/
 		//--------------------------------------------------------------------------------------
-		void BoneInit();
+		virtual void SetMeshResource(const shared_ptr<MeshResource>& MeshRes)override;
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief	メッシュリソースの登録
+		@param[in]	MeshKey	登録されているメッシュキー
+		@return	なし
+		*/
+		//--------------------------------------------------------------------------------------
+		void SetMeshResource(const wstring& MeshKey);
 		//--------------------------------------------------------------------------------------
 		/*!
 		@brief	開始行列から終了行列の間のt時間時の行列を返す
@@ -1160,20 +1178,6 @@ namespace basecross {
 		const wstring& GetCurrentAnimation() const;
 		//--------------------------------------------------------------------------------------
 		/*!
-		@brief	現在のアニメーションタイムを得る
-		@return	アニメーションタイム
-		*/
-		//--------------------------------------------------------------------------------------
-		float GetCurrentAnimationTime() const;
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	現在のアニメーションが終了しているかどうか
-		@return	修了していればtrue
-		*/
-		//--------------------------------------------------------------------------------------
-		bool IsTargetAnimeEnd() const;
-		//--------------------------------------------------------------------------------------
-		/*!
 		@brief	現在のアニメーションを進める
 		@param[in]	ElapsedTime	経過時間
 		@return	アニメーションが終了すればtrue
@@ -1186,76 +1190,21 @@ namespace basecross {
 		@return	ローカルボーン行列配列の先頭ポインタ
 		*/
 		//--------------------------------------------------------------------------------------
-		virtual const vector< bsm::Mat4x4 >* GetVecLocalBonesPtr() const override;
+		virtual const vector< bsm::Mat4x4 >* GetVecLocalBonesPtr() const;
 		//--------------------------------------------------------------------------------------
 		/*!
-		@brief	ローカルボーン行列配列の参照を得る(書き換え可能)
-		@return	ローカルボーン行列配列の参照
+		@brief	OnCreate処理
+		@return	なし
 		*/
 		//--------------------------------------------------------------------------------------
-		vector< bsm::Mat4x4 >& GetVecLocalBones();
+		virtual void OnCreate()override;
 		//--------------------------------------------------------------------------------------
 		/*!
-		@brief	ローカルボーン行列配列を得る（マルチメッシュ版）
-		@return	ローカルボーン行列配列の先頭ポインタ
+		@brief	OnDraw処理
+		@return	なし
 		*/
 		//--------------------------------------------------------------------------------------
-		virtual const vector< bsm::Mat4x4 >* GetVecMultiLocalBonesPtr(size_t index) const override;
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	ローカルボーン行列配列の参照を得る(マルチメッシュ版版、書き換え可能)
-		@return	ローカルボーン行列配列の参照（範囲外なら例外）
-		*/
-		//--------------------------------------------------------------------------------------
-		vector< bsm::Mat4x4 >& GetVecMultiLocalBones(size_t index);
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	スキン処理済みのローカル頂点配列を得る
-		@param[out]	vertices	受け取る頂点の配列
-		@return	なし（ボーンがなければ例外）
-		*/
-		//--------------------------------------------------------------------------------------
-		template <typename T>
-		void GetSkinedVertices(vector<T>& vertices) {
-			if (GetVecLocalBones().size() == 0) {
-				throw BaseException(
-					L"ボーン行列がありません",
-					L"if (GetVecLocalBones().size() == 0)",
-					L"BcBaseDraw::GetSkinedVertices()"
-				);
-			}
-			auto ReshRes = GetMeshResource();
-			if (!ReshRes) {
-				throw BaseException(
-					L"メッシュリソースがありません",
-					L"if (!ReshRes)",
-					L"BcBaseDraw::GetSkinedVertices()"
-				);
-			}
-			vertices.clear();
-			auto& Bones = GetVecLocalBones();
-			auto& BackVec = ReshRes->GetBackupVerteces<T>();
-			for (auto& v : BackVec) {
-				vertices.push_back(v);
-			}
-			//スキニング処理
-			for (auto& v : vertices) {
-				Mat4x4 skinning(0);
-				for (size_t i = 0; i < 4; i++)
-				{
-					skinning += Bones[v.indices[i]] * v.weights[i];
-				}
-				skinning._14 = 1.0f;
-				skinning._24 = 1.0f;
-				skinning._34 = 1.0f;
-				skinning._44 = 1.0f;
-				Vec4 p(v.position);
-				p.w = 0.0f;
-				p *= skinning;
-				v.position = p;
-				v.normal *= (Mat3x3)skinning;
-			}
-		}
+		virtual void OnDraw()override;
 	private:
 		// pImplイディオム
 		struct Impl;
@@ -1264,297 +1213,9 @@ namespace basecross {
 
 
 	//--------------------------------------------------------------------------------------
-	///BcPCStatic描画コンポーネント
+	///	BasicPNTnT描画コンポーネント
 	//--------------------------------------------------------------------------------------
-	class BcPCStaticDraw : public BcBaseDraw {
-	protected:
-	public:
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	コンストラクタ
-		@param[in]	GameObjectPtr	ゲームオブジェクト
-		*/
-		//--------------------------------------------------------------------------------------
-		explicit BcPCStaticDraw(const shared_ptr<GameObject>& GameObjectPtr);
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	デストラクタ
-		*/
-		//--------------------------------------------------------------------------------------
-		virtual ~BcPCStaticDraw();
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	OnCreate処理
-		@return	なし
-		*/
-		//--------------------------------------------------------------------------------------
-		virtual void OnCreate()override;
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	OnUpdate処理（空関数）
-		@return	なし
-		*/
-		//--------------------------------------------------------------------------------------
-		virtual void OnUpdate()override {}
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	OnDraw処理
-		@return	なし
-		*/
-		//--------------------------------------------------------------------------------------
-		virtual void OnDraw()override;
-	};
-
-	//--------------------------------------------------------------------------------------
-	///	BasicPTStatic描画コンポーネント
-	//--------------------------------------------------------------------------------------
-	class BcPTStaticDraw : public BcBaseDraw {
-	protected:
-	public:
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	コンストラクタ
-		@param[in]	GameObjectPtr	ゲームオブジェクト
-		*/
-		//--------------------------------------------------------------------------------------
-		explicit BcPTStaticDraw(const shared_ptr<GameObject>& GameObjectPtr);
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	デストラクタ
-		*/
-		//--------------------------------------------------------------------------------------
-		virtual ~BcPTStaticDraw();
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	OnCreate処理
-		@return	なし
-		*/
-		//--------------------------------------------------------------------------------------
-		virtual void OnCreate()override;
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	OnUpdate処理（空関数）
-		@return	なし
-		*/
-		//--------------------------------------------------------------------------------------
-		virtual void OnUpdate()override {}
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	OnDraw処理
-		@return	なし
-		*/
-		//--------------------------------------------------------------------------------------
-		virtual void OnDraw()override;
-	};
-
-	//--------------------------------------------------------------------------------------
-	///	BasicPCTStatic描画コンポーネント
-	//--------------------------------------------------------------------------------------
-	class BcPCTStaticDraw : public BcBaseDraw {
-	protected:
-	public:
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	コンストラクタ
-		@param[in]	GameObjectPtr	ゲームオブジェクト
-		*/
-		//--------------------------------------------------------------------------------------
-		explicit BcPCTStaticDraw(const shared_ptr<GameObject>& GameObjectPtr);
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	デストラクタ
-		*/
-		//--------------------------------------------------------------------------------------
-		virtual ~BcPCTStaticDraw();
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	OnCreate処理
-		@return	なし
-		*/
-		//--------------------------------------------------------------------------------------
-		virtual void OnCreate()override;
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	OnUpdate処理（空関数）
-		@return	なし
-		*/
-		//--------------------------------------------------------------------------------------
-		virtual void OnUpdate()override {}
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	OnDraw処理
-		@return	なし
-		*/
-		//--------------------------------------------------------------------------------------
-		virtual void OnDraw()override;
-	};
-
-
-
-	//--------------------------------------------------------------------------------------
-	///	BcPNTStatic描画コンポーネント
-	//--------------------------------------------------------------------------------------
-	class BcPNTStaticDraw : public BcBaseDraw {
-	protected:
-	public:
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	コンストラクタ
-		@param[in]	GameObjectPtr	ゲームオブジェクト
-		*/
-		//--------------------------------------------------------------------------------------
-		explicit BcPNTStaticDraw(const shared_ptr<GameObject>& GameObjectPtr);
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	デストラクタ
-		*/
-		//--------------------------------------------------------------------------------------
-		virtual ~BcPNTStaticDraw();
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	OnCreate処理
-		@return	なし
-		*/
-		//--------------------------------------------------------------------------------------
-		virtual void OnCreate()override;
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	OnUpdate処理（空関数）
-		@return	なし
-		*/
-		//--------------------------------------------------------------------------------------
-		virtual void OnUpdate()override {}
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	OnDraw処理
-		@return	なし
-		*/
-		//--------------------------------------------------------------------------------------
-		virtual void OnDraw()override;
-	};
-
-
-
-	//--------------------------------------------------------------------------------------
-	///	BasicPNTStaticモデル描画コンポーネント
-	//--------------------------------------------------------------------------------------
-	class BcPNTStaticModelDraw : public BcBaseDraw {
-	protected:
-	public:
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	コンストラクタ
-		@param[in]	GameObjectPtr	ゲームオブジェクト
-		*/
-		//--------------------------------------------------------------------------------------
-		explicit BcPNTStaticModelDraw(const shared_ptr<GameObject>& GameObjectPtr);
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	デストラクタ
-		*/
-		//--------------------------------------------------------------------------------------
-		virtual ~BcPNTStaticModelDraw();
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	OnCreate処理
-		@return	なし
-		*/
-		//--------------------------------------------------------------------------------------
-		virtual void OnCreate()override;
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	OnUpdate処理（空関数）
-		@return	なし
-		*/
-		//--------------------------------------------------------------------------------------
-		virtual void OnUpdate()override {}
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	OnDraw処理
-		@return	なし
-		*/
-		//--------------------------------------------------------------------------------------
-		virtual void OnDraw()override;
-	};
-
-	//--------------------------------------------------------------------------------------
-	///	BcPNTBoneModel描画コンポーネント（ボーンモデル描画用）
-	//--------------------------------------------------------------------------------------
-	class BcPNTBoneModelDraw : public BcBaseDraw {
-	protected:
-	public:
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	コンストラクタ
-		@param[in]	GameObjectPtr	ゲームオブジェクト
-		*/
-		//--------------------------------------------------------------------------------------
-		explicit BcPNTBoneModelDraw(const shared_ptr<GameObject>& GameObjectPtr);
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	デストラクタ
-		*/
-		//--------------------------------------------------------------------------------------
-		virtual ~BcPNTBoneModelDraw();
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	メッシュリソースの設定
-		@param[in]	MeshRes	メッシュリソース
-		@return	なし
-		*/
-		//--------------------------------------------------------------------------------------
-		virtual void SetMeshResource(const shared_ptr<MeshResource>& MeshRes)override;
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	メッシュリソースの登録
-		@param[in]	MeshKey	登録されているメッシュキー
-		@return	なし
-		*/
-		//--------------------------------------------------------------------------------------
-		void SetMeshResource(const wstring& MeshKey);
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	マルチメッシュリソースを設定する
-		@param[in]	MeshResourcePtr	メッシュリソース
-		@return	なし
-		*/
-		//--------------------------------------------------------------------------------------
-		virtual void SetMultiMeshResource(const shared_ptr<MultiMeshResource>& MeshResourcePtr)override;
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	マルチメッシュリソースを設定する
-		@param[in]	ResKey	メッシュリソースのキー
-		@return	なし
-		*/
-		//--------------------------------------------------------------------------------------
-		void SetMultiMeshResource(const wstring& ResKey);
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	OnCreate処理
-		@return	なし
-		*/
-		//--------------------------------------------------------------------------------------
-		virtual void OnCreate()override;
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	OnUpdate処理（空関数）
-		@return	なし
-		*/
-		//--------------------------------------------------------------------------------------
-		virtual void OnUpdate()override {}
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief	OnDraw処理
-		@return	なし
-		*/
-		//--------------------------------------------------------------------------------------
-		virtual void OnDraw()override;
-	};
-
-	//--------------------------------------------------------------------------------------
-	///	BasicPNTnTStatic描画コンポーネント
-	//--------------------------------------------------------------------------------------
-	class BcPNTnTStaticDraw : public BcBaseDraw {
+	class BcPNTnTStaticDraw : public BcStaticBaseDraw {
 	protected:
 	public:
 		//--------------------------------------------------------------------------------------
@@ -1572,6 +1233,51 @@ namespace basecross {
 		virtual ~BcPNTnTStaticDraw();
 		//--------------------------------------------------------------------------------------
 		/*!
+		@brief	影を描画するかどうか得る
+		@return	影を描画すればtrue
+		*/
+		//--------------------------------------------------------------------------------------
+		bool GetOwnShadowActive() const;
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief	影を描画するかどうか得る
+		@return	影を描画すればtrue
+		*/
+		//--------------------------------------------------------------------------------------
+		bool IsOwnShadowActive() const;
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief	影を描画するかどうか設定する
+		@param[in]	b		影を描画するかどうか
+		@return	なし
+		*/
+		//--------------------------------------------------------------------------------------
+		void SetOwnShadowActive(bool b);
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief	法線マップテクスチャリソースの取得
+		@return	法線マップテクスチャリソース
+		*/
+		//--------------------------------------------------------------------------------------
+		shared_ptr<TextureResource> GetNormalMapTextureResource() const;
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief	法線マップテクスチャリソースの設定
+		@param[in]	TextureRes	テクスチャリソース
+		@return	なし
+		*/
+		//--------------------------------------------------------------------------------------
+		void SetNormalMapTextureResource(const shared_ptr<TextureResource>& TextureRes);
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief	法線マップテクスチャリソースの設定
+		@param[in]	TextureKey	テクスチャキー
+		@return	なし
+		*/
+		//--------------------------------------------------------------------------------------
+		void SetNormalMapTextureResource(const wstring& TextureKey);
+		//--------------------------------------------------------------------------------------
+		/*!
 		@brief	OnCreate処理
 		@return	なし
 		*/
@@ -1591,13 +1297,16 @@ namespace basecross {
 		*/
 		//--------------------------------------------------------------------------------------
 		virtual void OnDraw()override;
+	private:
+		// pImplイディオム
+		struct Impl;
+		unique_ptr<Impl> pImpl;
 	};
-
 
 	//--------------------------------------------------------------------------------------
 	///	BasicPNTnTモデル描画コンポーネント
 	//--------------------------------------------------------------------------------------
-	class BcPNTnTStaticModelDraw : public BcBaseDraw {
+	class BcPNTnTStaticModelDraw : public BcPNTnTStaticDraw {
 	protected:
 	public:
 		//--------------------------------------------------------------------------------------
@@ -1615,6 +1324,72 @@ namespace basecross {
 		virtual ~BcPNTnTStaticModelDraw();
 		//--------------------------------------------------------------------------------------
 		/*!
+		@brief	デフィーズ色をモデル設定優先かどうか得る
+		@return	デフィーズ色をモデル設定優先ならtrue
+		*/
+		//--------------------------------------------------------------------------------------
+		bool GetModelDiffusePriority() const;
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief	デフィーズ色をモデル設定優先かどうか得る
+		@return	デフィーズ色をモデル設定優先ならtrue
+		*/
+		//--------------------------------------------------------------------------------------
+		bool IsModelDiffusePriority() const;
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief	デフィーズ色をモデル設定優先かどうか設定する
+		@param[in]	b	デフィーズ色をモデル設定優先かどうか
+		@return	なし
+		*/
+		//--------------------------------------------------------------------------------------
+		void SetModelDiffusePriority(bool b);
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief	エミッシブ色をモデル設定優先かどうか得る
+		@return	エミッシブ色をモデル設定優先ならtrue
+		*/
+		//--------------------------------------------------------------------------------------
+		bool GetModelEmissivePriority() const;
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief	エミッシブ色をモデル設定優先かどうか得る
+		@return	エミッシブ色をモデル設定優先ならtrue
+		*/
+		//--------------------------------------------------------------------------------------
+		bool IsModelEmissivePriority() const;
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief	エミッシブ色をモデル設定優先かどうか設定する
+		@param[in]	b	エミッシブ色をモデル設定優先かどうか
+		@return	なし
+		*/
+		//--------------------------------------------------------------------------------------
+		void SetModelEmissivePriority(bool b);
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief	モデルのテクスチャを有効にするかどうか得る
+		@return	モデルのテクスチャを有効ならtrue
+		*/
+		//--------------------------------------------------------------------------------------
+		bool GetModelTextureEnabled() const;
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief	モデルのテクスチャを有効にするかどうか得る
+		@return	モデルのテクスチャを有効ならtrue
+		*/
+		//--------------------------------------------------------------------------------------
+		bool IsModelTextureEnabled() const;
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief	モデルのテクスチャを有効にするかどうか設定する
+		@param[in]	b	モデルのテクスチャを有効にするかどうか
+		@return	なし
+		*/
+		//--------------------------------------------------------------------------------------
+		void SeModelTextureEnabled(bool b);
+		//--------------------------------------------------------------------------------------
+		/*!
 		@brief	OnCreate処理
 		@return	なし
 		*/
@@ -1622,24 +1397,21 @@ namespace basecross {
 		virtual void OnCreate()override;
 		//--------------------------------------------------------------------------------------
 		/*!
-		@brief	OnUpdate処理（空関数）
-		@return	なし
-		*/
-		//--------------------------------------------------------------------------------------
-		virtual void OnUpdate()override {}
-		//--------------------------------------------------------------------------------------
-		/*!
 		@brief	OnDraw処理
 		@return	なし
 		*/
 		//--------------------------------------------------------------------------------------
 		virtual void OnDraw()override;
+	private:
+		// pImplイディオム
+		struct Impl;
+		unique_ptr<Impl> pImpl;
 	};
 
 	//--------------------------------------------------------------------------------------
 	///	BcPNTnTBoneModelDraw描画コンポーネント（ボーンモデル描画用）
 	//--------------------------------------------------------------------------------------
-	class BcPNTnTBoneModelDraw : public BcBaseDraw {
+	class BcPNTnTBoneModelDraw : public BcPNTnTStaticModelDraw {
 	protected:
 	public:
 		//--------------------------------------------------------------------------------------
@@ -1673,20 +1445,59 @@ namespace basecross {
 		void SetMeshResource(const wstring& MeshKey);
 		//--------------------------------------------------------------------------------------
 		/*!
-		@brief	マルチメッシュリソースを設定する
-		@param[in]	MeshResourcePtr	メッシュリソース
+		@brief	開始行列から終了行列の間のt時間時の行列を返す
+		@param[in]	m1	開始の行列
+		@param[in]	m2	終了の行列
+		@param[in]	t	時間（0から1.0f）
+		@param[out]	out	結果を受け取る行列
 		@return	なし
 		*/
 		//--------------------------------------------------------------------------------------
-		virtual void SetMultiMeshResource(const shared_ptr<MultiMeshResource>& MeshResourcePtr)override;
+		void InterpolationMatrix(const bsm::Mat4x4& m1, const bsm::Mat4x4& m2, float t, bsm::Mat4x4& out);
 		//--------------------------------------------------------------------------------------
 		/*!
-		@brief	マルチメッシュリソースを設定する
-		@param[in]	ResKey	メッシュリソースのキー
+		@brief	アニメーションを追加する
+		@param[in]	Name	アニメーション名
+		@param[in]	StartSample	開始サンプル
+		@param[in]	SampleLength	サンプルの長さ
+		@param[in]	Loop	ループするかどうか
+		@param[in]	SamplesParSecond = 30.0f	1秒あたりのサンプル数
 		@return	なし
 		*/
 		//--------------------------------------------------------------------------------------
-		void SetMultiMeshResource(const wstring& ResKey);
+		void AddAnimation(const wstring& Name, int StartSample, int SampleLength, bool Loop,
+			float SamplesParSecond = 30.0f);
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief	現在のアニメーションを変更する
+		@param[in]	AnemationName	アニメーション名（すでに追加されているもの）
+		@param[in]	StartTime = 0.0f	開始からの秒数
+		@return	なし
+		*/
+		//--------------------------------------------------------------------------------------
+		void ChangeCurrentAnimation(const wstring& AnemationName, float StartTime = 0.0f);
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief	現在のアニメーション名を得る
+		@return	アニメーション名（文字列）
+		*/
+		//--------------------------------------------------------------------------------------
+		const wstring& GetCurrentAnimation() const;
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief	現在のアニメーションを進める
+		@param[in]	ElapsedTime	経過時間
+		@return	アニメーションが終了すればtrue
+		*/
+		//--------------------------------------------------------------------------------------
+		bool UpdateAnimation(float ElapsedTime);
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief	ローカルボーン行列配列を得る
+		@return	ローカルボーン行列配列の先頭ポインタ
+		*/
+		//--------------------------------------------------------------------------------------
+		virtual const vector< bsm::Mat4x4 >* GetVecLocalBonesPtr() const;
 		//--------------------------------------------------------------------------------------
 		/*!
 		@brief	OnCreate処理
@@ -1696,21 +1507,16 @@ namespace basecross {
 		virtual void OnCreate()override;
 		//--------------------------------------------------------------------------------------
 		/*!
-		@brief	OnUpdate処理（空関数）
-		@return	なし
-		*/
-		//--------------------------------------------------------------------------------------
-		virtual void OnUpdate()override {}
-		//--------------------------------------------------------------------------------------
-		/*!
 		@brief	OnDraw処理
 		@return	なし
 		*/
 		//--------------------------------------------------------------------------------------
 		virtual void OnDraw()override;
+	private:
+		// pImplイディオム
+		struct Impl;
+		unique_ptr<Impl> pImpl;
 	};
-
-
 
 
 }

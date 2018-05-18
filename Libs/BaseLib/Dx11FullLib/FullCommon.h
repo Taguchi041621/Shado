@@ -30,5 +30,3 @@
 #include "../SharedLib/GameObject.h"
 //スプライトスタジオ５
 #include "../SharedLib/SpriteStudio5.h"
-//物理計算マネージャなど
-#include "../SharedLib/PhysicsComponents.h"
