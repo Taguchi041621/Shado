@@ -22,3 +22,4 @@
 #include "Enemy.h"
 #include "UI.h"
 #include "Fade.h"
+#include "FadeOut.h"

@@ -50,7 +50,7 @@ void StageSelect::CreateTitleSprite()
 
 void StageSelect::CreateFadeSprite()
 {
-	auto Fade = AddGameObject<SpriteFade>(L"Shadow_TX", true,
+	auto Fade = AddGameObject<SpriteFadeOut>(L"Shadow_TX", true,
 		Vec2(3000, 1400), Vec3(0.0f, 0.0f, 0.1f));
 	SetSharedGameObject(L"Shadow_TX", Fade);
 
@@ -74,17 +74,20 @@ void StageSelect::StageNumberSprite()
 
 void StageSelect::OnCreate()
 {
-	CreateFadeSprite();
 	m_StageNumber = 0;
 	CreateViewLight();
 	//スプライトの作成
 	CreateTitleSprite();
+	CreateFadeSprite();
 	StageNumberSprite();
 
 }
 
 //更新
 void StageSelect::OnUpdate() {
+
+	auto Fade = GetSharedGameObject<SpriteFadeOut>(L"Shadow_TX");
+	Fade->SetActionflag(true);
 
 	//コントローラの取得
 	auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
