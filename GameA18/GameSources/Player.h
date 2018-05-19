@@ -138,6 +138,14 @@ namespace basecross{
 		//ゴールに入った時に呼ぶ、クリア演出をする
 		void InGoal();
 
+		///音声
+		void SetNowMusic(wstring NowMusic) {
+			m_StopNowMusic = NowMusic;
+		}
+		wstring GetNowMusic() {
+			return m_StopNowMusic;
+		}
+
 		//アクセサ
 		shared_ptr< StateMachine<Player> > GetStateMachine() const {
 			return m_StateMachine;
@@ -165,7 +173,6 @@ namespace basecross{
 	class WaitState : public ObjState<Player>
 	{
 		shared_ptr<MultiAudioObject> m_AudioObjectPtr;
-		wstring m_StopNowMusic;
 
 		WaitState() {}
 	public:
@@ -184,6 +191,7 @@ namespace basecross{
 	//--------------------------------------------------------------------------------------
 	class WalkState : public ObjState<Player>{
 		WalkState() {}
+		shared_ptr<MultiAudioObject> m_AudioObjectPtr;
 	public:
 		//ステートのインスタンス取得
 		static shared_ptr<WalkState> Instance();
@@ -200,7 +208,6 @@ namespace basecross{
 	//--------------------------------------------------------------------------------------
 	class DiedState : public ObjState<Player>{
 		shared_ptr<MultiAudioObject> m_AudioObjectPtr;
-		wstring m_StopNowMusic;
 
 		DiedState() {}
 	public:

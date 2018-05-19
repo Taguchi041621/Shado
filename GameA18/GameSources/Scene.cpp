@@ -63,6 +63,10 @@ namespace basecross{
 		App::GetApp()->RegisterWav(L"gameover", GameOver);
 		wstring GameStage = DataDir + L"BGMSE\\gamestage.WAV";
 		App::GetApp()->RegisterWav(L"gamestage", GameStage);
+		wstring walk = DataDir + L"BGMSE\\walk.wav";
+		App::GetApp()->RegisterWav(L"walk", walk);
+		wstring Dead = DataDir + L"BGMSE\\Dead.wav";
+		App::GetApp()->RegisterWav(L"dead", Dead);
 	}
 
 	void Scene::OnCreate() {
