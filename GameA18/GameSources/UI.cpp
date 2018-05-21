@@ -80,12 +80,12 @@ namespace basecross
 		//鍵を取った時に行うクリエイト
 		if (m_TextureKey == (wstring)L"Key_TX") {
 			GetStage()->AddGameObject<Sprite>(m_TextureKey, true,
-				Vec2(50.0f, 100.0f), Vec3(-600.0f + (50.0f * m_order), -350.0f, 0.0f));
+				Vec2(60.0f, 120.0f), Vec3(-600.0f + (50.0f * m_order), 330.0f, 0.0f));
 			return;
 		}
 		//ステージができたときに行うクリエイト
 		GetStage()->AddGameObject<Sprite>(m_TextureKey, true,
-			Vec2(50.0f, 100.0f),Vec3(-600.0f + (50.0f * m_order), -350.0f, 0.1f));
+			Vec2(60.0f, 120.0f),Vec3(-600.0f + (50.0f * m_order), 330.0f, 0.1f));
 		//最初からある方をグループに登録する
 		auto group = GetStage()->GetSharedObjectGroup(L"HaveKeysGroup");
 		group->IntoGroup(GetThis<HaveKeys>());
