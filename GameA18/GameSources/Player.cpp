@@ -439,7 +439,7 @@ namespace basecross{
 		//死亡アニメを呼び出す
 		Obj->AnimeChangeMotion(L"Died_1", false);
 		//操作を受け付けなくする
-		Obj->SetGameOverFlag(true);
+		//Obj->SetGameOverFlag(true);
 		//Velocityを0にする
 		Obj->GetComponent<Rigidbody>()->SetVelocityZero();
 		//---------------------------------------------------------------
@@ -483,8 +483,8 @@ namespace basecross{
 	//ステートに入ったときに呼ばれる関数
 	void GoalState::Enter(const shared_ptr<Player>& Obj) {
 		Obj->SetFps(60.0f);
-		Obj->AnimeChangeMotion(L"curtsey", true);
-		Obj->SetGameClearFlag(true);
+		Obj->AnimeChangeMotion(L"curtsey", false);
+		//Obj->SetGameClearFlag(true);
 		Obj->GetComponent<Rigidbody>()->SetVelocityZero();
 	}
 	//ステート実行中に毎ターン呼ばれる関数
