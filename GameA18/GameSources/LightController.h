@@ -13,6 +13,8 @@ namespace basecross {
 		Vec3 m_LightAngle;
 		//ライトを減速させる
 		float m_Speed;
+		//スティックを放したときのスピードをもつ
+		Vec2 m_Lingering;
 	public:
 		LightController(const shared_ptr<Stage>& StagePtr);
 		virtual ~LightController();
