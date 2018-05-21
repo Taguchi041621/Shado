@@ -188,6 +188,7 @@ namespace basecross{
 
 	//初期化
 	void Player::OnCreate() {
+		m_GameClearFlag = false;
 		m_GameOverFlag = false;
 		//初期位置などの設定
 		auto Ptr = GetComponent<Transform>();
@@ -254,17 +255,14 @@ namespace basecross{
 			if (!GetStage()->GetSharedGameObject<Player>(L"Player")->GetGameOverFlag()) {
 				MoveRotationMotion();
 			}
-
 			//文字列の表示
 			DrawStrings();
-
 			PlayerHP();
 		}
 	}
 	//
 	void Player::PlayerHP() {
 		m_PlayerHP = 3;
-
 		auto PlayerPos = this->GetComponent<Transform>()->GetPosition();
 		//落下死
 		if (PlayerPos.y < -25.0f){
@@ -485,7 +483,7 @@ namespace basecross{
 	void GoalState::Enter(const shared_ptr<Player>& Obj) {
 		Obj->SetFps(60.0f);
 		Obj->AnimeChangeMotion(L"curtsey", true);
-		Obj->SetGameOverFlag(true);
+		Obj->SetGameClearFlag(true);
 		Obj->GetComponent<Rigidbody>()->SetVelocityZero();
 	}
 	//ステート実行中に毎ターン呼ばれる関数

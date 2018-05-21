@@ -236,7 +236,7 @@ namespace basecross {
 		}
 		if (PtrPlayer->GetGameClearFlag() && !m_ClearFlag) {
 			Fade->SetActionflag(true);
-			PostEvent(2.4f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToClear");
+			PostEvent(2.4f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToClearStage");
 			m_ClearFlag = true;
 		}
 		////ƒRƒ“ƒgƒ[ƒ‰‚Ìæ“¾
