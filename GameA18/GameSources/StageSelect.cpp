@@ -119,9 +119,9 @@ void StageSelect::OnUpdate() {
 			}
 
 			if (m_StageNumber < 0) {
-				m_StageNumber = 3;
+				m_StageNumber = 7;
 			}
-			else if (m_StageNumber > 3) {
+			else if (m_StageNumber > 7) {
 				m_StageNumber = 0;
 			}
 			//Aƒ{ƒ^ƒ“
@@ -169,8 +169,35 @@ void StageSelect::OnUpdate() {
 		Three->SetActionflag(true);
 		ScenePtr->SetStageNumber(m_StageNumber);
 		break;
+	case 4:
+		Zero->SetActionflag(false);
+		One->SetActionflag(false);
+		Two->SetActionflag(false);
+		Three->SetActionflag(true);
+		ScenePtr->SetStageNumber(m_StageNumber);
+		break;
+	case 5:
+		Zero->SetActionflag(false);
+		One->SetActionflag(false);
+		Two->SetActionflag(false);
+		Three->SetActionflag(true);
+		ScenePtr->SetStageNumber(m_StageNumber);
+		break;
+	case 6:
+		Zero->SetActionflag(false);
+		One->SetActionflag(false);
+		Two->SetActionflag(false);
+		Three->SetActionflag(true);
+		ScenePtr->SetStageNumber(m_StageNumber);
+		break;
+	case 7:
+		Zero->SetActionflag(false);
+		One->SetActionflag(false);
+		Two->SetActionflag(false);
+		Three->SetActionflag(true);
+		ScenePtr->SetStageNumber(m_StageNumber);
+		break;
 	}
-	
 
 }
 
