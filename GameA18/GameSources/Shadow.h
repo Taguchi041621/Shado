@@ -43,6 +43,8 @@ namespace basecross {
 		float m_ScaleZ;
 
 		shared_ptr<MeshResource> m_MeshResource;
+
+		bool flag;
 	public:
 		//--------------------------------------------------------------------------------------
 		/*!

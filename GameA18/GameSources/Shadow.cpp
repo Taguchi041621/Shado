@@ -103,6 +103,8 @@ namespace basecross {
 
 		//真っ赤
 		PtrDraw->SetColorAndAlpha(Col4(1.0f, 0.4f, 0.0f, 1.0f));
+
+		flag = false;
 	}
 
 	void ShadowGoal::OnUpdate() {
@@ -121,11 +123,12 @@ namespace basecross {
 		p.m_Center.z = 0;
 		p.m_Size = GetStage()->GetSharedGameObject<Player>(L"Player")->GetComponent<Transform>()->GetScale() * 0.5f;
 		//プレイヤーがゴールに触れたかを調べる判定
-		if (HitTest::OBB_OBB(t, p)){
+		if (HitTest::OBB_OBB(t, p)&&!flag){
 			if (!GetStage()->GetSharedGameObject<Player>(L"Player")->GetGameOverFlag()) {
 				if (GetStage()->GetSharedGameObject<Player>(L"Player")->GetKey() >=
 					GetStage()->GetSharedObjectGroup(L"KeyGroup")->size()) {
 					GetStage()->GetSharedGameObject<Player>(L"Player")->InGoal();
+					flag = true;
 					//PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToClearStage");
 				}
 			}
