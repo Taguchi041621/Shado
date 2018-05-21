@@ -29,8 +29,8 @@ namespace basecross {
 		PtrDraw->SetTextureResource(L"Red_TX");
 
 		//影をつける
-		auto ShadowPtr = AddComponent<Shadowmap>();
-		ShadowPtr->SetMeshResource(L"DEFAULT_SQUARE");
+		//auto ShadowPtr = AddComponent<Shadowmap>();
+		//ShadowPtr->SetMeshResource(L"DEFAULT_SQUARE");
 		//--------------------------------------------------------
 		//オブジェクトの影のコンストラクタ呼び出し
 		GetStage()->AddGameObject<ShadowObject>(
