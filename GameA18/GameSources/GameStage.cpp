@@ -229,14 +229,14 @@ namespace basecross {
 	void GameStage::OnUpdate() {
 		auto Fade = GetSharedGameObject<SpriteFade>(L"FadeIn");
 		auto PtrPlayer = GetSharedGameObject<Player>(L"Player");
-		if (PtrPlayer->GetGameOverFlag() && !m_ClearFlag) {
+		if (PtrPlayer->GetGameOverFlag() && PtrPlayer->GetFadeFlag() && !m_ClearFlag) {
 			Fade->SetActionflag(true);
-			PostEvent(2.4f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameOver");
+			PostEvent(0.8f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameOver");
 			m_ClearFlag = true;
 		}
-		if (PtrPlayer->GetGameClearFlag() && !m_ClearFlag) {
+		if (PtrPlayer->GetGameClearFlag() && PtrPlayer->GetFadeFlag() && !m_ClearFlag) {
 			Fade->SetActionflag(true);
-			PostEvent(2.4f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToClearStage");
+			PostEvent(0.8f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToClearStage");
 			m_ClearFlag = true;
 		}
 		////ƒRƒ“ƒgƒ[ƒ‰‚Ìæ“¾

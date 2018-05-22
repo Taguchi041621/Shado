@@ -40,6 +40,7 @@ namespace basecross{
 
 		bool m_GameClearFlag;
 		bool m_GameOverFlag;
+		bool m_FadeFlag;
 
 		shared_ptr<MultiAudioObject> m_AudioObjectPtr;
 		wstring m_StopNowMusic;
@@ -164,6 +165,9 @@ namespace basecross{
 
 		void SetGameClearFlag(bool f) { m_GameClearFlag = f; }
 		bool GetGameClearFlag() { return m_GameClearFlag; }
+
+		void SetFadeFlag(bool f) { m_FadeFlag = f; }
+		bool GetFadeFlag() { return m_FadeFlag; }
 	};
 
 	//--------------------------------------------------------------------------------------

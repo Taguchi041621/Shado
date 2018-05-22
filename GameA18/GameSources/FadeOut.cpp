@@ -40,7 +40,7 @@ namespace basecross
 		PtrDraw->SetTextureResource(m_TextureKey);
 
 		auto ActionPtr = AddComponent<Action>();
-		ActionPtr->AddScaleTo(0.5f, Vec3(0.0f, 0, 0.0f));
+		ActionPtr->AddScaleTo(0.3f, Vec3(0.0f, 0, 0.0f));
 		ActionPtr->SetLooped(true);
 		ActionPtr->Run();
 	}
@@ -56,6 +56,21 @@ namespace basecross
 		//	ActionPtr->Stop();
 		//	PtrTransform->SetScale(m_StartScale.x, m_StartScale.y, 1.0f);
 		//}
+			float a = 1 - ElapsedTime*2;
+
+			float HelfSize = 0.5f;
+			//頂点配列
+			vector<VertexPositionColorTexture> vertices = {
+				{ VertexPositionColorTexture(Vec3(-HelfSize, HelfSize, 0),Col4(1.0f,1.0f,1.0f,a), Vec2(0.0f, 0.0f)) },
+				{ VertexPositionColorTexture(Vec3(HelfSize, HelfSize, 0), Col4(1.0f,1.0f,1.0f,a), Vec2(1.0f, 0.0f)) },
+				{ VertexPositionColorTexture(Vec3(-HelfSize, -HelfSize, 0),Col4(1.0f,1.0f,1.0f,a), Vec2(0.0f, 1.0f)) },
+				{ VertexPositionColorTexture(Vec3(HelfSize, -HelfSize, 0),Col4(1.0f,1.0f,1.0f,a), Vec2(1.0f, 1.0f)) },
+			};
+			//インデックス配列
+			vector<uint16_t> indices = { 0, 1, 2, 1, 3, 2 };
+			SetAlphaActive(m_Trace);
+			auto PtrDraw = this->GetComponent<PCTSpriteDraw>();
+			PtrDraw->UpdateVertices(vertices);
 	}
 	//end basecross
 }

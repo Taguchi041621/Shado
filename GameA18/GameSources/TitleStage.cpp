@@ -75,7 +75,7 @@ namespace basecross
 			if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A&&!m_SelectFlag) {
 				auto Fade = GetSharedGameObject<SpriteFade>(L"Shadow_TX");
 				Fade->SetActionflag(true);
-				PostEvent(2.4f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToStageSelect");
+				PostEvent(0.8f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToStageSelect");
 				m_SelectFlag = true;
 			}
 		}

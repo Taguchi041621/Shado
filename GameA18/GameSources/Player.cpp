@@ -237,7 +237,6 @@ namespace basecross{
 
 	//更新
 	void Player::OnUpdate() {
-		if (!m_GameOverFlag || !m_GameClearFlag) {
 			//ステートマシンのUpdateを行う
 			//この中でステートの切り替えが行われる
 			m_StateMachine->Update();
@@ -246,15 +245,12 @@ namespace basecross{
 			auto PtrGrav = GetBehavior<Gravity>();
 			PtrGrav->SetGravity(Vec3(0.0f, -4.9f, 0.0f));
 			PtrGrav->Execute();
-		}
 	}
 
 	void Player::OnUpdate2() {
-		if (!m_GameOverFlag || !m_GameClearFlag) {
+		if (!m_GameOverFlag && !m_GameClearFlag) {
 			//プレイヤーの移動
-			if (!GetStage()->GetSharedGameObject<Player>(L"Player")->GetGameOverFlag()) {
 				MoveRotationMotion();
-			}
 			//文字列の表示
 			//DrawStrings();
 
@@ -272,6 +268,7 @@ namespace basecross{
 
 		if (m_PlayerHP == 0&& !m_GameOverFlag){
 			m_GameOverFlag = true;
+			m_FadeFlag = true;
 		}
 	}
 	//GameOverSceneに移行する
@@ -439,7 +436,7 @@ namespace basecross{
 		//死亡アニメを呼び出す
 		Obj->AnimeChangeMotion(L"Died_1", false);
 		//操作を受け付けなくする
-		//Obj->SetGameOverFlag(true);
+		Obj->SetGameOverFlag(true);
 		//Velocityを0にする
 		Obj->GetComponent<Rigidbody>()->SetVelocityZero();
 		//---------------------------------------------------------------
@@ -462,7 +459,7 @@ namespace basecross{
 		//アニメーションが終わったら
 		if (Obj->IsAnimeEnd()) {
 			//ゲームオーバーシーンに遷移する
-			Obj->GoGameOverScene();
+			Obj->SetFadeFlag(true);
 		}
 	}
 	//ステートにから抜けるときに呼ばれる関数
@@ -484,7 +481,7 @@ namespace basecross{
 	void GoalState::Enter(const shared_ptr<Player>& Obj) {
 		Obj->SetFps(60.0f);
 		Obj->AnimeChangeMotion(L"curtsey", false);
-		//Obj->SetGameClearFlag(true);
+		Obj->SetGameClearFlag(true);
 		Obj->GetComponent<Rigidbody>()->SetVelocityZero();
 	}
 	//ステート実行中に毎ターン呼ばれる関数
@@ -492,7 +489,7 @@ namespace basecross{
 		//アニメーション更新
 		Obj->LoopedAnimeUpdateMotion();
 		if (Obj->IsAnimeEnd()) {
-			Obj->GoGameClearScene();
+			Obj->SetFadeFlag(true);
 		}
 	}
 	//ステートにから抜けるときに呼ばれる関数
