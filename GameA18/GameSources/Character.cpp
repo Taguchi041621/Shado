@@ -25,7 +25,9 @@ namespace basecross {
 		PtrTransform->SetPosition(m_StartPos);
 
 		auto PtrDraw = AddComponent<BcPNTStaticDraw>();
-		PtrDraw->SetMeshResource(L"DEFAULT_SQUARE");
+		PtrDraw->SetMeshResource(L"DEFAULT_CUBE");
+
+		PtrDraw->SetAlpha(0.8f);
 		PtrDraw->SetTextureResource(L"Red_TX");
 
 		//‰e‚ð‚Â‚¯‚é
