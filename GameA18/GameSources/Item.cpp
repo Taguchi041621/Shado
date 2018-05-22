@@ -45,21 +45,6 @@ namespace basecross {
 		//OnTriggerEnter();
 	}
 	//Œ®‚ª“–‚½‚Á‚½‚Æ‚«
-	void KeyItem::OnTriggerEnter()
-	{
-		SPHERE t;
-		t.m_Center = this->GetComponent<Transform>()->GetPosition();
-		t.m_Center.z = 0;
-		t.m_Radius = 0.20;
-
-		SPHERE p;
-		p.m_Center = GetStage()->GetSharedGameObject<Player>(L"Player")->GetComponent<Transform>()->GetWorldPosition();
-		p.m_Center.z = 0;
-		p.m_Radius = 0.20;
-
-		if (HitTest::SPHERE_SPHERE(t, p)){
-			GetStage()->GetSharedGameObject<Player>(L"Player")->AddKey();
-			GetStage()->RemoveGameObject<KeyItem>(GetThis<KeyItem>());
-		}
+	void KeyItem::OnTriggerEnter() {
 	}
 }

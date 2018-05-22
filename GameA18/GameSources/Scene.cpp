@@ -40,16 +40,23 @@ namespace basecross{
 		App::GetApp()->RegisterTexture(L"Shadow_TX", strTexture);
 		strTexture = DataDir + L"Key.png";
 		App::GetApp()->RegisterTexture(L"Key_TX", strTexture);
-		strTexture = DataDir + L"UI_Key.png";
+		//Œ®‚ÌUIŒó•â«
+		strTexture = DataDir + L"UI_Key.png";//•“h‚è
 		App::GetApp()->RegisterTexture(L"UI_Key_TX", strTexture);
-		//strTexture = DataDir + L"UI_Key_None.png";
+		//strTexture = DataDir + L"UI_Key_None.png";//‚Ó‚¿×’†”²‚«
 		//App::GetApp()->RegisterTexture(L"UI_Key_None_TX", strTexture);
-		strTexture = DataDir + L"UI_Key_NoneBigLine.png";
+		strTexture = DataDir + L"UI_Key_NoneBigLine.png";//‚Ó‚¿‘¾’†”²‚«
 		App::GetApp()->RegisterTexture(L"UI_Key_None_TX", strTexture);
-		//strTexture = DataDir + L"UI_Key_NoneWhite.png";
+		//strTexture = DataDir + L"UI_Key_NoneWhite.png";//”’“h
 		//App::GetApp()->RegisterTexture(L"UI_Key_None_TX", strTexture);
+		strTexture = DataDir + L"Key_0522.png";
+		App::GetApp()->RegisterTexture(L"Key_0522_TX", strTexture);
+		strTexture = DataDir + L"Key_None_0522.png";
+		App::GetApp()->RegisterTexture(L"Key_None_0522_TX", strTexture);
+		//Œ®‚ÌUIŒó•âª
+		strTexture = DataDir + L"Shadow_Blur.png";
+		App::GetApp()->RegisterTexture(L"Shadow_Blur_TX", strTexture);
 
-		
 		//”Žš
 		strTexture = DataDir + L"number_0.png";
 		App::GetApp()->RegisterTexture(L"0_TX", strTexture);
