@@ -90,7 +90,8 @@ namespace basecross {
 		const Vec3& Scale, const Vec3& Rotation, GameObject& Obj)
 		: GameObject(StagePtr),
 		m_Scale(Scale),m_Rotation(Rotation),m_Obj(Obj), m_ScaleZ(0.05f)
-	{}
+	{
+	}
 
 	void ShadowGoal::OnCreate() {
 		//スケールのZを固定の大きさに
@@ -166,7 +167,15 @@ namespace basecross {
 		const Vec3& Scale, const Vec3& Rotation, GameObject& Obj)
 		: SS5ssae(StagePtr, BaseDir, L"KeySS_0522.ssae", L"anime_1"),
 		m_Scale(Scale), m_Rotation(Rotation), m_Obj(Obj), m_ScaleZ(0.05f),m_Key(0)
-	{}
+	{
+		m_ToAnimeMatrix.affineTransformation(
+			Vec3(0.7f, 0.7f, 0.7f),
+			Vec3(0, 0, 0),
+			Vec3(0, 0, 0),
+			Vec3(0.0f, 0.4f, 0.0f)
+			);
+
+	}
 
 	void ShadowKey::OnCreate() {
 		//スケールのZを固定の大きさに
@@ -184,16 +193,14 @@ namespace basecross {
 		SetFps(49.0f);
 		//アニメーションのループ設定
 		SetLooped(true);
+		//アニメーションにかけるメトリックスの設定
+		SetToAnimeMatrix(m_ToAnimeMatrix);
 
 		auto PtrDraw = AddComponent<BcPNTStaticDraw>();
 		PtrDraw->SetFogEnabled(true);
 		//実体から形を持ってくる
 		PtrDraw->SetMeshResource(L"DEFAULT_SQUARE" );
-		//PtrDraw->SetOwnShadowActive(true);
-
-		////鍵のテクスチャ
-		PtrDraw->SetTextureResource(L"Key_TX");
-		PtrDraw->SetAlpha(1.0f);
+		PtrDraw->SetOwnShadowActive(false);
 	}
 
 	void ShadowKey::OnUpdate() {

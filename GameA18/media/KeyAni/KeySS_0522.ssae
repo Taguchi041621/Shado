@@ -147,26 +147,26 @@
 						</attribute>
 						<attribute tag="SCLX">
 							<key time="0" ipType="bezier">
-								<curve syncStartEnd="0">18.9989109039307 0.082860104739666 -8.16713333129883 0.0047423467040062</curve>
-								<value>0.499999910593033</value>
+								<curve syncStartEnd="0">12.1526031494141 0.00332287698984146 -7.8831353187561 -0.0130056291818619</curve>
+								<value>0.0500000007450581</value>
 							</key>
 							<key time="20" ipType="bezier">
-								<curve syncStartEnd="1">8.16713333129883 -0.0047423467040062 -4.65063095092773 0.0256152525544167</curve>
-								<value>-0.5</value>
+								<curve syncStartEnd="1">7.8831353187561 0.0130056291818619 -3.78392481803894 -0.00988069921731949</curve>
+								<value>-0.0500000007450581</value>
 							</key>
 							<key time="40" ipType="linear">
-								<value>0.499999910593033</value>
+								<value>0.0500000007450581</value>
 							</key>
 						</attribute>
 						<attribute tag="SCLY">
 							<key time="0" ipType="linear">
-								<value>0.499999910593033</value>
+								<value>0.0500000007450581</value>
 							</key>
 							<key time="20" ipType="linear">
-								<value>0.499999910593033</value>
+								<value>0.0500000007450581</value>
 							</key>
 							<key time="40" ipType="linear">
-								<value>0.499999910593033</value>
+								<value>0.0500000007450581</value>
 							</key>
 						</attribute>
 						<attribute tag="PRIO">

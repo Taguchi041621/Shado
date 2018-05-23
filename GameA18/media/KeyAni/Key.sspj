@@ -116,11 +116,11 @@
 		<value>KeySS_0522.ssce</value>
 	</cellmapNames>
 	<animepackNames>
-		<value>Key_move.ssae</value>
+		<value>KeySS_0522.ssae</value>
 	</animepackNames>
-	<lastAnimeFile>Key_move.ssae</lastAnimeFile>
+	<lastAnimeFile>KeySS_0522.ssae</lastAnimeFile>
 	<lastAnimeName>anime_1</lastAnimeName>
 	<lastCellMapFile>KeySS_0522.ssce</lastCellMapFile>
 	<lastCell>Key</lastCell>
-	<lastPart>Key</lastPart>
+	<lastPart>root</lastPart>
 </SpriteStudioProject>
