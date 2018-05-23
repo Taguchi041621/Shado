@@ -9,6 +9,8 @@ namespace basecross
 		weak_ptr<GameObject>m_TargetObject;
 		weak_ptr<GameStage>m_StagePtr;
 		float CameraPosZ;
+
+		bool m_StartFlag;
 	public:
 		explicit MyCamera(const shared_ptr<GameStage>& StagePtr);
 		virtual ~MyCamera();
@@ -19,5 +21,7 @@ namespace basecross
 		void CameraChanger();
 		virtual void OnCreate()override;
 		virtual void OnUpdate()override;
+
+		bool GetStartFlag() { return m_StartFlag; }
 	};
 }

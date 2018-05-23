@@ -25,6 +25,8 @@ namespace basecross{
 		//ゲームステージの作成用変数
 		int m_StageNumber=0;
 
+		bool m_StartFlag;
+
 	public:
 		//--------------------------------------------------------------------------------------
 		/*!
@@ -59,6 +61,14 @@ namespace basecross{
 
 		int GetStageNumber() {
 			return m_StageNumber;
+		}
+
+		void SetStartFlag(bool f) {
+			m_StartFlag = f;
+		}
+
+		bool GetStartFlag() {
+			return m_StartFlag;
 		}
 	};
 
