@@ -16,6 +16,9 @@ namespace basecross
 		void CreateFadeOutSprite();
 		void CreateFadeSprite();
 		bool m_SelectFlag;
+		//UI‚Ìì¬
+		void CreateUI();
+		float m_SelectScene;
 	public:
 		//\’z‚Æ”jŠü
 		GameOverStage() :Stage() {}

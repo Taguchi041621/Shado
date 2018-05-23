@@ -61,24 +61,50 @@ namespace basecross
 		auto Fade = AddGameObject<SpriteFade>(L"Shadow_TX", true,
 			Vec2(840, 600), Vec3(900.0f, 0.0f, 0.1f));
 		SetSharedGameObject(L"FadeIn", Fade);
-
+	}
+	void GameOverStage::CreateUI() {
+		AddGameObject<Sprite>(L"RETRY_OFF_TX",true,
+			Vec2(640,400),Vec3(-370,-300,0.1f));
+		AddGameObject<Sprite>(L"STAGE_SELECT_OFF_TX", true,
+			Vec2(640, 400), Vec3(270, -300, 0.1f));
+		//白い光
+		auto WLight = AddGameObject<Sprite>(L"GameOver_WhiteLight_TX",true,
+			Vec2(480, 300), Vec3(-370, -300, 0.1f));
+		//白い光のアニメーション
+		WLight->AddComponent<Action>();
+		SetSharedGameObject(L"WLight", WLight);
 	}
 
 	void GameOverStage::OnCreate()
 	{
 		m_SelectFlag = false;
+		m_SelectScene = 0.0f;
 		CreateViewLight();
 		//スプライトの作成
 		CreateTitleSprite();
 		CreateFadeOutSprite();
 		CreateFadeSprite();
+		CreateUI();
 	}
 
 	//更新
 	void GameOverStage::OnUpdate() {
+
 		//コントローラの取得
 		auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
 		if (CntlVec[0].bConnected) {
+			//左スティック
+			if (CntlVec[0].fThumbLX <= -0.3f && m_SelectScene!=-1.0f) {
+				m_SelectScene = -1.0f;
+				GetSharedGameObject<Sprite>(L"WLight")->
+					GetComponent<Action>()->AddMoveTo(1.0f, Vec3(-370.0f, -300.0f, 0.1f));
+			}			
+			if (CntlVec[0].fThumbLX >= 0.3f && m_SelectScene != 1.0f) {
+				m_SelectScene = 1.0f;
+				GetSharedGameObject<Sprite>(L"WLight")->
+					GetComponent<Action>()->AddMoveTo(1.0f, Vec3(270.0f, -300.0f, 0.1f));
+			}
+			GetSharedGameObject<Sprite>(L"WLight")->SetActionflag(true);
 
 			//Aボタン
 			if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A && !m_SelectFlag) {
@@ -100,7 +126,12 @@ namespace basecross
 				auto FadeIn = GetSharedGameObject<SpriteFade>(L"FadeIn");
 				FadeIn->SetActionflag(true);
 				m_SelectFlag = true;
-				PostEvent(0.8f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToStageSelect");
+				if (m_SelectScene == -1.0f) {
+					PostEvent(0.8f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameStage");
+				}
+				if (m_SelectScene == 1.0f) {
+					PostEvent(0.8f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToStageSelect");
+				}
 			}
 		}
 	}

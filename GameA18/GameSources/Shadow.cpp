@@ -166,7 +166,7 @@ namespace basecross {
 	ShadowKey::ShadowKey(const shared_ptr<Stage>& StagePtr,const wstring BaseDir,
 		const Vec3& Scale, const Vec3& Rotation, GameObject& Obj)
 		: SS5ssae(StagePtr, BaseDir, L"KeySS_0522.ssae", L"anime_1"),
-		m_Scale(Scale), m_Rotation(Rotation), m_Obj(Obj), m_ScaleZ(0.05f),m_Key(0)
+		m_Scale(Scale), m_Rotation(Rotation), m_Obj(Obj), m_ScaleZ(0.05f)
 	{
 		m_ToAnimeMatrix.affineTransformation(
 			Vec3(0.7f, 0.7f, 0.7f),
@@ -174,7 +174,6 @@ namespace basecross {
 			Vec3(0, 0, 0),
 			Vec3(0.0f, 0.4f, 0.0f)
 			);
-
 	}
 
 	void ShadowKey::OnCreate() {
@@ -195,12 +194,6 @@ namespace basecross {
 		SetLooped(true);
 		//アニメーションにかけるメトリックスの設定
 		SetToAnimeMatrix(m_ToAnimeMatrix);
-
-		auto PtrDraw = AddComponent<BcPNTStaticDraw>();
-		PtrDraw->SetFogEnabled(true);
-		//実体から形を持ってくる
-		PtrDraw->SetMeshResource(L"DEFAULT_SQUARE" );
-		PtrDraw->SetOwnShadowActive(false);
 	}
 
 	void ShadowKey::OnUpdate() {
@@ -225,11 +218,11 @@ namespace basecross {
 		//プレイヤーが鍵に触れたかを調べる判定
 		if (HitTest::OBB_OBB(t, p)) {
 			//鍵の所持数の表示を変える
-			GetStage()->AddGameObject<HaveKeys>((wstring)L"UI_Key_TX",m_Key);
+			GetStage()->AddGameObject<HaveKeys>((wstring)L"UI_Key_TX",
+				GetStage()->GetSharedGameObject<Player>(L"Player")->GetKey()
+			);
 			//プレイヤーの所持鍵数を増やす
 			GetStage()->GetSharedGameObject<Player>(L"Player")->AddKey();
-			//影の方で持ってる鍵の所持数を増やす
-			m_Key += 1;
 			//鍵を消す
 			GetStage()->RemoveGameObject<ShadowKey>(GetThis<ShadowKey>());
 		}
