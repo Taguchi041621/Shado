@@ -51,7 +51,7 @@ namespace basecross
 	void GameOverStage::CreateFadeOutSprite()
 	{
 		auto Fade = AddGameObject<SpriteFadeOut>(L"Shadow_TX", true,
-			Vec2(50000 / 4, 30000 / 4), Vec3(0.0f, 0.0f, 0.1f));
+			Vec2(50000 / 4, 30000 / 4), Vec3(0.0f, 600.0f, 0.1f));
 		SetSharedGameObject(L"FadeOut", Fade);
 
 	}
@@ -79,8 +79,24 @@ namespace basecross
 		//コントローラの取得
 		auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
 		if (CntlVec[0].bConnected) {
+
 			//Aボタン
 			if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A && !m_SelectFlag) {
+				if (m_StopNowMusic != L"")
+				{
+					m_AudioObjectPtr->Stop(m_StopNowMusic);
+				}
+				wstring DataDir;
+				//サンプルのためアセットディレクトリを取得
+				//App::GetApp()->GetAssetsDirectory(DataDir);
+				//各ゲームは以下のようにデータディレクトリを取得すべき
+				App::GetApp()->GetDataDirectory(DataDir);
+
+				m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
+				m_AudioObjectPtr->AddAudioResource(L"se");
+				m_AudioObjectPtr->Start(L"se", XAUDIO2_NO_LOOP_REGION, 0.1f);
+				SetNowMusic(L"se");
+
 				auto FadeIn = GetSharedGameObject<SpriteFade>(L"FadeIn");
 				FadeIn->SetActionflag(true);
 				m_SelectFlag = true;

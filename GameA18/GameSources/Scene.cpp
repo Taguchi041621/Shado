@@ -72,6 +72,13 @@ namespace basecross{
 		App::GetApp()->RegisterWav(L"walk", walk);
 		wstring Dead = DataDir + L"BGMSE\\Dead.wav";
 		App::GetApp()->RegisterWav(L"dead", Dead);
+		wstring Titel = DataDir + L"BGMSE\\Titel.wav";
+		App::GetApp()->RegisterWav(L"titel", Titel);
+		wstring SE = DataDir + L"BGMSE\\SE.wav";
+		App::GetApp()->RegisterWav(L"se", SE);
+		wstring SE2 = DataDir + L"BGMSE\\SE2.wav";
+		App::GetApp()->RegisterWav(L"se2", SE2);
+
 	}
 
 	void Scene::OnCreate() {
@@ -88,19 +95,39 @@ namespace basecross{
 	}
 
 	void Scene::OnEvent(const shared_ptr<Event>& event) {
+		//------------------------------------------------------
 		if (event->m_MsgStr == L"ToTitleStage") {
+
 			//最初のアクティブステージの設定
 			ResetActiveStage<TitleStage>();
+			m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
+			m_AudioObjectPtr->AddAudioResource(L"titel");
+			m_AudioObjectPtr->Start(L"titel", XAUDIO2_LOOP_INFINITE, 0.1f);
+			m_StopNowMusic = L"titel";
+
 		}
+		//------------------------------------------------------
 		else if (event->m_MsgStr == L"ToStageSelect") {
-			ResetActiveStage<StageSelect>();
+			if (m_StopNowMusic == L"gameover")
+			{
+			m_AudioObjectPtr->Stop(m_StopNowMusic);	
+			m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
+			m_AudioObjectPtr->AddAudioResource(L"titel");
+			m_AudioObjectPtr->Start(L"titel", XAUDIO2_NO_LOOP_REGION, 0.1f);
+			m_StopNowMusic = L"titel";
+
+			}
+
+            ResetActiveStage<StageSelect>();
 		}
+		//------------------------------------------------------
 		else if (event->m_MsgStr == L"ToGameStage") {
 			if (m_StopNowMusic != L"")
 			{
 				m_AudioObjectPtr->Stop(m_StopNowMusic);
 			}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
 			ResetActiveStage<GameStage>();
+
 			m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
 			m_AudioObjectPtr->AddAudioResource(L"gamestage");
 			m_AudioObjectPtr->Start(L"gamestage", XAUDIO2_LOOP_INFINITE, 0.1f);
