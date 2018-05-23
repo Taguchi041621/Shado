@@ -81,6 +81,7 @@ void StageSelect::StageNumberSprite()
 
 void StageSelect::OnCreate()
 {
+
 	m_SelectFlag = true;
 	m_StageNumber = 0;
 	CreateViewLight();
@@ -102,6 +103,21 @@ void StageSelect::OnUpdate() {
 			if (CntlVec[0].fThumbLX < -0.5) {
 				if (onectrl == false)
 				{
+					if (m_StopNowMusic != L"")
+					{
+						m_AudioObjectPtr->Stop(m_StopNowMusic);
+					}
+					wstring DataDir;
+					//サンプルのためアセットディレクトリを取得
+					//App::GetApp()->GetAssetsDirectory(DataDir);
+					//各ゲームは以下のようにデータディレクトリを取得すべき
+					App::GetApp()->GetDataDirectory(DataDir);
+
+					m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
+					m_AudioObjectPtr->AddAudioResource(L"se2");
+					m_AudioObjectPtr->Start(L"se2", XAUDIO2_NO_LOOP_REGION, 0.1f);
+					SetNowMusic(L"se2");
+
 					onectrl = true;
 					m_StageNumber += -1;
 				}
@@ -109,6 +125,21 @@ void StageSelect::OnUpdate() {
 			else if (CntlVec[0].fThumbLX > 0.5) {
 				if (onectrl == false)
 				{
+					if (m_StopNowMusic != L"")
+					{
+						m_AudioObjectPtr->Stop(m_StopNowMusic);
+					}
+					wstring DataDir;
+					//サンプルのためアセットディレクトリを取得
+					//App::GetApp()->GetAssetsDirectory(DataDir);
+					//各ゲームは以下のようにデータディレクトリを取得すべき
+					App::GetApp()->GetDataDirectory(DataDir);
+
+					m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
+					m_AudioObjectPtr->AddAudioResource(L"se2");
+					m_AudioObjectPtr->Start(L"se2", XAUDIO2_NO_LOOP_REGION, 0.1f);
+					SetNowMusic(L"se2");
+
 					onectrl = true;
 					m_StageNumber += 1;
 				}
@@ -126,6 +157,21 @@ void StageSelect::OnUpdate() {
 			}
 			//Aボタン
 			if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A) {
+				if (m_StopNowMusic != L"")
+				{
+					m_AudioObjectPtr->Stop(m_StopNowMusic);
+				}
+				wstring DataDir;
+				//サンプルのためアセットディレクトリを取得
+				//App::GetApp()->GetAssetsDirectory(DataDir);
+				//各ゲームは以下のようにデータディレクトリを取得すべき
+				App::GetApp()->GetDataDirectory(DataDir);
+
+				m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
+				m_AudioObjectPtr->AddAudioResource(L"se");
+				m_AudioObjectPtr->Start(L"se", XAUDIO2_NO_LOOP_REGION, 0.1f);
+				SetNowMusic(L"se");
+
 				auto FadeIn = GetSharedGameObject<SpriteFade>(L"FadeIn");
 				FadeIn->SetActionflag(true);
 				m_SelectFlag = false;

@@ -73,6 +73,22 @@ namespace basecross
 		if (CntlVec[0].bConnected) {
 			//Aボタン
 			if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A&&!m_SelectFlag) {
+				if (m_StopNowMusic != L"")
+				{
+					m_AudioObjectPtr->Stop(m_StopNowMusic);
+				}
+				wstring DataDir;
+				//サンプルのためアセットディレクトリを取得
+				//App::GetApp()->GetAssetsDirectory(DataDir);
+				//各ゲームは以下のようにデータディレクトリを取得すべき
+				App::GetApp()->GetDataDirectory(DataDir);
+
+				m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
+				m_AudioObjectPtr->AddAudioResource(L"se");
+				m_AudioObjectPtr->Start(L"se", XAUDIO2_NO_LOOP_REGION, 0.1f);
+			    SetNowMusic(L"se");
+				
+
 				auto Fade = GetSharedGameObject<SpriteFade>(L"Shadow_TX");
 				Fade->SetActionflag(true);
 				PostEvent(0.8f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToStageSelect");
