@@ -86,7 +86,7 @@ namespace basecross {
 	//------------------------------------------------------------------------------------------
 	///åÆÇÃñäÑÇÇ∑ÇÈâe
 	//------------------------------------------------------------------------------------------
-	class ShadowKey : public GameObject {
+	class ShadowKey : public SS5ssae {
 		Vec3 m_Scale;
 		Vec3 m_Rotation;
 		Vec3 m_Position;
@@ -106,7 +106,7 @@ namespace basecross {
 		@param[in]	StartPos	èâä˙à íu
 		*/
 		//--------------------------------------------------------------------------------------
-		ShadowKey(const shared_ptr<Stage>& StagePtr,
+		ShadowKey(const shared_ptr<Stage>& StagePtr, const wstring BaseDir,
 			const Vec3& m_Scale, const Vec3& Rotation, GameObject& Obj);
 		//--------------------------------------------------------------------------------------
 		/*!

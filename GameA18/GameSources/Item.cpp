@@ -33,7 +33,10 @@ namespace basecross {
 
 		//-------------------------------------------------
 		//‰e‚Ìì¬
+		wstring DataDir;
+		App::GetApp()->GetDataDirectory(DataDir);
 		GetStage()->AddGameObject<ShadowKey>(
+			DataDir + L"KeyAni\\",
 			GetComponent<Transform>()->GetScale(),
 			GetComponent<Transform>()->GetRotation(),
 			*GetThis<GameObject>()
