@@ -40,6 +40,15 @@ namespace basecross{
 		App::GetApp()->RegisterTexture(L"Shadow_TX", strTexture);
 		strTexture = DataDir + L"Key.png";
 		App::GetApp()->RegisterTexture(L"Key_TX", strTexture);
+		strTexture = DataDir + L"Shadow_Blur.png";
+		App::GetApp()->RegisterTexture(L"Shadow_Blur_TX", strTexture);
+		strTexture = DataDir + L"GameOver_WhiteLight.png";
+		App::GetApp()->RegisterTexture(L"GameOver_WhiteLight_TX", strTexture);
+		strTexture = DataDir + L"RETRY_OFF.png";
+		App::GetApp()->RegisterTexture(L"RETRY_OFF_TX", strTexture);
+		strTexture = DataDir + L"STAGE_SELECT_OFF.png";
+		App::GetApp()->RegisterTexture(L"STAGE_SELECT_OFF_TX", strTexture);
+
 		//Œ®‚ÌUIŒó•â«
 		strTexture = DataDir + L"UI_Key.png";//•“h‚è
 		App::GetApp()->RegisterTexture(L"UI_Key_TX", strTexture);
@@ -49,13 +58,11 @@ namespace basecross{
 		App::GetApp()->RegisterTexture(L"UI_Key_None_TX", strTexture);
 		//strTexture = DataDir + L"UI_Key_NoneWhite.png";//”’“h
 		//App::GetApp()->RegisterTexture(L"UI_Key_None_TX", strTexture);
-		strTexture = DataDir + L"Key_0522.png";
-		App::GetApp()->RegisterTexture(L"Key_0522_TX", strTexture);
-		strTexture = DataDir + L"Key_None_0522.png";
-		App::GetApp()->RegisterTexture(L"Key_None_0522_TX", strTexture);
+		//strTexture = DataDir + L"Key_0522.png";//‰©F
+		//App::GetApp()->RegisterTexture(L"Key_0522_TX", strTexture);
+		//strTexture = DataDir + L"Key_None_0522.png";‰©F
+		//App::GetApp()->RegisterTexture(L"Key_None_0522_TX", strTexture);
 		//Œ®‚ÌUIŒó•âª
-		strTexture = DataDir + L"Shadow_Blur.png";
-		App::GetApp()->RegisterTexture(L"Shadow_Blur_TX", strTexture);
 
 		//”š
 		strTexture = DataDir + L"number_0.png";

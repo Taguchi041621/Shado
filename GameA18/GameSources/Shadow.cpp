@@ -162,9 +162,9 @@ namespace basecross {
 	//------------------------------------------------------------------------------------------
 	///鍵の役割をする影
 	//------------------------------------------------------------------------------------------
-	ShadowKey::ShadowKey(const shared_ptr<Stage>& StagePtr,
+	ShadowKey::ShadowKey(const shared_ptr<Stage>& StagePtr,const wstring BaseDir,
 		const Vec3& Scale, const Vec3& Rotation, GameObject& Obj)
-		: GameObject(StagePtr),
+		: SS5ssae(StagePtr, BaseDir, L"KeySS_0522.ssae", L"anime_1"),
 		m_Scale(Scale), m_Rotation(Rotation), m_Obj(Obj), m_ScaleZ(0.05f),m_Key(0)
 	{}
 
@@ -178,13 +178,20 @@ namespace basecross {
 		PtrTransform->SetRotation(m_Rotation);
 		PtrTransform->SetPosition(ShadowLocation());
 
+		//親クラスのクリエイトを呼ぶ
+		SS5ssae::OnCreate();
+		//値は秒あたりのフレーム数
+		SetFps(49.0f);
+		//アニメーションのループ設定
+		SetLooped(true);
+
 		auto PtrDraw = AddComponent<BcPNTStaticDraw>();
 		PtrDraw->SetFogEnabled(true);
 		//実体から形を持ってくる
 		PtrDraw->SetMeshResource(L"DEFAULT_SQUARE" );
 		//PtrDraw->SetOwnShadowActive(true);
 
-		//鍵のテクスチャ
+		////鍵のテクスチャ
 		PtrDraw->SetTextureResource(L"Key_TX");
 		PtrDraw->SetAlpha(1.0f);
 	}
@@ -192,6 +199,10 @@ namespace basecross {
 	void ShadowKey::OnUpdate() {
 		OnTriggerEnter();
 		GetComponent<Transform>()->SetPosition(ShadowLocation());
+
+		float ElapsedTime = App::GetApp()->GetElapsedTime();
+		//アニメーションを更新する
+		UpdateAnimeTime(ElapsedTime);
 	}
 
 	void ShadowKey::OnTriggerEnter() {
