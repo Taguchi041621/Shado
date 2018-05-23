@@ -8,7 +8,10 @@ namespace basecross
 	{
 		weak_ptr<GameObject>m_TargetObject;
 		weak_ptr<GameStage>m_StagePtr;
+		float CameraAngle;
 		float CameraPosZ;
+
+		Vec3 CameraPos;
 
 		bool m_StartFlag;
 	public:

@@ -27,9 +27,10 @@ namespace basecross {
 		auto PtrDraw = AddComponent<BcPNTStaticDraw>();
 		PtrDraw->SetMeshResource(L"DEFAULT_CUBE");
 
-		PtrDraw->SetAlpha(0.8f);
+		PtrDraw->SetAlpha(0.5f);
 		PtrDraw->SetTextureResource(L"Red_TX");
 
+		SetAlphaActive(true);
 		//‰e‚ð‚Â‚¯‚é
 		//auto ShadowPtr = AddComponent<Shadowmap>();
 		//ShadowPtr->SetMeshResource(L"DEFAULT_SQUARE");
