@@ -248,7 +248,8 @@ namespace basecross{
 	}
 
 	void Player::OnUpdate2() {
-		if (!m_GameOverFlag && !m_GameClearFlag) {
+		auto ScenePtr = App::GetApp()->GetScene<Scene>();
+		if (!m_GameOverFlag && !m_GameClearFlag && ScenePtr->GetStartFlag()) {
 			//プレイヤーの移動
 				MoveRotationMotion();
 			//文字列の表示
@@ -365,8 +366,9 @@ namespace basecross{
 		if (Obj->GetDeath() == 1) {
 			Obj->GetStateMachine()->ChangeState(DiedState::Instance());
 		}
+		auto ScenePtr = App::GetApp()->GetScene<Scene>();
 		//左スティックの値が0以外ならWalkアニメを流す
-		if (Obj->GetMoveVector(0)) {
+		if (Obj->GetMoveVector(0)&& ScenePtr->GetStartFlag()) {
 			Obj->GetStateMachine()->ChangeState(WalkState::Instance());
 		}
 	}
