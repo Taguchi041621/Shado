@@ -128,6 +128,7 @@ namespace basecross{
 					if (!playerTrans->GetParent()) {
 						//ペアレント化する
 						playerTrans->SetParent(ShadowPtr);
+						m_ParentFlag = true;
 					}
 					//当たってるオブジェクトが親オブジェクトじゃ無かったら
 					else if (!(playerTrans->GetParent() == ShadowPtr)) {
@@ -181,6 +182,7 @@ namespace basecross{
 					(shadowPos.x + shadowSca.x * 0.5f) <= GetComponent<Transform>()->GetWorldPosition().x){
 					//ペアレント化を解く
 					GetComponent<Transform>()->ClearParent();
+					m_ParentFlag = false;
 				}
 			}
 		}
@@ -190,6 +192,7 @@ namespace basecross{
 	void Player::OnCreate() {
 		m_GameClearFlag = false;
 		m_GameOverFlag = false;
+		m_ParentFlag = false;
 		//初期位置などの設定
 		auto Ptr = GetComponent<Transform>();
 		Ptr->SetScale(0.80f, 1.60f, 0.40f);	//X,Z25、Y50の長方形
@@ -249,14 +252,19 @@ namespace basecross{
 
 	void Player::OnUpdate2() {
 		auto ScenePtr = App::GetApp()->GetScene<Scene>();
-		if (!m_GameOverFlag && !m_GameClearFlag && ScenePtr->GetStartFlag()) {
+		if (m_ParentFlag && !m_GameOverFlag && !m_GameClearFlag && ScenePtr->GetStartFlag()) {
 			//プレイヤーの移動
-				MoveRotationMotion();
+			MoveRotationMotion();
 			//文字列の表示
 			//DrawStrings();
-
-			PlayerHP();
 		}
+
+		if (!m_ParentFlag) {
+			auto PtrRedit = GetComponent<Rigidbody>();
+			PtrRedit->SetVelocityZero();
+
+		}
+			PlayerHP();
 	}
 	//
 	void Player::PlayerHP() {
@@ -368,12 +376,43 @@ namespace basecross{
 		}
 		auto ScenePtr = App::GetApp()->GetScene<Scene>();
 		//左スティックの値が0以外ならWalkアニメを流す
-		if (Obj->GetMoveVector(0)&& ScenePtr->GetStartFlag()) {
+		if (Obj->GetParentFlag() && Obj->GetMoveVector(0)&& ScenePtr->GetStartFlag()) {
 			Obj->GetStateMachine()->ChangeState(WalkState::Instance());
+		}
+		if (!Obj->GetParentFlag()) {
+			Obj->GetStateMachine()->ChangeState(FallState::Instance());
+		}
+	}
+	//ステートにから抜けるときに呼ばれる関数
+	void WaitState::Exit(const shared_ptr<Player>& Obj) {
+	}
+	//--------------------------------------------------------------------------------------
+	//	class FallState : public ObjState<Player>;
+	//	用途: 落ちてるとき
+	//--------------------------------------------------------------------------------------
+	//ステートのインスタンス取得
+	shared_ptr<FallState> FallState::Instance() {
+		static shared_ptr<FallState> instance;
+		if (!instance) {
+			instance = shared_ptr<FallState>(new FallState);
+		}
+		return instance;
+	}
+	//ステートに入ったときに呼ばれる関数
+	void FallState::Enter(const shared_ptr<Player>& Obj) {
+		Obj->AnimeChangeMotion(L"Jump_1", true);
+	}
+	//ステート実行中に毎ターン呼ばれる関数
+	void FallState::Execute(const shared_ptr<Player>& Obj) {
+		//アニメーション更新
+		Obj->LoopedAnimeUpdateMotion();
+		//左スティックの値が0以外ならWalkアニメを流す
+		if (Obj->GetParentFlag()) {
+			Obj->GetStateMachine()->ChangeState(WaitState::Instance());
 		}
 	}
 	//ステートから抜けるときに呼ばれる関数
-	void WaitState::Exit(const shared_ptr<Player>& Obj) {
+	void FallState::Exit(const shared_ptr<Player>& Obj) {
 	}
 	//--------------------------------------------------------------------------------------
 	//	class WalkState : public ObjState<Player>;

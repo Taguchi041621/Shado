@@ -44,6 +44,8 @@ namespace basecross{
 
 		shared_ptr<MultiAudioObject> m_AudioObjectPtr;
 		wstring m_StopNowMusic;
+
+		bool m_ParentFlag;
 	public:
 		//構築と破棄
 		//--------------------------------------------------------------------------------------
@@ -168,6 +170,29 @@ namespace basecross{
 
 		void SetFadeFlag(bool f) { m_FadeFlag = f; }
 		bool GetFadeFlag() { return m_FadeFlag; }
+
+		void SetParentFlag(bool f) { m_ParentFlag = f; }
+		bool GetParentFlag() { return m_ParentFlag; }
+	};
+
+	//--------------------------------------------------------------------------------------
+	//	class WaitState : public ObjState<Player>;
+	//	用途: 待機状態
+	//--------------------------------------------------------------------------------------
+	class FallState : public ObjState<Player>
+	{
+		shared_ptr<MultiAudioObject> m_AudioObjectPtr;
+
+		FallState() {}
+	public:
+		//ステートのインスタンス取得
+		static shared_ptr<FallState> Instance();
+		//ステートに入ったときに呼ばれる関数
+		virtual void Enter(const shared_ptr<Player>& Obj)override;
+		//ステート実行中に毎ターン呼ばれる関数
+		virtual void Execute(const shared_ptr<Player>& Obj)override;
+		//ステートにから抜けるときに呼ばれる関数
+		virtual void Exit(const shared_ptr<Player>& Obj)override;
 	};
 
 	//--------------------------------------------------------------------------------------
@@ -189,6 +214,7 @@ namespace basecross{
 		//ステートにから抜けるときに呼ばれる関数
 		virtual void Exit(const shared_ptr<Player>& Obj)override;
 	};
+
 	//--------------------------------------------------------------------------------------
 	//	class WalkState : public ObjState<Player>;
 	//	用途: 歩き状態
