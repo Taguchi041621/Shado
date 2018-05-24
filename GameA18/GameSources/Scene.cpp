@@ -72,6 +72,12 @@ namespace basecross{
 		App::GetApp()->RegisterTexture(L"3_TX", strTexture);
 		strTexture = DataDir + L"number_4.png";
 		App::GetApp()->RegisterTexture(L"4_TX", strTexture);
+		strTexture = DataDir + L"number_a.jpg";
+		App::GetApp()->RegisterTexture(L"5_TX", strTexture);
+		strTexture = DataDir + L"number_d.jpg";
+		App::GetApp()->RegisterTexture(L"6_TX", strTexture);
+		strTexture = DataDir + L"number_o.png";
+		App::GetApp()->RegisterTexture(L"7_TX", strTexture);
 
 		/*BGM・SE関連*/
 		//ゲームオーバーBGM

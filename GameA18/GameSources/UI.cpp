@@ -39,6 +39,7 @@ namespace basecross
 		PtrDraw->SetSamplerState(SamplerState::LinearWrap);
 		PtrDraw->SetTextureResource(m_TextureKey);
 		auto ActionPtr = AddComponent<Action>();
+		ActionPtr->AddMoveTo(0.1f, Vec3(m_StartPos.x*0.0f, m_StartPos.y, 0.0f));
 		ActionPtr->AddScaleTo(0.1f, Vec3(m_StartScale.x*1.2f, m_StartScale.y*1.2f, 0.0f));
 		ActionPtr->AddScaleTo(0.5f, Vec3(m_StartScale.x, m_StartScale.y, 0.0f));
 		ActionPtr->SetLooped(true);
@@ -54,6 +55,7 @@ namespace basecross
 		}
 		if (m_Actionflag == false) {
 			ActionPtr->Stop();
+			PtrTransform->SetPosition(m_StartPos.x, m_StartPos.y, 1.0f);
 			PtrTransform->SetScale(m_StartScale.x, m_StartScale.y, 1.0f);
 		}
 	};
