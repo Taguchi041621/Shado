@@ -43,15 +43,15 @@ namespace basecross
 		////描画コンポーネントテクスチャの設定
 		//DrawComp->SetTextureResource(L"GAMEOVER_TX");
 
-		//AddGameObject<TitleSprite>(L"TITLE_TX", false,
-		//	Vec2(1000.0f, 600.0f), Vec2(0.0f, 0.0f));
+		AddGameObject<Sprite>(L"GameOverMoji_TX", true,
+			Vec2(1280.0f, 800.0f), Vec3(0.0f, 200.0f,0.1f));
 		AddGameObject<Sprite>(L"GAMEOVER_TX", false,
-			Vec2(1280.0f, 800.0f), Vec3(0, 0.0f, 0.1f));
+			Vec2(1280.0f, 800.0f), Vec3(0.0f, 0.0f, 0.2f));
 	}
 	void GameOverStage::CreateFadeOutSprite()
 	{
 		auto Fade = AddGameObject<SpriteFadeOut>(L"Shadow_TX", true,
-			Vec2(50000 / 4, 30000 / 4), Vec3(0.0f, 600.0f, 0.1f));
+			Vec2(50000 / 4, 30000 / 4), Vec3(0.0f, 600.0f, 0.0f));
 		SetSharedGameObject(L"FadeOut", Fade);
 
 	}
@@ -59,26 +59,28 @@ namespace basecross
 	void GameOverStage::CreateFadeSprite()
 	{
 		auto Fade = AddGameObject<SpriteFade>(L"Shadow_TX", true,
-			Vec2(840, 600), Vec3(900.0f, 0.0f, 0.1f));
+			Vec2(840, 600), Vec3(900.0f, 0.0f, 0.0f));
 		SetSharedGameObject(L"FadeIn", Fade);
 	}
+	//下のリトライとステージセレクトの文字、白い光の作成
 	void GameOverStage::CreateUI() {
+		//リトライ
 		AddGameObject<Sprite>(L"RETRY_OFF_TX",true,
-			Vec2(640,400),Vec3(-370,-300,0.1f));
+			Vec2(640,400),Vec3(-360,-300,0.2f));
+		//ステージセレクト
 		AddGameObject<Sprite>(L"STAGE_SELECT_OFF_TX", true,
-			Vec2(640, 400), Vec3(270, -300, 0.1f));
+			Vec2(640, 400), Vec3(270, -300, 0.2f));
 		//白い光
 		auto WLight = AddGameObject<Sprite>(L"GameOver_WhiteLight_TX",true,
-			Vec2(480, 300), Vec3(-370, -300, 0.0f));
+			Vec2(480, 300), Vec3(-360, -300, 0.1f));
 		//白い光のアニメーション
 		WLight->AddComponent<Action>();
 		SetSharedGameObject(L"WLight", WLight);
 	}
 
-	void GameOverStage::OnCreate()
-	{
+	void GameOverStage::OnCreate(){
 		m_SelectFlag = false;
-		m_SelectScene = 0.0f;
+		m_SelectScene = -1.0f;
 		CreateViewLight();
 		//スプライトの作成
 		CreateTitleSprite();
@@ -89,32 +91,32 @@ namespace basecross
 
 	//更新
 	void GameOverStage::OnUpdate() {
-
+		auto WLight = GetSharedGameObject<Sprite>(L"WLight");
 		//コントローラの取得
 		auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
 		if (CntlVec[0].bConnected) {
-			//左スティック
+			//左,リトライ
 			if (CntlVec[0].fThumbLX <= -0.3f) {
 				if (onectrl == false) {
 					m_SelectScene = -1.0f;
-					GetSharedGameObject<Sprite>(L"WLight")->
-						GetComponent<Action>()->AllActionClear();
-					GetSharedGameObject<Sprite>(L"WLight")->
-						GetComponent<Action>()->AddMoveTo(0.3f, Vec3(-370.0f, -300.0f, 0.0f));
+					WLight->GetComponent<Action>()->AllActionClear();
+					WLight->GetComponent<Action>()->
+						AddMoveTo(0.3f, Vec3(-370.0f, -300.0f, 0.0f));
 					onectrl = true;
 				}
-			}
+			}//右,ステージセレクト
 			else if (CntlVec[0].fThumbLX >= 0.3f) {
 				if (onectrl == false) {
 					m_SelectScene = 1.0f;
-					GetSharedGameObject<Sprite>(L"WLight")->
-						GetComponent<Action>()->AllActionClear();
-					GetSharedGameObject<Sprite>(L"WLight")->
-						GetComponent<Action>()->AddMoveTo(0.3f, Vec3(270.0f, -300.0f, 0.0f));
+					WLight->GetComponent<Action>()->AllActionClear();
+					WLight->GetComponent<Action>()->
+						AddMoveTo(0.3f, Vec3(270.0f, -300.0f, 0.0f));
 					onectrl = true;
 				}
-			}		//アクションが終わったら、フラグを折る
+			}
 			else {
+				if((m_SelectScene == -1.0f && WLight->GetComponent<Transform>()->GetPosition().x <= -100.0f)||
+					(m_SelectScene == 1.0f && WLight->GetComponent<Transform>()->GetPosition().x >= 100.0f))
 				onectrl = false;
 			}
 

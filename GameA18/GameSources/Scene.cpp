@@ -18,20 +18,17 @@ namespace basecross{
 		//App::GetApp()->GetAssetsDirectory(DataDir);
 		//各ゲームは以下のようにデータディレクトリを取得すべき
 		App::GetApp()->GetDataDirectory(DataDir);
-		wstring strTexture = DataDir + L"sky.jpg";
-		App::GetApp()->RegisterTexture(L"SKY_TX", strTexture);
-		strTexture = DataDir + L"trace.png";
-		App::GetApp()->RegisterTexture(L"TRACE_TX", strTexture);
-		strTexture = DataDir + L"Oreng.png";
-		App::GetApp()->RegisterTexture(L"Oreng_TX", strTexture);
-		strTexture = DataDir + L"Title.jpg";
+		wstring strTexture = DataDir + L"Title.jpg";
 		App::GetApp()->RegisterTexture(L"TITLE_TX", strTexture);
 		strTexture = DataDir + L"Select.png";
 		App::GetApp()->RegisterTexture(L"SELECT_TX", strTexture);
 		strTexture = DataDir + L"Clear.png";
 		App::GetApp()->RegisterTexture(L"CLEAR_TX", strTexture);
-		strTexture = DataDir + L"GameOver.png";
+		//GameOver = 文字あり、GameOver1 = 文字なし
+		strTexture = DataDir + L"GameOver1.png";
 		App::GetApp()->RegisterTexture(L"GAMEOVER_TX", strTexture);
+		strTexture = DataDir + L"GameOverMoji.png";
+		App::GetApp()->RegisterTexture(L"GameOverMoji_TX", strTexture);
 		strTexture = DataDir + L"WallTexture.png";
 		App::GetApp()->RegisterTexture(L"WallTexture_TX", strTexture);
 		strTexture = DataDir + L"Red.tga";
