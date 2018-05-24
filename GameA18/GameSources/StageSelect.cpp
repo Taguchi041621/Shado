@@ -115,10 +115,6 @@ namespace basecross
 				if (CntlVec[0].fThumbLX < -0.5) {
 					if (onectrl == false)
 					{
-						->GetComponent<Action>()->AllActionClear();
-						WLight->GetComponent<Action>()->
-							AddMoveTo(0.3f, Vec3(-370.0f, -300.0f, 0.0f));
-
 						if (m_StopNowMusic != L"")
 						{
 							m_AudioObjectPtr->Stop(m_StopNowMusic);
