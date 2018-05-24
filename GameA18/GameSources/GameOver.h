@@ -19,6 +19,8 @@ namespace basecross
 		//UI‚Ìì¬
 		void CreateUI();
 		float m_SelectScene;
+		//˜A‘±‚Å‘€ì‚Å‚«‚È‚¢
+		bool onectrl;
 	public:
 		//\’z‚Æ”jŠü
 		GameOverStage() :Stage() {}

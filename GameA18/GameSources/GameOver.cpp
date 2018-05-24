@@ -69,7 +69,7 @@ namespace basecross
 			Vec2(640, 400), Vec3(270, -300, 0.1f));
 		//白い光
 		auto WLight = AddGameObject<Sprite>(L"GameOver_WhiteLight_TX",true,
-			Vec2(480, 300), Vec3(-370, -300, 0.1f));
+			Vec2(480, 300), Vec3(-370, -300, 0.0f));
 		//白い光のアニメーション
 		WLight->AddComponent<Action>();
 		SetSharedGameObject(L"WLight", WLight);
@@ -94,22 +94,35 @@ namespace basecross
 		auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
 		if (CntlVec[0].bConnected) {
 			//左スティック
-			if (CntlVec[0].fThumbLX <= -0.3f && m_SelectScene!=-1.0f) {
-				m_SelectScene = -1.0f;
-				GetSharedGameObject<Sprite>(L"WLight")->
-					GetComponent<Action>()->AddMoveTo(1.0f, Vec3(-370.0f, -300.0f, 0.1f));
-			}			
-			if (CntlVec[0].fThumbLX >= 0.3f && m_SelectScene != 1.0f) {
-				m_SelectScene = 1.0f;
-				GetSharedGameObject<Sprite>(L"WLight")->
-					GetComponent<Action>()->AddMoveTo(1.0f, Vec3(270.0f, -300.0f, 0.1f));
+			if (CntlVec[0].fThumbLX <= -0.3f) {
+				if (onectrl == false) {
+					m_SelectScene = -1.0f;
+					GetSharedGameObject<Sprite>(L"WLight")->
+						GetComponent<Action>()->AllActionClear();
+					GetSharedGameObject<Sprite>(L"WLight")->
+						GetComponent<Action>()->AddMoveTo(0.3f, Vec3(-370.0f, -300.0f, 0.0f));
+					onectrl = true;
+				}
 			}
+			else if (CntlVec[0].fThumbLX >= 0.3f) {
+				if (onectrl == false) {
+					m_SelectScene = 1.0f;
+					GetSharedGameObject<Sprite>(L"WLight")->
+						GetComponent<Action>()->AllActionClear();
+					GetSharedGameObject<Sprite>(L"WLight")->
+						GetComponent<Action>()->AddMoveTo(0.3f, Vec3(270.0f, -300.0f, 0.0f));
+					onectrl = true;
+				}
+			}		//アクションが終わったら、フラグを折る
+			else {
+				onectrl = false;
+			}
+
 			GetSharedGameObject<Sprite>(L"WLight")->SetActionflag(true);
 
 			//Aボタン
 			if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A && !m_SelectFlag) {
-				if (m_StopNowMusic != L"")
-				{
+				if (m_StopNowMusic != L""){
 					m_AudioObjectPtr->Stop(m_StopNowMusic);
 				}
 				wstring DataDir;
