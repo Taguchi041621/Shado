@@ -36,16 +36,32 @@ namespace basecross {
 					m_LightAngle.y += -CntlVec[0].fThumbRY * ElapsedTime*m_Speed;
 					m_Lingering.y = -CntlVec[0].fThumbRY*m_Speed;
 				}
-				else if (m_LightAngle.y <= m_MaxAngle && CntlVec[0].fThumbRY < -0.4f) {
-					m_LightAngle.y += -CntlVec[0].fThumbRY * ElapsedTime*m_Speed;
-					m_Lingering.y = -CntlVec[0].fThumbRY*m_Speed;
+				else if (CntlVec[0].fThumbRY < -0.4f) {
+					if (m_LightAngle.y <= m_MaxAngle) {
+						m_LightAngle.y += -CntlVec[0].fThumbRY * ElapsedTime*m_Speed;
+						m_Lingering.y = -CntlVec[0].fThumbRY*m_Speed;
+					}
 				}
 			}
+			//スティック離した後も少し動く
 			else if (m_Lingering.x >= 0.1f || m_Lingering.y >= 0.1f||
 				m_Lingering.x <= -0.1f || m_Lingering.y <= -0.1f) {
 				m_LightAngle.x += m_Lingering.x * ElapsedTime;
 				m_LightAngle.y += m_Lingering.y * ElapsedTime;
 				m_Lingering *= 0.8f;
+				//マックスアングルを超えたらマックスアングルの値に戻す
+				if (m_LightAngle.x >= m_MaxAngle) {
+					m_LightAngle.x = m_MaxAngle;
+				}
+				if (m_LightAngle.x <= -m_MaxAngle) {
+					m_LightAngle.x = -m_MaxAngle;
+				}
+				if (m_LightAngle.y >= m_MaxAngle) {
+					m_LightAngle.y = m_MaxAngle;
+				}
+				if (m_LightAngle.y <= -m_MaxAngle) {
+					m_LightAngle.y = -m_MaxAngle;
+				}
 			}
 
 			//---------------------------------------------------------------------------------------
