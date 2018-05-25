@@ -176,8 +176,8 @@ namespace basecross{
 	};
 
 	//--------------------------------------------------------------------------------------
-	//	class WaitState : public ObjState<Player>;
-	//	用途: 待機状態
+	//	class FallState : public ObjState<Player>;
+	//	用途: 落下状態
 	//--------------------------------------------------------------------------------------
 	class FallState : public ObjState<Player>
 	{
@@ -187,6 +187,26 @@ namespace basecross{
 	public:
 		//ステートのインスタンス取得
 		static shared_ptr<FallState> Instance();
+		//ステートに入ったときに呼ばれる関数
+		virtual void Enter(const shared_ptr<Player>& Obj)override;
+		//ステート実行中に毎ターン呼ばれる関数
+		virtual void Execute(const shared_ptr<Player>& Obj)override;
+		//ステートにから抜けるときに呼ばれる関数
+		virtual void Exit(const shared_ptr<Player>& Obj)override;
+	};
+
+	//--------------------------------------------------------------------------------------
+	//	class LandingState : public ObjState<Player>;
+	//	用途: 着地状態
+	//--------------------------------------------------------------------------------------
+	class LandingState : public ObjState<Player>
+	{
+		shared_ptr<MultiAudioObject> m_AudioObjectPtr;
+
+		LandingState() {}
+	public:
+		//ステートのインスタンス取得
+		static shared_ptr<LandingState> Instance();
 		//ステートに入ったときに呼ばれる関数
 		virtual void Enter(const shared_ptr<Player>& Obj)override;
 		//ステート実行中に毎ターン呼ばれる関数
