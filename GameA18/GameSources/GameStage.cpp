@@ -167,17 +167,15 @@ namespace basecross {
 	}
 
 	void GameStage::CreateWall() {
-		//ステージへのゲームオブジェクトの追加
+		//壁、影があるほう
 		auto Ptr = AddGameObject<GameObject>();
 		auto PtrTrans = Ptr->GetComponent<Transform>();
 		Quat Qt;
 		Qt.rotationRollPitchYawFromVector(Vec3(0, 0, XM_PIDIV2));
-		PtrTrans->SetScale(80.0f, 80.0f, 1.0f);
+		PtrTrans->SetScale(100.0f, 100.0f, 1.0f);
 		PtrTrans->SetQuaternion(Qt);
-		PtrTrans->SetPosition(0.0f, 0.0f, 0.5f);
+		PtrTrans->SetWorldPosition(Vec3(0.0f, 0.0f, 0.5f));
 
-		
-		//auto ColPtr = Ptr->AddComponent<CollisionRect>();
 		//描画コンポーネントの追加
 		auto DrawComp = Ptr->AddComponent<BcPNTStaticDraw>();
 		//描画コンポーネントに形状（メッシュ）を設定
@@ -186,10 +184,24 @@ namespace basecross {
 		//自分に影が映りこむようにする
 		DrawComp->SetOwnShadowActive(true);
 		DrawComp->SetTextureResource(L"WallTexture_TX");
-		
-
 		Flt4 Color(1.0f, 1.0f, 1.0f, 0.7f);
 		DrawComp->SetColorAndAlpha(Color);
+
+		//壁、影がないほう
+		Ptr = AddGameObject<GameObject>();
+		PtrTrans = Ptr->GetComponent<Transform>();
+		Qt.rotationRollPitchYawFromVector(Vec3(0, XM_PIDIV2, 0));
+		PtrTrans->SetScale(80.0f, 100.0f, 1.0f);
+		PtrTrans->SetQuaternion(Qt);
+		PtrTrans->SetWorldPosition(Vec3(50.0f, 0.0f, 0.5f));
+		DrawComp = Ptr->AddComponent<BcPNTStaticDraw>();
+		//描画コンポーネントに形状（メッシュ）を設定
+		DrawComp->SetMeshResource(L"DEFAULT_SQUARE");
+		DrawComp->SetFogEnabled(true);
+		DrawComp->SetOwnShadowActive(true);
+		DrawComp->SetTextureResource(L"WallTexture_TX");
+		DrawComp->SetColorAndAlpha(Color);
+
 	}
 	void GameStage::CreateHaveKeys() {
 		auto group = GetSharedObjectGroup(L"KeyGroup");
@@ -217,7 +229,9 @@ namespace basecross {
 		//描画コンポーネントに形状（メッシュ）を設定
 		DrawComp->SetMeshResource(L"DEFAULT_CUBE");
 		DrawComp->SetFogEnabled(true);
-
+	}
+	void GameStage::CreateMiniMap() {
+		AddGameObject<MiniMap>();
 	}
 	void GameStage::OnCreate() {
 		m_ClearFlag = false;
@@ -228,14 +242,16 @@ namespace basecross {
 			CreateWall();
 			//クリエイトした鍵のグループ
 			CreateSharedObjectGroup(L"KeyGroup");
-			//
+			//ステージにある鍵の数
 			CreateSharedObjectGroup(L"HaveKeysGroup");
 			//敵
 			CreateEnemy();
+			//ミニマップ
+			CreateMiniMap();
 			Csv();
 			//鍵の数に応じて作るため、鍵ができてから呼び出す
 			CreateHaveKeys();
-
+			
 			//フェード
 			CreateFadeOutSprite();
 			CreateFadeSprite();

@@ -99,5 +99,45 @@ namespace basecross
 	*/
 	//--------------------------------------------------------------------------------------
 	void HaveKeys::OnUpdate() {};
+
+	//-------------------------------------------------------------------------------------
+	///ライトの位置を表示するミニマップ
+	//-------------------------------------------------------------------------------------
+	MiniMap::MiniMap(const shared_ptr<Stage>& StagePtr)
+		: GameObject(StagePtr)
+	{
+	};
+	//--------------------------------------------------------------------------------------
+	/*!
+	@brief デストラクタ
+	*/
+	//--------------------------------------------------------------------------------------
+	MiniMap::~MiniMap() {};
+	//--------------------------------------------------------------------------------------
+	/*!
+	@brief 初期化
+	@return	なし
+	*/
+	//--------------------------------------------------------------------------------------
+	void MiniMap::OnCreate() {
+		GetStage()->AddGameObject<Sprite>(L"pane_TX", true, Vec2(160.0f, 160.0f), Vec3(-540.0f, -300.0f, 0.1f));
+		auto light = GetStage()->AddGameObject<Sprite>(L"ball_yellow_TX", true, Vec2(30.0f,30.0f), Vec3(-540.0f, -300.0f, 0.0f));
+		light->AddComponent<Action>();
+		light->GetComponent<Action>()->AllActionClear();
+		GetStage()->SetSharedGameObject(L"MiniMapLight", light);
+	};
+	//--------------------------------------------------------------------------------------
+	/*!
+	@brief 更新
+	@return	なし
+	*/
+	//--------------------------------------------------------------------------------------
+	void MiniMap::OnUpdate() {
+		auto ptrMyLight = GetStage()->GetSharedGameObject<LightController>(L"LightController");
+		auto LightAngle = ptrMyLight->GetLightAngle();
+		auto MiniMapLight = GetStage()->GetSharedGameObject<Sprite>(L"MiniMapLight");
+		MiniMapLight->GetComponent<Transform>()->
+			SetPosition(Vec3(-540.0f + -90*sinf(LightAngle.x), -300.0f + -90*sinf(LightAngle.y), 0.0f));
+	};
 	//end basecross
 }

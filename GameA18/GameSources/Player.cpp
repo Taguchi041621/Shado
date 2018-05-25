@@ -387,11 +387,11 @@ namespace basecross{
 		}
 		auto ScenePtr = App::GetApp()->GetScene<Scene>();
 		//左スティックの値が0以外ならWalkアニメを流す
-		if (Obj->GetParentFlag() && Obj->GetMoveVector(0)&& ScenePtr->GetStartFlag()) {
-			Obj->GetStateMachine()->ChangeState(WalkState::Instance());
-		}
 		if (!Obj->GetParentFlag()) {
 			Obj->GetStateMachine()->ChangeState(FallState::Instance());
+		}
+		if (Obj->GetParentFlag() && Obj->GetMoveVector(0)&& ScenePtr->GetStartFlag()) {
+			Obj->GetStateMachine()->ChangeState(WalkState::Instance());
 		}
 	}
 	//ステートにから抜けるときに呼ばれる関数
@@ -411,19 +411,47 @@ namespace basecross{
 	}
 	//ステートに入ったときに呼ばれる関数
 	void FallState::Enter(const shared_ptr<Player>& Obj) {
-		Obj->AnimeChangeMotion(L"Jump_1", true);
+		Obj->AnimeChangeMotion(L"Down_loop", true);
 	}
 	//ステート実行中に毎ターン呼ばれる関数
 	void FallState::Execute(const shared_ptr<Player>& Obj) {
 		//アニメーション更新
 		Obj->LoopedAnimeUpdateMotion();
-		//左スティックの値が0以外ならWalkアニメを流す
 		if (Obj->GetParentFlag()) {
-			Obj->GetStateMachine()->ChangeState(WaitState::Instance());
+			Obj->GetStateMachine()->ChangeState(LandingState::Instance());
 		}
 	}
 	//ステートから抜けるときに呼ばれる関数
 	void FallState::Exit(const shared_ptr<Player>& Obj) {
+		
+	}
+	//--------------------------------------------------------------------------------------
+	//	class LandingState : public ObjState<Player>;
+	//	用途: 着地
+	//--------------------------------------------------------------------------------------
+	//ステートのインスタンス取得
+	shared_ptr<LandingState> LandingState::Instance() {
+		static shared_ptr<LandingState> instance;
+		if (!instance) {
+			instance = shared_ptr<LandingState>(new LandingState);
+		}
+		return instance;
+	}
+	//ステートに入ったときに呼ばれる関数
+	void LandingState::Enter(const shared_ptr<Player>& Obj) {
+		Obj->AnimeChangeMotion(L"Down_landing", false);
+	}
+	//ステート実行中に毎ターン呼ばれる関数
+	void LandingState::Execute(const shared_ptr<Player>& Obj) {
+		//アニメーション更新
+		Obj->LoopedAnimeUpdateMotion();
+		if (Obj->IsAnimeEnd()) {
+			Obj->GetStateMachine()->ChangeState(WalkState::Instance());
+		}
+	}
+	//ステートから抜けるときに呼ばれる関数
+	void LandingState::Exit(const shared_ptr<Player>& Obj) {
+
 	}
 	//--------------------------------------------------------------------------------------
 	//	class WalkState : public ObjState<Player>;
@@ -458,6 +486,9 @@ namespace basecross{
 		//アニメーション更新
 		Obj->LoopedAnimeUpdateMotion();
 		//潰れて死んだらDiedアニメーションを流す
+		if (!Obj->GetParentFlag()) {
+			Obj->GetStateMachine()->ChangeState(FallState::Instance());
+		}
 		if (Obj->GetDeath() == 1) {
 			Obj->GetStateMachine()->ChangeState(DiedState::Instance());
 		}

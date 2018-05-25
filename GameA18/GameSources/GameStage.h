@@ -23,6 +23,8 @@ namespace basecross {
 		void CreateHaveKeys();
 		//敵
 		void CreateEnemy();
+		//ミニマップ
+		void CreateMiniMap();
 		CsvFile m_Csv;//CSV関連の変数
 					  //DataIDを管理するフラグ
 		bool dataIdFlag = false;
