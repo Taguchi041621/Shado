@@ -387,11 +387,11 @@ namespace basecross{
 		}
 		auto ScenePtr = App::GetApp()->GetScene<Scene>();
 		//左スティックの値が0以外ならWalkアニメを流す
-		if (Obj->GetParentFlag() && Obj->GetMoveVector(0)&& ScenePtr->GetStartFlag()) {
-			Obj->GetStateMachine()->ChangeState(WalkState::Instance());
-		}
 		if (!Obj->GetParentFlag()) {
 			Obj->GetStateMachine()->ChangeState(FallState::Instance());
+		}
+		if (Obj->GetParentFlag() && Obj->GetMoveVector(0)&& ScenePtr->GetStartFlag()) {
+			Obj->GetStateMachine()->ChangeState(WalkState::Instance());
 		}
 	}
 	//ステートにから抜けるときに呼ばれる関数
@@ -486,6 +486,9 @@ namespace basecross{
 		//アニメーション更新
 		Obj->LoopedAnimeUpdateMotion();
 		//潰れて死んだらDiedアニメーションを流す
+		if (!Obj->GetParentFlag()) {
+			Obj->GetStateMachine()->ChangeState(FallState::Instance());
+		}
 		if (Obj->GetDeath() == 1) {
 			Obj->GetStateMachine()->ChangeState(DiedState::Instance());
 		}

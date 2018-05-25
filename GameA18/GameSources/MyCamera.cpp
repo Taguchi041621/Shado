@@ -6,7 +6,7 @@ namespace basecross {
 		Camera(),
 		m_StagePtr(StagePtr),
 		CameraPosZ(-40.0f),
-		CameraAngle(12),
+		CameraAngle(6),
 		CameraPos(0)
 	{}
 
