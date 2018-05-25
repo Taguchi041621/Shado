@@ -31,7 +31,7 @@ namespace basecross
 		vector<uint16_t> indices = { 0, 1, 2, 1, 3, 2 };
 		SetAlphaActive(m_Trace);
 		auto PtrTransform = GetComponent<Transform>();
-		PtrTransform->SetScale(m_StartScale.x, m_StartScale.y, 1.0f);
+		PtrTransform->SetScale(m_StartScale.x, m_StartScale.y, m_StartPos.z);
 		PtrTransform->SetRotation(0, 0, 0);
 		PtrTransform->SetPosition(m_StartPos);
 		//頂点とインデックスを指定してスプライト作成
@@ -55,7 +55,7 @@ namespace basecross
 		}
 		if (m_Actionflag == false) {
 			ActionPtr->Stop();
-			PtrTransform->SetPosition(m_StartPos.x, m_StartPos.y, 1.0f);
+			PtrTransform->SetPosition(m_StartPos.x, m_StartPos.y, m_StartPos.z);
 			PtrTransform->SetScale(m_StartScale.x, m_StartScale.y, 1.0f);
 		}
 	};
