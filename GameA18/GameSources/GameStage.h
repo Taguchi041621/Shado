@@ -21,6 +21,8 @@ namespace basecross {
 		void CreateWall();
 		//鍵の取得状況表示
 		void CreateHaveKeys();
+		//敵
+		void CreateEnemy();
 		CsvFile m_Csv;//CSV関連の変数
 					  //DataIDを管理するフラグ
 		bool dataIdFlag = false;

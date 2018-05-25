@@ -14,6 +14,8 @@ namespace basecross {
 	{}
 
 	void Enemy::OnCreate() {
+
+		AddTag(L"Enemy");
 		vector<VertexPositionNormalTexture> vertices;
 		vector<VertexPositionNormal> new_vertices;
 
@@ -26,6 +28,11 @@ namespace basecross {
 			new_vertices.push_back(new_v);
 		}
 		m_MeshResource = MeshResource::CreateMeshResource(new_vertices, indices, false);
+
+		auto PtrObb = AddComponent<CollisionObb>();
+		//PtrObb->SetFixed(true);
+		PtrObb->SetIsHitAction(IsHitAction::Auto);
+		PtrObb->SetUpdateActive(true);
 
 		auto PtrTransform = GetComponent<Transform>();
 		PtrTransform->SetScale(m_StartScale);

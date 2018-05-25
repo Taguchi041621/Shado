@@ -110,6 +110,7 @@ namespace basecross{
 		for (auto &obj : OtherVec) {
 			//シャドウオブジェクトを検出
 			auto ShadowPtr = dynamic_pointer_cast<ShadowObject>(obj);
+			auto EnemyPtr = dynamic_pointer_cast<Enemy>(obj);
 			//当たったのがシャドウオブジェクトで
 			if (ShadowPtr) {
 				//シャドウの判定
@@ -137,6 +138,15 @@ namespace basecross{
 					}
 
 				}
+			}
+			else if (EnemyPtr)
+			{
+				m_PlayerHP = 0;
+				if (m_PlayerHP == 0)
+				{
+					PostEvent(0.0f, GetThis<Player>(), App::GetApp()->GetSceneInterface(), L"ToGameOverStage");
+				}
+
 			}
 		}
 	}
@@ -266,6 +276,7 @@ namespace basecross{
 			m_PlayerHP = 0;
 		}
 
+		
 		if (m_PlayerHP == 0&& !m_GameOverFlag){
 			m_GameOverFlag = true;
 			m_FadeFlag = true;

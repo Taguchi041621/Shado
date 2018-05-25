@@ -85,7 +85,8 @@ namespace basecross{
 		App::GetApp()->RegisterWav(L"se", SE);
 		wstring SE2 = DataDir + L"BGMSE\\SE2.wav";
 		App::GetApp()->RegisterWav(L"se2", SE2);
-
+		wstring Clear = DataDir + L"BGMSE\\kuria.wav";
+		App::GetApp()->RegisterWav(L"clear", Clear);
 	}
 
 	void Scene::OnCreate() {
@@ -156,7 +157,16 @@ namespace basecross{
 		}
 		//------------------------------------------------------
 		else if (event->m_MsgStr == L"ToClearStage") {
+			if (m_StopNowMusic != L"")
+			{
+				m_AudioObjectPtr->Stop(m_StopNowMusic);
+			}
 			ResetActiveStage<ClearStage>();
+			m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
+			m_AudioObjectPtr->AddAudioResource(L"clear");
+			m_AudioObjectPtr->Start(L"clear", XAUDIO2_NO_LOOP_REGION, 0.1f);
+			m_StopNowMusic = L"clear";
+
 		}
 	}
 
