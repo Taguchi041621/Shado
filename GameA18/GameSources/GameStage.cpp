@@ -201,6 +201,24 @@ namespace basecross {
 			}
 		}
 	}
+	void GameStage::CreateEnemy() 
+	{
+		//ステージへのゲームオブジェクトの追加
+		auto Ptr = AddGameObject<GameObject>();
+		auto PtrTrans = Ptr->GetComponent<Transform>();
+		Quat Qt;
+		Qt.rotationRollPitchYawFromVector(Vec3(0, 0, 0));
+		PtrTrans->SetScale(1.0f, 1.0f, 2.0f);
+		PtrTrans->SetQuaternion(Qt);
+		PtrTrans->SetPosition(0.0f, 5.0f, 0.5f);
+
+		//描画コンポーネントの追加
+		auto DrawComp = Ptr->AddComponent<BcPNTStaticDraw>();
+		//描画コンポーネントに形状（メッシュ）を設定
+		DrawComp->SetMeshResource(L"DEFAULT_CUBE");
+		DrawComp->SetFogEnabled(true);
+
+	}
 	void GameStage::OnCreate() {
 		m_ClearFlag = false;
 		try {
@@ -212,7 +230,8 @@ namespace basecross {
 			CreateSharedObjectGroup(L"KeyGroup");
 			//
 			CreateSharedObjectGroup(L"HaveKeysGroup");
-
+			//敵
+			CreateEnemy();
 			Csv();
 			//鍵の数に応じて作るため、鍵ができてから呼び出す
 			CreateHaveKeys();
