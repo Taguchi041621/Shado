@@ -113,10 +113,6 @@ namespace basecross
 		if (m_SelectFlag) {
 			if (CntlVec[0].bConnected) {
 				if (CntlVec[0].fThumbLX < -0.5) {
-					auto Zero = AddGameObject<Sprite>(L"0_TX", false,
-						Vec2(100.0f, 200.0f), Vec3(-200, 0.0f, 0.1f));
-					SetSharedGameObject(L"0", Zero);
-
 					if (onectrl == false)
 					{
 						if (m_StopNowMusic != L"")
