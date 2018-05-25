@@ -172,12 +172,10 @@ namespace basecross {
 		auto PtrTrans = Ptr->GetComponent<Transform>();
 		Quat Qt;
 		Qt.rotationRollPitchYawFromVector(Vec3(0, 0, XM_PIDIV2));
-		PtrTrans->SetScale(80.0f, 80.0f, 1.0f);
+		PtrTrans->SetScale(80.0f, 100.0f, 1.0f);
 		PtrTrans->SetQuaternion(Qt);
 		PtrTrans->SetPosition(0.0f, 0.0f, 0.5f);
 
-		
-		//auto ColPtr = Ptr->AddComponent<CollisionRect>();
 		//描画コンポーネントの追加
 		auto DrawComp = Ptr->AddComponent<BcPNTStaticDraw>();
 		//描画コンポーネントに形状（メッシュ）を設定
@@ -186,10 +184,24 @@ namespace basecross {
 		//自分に影が映りこむようにする
 		DrawComp->SetOwnShadowActive(true);
 		DrawComp->SetTextureResource(L"WallTexture_TX");
-		
-
 		Flt4 Color(1.0f, 1.0f, 1.0f, 0.7f);
 		DrawComp->SetColorAndAlpha(Color);
+
+		
+		Ptr = AddGameObject<GameObject>();
+		PtrTrans = Ptr->GetComponent<Transform>();
+		Qt.rotationRollPitchYawFromVector(Vec3(0, XM_PIDIV2, XM_PIDIV2));
+		PtrTrans->SetScale(80.0f, 80.0f, 1.0f);
+		PtrTrans->SetQuaternion(Qt);
+		PtrTrans->SetPosition(40.0f, 0.0f, 0.0f);
+		DrawComp = Ptr->AddComponent<BcPNTStaticDraw>();
+		//描画コンポーネントに形状（メッシュ）を設定
+		DrawComp->SetMeshResource(L"DEFAULT_SQUARE");
+		DrawComp->SetFogEnabled(true);
+		DrawComp->SetOwnShadowActive(true);
+		DrawComp->SetTextureResource(L"WallTexture_TX");
+		DrawComp->SetColorAndAlpha(Color);
+
 	}
 	void GameStage::CreateHaveKeys() {
 		auto group = GetSharedObjectGroup(L"KeyGroup");
