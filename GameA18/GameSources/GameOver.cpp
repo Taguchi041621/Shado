@@ -30,7 +30,6 @@ namespace basecross
 		//PtrTrans->SetScale(5.5f, 4.0f, 1.0f);
 		//PtrTrans->SetQuaternion(Qt);
 		//PtrTrans->SetPosition(0.0f, 0.5f, 0.0f);
-
 		//auto ColPtr = Ptr->AddComponent<CollisionRect>();
 		////描画コンポーネントの追加
 		//auto DrawComp = Ptr->AddComponent<BcPNTStaticDraw>();
@@ -39,7 +38,6 @@ namespace basecross
 		//DrawComp->SetFogEnabled(true);
 		////自分に影が映りこむようにする
 		//DrawComp->SetOwnShadowActive(true);
-
 		////描画コンポーネントテクスチャの設定
 		//DrawComp->SetTextureResource(L"GAMEOVER_TX");
 

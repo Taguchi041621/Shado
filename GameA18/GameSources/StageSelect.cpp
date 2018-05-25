@@ -66,28 +66,28 @@ namespace basecross
 	void StageSelect::StageNumberSprite()
 	{
 		auto Zero = AddGameObject<Sprite>(L"0_TX", false,
-			Vec2(150.0f, 150.0f), Vec3(0, 0.0f, 0.1f));
+			Vec2(100.0f, 200.0f), Vec3(0, 0.0f, 0.1f));
 		SetSharedGameObject(L"0", Zero);
 		auto One = AddGameObject<Sprite>(L"1_TX", false,
-			Vec2(150.0f, 150.0f), Vec3(200, 0.0f, 0.1f));
+			Vec2(100.0f, 200.0f), Vec3(200, 0.0f, 0.1f));
 		SetSharedGameObject(L"1", One);
 		auto Two = AddGameObject<Sprite>(L"2_TX", false,
-			Vec2(150.0f, 150.0f), Vec3(400, 0.0f, 0.1f));
+			Vec2(100.0f, 200.0f), Vec3(400, 0.0f, 0.1f));
 		SetSharedGameObject(L"2", Two);
 		auto Three = AddGameObject<Sprite>(L"3_TX", false,
-			Vec2(150.0f, 150.0f), Vec3(600, 0.0f, 0.1f));
+			Vec2(100.0f, 200.0f), Vec3(600, 0.0f, 0.1f));
 		SetSharedGameObject(L"3", Three);
 		auto Four = AddGameObject<Sprite>(L"4_TX", false,
-			Vec2(150.0f, 150.0f), Vec3(800, 0.0f, 0.1f));
+			Vec2(100.0f, 200.0f), Vec3(800, 0.0f, 0.1f));
 		SetSharedGameObject(L"4", Four);
 		auto Five = AddGameObject<Sprite>(L"5_TX", false,
-			Vec2(150.0f, 150.0f), Vec3(1000, 0.0f, 0.1f));
+			Vec2(100.0f, 200.0f), Vec3(1000, 0.0f, 0.1f));
 		SetSharedGameObject(L"5", Five);
 		auto Six = AddGameObject<Sprite>(L"6_TX", false,
-			Vec2(150.0f, 150.0f), Vec3(1200, 0.0f, 0.1f));
+			Vec2(100.0f, 200.0f), Vec3(1200, 0.0f, 0.1f));
 		SetSharedGameObject(L"6", Six);
 		auto Seven = AddGameObject<Sprite>(L"7_TX", false,
-			Vec2(150.0f, 150.0f), Vec3(1400, 0.0f, 0.1f));
+			Vec2(100.0f, 200.0f), Vec3(1400, 0.0f, 0.1f));
 		SetSharedGameObject(L"7", Seven);
 	}
 
@@ -113,6 +113,10 @@ namespace basecross
 		if (m_SelectFlag) {
 			if (CntlVec[0].bConnected) {
 				if (CntlVec[0].fThumbLX < -0.5) {
+					auto Zero = AddGameObject<Sprite>(L"0_TX", false,
+						Vec2(100.0f, 200.0f), Vec3(-200, 0.0f, 0.1f));
+					SetSharedGameObject(L"0", Zero);
+
 					if (onectrl == false)
 					{
 						if (m_StopNowMusic != L"")

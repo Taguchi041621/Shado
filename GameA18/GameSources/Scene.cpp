@@ -62,21 +62,21 @@ namespace basecross{
 		//Œ®‚ÌUIŒó•âª
 
 		//”š
-		strTexture = DataDir + L"number_0.png";
+		strTexture = DataDir + L"Door.png";
 		App::GetApp()->RegisterTexture(L"0_TX", strTexture);
-		strTexture = DataDir + L"number_1.png";
+		strTexture = DataDir + L"Door.png";
 		App::GetApp()->RegisterTexture(L"1_TX", strTexture);
-		strTexture = DataDir + L"number_2.png";
+		strTexture = DataDir + L"Door.png";
 		App::GetApp()->RegisterTexture(L"2_TX", strTexture);
-		strTexture = DataDir + L"number_3.png";
+		strTexture = DataDir + L"Door.png";
 		App::GetApp()->RegisterTexture(L"3_TX", strTexture);
-		strTexture = DataDir + L"number_4.png";
+		strTexture = DataDir + L"Door.png";
 		App::GetApp()->RegisterTexture(L"4_TX", strTexture);
-		strTexture = DataDir + L"number_a.jpg";
+		strTexture = DataDir + L"Door.png";
 		App::GetApp()->RegisterTexture(L"5_TX", strTexture);
-		strTexture = DataDir + L"number_d.jpg";
+		strTexture = DataDir + L"Door.png";
 		App::GetApp()->RegisterTexture(L"6_TX", strTexture);
-		strTexture = DataDir + L"number_o.png";
+		strTexture = DataDir + L"Door.png";
 		App::GetApp()->RegisterTexture(L"7_TX", strTexture);
 
 		/*BGMESEŠÖ˜A*/
