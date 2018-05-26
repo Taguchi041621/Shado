@@ -47,7 +47,7 @@ namespace basecross{
 		App::GetApp()->RegisterTexture(L"STAGE_SELECT_OFF_TX", strTexture);
 		strTexture = DataDir + L"pane.png";//˜g
 		App::GetApp()->RegisterTexture(L"pane_TX", strTexture);
-		strTexture = DataDir + L"ball_yellow.png";//Ô‚¢ŠÛ
+		strTexture = DataDir + L"ball_yellow.png";//‰©F‚¢ŠÛ
 		App::GetApp()->RegisterTexture(L"ball_yellow_TX", strTexture); 
 		strTexture = DataDir + L"PressAStart_0424.png";
 		App::GetApp()->RegisterTexture(L"TITLE_TEXT_TX", strTexture);
@@ -64,22 +64,24 @@ namespace basecross{
 		//App::GetApp()->RegisterTexture(L"UI_Key_None_TX", strTexture);
 		//Œ®‚ÌUIŒó•âª
 
+		strTexture = DataDir + L"Door.png";
+		App::GetApp()->RegisterTexture(L"Door_TX", strTexture);
 		//”š
-		strTexture = DataDir + L"Door.png";
+		strTexture = DataDir + L"number_0.png";
 		App::GetApp()->RegisterTexture(L"0_TX", strTexture);
-		strTexture = DataDir + L"Door.png";
+		strTexture = DataDir + L"number_1.png";
 		App::GetApp()->RegisterTexture(L"1_TX", strTexture);
-		strTexture = DataDir + L"Door.png";
+		strTexture = DataDir + L"number_2.png";
 		App::GetApp()->RegisterTexture(L"2_TX", strTexture);
-		strTexture = DataDir + L"Door.png";
+		strTexture = DataDir + L"number_3.png";
 		App::GetApp()->RegisterTexture(L"3_TX", strTexture);
-		strTexture = DataDir + L"Door.png";
+		strTexture = DataDir + L"number_4.png";
 		App::GetApp()->RegisterTexture(L"4_TX", strTexture);
-		strTexture = DataDir + L"Door.png";
+		strTexture = DataDir + L"number_5.png";
 		App::GetApp()->RegisterTexture(L"5_TX", strTexture);
-		strTexture = DataDir + L"Door.png";
+		strTexture = DataDir + L"number_6.png";
 		App::GetApp()->RegisterTexture(L"6_TX", strTexture);
-		strTexture = DataDir + L"Door.png";
+		strTexture = DataDir + L"number_7.png";
 		App::GetApp()->RegisterTexture(L"7_TX", strTexture);
 
 		/*BGMESEŠÖ˜A*/

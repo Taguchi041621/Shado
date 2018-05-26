@@ -67,30 +67,61 @@ namespace basecross
 	}
 	void StageSelect::StageNumberSprite()
 	{
-		auto Zero = AddGameObject<Sprite>(L"0_TX", false,
+		auto Door = AddGameObject<Sprite>(L"Door_TX", false,
 			Vec2(100.0f, 200.0f), Vec3(0, 0.0f, 0.1f));
-		SetSharedGameObject(L"0", Zero);
-		auto One = AddGameObject<Sprite>(L"1_TX", false,
+		SetSharedGameObject(L"0", Door);
+		auto Num = AddGameObject<Sprite>(L"0_TX", true,
+			Vec2(50.0f, 100.0f), Vec3(0, 20.0f, 0.1f));
+		SetSharedGameObject(L"0Num", Num);
+
+		Door = AddGameObject<Sprite>(L"Door_TX", false,
 			Vec2(100.0f, 200.0f), Vec3(200, 0.0f, 0.1f));
-		SetSharedGameObject(L"1", One);
-		auto Two = AddGameObject<Sprite>(L"2_TX", false,
+		SetSharedGameObject(L"1", Door);
+		Num = AddGameObject<Sprite>(L"1_TX", true,
+			Vec2(50.0f, 100.0f), Vec3(200, 20.0f, 0.1f));
+		SetSharedGameObject(L"1Num", Num);
+
+		Door = AddGameObject<Sprite>(L"Door_TX", false,
 			Vec2(100.0f, 200.0f), Vec3(400, 0.0f, 0.1f));
-		SetSharedGameObject(L"2", Two);
-		auto Three = AddGameObject<Sprite>(L"3_TX", false,
+		SetSharedGameObject(L"2", Door);
+		Num = AddGameObject<Sprite>(L"2_TX", true,
+			Vec2(50.0f, 100.0f), Vec3(400, 20.0f, 0.1f));
+		SetSharedGameObject(L"2Num", Num);
+
+		Door = AddGameObject<Sprite>(L"Door_TX", false,
 			Vec2(100.0f, 200.0f), Vec3(600, 0.0f, 0.1f));
-		SetSharedGameObject(L"3", Three);
-		auto Four = AddGameObject<Sprite>(L"4_TX", false,
+		SetSharedGameObject(L"3", Door);
+		Num = AddGameObject<Sprite>(L"3_TX", true,
+			Vec2(50.0f, 100.0f), Vec3(600, 20.0f, 0.1f));
+		SetSharedGameObject(L"3Num", Num);
+
+		Door = AddGameObject<Sprite>(L"Door_TX", false,
 			Vec2(100.0f, 200.0f), Vec3(800, 0.0f, 0.1f));
-		SetSharedGameObject(L"4", Four);
-		auto Five = AddGameObject<Sprite>(L"5_TX", false,
+		SetSharedGameObject(L"4", Door);
+		Num = AddGameObject<Sprite>(L"4_TX", true,
+			Vec2(50.0f, 100.0f), Vec3(800, 20.0f, 0.1f));
+		SetSharedGameObject(L"4Num", Num);
+
+		Door = AddGameObject<Sprite>(L"Door_TX", false,
 			Vec2(100.0f, 200.0f), Vec3(1000, 0.0f, 0.1f));
-		SetSharedGameObject(L"5", Five);
-		auto Six = AddGameObject<Sprite>(L"6_TX", false,
+		SetSharedGameObject(L"5", Door);
+		Num = AddGameObject<Sprite>(L"5_TX", true,
+			Vec2(50.0f, 100.0f), Vec3(1000, 20.0f, 0.1f));
+		SetSharedGameObject(L"5Num", Num);
+
+		Door = AddGameObject<Sprite>(L"Door_TX", false,
 			Vec2(100.0f, 200.0f), Vec3(1200, 0.0f, 0.1f));
-		SetSharedGameObject(L"6", Six);
-		auto Seven = AddGameObject<Sprite>(L"7_TX", false,
+		SetSharedGameObject(L"6", Door);
+		Num = AddGameObject<Sprite>(L"6_TX", true,
+			Vec2(50.0f, 100.0f), Vec3(1200, 20.0f, 0.1f));
+		SetSharedGameObject(L"6Num", Num);
+
+		Door = AddGameObject<Sprite>(L"Door_TX", false,
 			Vec2(100.0f, 200.0f), Vec3(1400, 0.0f, 0.1f));
-		SetSharedGameObject(L"7", Seven);
+		SetSharedGameObject(L"7", Door);
+		Num = AddGameObject<Sprite>(L"7_TX", true,
+			Vec2(50.0f, 100.0f), Vec3(1400, 20.0f, 0.1f));
+		SetSharedGameObject(L"7Num", Num);
 	}
 
 	void StageSelect::OnCreate()
@@ -196,106 +227,23 @@ namespace basecross
 			}
 		}
 
-		auto Zero = GetSharedGameObject<Sprite>(L"0");
-		auto One = GetSharedGameObject<Sprite>(L"1");
-		auto Two = GetSharedGameObject<Sprite>(L"2");
-		auto Three = GetSharedGameObject<Sprite>(L"3");
-		auto Four = GetSharedGameObject<Sprite>(L"4");
-		auto Five = GetSharedGameObject<Sprite>(L"5");
-		auto Six = GetSharedGameObject<Sprite>(L"6");
-		auto Seven = GetSharedGameObject<Sprite>(L"7");
-		switch (m_StageNumber) {
-
-		case 0:
-			Zero->SetActionflag(true);
-			One->SetActionflag(false);
-			Two->SetActionflag(false);
-			Three->SetActionflag(false);
-			Four->SetActionflag(false);
-			Five->SetActionflag(false);
-			Six->SetActionflag(false);
-			Seven->SetActionflag(false);
-			ScenePtr->SetStageNumber(m_StageNumber);
-			break;
-		case 1:
-			Zero->SetActionflag(false);
-			One->SetActionflag(true);
-			Two->SetActionflag(false);
-			Three->SetActionflag(false);
-			Four->SetActionflag(false);
-			Five->SetActionflag(false);
-			Six->SetActionflag(false);
-			Seven->SetActionflag(false);
-			ScenePtr->SetStageNumber(m_StageNumber);
-			break;
-		case 2:
-			Zero->SetActionflag(false);
-			One->SetActionflag(false);
-			Two->SetActionflag(true);
-			Three->SetActionflag(false);
-			Four->SetActionflag(false);
-			Five->SetActionflag(false);
-			Six->SetActionflag(false);
-			Seven->SetActionflag(false);
-			ScenePtr->SetStageNumber(m_StageNumber);
-			break;
-		case 3:
-			Zero->SetActionflag(false);
-			One->SetActionflag(false);
-			Two->SetActionflag(false);
-			Three->SetActionflag(true);
-			Four->SetActionflag(false);
-			Five->SetActionflag(false);
-			Six->SetActionflag(false);
-			Seven->SetActionflag(false);
-			ScenePtr->SetStageNumber(m_StageNumber);
-			break;
-		case 4:
-			Zero->SetActionflag(false);
-			One->SetActionflag(false);
-			Two->SetActionflag(false);
-			Three->SetActionflag(false);
-			Four->SetActionflag(true);
-			Five->SetActionflag(false);
-			Six->SetActionflag(false);
-			Seven->SetActionflag(false);
-			ScenePtr->SetStageNumber(m_StageNumber);
-			break;
-		case 5:
-			Zero->SetActionflag(false);
-			One->SetActionflag(false);
-			Two->SetActionflag(false);
-			Three->SetActionflag(false);
-			Four->SetActionflag(false);
-			Five->SetActionflag(true);
-			Six->SetActionflag(false);
-			Seven->SetActionflag(false);
-			ScenePtr->SetStageNumber(m_StageNumber);
-			break;
-		case 6:
-			Zero->SetActionflag(false);
-			One->SetActionflag(false);
-			Two->SetActionflag(false);
-			Three->SetActionflag(false);
-			Four->SetActionflag(false);
-			Five->SetActionflag(false);
-			Six->SetActionflag(true);
-			Seven->SetActionflag(false);
-			ScenePtr->SetStageNumber(m_StageNumber);
-			break;
-		case 7:
-			Zero->SetActionflag(false);
-			One->SetActionflag(false);
-			Two->SetActionflag(false);
-			Three->SetActionflag(false);
-			Four->SetActionflag(false);
-			Five->SetActionflag(false);
-			Six->SetActionflag(false);
-			Seven->SetActionflag(true);
-			ScenePtr->SetStageNumber(m_StageNumber);
-			break;
+		//ステージの数ループさせる
+		for (int i = 0; i < 8;i++) {
+			auto StageNum = to_wstring(i);
+			auto Door = GetSharedGameObject<Sprite>(StageNum);
+			auto Num = GetSharedGameObject<Sprite>(StageNum + L"Num");
+			//今選んでるステージと同じならアクションする
+			if (i == m_StageNumber) {
+				Door->SetActionflag(true);
+				Num->SetActionflag(true);
+			}
+			//違うステージならアクション切る
+			if (i != m_StageNumber) {
+				Door->SetActionflag(false);
+				Num->SetActionflag(false);
+			}
 		}
+		ScenePtr->SetStageNumber(m_StageNumber);
 
 	}
-
 }
