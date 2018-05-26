@@ -46,6 +46,8 @@ namespace basecross
 		//	Vec2(1000.0f, 600.0f), Vec2(0.0f, 0.0f));
 		AddGameObject<Sprite>(L"TITLE_TX", false,
 			Vec2(1280.0f, 800.0f), Vec3(0, 0.0f, 0.1f));
+		AddGameObject<ScaleChangeSprite>(L"TITLE_TEXT_TX", true,
+			Vec2(960, 200), Vec3(0, -300, 0.1f),1.0f);
 	}
 
 	void TitleStage::CreateFadeSprite()

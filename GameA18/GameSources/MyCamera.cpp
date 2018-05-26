@@ -93,6 +93,13 @@ namespace basecross {
 		m_StartFlag = false;
 		auto ScenePtr = App::GetApp()->GetScene<Scene>();
 		ScenePtr->SetStartFlag(m_StartFlag);
+		if (ScenePtr->GetRespawnFlag())
+		{
+			m_StartFlag = true;
+			ScenePtr->SetStartFlag(m_StartFlag);
+			CameraPosZ = -10;
+			CameraAngle = 6;
+		}
 	}
 	void MyCamera::OnUpdate() {
 		auto TargetPtr = m_TargetObject.lock();

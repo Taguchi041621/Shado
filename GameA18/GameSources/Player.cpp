@@ -215,7 +215,7 @@ namespace basecross{
 		SetFps(49.0f);
 
 		//元となるオブジェクトからアニメーションオブジェクトへの行列の設定
-		SetToAnimeMatrix(m_ToAnimeMatrixLeft);
+		SetToAnimeMatrix(m_ToAnimeMatrixRight);
 
 		//Rigidbodyをつける
 		auto PtrRedid = AddComponent<Rigidbody>();
@@ -256,7 +256,7 @@ namespace basecross{
 
 			//重力を加える
 			auto PtrGrav = GetBehavior<Gravity>();
-			PtrGrav->SetGravity(Vec3(0.0f, -4.9f, 0.0f));
+			PtrGrav->SetGravity(Vec3(0.0f, -9.8f, 0.0f));
 			PtrGrav->Execute();
 	}
 

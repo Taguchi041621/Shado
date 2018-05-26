@@ -121,7 +121,7 @@ namespace basecross
 	//--------------------------------------------------------------------------------------
 	void MiniMap::OnCreate() {
 		GetStage()->AddGameObject<Sprite>(L"pane_TX", true, Vec2(160.0f, 160.0f), Vec3(-540.0f, -300.0f, 0.1f));
-		auto light = GetStage()->AddGameObject<Sprite>(L"ball_yellow_TX", true, Vec2(30.0f,30.0f), Vec3(-540.0f, -300.0f, 0.0f));
+		auto light = GetStage()->AddGameObject<Sprite>(L"ball_yellow_TX", true, Vec2(30.0f,30.0f), Vec3(-540.0f, -300.0f, 0.1f));
 		light->AddComponent<Action>();
 		light->GetComponent<Action>()->AllActionClear();
 		GetStage()->SetSharedGameObject(L"MiniMapLight", light);
@@ -137,7 +137,71 @@ namespace basecross
 		auto LightAngle = ptrMyLight->GetLightAngle();
 		auto MiniMapLight = GetStage()->GetSharedGameObject<Sprite>(L"MiniMapLight");
 		MiniMapLight->GetComponent<Transform>()->
-			SetPosition(Vec3(-540.0f + -90*sinf(LightAngle.x), -300.0f + -90*sinf(LightAngle.y), 0.0f));
+			SetPosition(Vec3(-540.0f + -90*sinf(LightAngle.x), -300.0f + -90*sinf(LightAngle.y), 0.1f));
+	};
+
+	//--------------------------------------------------------------------------------------
+	///	拡大縮小を繰り返すスプライト
+	//--------------------------------------------------------------------------------------
+	ScaleChangeSprite::ScaleChangeSprite(const shared_ptr<Stage>& StagePtr, const wstring& TextureKey, bool Trace,
+		const Vec2& StartScale, const Vec3& StartPos, const float f) :
+		GameObject(StagePtr),
+		m_TextureKey(TextureKey),
+		m_Trace(Trace),
+		m_StartScale(StartScale),
+		m_StartPos(StartPos),
+		f(f)
+	{}
+
+	ScaleChangeSprite::~ScaleChangeSprite() {}
+	void ScaleChangeSprite::OnCreate() {
+		float HelfSize = 0.5f;
+		//頂点配列
+		vector<VertexPositionColorTexture> vertices = {
+			{ VertexPositionColorTexture(Vec3(-HelfSize, HelfSize, 0),Col4(1.0f,1.0f,1.0f,1.0f), Vec2(0.0f, 0.0f)) },
+			{ VertexPositionColorTexture(Vec3(HelfSize, HelfSize, 0), Col4(1.0f,1.0f,1.0f,1.0f), Vec2(1.0f, 0.0f)) },
+			{ VertexPositionColorTexture(Vec3(-HelfSize, -HelfSize, 0),Col4(1.0f,1.0f,1.0f,1.0f), Vec2(0.0f, 1.0f)) },
+			{ VertexPositionColorTexture(Vec3(HelfSize, -HelfSize, 0),Col4(1.0f,1.0f,1.0f,1.0f), Vec2(1.0f, 1.0f)) },
+		};
+		//インデックス配列
+		vector<uint16_t> indices = { 0, 1, 2, 1, 3, 2 };
+		SetAlphaActive(m_Trace);
+		auto PtrTransform = GetComponent<Transform>();
+		PtrTransform->SetScale(m_StartScale.x, m_StartScale.y, m_StartPos.z);
+		PtrTransform->SetRotation(0, 0, 0);
+		PtrTransform->SetPosition(m_StartPos);
+		//頂点とインデックスを指定してスプライト作成
+		auto PtrDraw = AddComponent<PCTSpriteDraw>(vertices, indices);
+		PtrDraw->SetSamplerState(SamplerState::LinearWrap);
+		PtrDraw->SetTextureResource(m_TextureKey);
+		auto ActionPtr = AddComponent<Action>();
+		ActionPtr->SetLooped(true);
+		ActionPtr->Run();
+	}
+
+	void ScaleChangeSprite::OnUpdate() {
+		auto PtrTransform = GetComponent<Transform>();
+		auto PtrScale = PtrTransform->GetScale();
+		float ElapsedTime = App::GetApp()->GetElapsedTime();
+		m_Timer += ElapsedTime;
+		if (m_SceleFlag) {
+			PtrTransform->SetScale(PtrScale.x + f, PtrScale.y + f, m_StartPos.z);
+		}
+		else {
+			PtrTransform->SetScale(PtrScale.x - f, PtrScale.y - f, m_StartPos.z);
+		}
+		if (1 <= m_Timer)
+		{
+			if (m_SceleFlag) {
+				m_SceleFlag = false;
+				m_Timer = 0;
+			}
+			else if (!m_SceleFlag) {
+				m_SceleFlag = true;
+				m_Timer = 0;
+			}
+		}
+
 	};
 	//end basecross
 }

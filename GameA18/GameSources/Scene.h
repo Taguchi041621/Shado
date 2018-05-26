@@ -27,6 +27,8 @@ namespace basecross{
 
 		bool m_StartFlag;
 
+		bool m_RespawnFlag;
+
 	public:
 		//--------------------------------------------------------------------------------------
 		/*!
@@ -69,6 +71,14 @@ namespace basecross{
 
 		bool GetStartFlag() {
 			return m_StartFlag;
+		}
+
+		void SetRespawnFlag(bool f) {
+			m_RespawnFlag = f;
+		}
+
+		bool GetRespawnFlag() {
+			return m_RespawnFlag;
 		}
 	};
 

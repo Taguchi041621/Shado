@@ -69,8 +69,8 @@ namespace basecross
 		AddGameObject<Sprite>(L"STAGE_SELECT_OFF_TX", true,
 			Vec2(640, 400), Vec3(270, -300, 0.2f));
 		//白い光
-		auto WLight = AddGameObject<Sprite>(L"GameOver_WhiteLight_TX",true,
-			Vec2(480, 300), Vec3(-370.0, -300, 0.0f));
+		auto WLight = AddGameObject<ScaleChangeSprite>(L"GameOver_WhiteLight_TX",true,
+			Vec2(960, 600), Vec3(-370.0, -300, 0.1f),3.0f);
 		//白い光のアニメーション
 		WLight->AddComponent<Action>();
 		WLight->GetComponent<Action>()->AllActionClear();
@@ -90,7 +90,7 @@ namespace basecross
 
 	//更新
 	void GameOverStage::OnUpdate() {
-		auto WLight = GetSharedGameObject<Sprite>(L"WLight");
+		auto WLight = GetSharedGameObject<ScaleChangeSprite>(L"WLight");
 		//コントローラの取得
 		auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
 		if (CntlVec[0].bConnected) {
@@ -119,7 +119,7 @@ namespace basecross
 				onectrl = false;
 			}
 
-			GetSharedGameObject<Sprite>(L"WLight")->SetActionflag(true);
+			WLight->GetComponent<Action>()->Run();
 
 			//Aボタン
 			if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A && !m_SelectFlag) {

@@ -10,6 +10,22 @@ namespace basecross
 		void CreateViewLight();
 		//スプライトの作成
 		void CreateTitleSprite();
+		void CreateUI();
+
+		void CreateFadeOutSprite();
+		void CreateFadeSprite();
+		bool m_SelectFlag;
+
+		//選択関係
+		bool ActionFlag;
+		bool ControllerFlag;
+		bool SelectFlag;
+		float ThumbTimer;
+		bool ThumbFlag;
+		int NowSelect;
+
+		float m_ScaleTimer;
+		bool m_ScaleFlag;
 	public:
 		//構築と破棄
 		ClearStage() :Stage() {}
@@ -18,6 +34,7 @@ namespace basecross
 		virtual void OnCreate()override;
 		//更新
 		virtual void OnUpdate()override;
+
 	};
 
 }

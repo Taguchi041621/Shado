@@ -46,12 +46,14 @@ namespace basecross
 		//DrawComp->SetTextureResource(L"SELECT_TX");
 		AddGameObject<Sprite>(L"SELECT_TX", false,
 			Vec2(1280.0f, 800.0f), Vec3(0, 0.0f, 0.1f));
+		AddGameObject<ScaleChangeSprite>(L"SELECT_TEXT_TX", true,
+			Vec2(960, 200), Vec3(0, 300, 0.1f), 1.0f);
 	}
 
 	void StageSelect::CreateFadeOutSprite()
 	{
 		auto Fade = AddGameObject<SpriteFadeOut>(L"Shadow_TX", true,
-			Vec2(50000 / 4, 30000 / 4), Vec3(0.0f, 0.0f, 0.1f));
+			Vec2(50000 / 4, 30000 / 4), Vec3(0.0f, 0.0f, 0.0f));
 		SetSharedGameObject(L"FadeOut", Fade);
 
 	}
@@ -59,7 +61,7 @@ namespace basecross
 	void StageSelect::CreateFadeSprite()
 	{
 		auto Fade = AddGameObject<SpriteFade>(L"Shadow_TX", true,
-			Vec2(840, 600), Vec3(900.0f, 0.0f, 0.5f));
+			Vec2(840, 600), Vec3(900.0f, 0.0f, 0.0f));
 		SetSharedGameObject(L"FadeIn", Fade);
 
 	}
@@ -108,6 +110,7 @@ namespace basecross
 
 	//更新
 	void StageSelect::OnUpdate() {
+		auto ScenePtr = App::GetApp()->GetScene<Scene>();
 		//コントローラの取得
 		auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
 		if (m_SelectFlag) {
@@ -187,7 +190,8 @@ namespace basecross
 					auto FadeIn = GetSharedGameObject<SpriteFade>(L"FadeIn");
 					FadeIn->SetActionflag(true);
 					m_SelectFlag = false;
-					PostEvent(0.4f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameStage");
+					ScenePtr->SetRespawnFlag(false);
+					PostEvent(0.8f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameStage");
 				}
 			}
 		}
@@ -200,7 +204,6 @@ namespace basecross
 		auto Five = GetSharedGameObject<Sprite>(L"5");
 		auto Six = GetSharedGameObject<Sprite>(L"6");
 		auto Seven = GetSharedGameObject<Sprite>(L"7");
-		auto ScenePtr = App::GetApp()->GetScene<Scene>();
 		switch (m_StageNumber) {
 
 		case 0:

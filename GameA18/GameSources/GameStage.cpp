@@ -262,11 +262,16 @@ namespace basecross {
 	}
 	//更新
 	void GameStage::OnUpdate() {
+		auto ScenePtr = App::GetApp()->GetScene<Scene>();
 		auto Fade = GetSharedGameObject<SpriteFade>(L"FadeIn");
 		auto PtrPlayer = GetSharedGameObject<Player>(L"Player");
 		if (PtrPlayer->GetGameOverFlag() && PtrPlayer->GetFadeFlag() && !m_ClearFlag) {
 			Fade->SetActionflag(true);
-			PostEvent(0.8f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameOver");
+			//リスポーン
+			ScenePtr->SetRespawnFlag(true);
+			PostEvent(0.8f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameStage");
+			//ゲームオーバー
+			//PostEvent(0.8f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameOver");
 			m_ClearFlag = true;
 		}
 		if (PtrPlayer->GetGameClearFlag() && PtrPlayer->GetFadeFlag() && !m_ClearFlag) {
