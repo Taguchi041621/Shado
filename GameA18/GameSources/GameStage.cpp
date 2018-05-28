@@ -233,6 +233,19 @@ namespace basecross {
 	void GameStage::CreateMiniMap() {
 		AddGameObject<MiniMap>();
 	}
+	void GameStage::CreateMoveEnd() {
+		auto group = GetSharedObjectGroup(L"MoveEndGroup");
+		for (int i = 1; i > -2 ; i += -2) {
+			auto vertical = AddGameObject<Sprite>(L"Shadow_TX", true, Vec2(8000, 400), Vec3(0, 500*(float)i, 0));
+			auto horizontal = AddGameObject<Sprite>(L"Shadow_TX", true, Vec2(650, 5000), Vec3(750*(float)i, 0, 0));
+			vertical->GetComponent<Action>()->AllActionClear();
+			horizontal->GetComponent<Action>()->AllActionClear();
+			vertical->SetActionflag(true);
+			horizontal->SetActionflag(true);
+			group->IntoGroup(vertical);
+			group->IntoGroup(horizontal);
+		}
+	}
 	void GameStage::OnCreate() {
 		m_ClearFlag = false;
 		try {
@@ -244,10 +257,15 @@ namespace basecross {
 			CreateSharedObjectGroup(L"KeyGroup");
 			//ステージにある鍵の数
 			CreateSharedObjectGroup(L"HaveKeysGroup");
+			//4方向のライト限界を教えるスプライトのグループ
+			//上から登録、時計回り
+			CreateSharedObjectGroup(L"MoveEndGroup");
 			//敵
 			CreateEnemy();
 			//ミニマップ
-			CreateMiniMap();
+			//CreateMiniMap();
+			//ライトの駆動限界を教える
+			CreateMoveEnd();
 			Csv();
 			//鍵の数に応じて作るため、鍵ができてから呼び出す
 			CreateHaveKeys();

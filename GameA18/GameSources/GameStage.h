@@ -25,6 +25,8 @@ namespace basecross {
 		void CreateEnemy();
 		//ミニマップ
 		void CreateMiniMap();
+		//画面端を知らせる演出
+		void CreateMoveEnd();
 		CsvFile m_Csv;//CSV関連の変数
 					  //DataIDを管理するフラグ
 		bool dataIdFlag = false;

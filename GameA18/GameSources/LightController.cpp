@@ -23,46 +23,71 @@ namespace basecross {
 			//右スティックが動いていたら
 			if (CntlVec[0].fThumbRX != 0 || CntlVec[0].fThumbRY != 0) {
 				//X方向にステックが倒れていたら
-				if (m_LightAngle.x >= -m_MaxAngle && CntlVec[0].fThumbRX > 0.4f) {
+				if (CntlVec[0].fThumbRX > 0.4f) {
 					m_LightAngle.x += -CntlVec[0].fThumbRX * ElapsedTime*m_Speed;
 					m_Lingering.x = -CntlVec[0].fThumbRX*m_Speed;
 				}
-				else if (m_LightAngle.x <= m_MaxAngle && CntlVec[0].fThumbRX < -0.4f) {
+				else if (CntlVec[0].fThumbRX < -0.4f) {
 					m_LightAngle.x += -CntlVec[0].fThumbRX * ElapsedTime*m_Speed;
 					m_Lingering.x = -CntlVec[0].fThumbRX*m_Speed;
 				}
 				//Y方向にスティックが倒れていたら
-				if (m_LightAngle.y >= -m_MaxAngle && CntlVec[0].fThumbRY > 0.4f) {
+				if (CntlVec[0].fThumbRY > 0.4f) {
 					m_LightAngle.y += -CntlVec[0].fThumbRY * ElapsedTime*m_Speed;
 					m_Lingering.y = -CntlVec[0].fThumbRY*m_Speed;
 				}
 				else if (CntlVec[0].fThumbRY < -0.4f) {
-					if (m_LightAngle.y <= m_MaxAngle) {
-						m_LightAngle.y += -CntlVec[0].fThumbRY * ElapsedTime*m_Speed;
-						m_Lingering.y = -CntlVec[0].fThumbRY*m_Speed;
-					}
+					m_LightAngle.y += -CntlVec[0].fThumbRY * ElapsedTime*m_Speed;
+					m_Lingering.y = -CntlVec[0].fThumbRY*m_Speed;
 				}
 			}
 			//スティック離した後も少し動く
-			else if (m_Lingering.x >= 0.1f || m_Lingering.y >= 0.1f||
+			else if (m_Lingering.x >= 0.1f || m_Lingering.y >= 0.1f ||
 				m_Lingering.x <= -0.1f || m_Lingering.y <= -0.1f) {
 				m_LightAngle.x += m_Lingering.x * ElapsedTime;
 				m_LightAngle.y += m_Lingering.y * ElapsedTime;
 				m_Lingering *= 0.8f;
-				//マックスアングルを超えたらマックスアングルの値に戻す
+			}
+			//限界位置表示のやつが入ってるグループの取得
+			auto MoveEndGroup = GetStage()->GetSharedObjectGroup(L"MoveEndGroup");
+			//マックスアングルを超えたらマックスアングルの値に戻す
+			//左
+			if (m_LightAngle.x >= m_MaxAngle - 0.5f) {
 				if (m_LightAngle.x >= m_MaxAngle) {
 					m_LightAngle.x = m_MaxAngle;
 				}
+				MoveEndGroup->at(3)->GetComponent<Action>()->AllActionClear();
+				MoveEndGroup->at(3)->GetComponent<Action>()->
+					AddMoveTo(0.1f,Vec3(-650.0f - (m_MaxAngle - m_LightAngle.x)*100.0f, 0.0f, 0.0f));
+			}
+			//右
+			if (m_LightAngle.x <= -m_MaxAngle + 0.5f) {
 				if (m_LightAngle.x <= -m_MaxAngle) {
 					m_LightAngle.x = -m_MaxAngle;
 				}
+				MoveEndGroup->at(1)->GetComponent<Action>()->AllActionClear();
+				MoveEndGroup->at(1)->GetComponent<Action>()->
+					AddMoveTo(0.1f, Vec3(650.0f + (m_MaxAngle - -m_LightAngle.x)*100.0f, 0.0f, 0.0f));
+			}
+			//下
+			if (m_LightAngle.y >= m_MaxAngle - 0.5f) {
 				if (m_LightAngle.y >= m_MaxAngle) {
 					m_LightAngle.y = m_MaxAngle;
-				}
+				}				
+				MoveEndGroup->at(2)->GetComponent<Action>()->AllActionClear();
+				MoveEndGroup->at(2)->GetComponent<Action>()->
+					AddMoveTo(0.1f, Vec3(0.0f,-400.0f - (m_MaxAngle - m_LightAngle.y)*100.0f,0.0f));
+			}
+			//上
+			if (m_LightAngle.y <= -m_MaxAngle + 0.5f) {
 				if (m_LightAngle.y <= -m_MaxAngle) {
 					m_LightAngle.y = -m_MaxAngle;
 				}
+				MoveEndGroup->at(0)->GetComponent<Action>()->AllActionClear();
+				MoveEndGroup->at(0)->GetComponent<Action>()->
+					AddMoveTo(0.1f, Vec3(0.0f, 400.0f + (m_MaxAngle - -m_LightAngle.y)*100.0f, 0.0f));
 			}
+
 
 			//---------------------------------------------------------------------------------------
 			//角度からポジション出す
