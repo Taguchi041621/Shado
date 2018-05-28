@@ -106,14 +106,21 @@ namespace basecross
 			if (!SelectFlag) {//コントローラーの処理
 				if (CntlVec[0].fThumbLX < -0.5f) {
 					if (ThumbFlag) {
-						NowSelect -= 1;//選択状態を右へ
+						NowSelect = 1;
 						ThumbTimer = 0.0f;
 						ThumbFlag = false;
 					}
 				}
 				else if (CntlVec[0].fThumbLX > 0.5f) {
 					if (ThumbFlag) {
-						NowSelect += 1;//選択状態を左へ
+						NowSelect = 2;
+						ThumbTimer = 0.0f;
+						ThumbFlag = false;
+					}
+				}
+				else if (CntlVec[0].fThumbLY > 0.5f) {
+					if (ThumbFlag) {
+						NowSelect = 0;
 						ThumbTimer = 0.0f;
 						ThumbFlag = false;
 					}
