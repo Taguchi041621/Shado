@@ -34,6 +34,21 @@ namespace basecross {
 		//フェードの作成
 		void CreateFadeOutSprite();
 		void CreateFadeSprite();
+
+		void CreatePause();
+
+
+		//選択関係
+		bool ActionFlag;
+		bool ControllerFlag;
+		bool SelectFlag;
+		float ThumbTimer;
+		bool ThumbFlag;
+		int NowSelect;
+
+		float m_ScaleTimer;
+		bool m_ScaleFlag;
+
 	public:
 		//構築と破棄
 		GameStage() :Stage() {}
@@ -46,6 +61,8 @@ namespace basecross {
 
 		bool GetClearFlag() { return m_ClearFlag; }
 		void SetClearFlag(bool f) { m_ClearFlag = f; }
+
+		
 	};
 
 

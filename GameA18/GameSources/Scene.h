@@ -31,6 +31,7 @@ namespace basecross{
 
 		float StageCameraPosZ;
 		float StageCameraAngle;
+		bool m_PauseFlag;
 
 	public:
 		//--------------------------------------------------------------------------------------
@@ -99,6 +100,9 @@ namespace basecross{
 		float GetCameraAngle() {
 			return StageCameraAngle;
 		}
+
+		bool GetPauseFlag() { return m_PauseFlag; }
+		void SetPauseFlag(bool f) { m_PauseFlag = f; }
 	};
 
 }

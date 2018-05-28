@@ -31,7 +31,8 @@ namespace basecross {
 	//ƒJƒƒ‰‚ðˆø‚¢‚½‚è‹ß‚Ã‚¯‚½‚è‚·‚é
 	void MyCamera::CameraChanger() {
 		auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
-		if (m_StartFlag) {
+		auto ScenePtr = App::GetApp()->GetScene<Scene>();
+		if (m_StartFlag && !ScenePtr->GetPauseFlag()) {
 			if (CntlVec[0].bConnected) {
 				if (CntlVec[0].wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) {
 					CameraPosZ += 0.2;
@@ -62,7 +63,7 @@ namespace basecross {
 					}
 				}
 		}
-		else {
+		else if(!m_StartFlag) {
 			CameraPosZ += 0.2;
 			if (CameraPosZ >= -10) {
 				CameraPosZ = -10;
@@ -85,10 +86,8 @@ namespace basecross {
 		Vec3 Eye = TargetPos + ArmVec;
 		SetAt(TargetPos);
 		SetEye(Eye);
-		auto ScenePtr = App::GetApp()->GetScene<Scene>();
 		ScenePtr->SetCameraAngle(CameraAngle);
 		ScenePtr->SetCameraPosZ(CameraPosZ);
-
 	}
 
 	void MyCamera::OnCreate() {
