@@ -122,6 +122,20 @@ namespace basecross
 		Num = AddGameObject<Sprite>(L"7_TX", true,
 			Vec2(50.0f, 100.0f), Vec3(1400, 20.0f, 0.1f));
 		SetSharedGameObject(L"7Num", Num);
+
+		Door = AddGameObject<Sprite>(L"Door_TX", false,
+			Vec2(100.0f, 200.0f), Vec3(1400, 0.0f, 0.1f));
+		SetSharedGameObject(L"8", Door);
+		Num = AddGameObject<Sprite>(L"8_TX", true,
+			Vec2(50.0f, 100.0f), Vec3(1400, 20.0f, 0.1f));
+		SetSharedGameObject(L"8Num", Num);
+
+		Door = AddGameObject<Sprite>(L"Door_TX", false,
+			Vec2(100.0f, 200.0f), Vec3(1400, 0.0f, 0.1f));
+		SetSharedGameObject(L"9", Door);
+		Num = AddGameObject<Sprite>(L"9_TX", true,
+			Vec2(50.0f, 100.0f), Vec3(1400, 20.0f, 0.1f));
+		SetSharedGameObject(L"9Num", Num);
 	}
 
 	void StageSelect::OnCreate()
@@ -196,9 +210,9 @@ namespace basecross
 				}
 
 				if (m_StageNumber < 0) {
-					m_StageNumber = 7;
+					m_StageNumber = 9;
 				}
-				else if (m_StageNumber > 7) {
+				else if (m_StageNumber > 9) {
 					m_StageNumber = 0;
 				}
 				//Aボタン
@@ -228,7 +242,7 @@ namespace basecross
 		}
 
 		//ステージの数ループさせる
-		for (int i = 0; i < 8;i++) {
+		for (int i = 0; i < 10;i++) {
 			auto StageNum = to_wstring(i);
 			auto Door = GetSharedGameObject<Sprite>(StageNum);
 			auto Num = GetSharedGameObject<Sprite>(StageNum + L"Num");
