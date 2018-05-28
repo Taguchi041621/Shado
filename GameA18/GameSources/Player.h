@@ -182,11 +182,31 @@ namespace basecross{
 	class FallState : public ObjState<Player>
 	{
 		shared_ptr<MultiAudioObject> m_AudioObjectPtr;
-
+		float m_Timer;
+		bool m_FallFlag;
 		FallState() {}
 	public:
 		//ステートのインスタンス取得
 		static shared_ptr<FallState> Instance();
+		//ステートに入ったときに呼ばれる関数
+		virtual void Enter(const shared_ptr<Player>& Obj)override;
+		//ステート実行中に毎ターン呼ばれる関数
+		virtual void Execute(const shared_ptr<Player>& Obj)override;
+		//ステートにから抜けるときに呼ばれる関数
+		virtual void Exit(const shared_ptr<Player>& Obj)override;
+	};
+
+	//--------------------------------------------------------------------------------------
+	//	class StandState : public ObjState<Player>;
+	//	用途: 起き上がり状態
+	//--------------------------------------------------------------------------------------
+	class StandState : public ObjState<Player>
+	{
+		shared_ptr<MultiAudioObject> m_AudioObjectPtr;
+		StandState() {}
+	public:
+		//ステートのインスタンス取得
+		static shared_ptr<StandState> Instance();
 		//ステートに入ったときに呼ばれる関数
 		virtual void Enter(const shared_ptr<Player>& Obj)override;
 		//ステート実行中に毎ターン呼ばれる関数

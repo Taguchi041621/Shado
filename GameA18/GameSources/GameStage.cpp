@@ -29,7 +29,7 @@ namespace basecross {
 		//ファイルの指定
 		m_Csv.SetFileName(Map);
 
-		if (!m_Csv.ReadCsv()){
+		if (!m_Csv.ReadCsv()) {
 			//ファイルが存在しなかったとき
 			throw BaseException(
 				L"ファイルが見つかりませんでした",
@@ -54,7 +54,7 @@ namespace basecross {
 
 		int Wcount = 0;
 		//最後まで読み込む
-		while (MapVec[0] != L"end"){
+		while (MapVec[0] != L"end") {
 			//文字列があったかを判断
 			bool stringflag = false;
 			//ポジション、ローテーション、スケール
@@ -67,14 +67,14 @@ namespace basecross {
 			//--------------------
 			//_wtof(文字列を数値として読み取る)
 			//ポジションを格納
-			Vec3 Pos = Vec3((float)_wtof(MapVec[1].c_str()), (float)_wtof(MapVec[2].c_str()), (float)_wtof(MapVec[3].c_str())-1.0f);
+			Vec3 Pos = Vec3((float)_wtof(MapVec[1].c_str()), (float)_wtof(MapVec[2].c_str()), (float)_wtof(MapVec[3].c_str()) - 1.0f);
 			//ローテーションを格納(この時にラジアンに変換)
 			Vec3 Rot = Vec3((float)_wtof(MapVec[4].c_str()), (float)_wtof(MapVec[5].c_str()), (float)_wtof(MapVec[6].c_str()))*DegToRad;
 			//スケールを格納
 			Vec3 Scl = Vec3((float)_wtof(MapVec[7].c_str()), (float)_wtof(MapVec[8].c_str()), (float)_wtof(MapVec[9].c_str()));
 			//auto UpGroup = GetSharedObjectGroup(L"UpdateObjectGroup");
 
-			if (MapVec[0] == L"Cube"){
+			if (MapVec[0] == L"Cube") {
 				//FixedBox(const Vector3& Scale,const Vector3& Rotation,const Vector3& Position
 				//それぞれの値を入れる
 				//固定する値を設定
@@ -85,7 +85,7 @@ namespace basecross {
 				auto PtrCube = AddGameObject<WhiteCube>(Scl, Qt, Pos);
 			}
 
-			if (MapVec[0] == L"Player"){
+			if (MapVec[0] == L"Player") {
 				stringflag = true;
 				wstring DataDir;
 				App::GetApp()->GetDataDirectory(DataDir);
@@ -99,7 +99,7 @@ namespace basecross {
 				dynamic_pointer_cast<MyCamera>(GetView()->GetTargetCamera())->SetTargetObject(PlayerPtr);
 			}
 
-			if (MapVec[0] == L"Goal"){
+			if (MapVec[0] == L"Goal") {
 				stringflag = true;
 				Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
 				auto CubePtr = AddGameObject<Goal>(
@@ -108,13 +108,13 @@ namespace basecross {
 					Pos					//ポジション
 					);
 			}
-			if (MapVec[0] == L"Key"){
+			if (MapVec[0] == L"Key") {
 				stringflag = true;
 				//Pos.z = -15.0f;
 				Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
 				AddGameObject<KeyItem>(Pos);
 			}
-			if (!stringflag){
+			if (!stringflag) {
 				throw BaseException(
 					Util::IntToWStr(RowNum + 1) + L"行目",
 					MapVec[0].c_str(),
@@ -143,6 +143,21 @@ namespace basecross {
 			Vec2(840, 600), Vec3(900.0f, 0.0f, 0.1f));
 		SetSharedGameObject(L"FadeIn", Fade);
 
+	}
+
+	void GameStage::CreatePause() {
+		auto Pause = AddGameObject<Sprite>(L"PAUSE_TX", true,
+			Vec2(800 * 2, 450 * 2), Vec3(0, -50.0f, 0.2f));
+		SetSharedGameObject(L"Pause", Pause);
+		Pause->SetDrawActive(false);
+		auto WLight = AddGameObject<ScaleChangeSprite>(L"GameOver_WhiteLight_TX", true,
+			Vec2(1000, 600), Vec3(-20, -30, 0.1f), 0.3f);
+		WLight->SetDrawActive(false);
+
+		//白い光のアニメーション
+		WLight->AddComponent<Action>();
+		WLight->GetComponent<Action>()->AllActionClear();
+		SetSharedGameObject(L"WLight", WLight);
 	}
 
 
@@ -201,19 +216,18 @@ namespace basecross {
 		DrawComp->SetOwnShadowActive(true);
 		DrawComp->SetTextureResource(L"WallTexture_TX");
 		DrawComp->SetColorAndAlpha(Color);
-
 	}
 	void GameStage::CreateHaveKeys() {
 		auto group = GetSharedObjectGroup(L"KeyGroup");
 		for (int i = 0; i < group->size(); i++) {
 			//鍵のグループに入ってる数、表示する
-			auto key = AddGameObject<HaveKeys>((wstring)L"UI_Key_None_TX",i);
+			auto key = AddGameObject<HaveKeys>((wstring)L"UI_Key_None_TX", i);
 			if (i == 0) {
 				SetSharedGameObject(L"HaveKey", key);
 			}
 		}
 	}
-	void GameStage::CreateEnemy() 
+	void GameStage::CreateEnemy()
 	{
 		//ステージへのゲームオブジェクトの追加
 		auto Ptr = AddGameObject<GameObject>();
@@ -248,6 +262,7 @@ namespace basecross {
 	}
 	void GameStage::OnCreate() {
 		m_ClearFlag = false;
+		NowSelect = 0;
 		try {
 			//ビューとライトの作成
 			CreateViewLight();
@@ -261,7 +276,7 @@ namespace basecross {
 			//上から登録、時計回り
 			CreateSharedObjectGroup(L"MoveEndGroup");
 			//敵
-			CreateEnemy();
+			//CreateEnemy();
 			//ミニマップ
 			//CreateMiniMap();
 			//ライトの駆動限界を教える
@@ -269,10 +284,12 @@ namespace basecross {
 			Csv();
 			//鍵の数に応じて作るため、鍵ができてから呼び出す
 			CreateHaveKeys();
-			
+			CreatePause();
 			//フェード
 			CreateFadeOutSprite();
 			CreateFadeSprite();
+
+
 		}
 		catch (...) {
 			throw;
@@ -283,6 +300,13 @@ namespace basecross {
 		auto ScenePtr = App::GetApp()->GetScene<Scene>();
 		auto Fade = GetSharedGameObject<SpriteFade>(L"FadeIn");
 		auto PtrPlayer = GetSharedGameObject<Player>(L"Player");
+
+		auto Pause = GetSharedGameObject<Sprite>(L"Pause");
+		auto WLight = GetSharedGameObject<ScaleChangeSprite>(L"WLight");
+
+		auto Time = App::GetApp()->GetElapsedTime();
+		ThumbTimer += Time;
+		m_ScaleTimer += Time;
 		if (PtrPlayer->GetGameOverFlag() && PtrPlayer->GetFadeFlag() && !m_ClearFlag) {
 			Fade->SetActionflag(true);
 			//リスポーン
@@ -297,14 +321,112 @@ namespace basecross {
 			PostEvent(0.8f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToClearStage");
 			m_ClearFlag = true;
 		}
-		////コントローラの取得
-		//auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
-		//if (CntlVec[0].bConnected) {
-		//	//Aボタン
-		//	if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A) {
-		//		PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToTitleStage");
-		//	}
-		//}
+
+		//コントローラの取得
+		auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
+		if (CntlVec[0].bConnected) {
+			if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_START && !ScenePtr->GetPauseFlag()) {
+				PtrPlayer->SetUpdateActive(false);
+				ScenePtr->SetPauseFlag(true);
+				Pause->SetDrawActive(true);
+				WLight->SetDrawActive(true);
+			}
+			else	if ((CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_START || CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_B)
+				&& ScenePtr->GetPauseFlag()) {
+				PtrPlayer->SetUpdateActive(true);
+				ScenePtr->SetPauseFlag(false);
+				auto Pause = GetSharedGameObject<Sprite>(L"Pause");
+				auto WLight = GetSharedGameObject<ScaleChangeSprite>(L"WLight");
+
+				Pause->SetDrawActive(false);
+				WLight->SetDrawActive(false);
+			}
+		}
+
+
+		if (ScenePtr->GetPauseFlag()) {
+			if (ThumbTimer > 0.5f) {
+				ThumbFlag = true;
+			}
+			if (!SelectFlag) {//コントローラーの処理
+				if (CntlVec[0].fThumbLY < -0.5f) {
+					if (ThumbFlag) {
+						NowSelect += 1;
+						ThumbTimer = 0.0f;
+						ThumbFlag = false;
+					}
+				}
+				else if (CntlVec[0].fThumbLY > 0.5f) {
+					if (ThumbFlag) {
+						NowSelect -= 1;
+						ThumbTimer = 0.0f;
+						ThumbFlag = false;
+					}
+				}
+			}
+
+			if (NowSelect < 0) {
+				NowSelect = 2;
+			}
+
+			if (NowSelect > 2) {
+				NowSelect = 0;
+			}
+
+
+			switch (NowSelect) {//現在選択中の状態によって処理を分岐
+			case 0:
+				WLight->GetComponent<Action>()->Stop();
+				WLight->GetComponent<Action>()->AllActionClear();
+				WLight->GetComponent<Action>()->
+					AddMoveTo(0.2f, Vec3(-20, 130, 0.1f));
+				WLight->GetComponent<Action>()->Run();
+				break;
+			case 1:
+				WLight->GetComponent<Action>()->Stop();
+				WLight->GetComponent<Action>()->AllActionClear();
+				WLight->GetComponent<Action>()->
+					AddMoveTo(0.2f, Vec3(-20, -30, 0.1f));
+				WLight->GetComponent<Action>()->Run();
+				break;
+			case 2:
+				WLight->GetComponent<Action>()->Stop();
+				WLight->GetComponent<Action>()->AllActionClear();
+				WLight->GetComponent<Action>()->
+					AddMoveTo(0.2f, Vec3(-20, -190, 0.1f));
+				WLight->GetComponent<Action>()->Run();
+				break;
+			}
+
+			//Aボタン
+			if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A) {
+				auto FadeIn = GetSharedGameObject<SpriteFade>(L"FadeIn");
+				SelectFlag = true;
+				switch (NowSelect) {//現在選択中の状態によって処理を分岐
+				case 0:
+					PtrPlayer->SetUpdateActive(true);
+					ScenePtr->SetPauseFlag(false);
+					Pause->SetDrawActive(false);
+					WLight->SetDrawActive(false);
+					SelectFlag = false;
+					break;
+				case 1:
+					ScenePtr->SetRespawnFlag(false);
+					ScenePtr->SetPauseFlag(false);
+					FadeIn->SetActionflag(true);
+					PostEvent(0.8f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameStage");
+					break;
+				case 2:
+					ScenePtr->SetPauseFlag(false);
+					FadeIn->SetActionflag(true);
+					PostEvent(0.8f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToStageSelect");
+					break;
+				}
+			}
+		}
 	}
 	//end basecross
 }
+	
+
+		

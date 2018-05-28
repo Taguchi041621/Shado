@@ -29,6 +29,10 @@ namespace basecross{
 
 		bool m_RespawnFlag;
 
+		float StageCameraPosZ;
+		float StageCameraAngle;
+		bool m_PauseFlag;
+
 	public:
 		//--------------------------------------------------------------------------------------
 		/*!
@@ -80,6 +84,25 @@ namespace basecross{
 		bool GetRespawnFlag() {
 			return m_RespawnFlag;
 		}
+
+		void SetCameraPosZ(float p) {
+			StageCameraPosZ = p;
+		}
+
+		float GetCameraPosZ() {
+			return StageCameraPosZ;
+		}
+
+		void SetCameraAngle(float a) {
+			StageCameraAngle = a;
+		}
+
+		float GetCameraAngle() {
+			return StageCameraAngle;
+		}
+
+		bool GetPauseFlag() { return m_PauseFlag; }
+		void SetPauseFlag(bool f) { m_PauseFlag = f; }
 	};
 
 }
