@@ -244,8 +244,14 @@ namespace basecross{
 		m_StateMachine = make_shared< StateMachine<Player> >(GetThis<Player>());
 		//最初のステートをWaitStateに設定
 		m_StateMachine->SetCurrentState(WaitState::Instance());
+		auto ScenePtr = App::GetApp()->GetScene<Scene>();
+		if (ScenePtr->GetRespawnFlag())
+		{
+			m_StateMachine->ChangeState(StandState::Instance());
+		}
 		//WaitStateの初期化実行を行う
 		m_StateMachine->GetCurrentState()->Enter(GetThis<Player>());
+		
 	}
 
 	//更新
@@ -376,6 +382,7 @@ namespace basecross{
 	//ステートに入ったときに呼ばれる関数
 	void WaitState::Enter(const shared_ptr<Player>& Obj) {
 		Obj->AnimeChangeMotion(L"Wait_1", true);
+		Obj->SetFps(49.0f);
 	}
 	//ステート実行中に毎ターン呼ばれる関数
 	void WaitState::Execute(const shared_ptr<Player>& Obj) {
@@ -412,12 +419,27 @@ namespace basecross{
 	//ステートに入ったときに呼ばれる関数
 	void FallState::Enter(const shared_ptr<Player>& Obj) {
 		Obj->AnimeChangeMotion(L"Down_loop", true);
+		m_Timer = 0;
+		m_FallFlag = false;
 	}
 	//ステート実行中に毎ターン呼ばれる関数
 	void FallState::Execute(const shared_ptr<Player>& Obj) {
+		float ElapsedTime = App::GetApp()->GetElapsedTime();
+		m_Timer += ElapsedTime;
+
+		if (m_Timer >= 1.3f)
+		{
+			Obj->AnimeChangeMotion(L"Fall", false);
+			m_FallFlag = true;
+			m_Timer = -10;
+		}
+
 		//アニメーション更新
 		Obj->LoopedAnimeUpdateMotion();
-		if (Obj->GetParentFlag()) {
+		if (Obj->GetParentFlag() && m_FallFlag) {
+			Obj->GetStateMachine()->ChangeState(StandState::Instance());
+		}
+		else if (Obj->GetParentFlag()) {
 			Obj->GetStateMachine()->ChangeState(LandingState::Instance());
 		}
 	}
@@ -453,6 +475,37 @@ namespace basecross{
 	void LandingState::Exit(const shared_ptr<Player>& Obj) {
 
 	}
+
+	//--------------------------------------------------------------------------------------
+	//	class StandState : public ObjState<Player>;
+	//	用途: 起き上がり
+	//--------------------------------------------------------------------------------------
+	//ステートのインスタンス取得
+	shared_ptr<StandState> StandState::Instance() {
+		static shared_ptr<StandState> instance;
+		if (!instance) {
+			instance = shared_ptr<StandState>(new StandState);
+		}
+		return instance;
+	}
+	//ステートに入ったときに呼ばれる関数
+	void StandState::Enter(const shared_ptr<Player>& Obj) {
+		Obj->AnimeChangeMotion(L"Stand", false);
+		Obj->SetFps(30.0f);
+	}
+	//ステート実行中に毎ターン呼ばれる関数
+	void StandState::Execute(const shared_ptr<Player>& Obj) {
+		//アニメーション更新
+		Obj->LoopedAnimeUpdateMotion();
+		if (Obj->IsAnimeEnd()) {
+			Obj->GetStateMachine()->ChangeState(WaitState::Instance());
+		}
+	}
+	//ステートから抜けるときに呼ばれる関数
+	void StandState::Exit(const shared_ptr<Player>& Obj) {
+
+	}
+
 	//--------------------------------------------------------------------------------------
 	//	class WalkState : public ObjState<Player>;
 	//	用途: 歩き状態
@@ -467,6 +520,7 @@ namespace basecross{
 	}
 	//ステートに入ったときに呼ばれる関数
 	void WalkState::Enter(const shared_ptr<Player>& Obj) {
+		Obj->SetFps(49.0f);
 		Obj->AnimeChangeMotion(L"Walk", true);
 		//---------------------------------------------------------------
 		wstring DataDir;

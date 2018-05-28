@@ -85,6 +85,10 @@ namespace basecross {
 		Vec3 Eye = TargetPos + ArmVec;
 		SetAt(TargetPos);
 		SetEye(Eye);
+		auto ScenePtr = App::GetApp()->GetScene<Scene>();
+		ScenePtr->SetCameraAngle(CameraAngle);
+		ScenePtr->SetCameraPosZ(CameraPosZ);
+
 	}
 
 	void MyCamera::OnCreate() {
@@ -97,8 +101,8 @@ namespace basecross {
 		{
 			m_StartFlag = true;
 			ScenePtr->SetStartFlag(m_StartFlag);
-			CameraPosZ = -10;
-			CameraAngle = 6;
+			CameraPosZ = ScenePtr->GetCameraPosZ();
+			CameraAngle = ScenePtr->GetCameraAngle();
 		}
 	}
 	void MyCamera::OnUpdate() {
