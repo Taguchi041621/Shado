@@ -29,21 +29,20 @@ namespace basecross {
 		PtrObb->SetFixed(true);
 		//PtrObb->SetDrawActive(true);
 
-		//auto PtrDraw = AddComponent<BcPNTStaticDraw>();
-		//PtrDraw->SetMeshResource(m_Obj.GetComponent<BcPNTStaticDraw>()->GetMeshResource());
-		////^‚Á•
-		//PtrDraw->SetColorAndAlpha(Col4(1.0f, 1.0f, 1.0f, 0.0f));
-		////Mat4x4 au;
-		///*au.affineTransformation(
-		//	Vec3(1.0f, 1.0f, 0.1f),
-		//	Vec3(0, 0, 0),
-		//	Vec3(0, 0, 0),
-		//	Vec3(0.0f, 0.0f, 0.0f)
-		//	);
-		//PtrDraw->SetMeshToTransformMatrix(au);*/
-		//PtrDraw->SetTextureResource(L"Shadow_Blur_TX");
+		auto PtrDraw = AddComponent<BcPNTStaticDraw>();
+		PtrDraw->SetMeshResource(m_Obj.GetComponent<BcPNTStaticDraw>()->GetMeshResource());
+		//^‚Á•
+		PtrDraw->SetColorAndAlpha(Col4(1.0f, 1.0f, 1.0f, 0.0f));
+		//Mat4x4 au;
+		/*au.affineTransformation(
+			Vec3(1.0f, 1.0f, 0.1f),
+			Vec3(0, 0, 0),
+			Vec3(0, 0, 0),
+			Vec3(0.0f, 0.0f, 0.0f)
+			);
+		PtrDraw->SetMeshToTransformMatrix(au);*/
+		PtrDraw->SetTextureResource(L"Shadow_Blur_TX");
 		//PtrDraw->SetAlpha(1.0f);
-		//PtrDraw->SetPerPixelLighting(false);
 
 
 

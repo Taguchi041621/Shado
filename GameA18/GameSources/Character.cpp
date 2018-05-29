@@ -41,11 +41,11 @@ namespace basecross {
 			GetComponent<Transform>()->GetRotation(),
 			*GetThis<GameObject>()
 			);
-		GetStage()->AddGameObject<ShadowObject2>(
+		/*GetStage()->AddGameObject<ShadowObject2>(
 			GetComponent<Transform>()->GetScale(),
 			GetComponent<Transform>()->GetRotation(),
 			*GetThis<GameObject>()
-			);
+			);*/
 	}
 
 	void WhiteCube::OnUpdate() {

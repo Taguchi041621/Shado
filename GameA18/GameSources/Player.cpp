@@ -203,6 +203,7 @@ namespace basecross{
 		m_GameClearFlag = false;
 		m_GameOverFlag = false;
 		m_ParentFlag = false;
+		m_StandFlag = false;
 		//初期位置などの設定
 		auto Ptr = GetComponent<Transform>();
 		Ptr->SetScale(0.80f, 1.60f, 0.040f);	//X,Z25、Y50の長方形
@@ -268,7 +269,7 @@ namespace basecross{
 
 	void Player::OnUpdate2() {
 		auto ScenePtr = App::GetApp()->GetScene<Scene>();
-		if (m_ParentFlag && !m_GameOverFlag && !m_GameClearFlag && ScenePtr->GetStartFlag()) {
+		if (m_ParentFlag && !m_GameOverFlag && !m_GameClearFlag && ScenePtr->GetStartFlag()&&!m_StandFlag) {
 			//プレイヤーの移動
 			MoveRotationMotion();
 			//文字列の表示
@@ -468,7 +469,7 @@ namespace basecross{
 		//アニメーション更新
 		Obj->LoopedAnimeUpdateMotion();
 		if (Obj->IsAnimeEnd()) {
-			Obj->GetStateMachine()->ChangeState(WalkState::Instance());
+			Obj->GetStateMachine()->ChangeState(WaitState::Instance());
 		}
 	}
 	//ステートから抜けるときに呼ばれる関数
@@ -491,7 +492,8 @@ namespace basecross{
 	//ステートに入ったときに呼ばれる関数
 	void StandState::Enter(const shared_ptr<Player>& Obj) {
 		Obj->AnimeChangeMotion(L"Stand", false);
-		Obj->SetFps(30.0f);
+		Obj->SetFps(45.0f);
+		Obj->SetStandFlag(true);
 	}
 	//ステート実行中に毎ターン呼ばれる関数
 	void StandState::Execute(const shared_ptr<Player>& Obj) {
@@ -499,6 +501,7 @@ namespace basecross{
 		Obj->LoopedAnimeUpdateMotion();
 		if (Obj->IsAnimeEnd()) {
 			Obj->GetStateMachine()->ChangeState(WaitState::Instance());
+			Obj->SetStandFlag(false);
 		}
 	}
 	//ステートから抜けるときに呼ばれる関数

@@ -151,7 +151,7 @@ namespace basecross {
 		SetSharedGameObject(L"Pause", Pause);
 		Pause->SetDrawActive(false);
 		auto WLight = AddGameObject<ScaleChangeSprite>(L"GameOver_WhiteLight_TX", true,
-			Vec2(1000, 600), Vec3(-20, -30, 0.1f), 0.3f);
+			Vec2(1000, 600), Vec3(-20, 130, 0.1f), 0.3f);
 		WLight->SetDrawActive(false);
 
 		//白い光のアニメーション
@@ -325,7 +325,7 @@ namespace basecross {
 		//コントローラの取得
 		auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
 		if (CntlVec[0].bConnected) {
-			if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_START && !ScenePtr->GetPauseFlag()) {
+			if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_START && !ScenePtr->GetPauseFlag() && !PtrPlayer->GetGameClearFlag() && ScenePtr->GetStartFlag()) {
 				PtrPlayer->SetUpdateActive(false);
 				ScenePtr->SetPauseFlag(true);
 				Pause->SetDrawActive(true);
@@ -393,7 +393,7 @@ namespace basecross {
 				WLight->GetComponent<Action>()->Stop();
 				WLight->GetComponent<Action>()->AllActionClear();
 				WLight->GetComponent<Action>()->
-					AddMoveTo(0.2f, Vec3(-20, -190, 0.1f));
+					AddMoveTo(0.2f, Vec3(-20, -170, 0.1f));
 				WLight->GetComponent<Action>()->Run();
 				break;
 			}

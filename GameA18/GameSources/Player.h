@@ -46,6 +46,8 @@ namespace basecross{
 		wstring m_StopNowMusic;
 
 		bool m_ParentFlag;
+
+		bool m_StandFlag;
 	public:
 		//ç\ízÇ∆îjä¸
 		//--------------------------------------------------------------------------------------
@@ -173,6 +175,9 @@ namespace basecross{
 
 		void SetParentFlag(bool f) { m_ParentFlag = f; }
 		bool GetParentFlag() { return m_ParentFlag; }
+
+		void SetStandFlag(bool f) { m_StandFlag = f; }
+		bool GetStandFlag() { return m_StandFlag; }
 	};
 
 	//--------------------------------------------------------------------------------------
