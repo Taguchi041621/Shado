@@ -250,8 +250,8 @@ namespace basecross {
 	void GameStage::CreateMoveEnd() {
 		auto group = GetSharedObjectGroup(L"MoveEndGroup");
 		for (int i = 1; i > -2 ; i += -2) {
-			auto vertical = AddGameObject<Sprite>(L"Shadow_TX", true, Vec2(8000, 400), Vec3(0, 500*(float)i, 0));
-			auto horizontal = AddGameObject<Sprite>(L"Shadow_TX", true, Vec2(650, 5000), Vec3(750*(float)i, 0, 0));
+			auto vertical = AddGameObject<Sprite>(L"Shadow_TX", true, Vec2(10000, 600), Vec3(0, 470*(float)i, 0));
+			auto horizontal = AddGameObject<Sprite>(L"Shadow_TX", true, Vec2(800, 5000), Vec3(700*(float)i, 0, 0));
 			vertical->GetComponent<Action>()->AllActionClear();
 			horizontal->GetComponent<Action>()->AllActionClear();
 			vertical->SetActionflag(true);
