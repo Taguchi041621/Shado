@@ -37,7 +37,7 @@ namespace basecross{
 		App::GetApp()->RegisterTexture(L"Shadow_TX", strTexture);
 		strTexture = DataDir + L"Key.png";
 		App::GetApp()->RegisterTexture(L"Key_TX", strTexture);
-		strTexture = DataDir + L"Shadow_Blur.png";
+		strTexture = DataDir + L"Shadow_Blur4.png";
 		App::GetApp()->RegisterTexture(L"Shadow_Blur_TX", strTexture);
 		strTexture = DataDir + L"LIGHT2.png";
 		App::GetApp()->RegisterTexture(L"GameOver_WhiteLight_TX", strTexture);

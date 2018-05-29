@@ -205,7 +205,7 @@ namespace basecross{
 		m_ParentFlag = false;
 		//初期位置などの設定
 		auto Ptr = GetComponent<Transform>();
-		Ptr->SetScale(0.80f, 1.60f, 0.40f);	//X,Z25、Y50の長方形
+		Ptr->SetScale(0.80f, 1.60f, 0.040f);	//X,Z25、Y50の長方形
 		Ptr->SetRotation(0.0f, 0.0f, 0.0f);
 		Ptr->SetPosition(-8.0f, 5.5f, 0.0f);
 
