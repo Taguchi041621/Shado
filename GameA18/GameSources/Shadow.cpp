@@ -205,14 +205,40 @@ namespace basecross {
 	//------------------------------------------------------------------------------------------
 	///ゴールの役割をする影
 	//------------------------------------------------------------------------------------------
-	ShadowGoal::ShadowGoal(const shared_ptr<Stage>& StagePtr,
-		const Vec3& Scale, const Vec3& Rotation, GameObject& Obj)
-		: GameObject(StagePtr),
-		m_Scale(Scale),m_Rotation(Rotation),m_Obj(Obj), m_ScaleZ(0.05f)
+	ShadowGoal::ShadowGoal(const shared_ptr<Stage>& StagePtr, const wstring BaseDir,
+		const Vec3& m_Scale, const Vec3& Rotation, GameObject& Obj)
+		: SS5ssae(StagePtr, BaseDir, L"Door.ssae", L"Dark"),
+		m_Scale(m_Scale),m_Rotation(Rotation),m_Obj(Obj), m_ScaleZ(0.05f)
 	{
+		m_ToAnimeMatrix.affineTransformation(
+			Vec3(0.5f, 0.5f, 0.1f),
+			Vec3(0, 0, 0),
+			Vec3(0, 0, 0),
+			Vec3(0, 0.0f, 0.0f)
+		);
 	}
 
 	void ShadowGoal::OnCreate() {
+		////スケールのZを固定の大きさに
+		//m_Scale.z = m_ScaleZ;
+
+		//auto PtrTransform = GetComponent<Transform>();
+		////影のスケール,角度,ポジションの設定
+		//PtrTransform->SetScale(m_Scale);
+		//PtrTransform->SetRotation(m_Rotation);
+		//PtrTransform->SetPosition(ShadowLocation());
+
+		//auto PtrDraw = AddComponent<BcPNTStaticDraw>();
+		//PtrDraw->SetFogEnabled(true);
+		////実体から形を持ってくる
+		//PtrDraw->SetMeshResource(m_Obj.GetComponent<BcPNTStaticDraw>()->GetMeshResource());
+		//PtrDraw->SetOwnShadowActive(true);
+
+		////真っ赤
+		//PtrDraw->SetColorAndAlpha(Col4(1.0f, 0.4f, 0.0f, 1.0f));
+
+		//flag = false;
+
 		//スケールのZを固定の大きさに
 		m_Scale.z = m_ScaleZ;
 
@@ -222,21 +248,23 @@ namespace basecross {
 		PtrTransform->SetRotation(m_Rotation);
 		PtrTransform->SetPosition(ShadowLocation());
 
-		auto PtrDraw = AddComponent<BcPNTStaticDraw>();
-		PtrDraw->SetFogEnabled(true);
-		//実体から形を持ってくる
-		PtrDraw->SetMeshResource(m_Obj.GetComponent<BcPNTStaticDraw>()->GetMeshResource());
-		PtrDraw->SetOwnShadowActive(true);
-
-		//真っ赤
-		PtrDraw->SetColorAndAlpha(Col4(1.0f, 0.4f, 0.0f, 1.0f));
-
-		flag = false;
+		//親クラスのクリエイトを呼ぶ
+		SS5ssae::OnCreate();
+		//値は秒あたりのフレーム数
+		SetFps(30);
+		//アニメーションのループ設定
+		SetLooped(true);
+		//アニメーションにかけるメトリックスの設定
+		SetToAnimeMatrix(m_ToAnimeMatrix);
 	}
 
 	void ShadowGoal::OnUpdate() {
 		OnTriggerEnter();
 		GetComponent<Transform>()->SetPosition(ShadowLocation());
+
+		float ElapsedTime = App::GetApp()->GetElapsedTime();
+		//アニメーションを更新する
+		UpdateAnimeTime(ElapsedTime);
 	}
 
 	void ShadowGoal::OnTriggerEnter(){
@@ -261,6 +289,7 @@ namespace basecross {
 			}
 		}
 	}
+
 	//物体とライトの位置から、影の位置を導き出す
 	Vec3 ShadowGoal::ShadowLocation() {
 		//実体ブロックのポジション

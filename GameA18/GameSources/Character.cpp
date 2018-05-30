@@ -183,7 +183,10 @@ namespace basecross {
 		ShadowPtr->SetMeshResource(m_MeshResource);
 		//------------------------------------------------------------------
 		//オブジェクトの影のコンストラクタ呼び出し
+		wstring DataDir;
+		App::GetApp()->GetDataDirectory(DataDir);
 		GetStage()->AddGameObject<ShadowGoal>(
+			DataDir + L"Door\\",
 			GetComponent<Transform>()->GetScale(),
 			GetComponent<Transform>()->GetRotation(),
 			*GetThis<GameObject>()

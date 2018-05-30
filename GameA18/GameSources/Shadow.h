@@ -64,7 +64,7 @@ namespace basecross {
 	//------------------------------------------------------------------------------------------
 	///ÉSÅ[ÉãÇÃñäÑÇÇ∑ÇÈâe
 	//------------------------------------------------------------------------------------------
-	class ShadowGoal : public GameObject {
+	class ShadowGoal : public SS5ssae {
 		Vec3 m_Scale;
 		Vec3 m_Rotation;
 		Vec3 m_Position;
@@ -73,6 +73,7 @@ namespace basecross {
 		float m_ScaleZ;
 
 		shared_ptr<MeshResource> m_MeshResource;
+		Mat4x4 m_ToAnimeMatrix;
 
 		bool flag;
 	public:
@@ -85,7 +86,7 @@ namespace basecross {
 		@param[in]	StartPos	èâä˙à íu
 		*/
 		//--------------------------------------------------------------------------------------
-		ShadowGoal(const shared_ptr<Stage>& StagePtr,
+		ShadowGoal(const shared_ptr<Stage>& StagePtr, const wstring BaseDir,
 			const Vec3& m_Scale, const Vec3& Rotation, GameObject& Obj);
 		//--------------------------------------------------------------------------------------
 		/*!
