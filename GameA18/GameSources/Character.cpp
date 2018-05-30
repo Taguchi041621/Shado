@@ -11,11 +11,16 @@ namespace basecross {
 	///	”’‚¢—§•û‘Ì
 	//--------------------------------------------------------------------------------------
 	WhiteCube::WhiteCube(const shared_ptr<Stage>& StagePtr,
-		const Vec3& StartScale, const Quat& StartQt, const Vec3& StartPos) :
+		const Vec3& StartScale, const Quat& StartQt, const Vec3& StartPos, const Vec3& StartSpeed, const bool& Move) :
 		GameObject(StagePtr),
 		m_StartScale(StartScale),
 		m_StartQt(StartQt),
-		m_StartPos(StartPos)
+		m_StartPos(StartPos),
+		m_MoveFlag(Move),
+		m_HengMoveFlag(true),
+		m_VerticalMoveFlag(true),
+		m_Speed(StartSpeed),
+		m_Timer(0)
 	{}
 
 	void WhiteCube::OnCreate() {
@@ -23,6 +28,8 @@ namespace basecross {
 		PtrTransform->SetScale(m_StartScale);
 		PtrTransform->SetQuaternion(m_StartQt);
 		PtrTransform->SetPosition(m_StartPos);
+
+		m_Rigidbody = AddComponent<Rigidbody>();
 
 		auto PtrDraw = AddComponent<BcPNTStaticDraw>();
 		PtrDraw->SetMeshResource(L"DEFAULT_CUBE");
@@ -49,6 +56,39 @@ namespace basecross {
 	}
 
 	void WhiteCube::OnUpdate() {
+
+		float ElapsedTime = App::GetApp()->GetElapsedTime();
+
+		m_Timer += ElapsedTime;
+		if (m_MoveFlag) {
+			if (m_HengMoveFlag)
+				m_Rigidbody->SetVelocity(Vec3(-m_Speed.x, 0, 0));
+			else if (!m_HengMoveFlag)
+				m_Rigidbody->SetVelocity(Vec3(m_Speed.x, 0, 0));
+
+			if (m_Timer >= 3 && m_HengMoveFlag) {
+				m_HengMoveFlag = false;
+				m_Timer = 0;
+			}
+			else if (m_Timer >= 3 && !m_HengMoveFlag) {
+				m_HengMoveFlag = true;
+				m_Timer = 0;
+			}
+
+			if (m_VerticalMoveFlag)
+				m_Rigidbody->SetVelocity(Vec3(0, m_Speed.x, 0));
+			else if (!m_VerticalMoveFlag)
+				m_Rigidbody->SetVelocity(Vec3(0, -m_Speed.x, 0));
+
+			if (m_Timer >= 3 && m_VerticalMoveFlag) {
+				m_VerticalMoveFlag = false;
+				m_Timer = 0;
+			}
+			else if (m_Timer >= 3 && !m_VerticalMoveFlag) {
+				m_VerticalMoveFlag = true;
+				m_Timer = 0;
+			}
+		}
 	}
 
 	//--------------------------------------------------------------------------------------

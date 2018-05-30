@@ -16,7 +16,7 @@ namespace basecross{
 	//構築と破棄
 	Player::Player(const shared_ptr<Stage>& StagePtr, const wstring& BaseDir) :
 		SS5ssae(StagePtr, BaseDir, L"Idea1.ssae", L"Wait"),
-		m_MaxSpeed(50.0f),	//最高速度
+		m_MaxSpeed(80.0f),	//最高速度
 		m_Decel(0.65f),	//減速値
 		m_Mass(0.5f),	//質量
 		m_Key(0),		//鍵の取得状況

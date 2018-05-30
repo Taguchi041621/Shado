@@ -12,6 +12,15 @@ namespace basecross{
 		Quat m_StartQt;
 		Vec3 m_StartPos;
 		shared_ptr<MeshResource> m_MeshResource;
+
+		shared_ptr<Rigidbody> m_Rigidbody;
+
+		bool m_MoveFlag;
+		bool m_HengMoveFlag;
+		bool m_VerticalMoveFlag;
+		Vec3 m_Speed;
+
+		float m_Timer;
 	public:
 		//--------------------------------------------------------------------------------------
 		/*!
@@ -23,7 +32,7 @@ namespace basecross{
 		*/
 		//--------------------------------------------------------------------------------------
 		WhiteCube(const shared_ptr<Stage>& StagePtr,
-			const Vec3& StartScale, const Quat& StartQt, const Vec3& StartPos);
+			const Vec3& StartScale, const Quat& StartQt, const Vec3& StartPos, const Vec3& StartSpeed, const bool& Move);
 		//--------------------------------------------------------------------------------------
 		/*!
 		@brief デストラクタ
