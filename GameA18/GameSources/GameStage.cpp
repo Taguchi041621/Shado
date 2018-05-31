@@ -24,7 +24,8 @@ namespace basecross {
 
 		//ファイル名の設定
 		//wstring Map = Path + L"Stage_" + Util::IntToWStr(ScenePtr->GetStageNumber()) + L".csv";
-		wstring Map = DataDir + L"Stage_" + Util::IntToWStr(ScenePtr->GetStageNumber()) + L".csv";
+		//wstring Map = DataDir + L"Stage_" + Util::IntToWStr(ScenePtr->GetStageNumber()) + L".csv";
+		wstring Map = DataDir + L"CSV\\" + L"Stage_" + Util::IntToWStr(ScenePtr->GetStageNumber()) + L".csv";
 
 		//ファイルの指定
 		m_Csv.SetFileName(Map);
@@ -82,7 +83,18 @@ namespace basecross {
 				//Scl = Vector3(1, 1, 1);
 				//Rot = Vector3(0, 0, 0);
 				Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
-				auto PtrCube = AddGameObject<WhiteCube>(Scl, Qt, Pos,Vec3(0),false);
+				auto PtrCube = AddGameObject<WhiteCube>(Scl, Qt, Pos,Vec3(0,0,0),false);
+			}
+
+			if (MapVec[0] == L"MoveCube") {
+				//FixedBox(const Vector3& Scale,const Vector3& Rotation,const Vector3& Position
+				//それぞれの値を入れる
+				//固定する値を設定
+				stringflag = true;
+				//Scl = Vector3(1, 1, 1);
+				//Rot = Vector3(0, 0, 0);
+				Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
+				auto PtrCube = AddGameObject<WhiteCube>(Scl, Qt, Pos, Vec3(1,0,0), true);
 			}
 
 			if (MapVec[0] == L"Player") {
@@ -114,6 +126,22 @@ namespace basecross {
 				Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
 				AddGameObject<KeyItem>(Pos);
 			}
+
+			if (MapVec[0] == L"Enemy") {
+				stringflag = true;
+				//Pos.z = -15.0f;
+				Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
+				AddGameObject<Enemy>(Pos);
+			}
+
+			if (MapVec[0] == L"Cannon") {
+				//それぞれの値を入れる
+				//固定する値を設定
+				stringflag = true;
+				Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
+				AddGameObject<CannonBase>(Scl, Qt, Pos);
+			}
+
 			if (!stringflag) {
 				throw BaseException(
 					Util::IntToWStr(RowNum + 1) + L"行目",
@@ -124,9 +152,7 @@ namespace basecross {
 			//行データ更新
 			RowNum++;
 			m_Csv.GetRowVec(RowNum, MapVec);
-
 		}
-
 	}
 
 	void GameStage::CreateFadeOutSprite()
@@ -134,7 +160,6 @@ namespace basecross {
 		auto Fade = AddGameObject<SpriteFadeOut>(L"Shadow_TX", true,
 			Vec2(50000 / 4, 30000 / 4), Vec3(0.0f, 0.0f, 0.1f));
 		SetSharedGameObject(L"FadeOut", Fade);
-
 	}
 
 	void GameStage::CreateFadeSprite()
@@ -142,7 +167,6 @@ namespace basecross {
 		auto Fade = AddGameObject<SpriteFade>(L"Shadow_TX", true,
 			Vec2(840, 600), Vec3(900.0f, 0.0f, 0.1f));
 		SetSharedGameObject(L"FadeIn", Fade);
-
 	}
 
 	void GameStage::CreatePause() {
@@ -217,6 +241,7 @@ namespace basecross {
 		DrawComp->SetTextureResource(L"WallTexture_TX");
 		DrawComp->SetColorAndAlpha(Color);
 	}
+
 	void GameStage::CreateHaveKeys() {
 		auto group = GetSharedObjectGroup(L"KeyGroup");
 		for (int i = 0; i < group->size(); i++) {
@@ -244,9 +269,11 @@ namespace basecross {
 		DrawComp->SetMeshResource(L"DEFAULT_CUBE");
 		DrawComp->SetFogEnabled(true);
 	}
+
 	void GameStage::CreateMiniMap() {
 		AddGameObject<MiniMap>();
 	}
+
 	void GameStage::CreateMoveEnd() {
 		auto group = GetSharedObjectGroup(L"MoveEndGroup");
 		for (int i = 1; i > -2 ; i += -2) {
@@ -260,6 +287,7 @@ namespace basecross {
 			group->IntoGroup(horizontal);
 		}
 	}
+
 	void GameStage::OnCreate() {
 		m_ClearFlag = false;
 		NowSelect = 0;

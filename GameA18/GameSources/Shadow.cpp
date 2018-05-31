@@ -210,8 +210,14 @@ namespace basecross {
 		: SS5ssae(StagePtr, BaseDir, L"Door.ssae", L"Dark"),
 		m_Scale(m_Scale),m_Rotation(Rotation),m_Obj(Obj), m_ScaleZ(0.05f)
 	{
-		m_ToAnimeMatrix.affineTransformation(
-			Vec3(0.5f, 0.5f, 0.1f),
+		m_ToAnimeMatrixDark.affineTransformation(
+			Vec3(0.18f, 0.14f, 0.1f),
+			Vec3(0, 0, 0),
+			Vec3(0, 0, 0),
+			Vec3(0, 0.0f, 0.0f)
+		);
+		m_ToAnimeMatrixLight.affineTransformation(
+			Vec3(0.0000018f, 0.0000014f, 0.1f),
 			Vec3(0, 0, 0),
 			Vec3(0, 0, 0),
 			Vec3(0, 0.0f, 0.0f)
@@ -251,11 +257,14 @@ namespace basecross {
 		//親クラスのクリエイトを呼ぶ
 		SS5ssae::OnCreate();
 		//値は秒あたりのフレーム数
-		SetFps(30);
+		SetFps(60);
 		//アニメーションのループ設定
 		SetLooped(true);
 		//アニメーションにかけるメトリックスの設定
-		SetToAnimeMatrix(m_ToAnimeMatrix);
+		SetToAnimeMatrix(m_ToAnimeMatrixDark);
+
+		//auto PtrCol = AddComponent<CollisionObb>();
+		//PtrCol->SetDrawActive(true);
 	}
 
 	void ShadowGoal::OnUpdate() {
@@ -265,6 +274,12 @@ namespace basecross {
 		float ElapsedTime = App::GetApp()->GetElapsedTime();
 		//アニメーションを更新する
 		UpdateAnimeTime(ElapsedTime);
+		if (!m_LightFlag&&GetStage()->GetSharedGameObject<Player>(L"Player")->GetKey())
+		{
+			m_LightFlag = true;
+			ChangeAnimation(L"Light");
+			SetToAnimeMatrix(m_ToAnimeMatrixLight);
+		}
 	}
 
 	void ShadowGoal::OnTriggerEnter(){

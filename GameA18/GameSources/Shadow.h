@@ -73,9 +73,11 @@ namespace basecross {
 		float m_ScaleZ;
 
 		shared_ptr<MeshResource> m_MeshResource;
-		Mat4x4 m_ToAnimeMatrix;
+		Mat4x4 m_ToAnimeMatrixDark;
+		Mat4x4 m_ToAnimeMatrixLight;
 
 		bool flag;
+		bool m_LightFlag;
 	public:
 		//--------------------------------------------------------------------------------------
 		/*!

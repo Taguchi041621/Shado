@@ -2,11 +2,18 @@
 #include "stdafx.h"
 
 namespace basecross {
-	class Enemy : public GameObject {
-		Vec3 m_StartScale;
-		Quat m_StartQt;
-		Vec3 m_StartPos;
+	//------------------------------------------------------------------------------------------
+	///敵(影)
+	//------------------------------------------------------------------------------------------
+	class ShadowEnemy : public SS5ssae {
+		Vec3 m_Scale;
+		Vec3 m_Rotation;
+		Vec3 m_Position;
+		GameObject& m_Obj;
+		//スケールのZの固定値
+		float m_ScaleZ;
 		shared_ptr<MeshResource> m_MeshResource;
+		Mat4x4 m_ToAnimeMatrix;
 	public:
 		//--------------------------------------------------------------------------------------
 		/*!
@@ -17,14 +24,14 @@ namespace basecross {
 		@param[in]	StartPos	初期位置
 		*/
 		//--------------------------------------------------------------------------------------
-		Enemy(const shared_ptr<Stage>& StagePtr,
-			const Vec3& StartScale, const Quat& StartQt, const Vec3& StartPos);
+		ShadowEnemy(const shared_ptr<Stage>& StagePtr, const wstring BaseDir,
+			const Vec3& m_Scale, const Vec3& Rotation, GameObject& Obj);
 		//--------------------------------------------------------------------------------------
 		/*!
 		@brief デストラクタ
 		*/
 		//--------------------------------------------------------------------------------------
-		virtual ~Enemy() {}
+		virtual ~ShadowEnemy() {}
 		//--------------------------------------------------------------------------------------
 		/*!
 		@brief 初期化
@@ -40,5 +47,87 @@ namespace basecross {
 		//--------------------------------------------------------------------------------------
 		virtual void OnUpdate()override;
 
+		void OnTriggerEnter();
+
+		//影の場所を計算する
+		Vec3 ShadowLocation();
+	};
+
+
+	//------------------------------------------------------------------------------------------
+	///敵の実体
+	//------------------------------------------------------------------------------------------
+	class Enemy : public GameObject {
+		Vec3 m_KeyPos;
+	public:
+		Enemy(const shared_ptr<Stage>& StagePtr, const Vec3& StartPos);
+		virtual ~Enemy() {}
+		//初期化
+		virtual void OnCreate() override;
+
+		virtual void OnUpdate() override;
+	};
+
+	//--------------------------------------------------------------------------------------
+	//	大砲
+	//--------------------------------------------------------------------------------------
+	class Cannon : public GameObject {
+		Vec3 m_Scale;
+		Vec3 m_Rotation;
+		Vec3 m_Position;
+		//対応した実態オブジェクトのポインタ
+		GameObject& m_Obj;
+		//スケールのZの固定値
+		float m_ScaleZ;
+		//このオブジェクトのみで使用するスクエアメッシュ
+		shared_ptr<MeshResource> m_SquareMeshResource;
+
+		float m_CoolTime;
+		bool m_BulletFlag;
+
+	public:
+		//構築と破棄
+		Cannon(const shared_ptr<Stage>& StagePtr,
+			const Vec3& Scale,
+			const Vec3& Rotation,
+			GameObject& Obj
+		);
+
+		virtual ~Cannon();
+		//初期化
+		virtual void OnCreate() override;
+		//操作
+		virtual void OnUpdate();
+		virtual void OnUpdate2();
+		//影の場所を計算する
+		Vec3 ShadowLocation();
+	};
+
+	//--------------------------------------------------------------------------------------
+	//	弾
+	//--------------------------------------------------------------------------------------
+
+	class Bullet : public GameObject {
+		Vec3 m_Scale;
+		Vec3 m_Rotation;
+		Vec3 m_Position;
+		//スケールのZの固定値
+		float m_ScaleZ;
+		//このオブジェクトのみで使用するスクエアメッシュ
+		shared_ptr<MeshResource> m_SquareMeshResource;
+	public:
+		//構築と破棄
+		Bullet(const shared_ptr<Stage>& StagePtr,
+			const Vec3& Scale,
+			const Vec3& Rotation,
+			const Vec3& Position
+		);
+
+		virtual ~Bullet();
+		//初期化
+		virtual void OnCreate() override;
+		//操作
+		virtual void OnUpdate();
+		virtual void OnUpdate2();
 	};
 }
