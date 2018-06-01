@@ -178,6 +178,10 @@ namespace basecross{
 
 		void SetStandFlag(bool f) { m_StandFlag = f; }
 		bool GetStandFlag() { return m_StandFlag; }
+
+		void SetDeath(int n) {
+			m_Death = 1;
+		}
 	};
 
 	//--------------------------------------------------------------------------------------

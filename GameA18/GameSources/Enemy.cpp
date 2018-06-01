@@ -132,7 +132,7 @@ namespace basecross {
 	Cannon::Cannon(const shared_ptr<Stage>& StagePtr,
 		const Vec3& Scale, const Vec3& Rotation, GameObject& Obj)
 		: GameObject(StagePtr),
-		m_Scale(Scale), m_Rotation(Rotation), m_Obj(Obj), m_ScaleZ(0.00005f), m_CoolTime(0), m_BulletFlag(false)
+		m_Scale(Scale), m_Rotation(Rotation), m_Obj(Obj), m_ScaleZ(0.05f), m_CoolTime(0), m_BulletFlag(false)
 	{
 	}
 
@@ -142,6 +142,7 @@ namespace basecross {
 		//スケールのZを固定の大きさに
 		m_Scale.z = m_ScaleZ;
 		m_Scale.x *= -1;
+		m_Position.z = 0.1;
 		//AddComponent<Rigidbody>();
 		auto PtrTransform = AddComponent<Transform>();
 		//影のスケール,角度,ポジションの設定
@@ -242,7 +243,7 @@ namespace basecross {
 		Vec3 m_kagePos;
 		m_kagePos.x = ObjPos.x - ObjPos.z * tanf(LightAngle.x);
 		m_kagePos.y = ObjPos.y - ObjPos.z * tanf(LightAngle.y);
-		m_kagePos.z = 0.1f;
+		m_kagePos.z = -0.1f;
 
 		//ライトの角度を別変数で持つ
 		auto AngleX = LightAngle.x;
@@ -266,7 +267,7 @@ namespace basecross {
 	Bullet::Bullet(const shared_ptr<Stage>& StagePtr,
 		const Vec3& Scale, const Vec3& Rotation, const Vec3& Position)
 		: GameObject(StagePtr),
-		m_Scale(Scale), m_Rotation(Rotation), m_Position(Position), m_ScaleZ(0.00005f)
+		m_Scale(Scale), m_Rotation(Rotation), m_Position(Position), m_ScaleZ(0.05f)
 	{
 	}
 
@@ -339,7 +340,6 @@ namespace basecross {
 		);
 		PtrDraw->SetMeshToTransformMatrix(au);*/
 
-
 	}
 
 	//変化
@@ -347,10 +347,35 @@ namespace basecross {
 		float ElapsedTime = App::GetApp()->GetElapsedTime();
 		auto PtrTransform = AddComponent<Transform>();
 		auto Pos = PtrTransform->GetPosition();
-		Pos.x -= 10.0f*ElapsedTime;
+		Pos.x -= 5.0f*ElapsedTime;
 		PtrTransform->SetPosition(Pos);
+
+		OnTriggerEnter();
+
+		if (Pos.x<=-30) {
+			GetStage()->RemoveGameObject<Bullet>(GetThis<Bullet>());
+		}
 	}
 	void Bullet::OnUpdate2() {
 
+	}
+
+	void Bullet::OnTriggerEnter() {
+		auto PtrPlayer = GetStage()->GetSharedGameObject<Player>(L"Player");
+
+		SPHERE t;
+		t.m_Center = GetComponent<Transform>()->GetWorldPosition();
+		t.m_Center.z = 0;
+		t.m_Radius = GetComponent<Transform>()->GetScale().x/2;
+
+		OBB p;
+		p.m_Center = PtrPlayer->GetComponent<Transform>()->GetWorldPosition();
+		p.m_Center.z = 0;
+		p.m_Size = PtrPlayer->GetComponent<Transform>()->GetScale()/2.3;
+
+		//プレイヤーが鍵に触れたかを調べる判定
+		if (HitTest::SPHERE_OBB(t, p,Vec3(0))) {
+			PtrPlayer->SetDeath(1);
+		}
 	}
 }

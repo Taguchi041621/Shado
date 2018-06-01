@@ -287,7 +287,6 @@ namespace basecross {
 		t.m_Center = this->GetComponent<Transform>()->GetWorldPosition();
 		t.m_Center.z = 0;
 		t.m_Size = this->GetComponent<Transform>()->GetScale() * 0.5f;
-
 		OBB p;
 		p.m_Center = GetStage()->GetSharedGameObject<Player>(L"Player")->GetComponent<Transform>()->GetWorldPosition();
 		p.m_Center.z = 0;

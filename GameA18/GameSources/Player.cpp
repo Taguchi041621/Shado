@@ -293,7 +293,7 @@ namespace basecross{
 		}
 
 		
-		if (m_PlayerHP == 0&& !m_GameOverFlag){
+		if (m_PlayerHP == 0 && !m_GameOverFlag){
 			m_GameOverFlag = true;
 			m_FadeFlag = true;
 		}
