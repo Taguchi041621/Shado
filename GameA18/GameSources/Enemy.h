@@ -129,5 +129,6 @@ namespace basecross {
 		//‘€ì
 		virtual void OnUpdate();
 		virtual void OnUpdate2();
+		void OnTriggerEnter();
 	};
 }
