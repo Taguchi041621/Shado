@@ -38,6 +38,7 @@ namespace basecross
 		auto PtrDraw = AddComponent<PCTSpriteDraw>(vertices, indices);
 		PtrDraw->SetSamplerState(SamplerState::LinearWrap);
 		PtrDraw->SetTextureResource(m_TextureKey);
+
 		auto ActionPtr = AddComponent<Action>();
 		ActionPtr->AddMoveTo(0.1f, Vec3(m_StartPos.x*0.0f, m_StartPos.y, 0.0f));
 		ActionPtr->AddScaleTo(0.1f, Vec3(m_StartScale.x*2.0f, m_StartScale.y*2.0f, 0.0f));
@@ -58,6 +59,7 @@ namespace basecross
 			PtrTransform->SetPosition(m_StartPos.x, m_StartPos.y, m_StartPos.z);
 			PtrTransform->SetScale(m_StartScale.x, m_StartScale.y, 1.0f);
 		}
+
 	};
 	//-------------------------------------------------------------------------------------
 	///ステージ上の鍵の数と現在取得した鍵の数を表示する

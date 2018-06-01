@@ -44,7 +44,7 @@ namespace basecross
 
 		////描画コンポーネントテクスチャの設定
 		//DrawComp->SetTextureResource(L"SELECT_TX");
-		AddGameObject<Sprite>(L"SELECT_TX", false,
+		AddGameObject<Sprite>(L"WallTexture_TX", false,
 			Vec2(1280.0f, 800.0f), Vec3(0, 0.0f, 0.1f));
 		AddGameObject<ScaleChangeSprite>(L"SELECT_TEXT_TX", true,
 			Vec2(960, 200), Vec3(0, 300, 0.1f), 1.0f);
@@ -68,75 +68,82 @@ namespace basecross
 	void StageSelect::StageNumberSprite()
 	{
 		auto Door = AddGameObject<Sprite>(L"Door_TX", false,
-			Vec2(100.0f, 200.0f), Vec3(0, 0.0f, 0.1f));
+			Vec2(100.0f, 200.0f), Vec3(0, -200.0f, 0.1f));
 		SetSharedGameObject(L"0", Door);
 		auto Num = AddGameObject<Sprite>(L"0_TX", true,
-			Vec2(50.0f, 100.0f), Vec3(0, 20.0f, 0.1f));
+			Vec2(50.0f, 100.0f), Vec3(0, -10.0f, 0.1f));
 		SetSharedGameObject(L"0Num", Num);
 
 		Door = AddGameObject<Sprite>(L"Door_TX", false,
-			Vec2(100.0f, 200.0f), Vec3(200, 0.0f, 0.1f));
+			Vec2(100.0f, 200.0f), Vec3(200, -200.0f, 0.1f));
 		SetSharedGameObject(L"1", Door);
 		Num = AddGameObject<Sprite>(L"1_TX", true,
-			Vec2(50.0f, 100.0f), Vec3(200, 20.0f, 0.1f));
+			Vec2(50.0f, 100.0f), Vec3(200, -10.0f, 0.1f));
 		SetSharedGameObject(L"1Num", Num);
 
 		Door = AddGameObject<Sprite>(L"Door_TX", false,
-			Vec2(100.0f, 200.0f), Vec3(400, 0.0f, 0.1f));
+			Vec2(100.0f, 200.0f), Vec3(400, -200.0f, 0.1f));
 		SetSharedGameObject(L"2", Door);
 		Num = AddGameObject<Sprite>(L"2_TX", true,
-			Vec2(50.0f, 100.0f), Vec3(400, 20.0f, 0.1f));
+			Vec2(50.0f, 100.0f), Vec3(400, -10.0f, 0.1f));
 		SetSharedGameObject(L"2Num", Num);
 
 		Door = AddGameObject<Sprite>(L"Door_TX", false,
-			Vec2(100.0f, 200.0f), Vec3(600, 0.0f, 0.1f));
+			Vec2(100.0f, 200.0f), Vec3(600, -200.0f, 0.1f));
 		SetSharedGameObject(L"3", Door);
 		Num = AddGameObject<Sprite>(L"3_TX", true,
-			Vec2(50.0f, 100.0f), Vec3(600, 20.0f, 0.1f));
+			Vec2(50.0f, 100.0f), Vec3(600, -10.0f, 0.1f));
 		SetSharedGameObject(L"3Num", Num);
 
 		Door = AddGameObject<Sprite>(L"Door_TX", false,
-			Vec2(100.0f, 200.0f), Vec3(800, 0.0f, 0.1f));
+			Vec2(100.0f, 200.0f), Vec3(800, -200.0f, 0.1f));
 		SetSharedGameObject(L"4", Door);
 		Num = AddGameObject<Sprite>(L"4_TX", true,
-			Vec2(50.0f, 100.0f), Vec3(800, 20.0f, 0.1f));
+			Vec2(50.0f, 100.0f), Vec3(800, -10.0f, 0.1f));
 		SetSharedGameObject(L"4Num", Num);
 
 		Door = AddGameObject<Sprite>(L"Door_TX", false,
-			Vec2(100.0f, 200.0f), Vec3(1000, 0.0f, 0.1f));
+			Vec2(100.0f, 200.0f), Vec3(1000, -200.0f, 0.1f));
 		SetSharedGameObject(L"5", Door);
 		Num = AddGameObject<Sprite>(L"5_TX", true,
-			Vec2(50.0f, 100.0f), Vec3(1000, 20.0f, 0.1f));
+			Vec2(50.0f, 100.0f), Vec3(1000, -10.0f, 0.1f));
 		SetSharedGameObject(L"5Num", Num);
 
 		Door = AddGameObject<Sprite>(L"Door_TX", false,
-			Vec2(100.0f, 200.0f), Vec3(1200, 0.0f, 0.1f));
+			Vec2(100.0f, 200.0f), Vec3(1200, -200.0f, 0.1f));
 		SetSharedGameObject(L"6", Door);
 		Num = AddGameObject<Sprite>(L"6_TX", true,
-			Vec2(50.0f, 100.0f), Vec3(1200, 20.0f, 0.1f));
+			Vec2(50.0f, 100.0f), Vec3(1200, -10.0f, 0.1f));
 		SetSharedGameObject(L"6Num", Num);
 
 		Door = AddGameObject<Sprite>(L"Door_TX", false,
-			Vec2(100.0f, 200.0f), Vec3(1400, 0.0f, 0.1f));
+			Vec2(100.0f, 200.0f), Vec3(1400, -200.0f, 0.1f));
 		SetSharedGameObject(L"7", Door);
 		Num = AddGameObject<Sprite>(L"7_TX", true,
-			Vec2(50.0f, 100.0f), Vec3(1400, 20.0f, 0.1f));
+			Vec2(50.0f, 100.0f), Vec3(1400, -10.0f, 0.1f));
 		SetSharedGameObject(L"7Num", Num);
 
 		Door = AddGameObject<Sprite>(L"Door_TX", false,
-			Vec2(100.0f, 200.0f), Vec3(1400, 0.0f, 0.1f));
+			Vec2(100.0f, 200.0f), Vec3(1400, -200.0f, 0.1f));
 		SetSharedGameObject(L"8", Door);
 		Num = AddGameObject<Sprite>(L"8_TX", true,
-			Vec2(50.0f, 100.0f), Vec3(1400, 20.0f, 0.1f));
+			Vec2(50.0f, 100.0f), Vec3(1400, -10.0f, 0.1f));
 		SetSharedGameObject(L"8Num", Num);
 
 		Door = AddGameObject<Sprite>(L"Door_TX", false,
-			Vec2(100.0f, 200.0f), Vec3(1400, 0.0f, 0.1f));
+			Vec2(100.0f, 200.0f), Vec3(1400, -200.0f, 0.1f));
 		SetSharedGameObject(L"9", Door);
 		Num = AddGameObject<Sprite>(L"9_TX", true,
-			Vec2(50.0f, 100.0f), Vec3(1400, 20.0f, 0.1f));
+			Vec2(50.0f, 100.0f), Vec3(1400, -10.0f, 0.1f));
 		SetSharedGameObject(L"9Num", Num);
+
+		Door->AddComponent<Action>();
+		Door->GetComponent<Action>()->AllActionClear();
+		SetSharedGameObject(L"Door", Door);
+
 	}
+
+
 
 	void StageSelect::OnCreate()
 	{
@@ -151,10 +158,10 @@ namespace basecross
 		CreateFadeSprite();
 	}
 
-
-
 	//更新
 	void StageSelect::OnUpdate() {
+		auto Door = GetSharedGameObject<Sprite>(L"Door");
+
 		auto ScenePtr = App::GetApp()->GetScene<Scene>();
 		//コントローラの取得
 		auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
@@ -163,6 +170,10 @@ namespace basecross
 				if (CntlVec[0].fThumbLX < -0.5) {
 					if (onectrl == false)
 					{
+						Door->GetComponent<Action>()->AllActionClear();
+						Door->GetComponent<Action>()->
+							AddMoveTo(0.1f, Vec3(-200.0f, 0.0f, 0.0f));
+
 						if (m_StopNowMusic != L"")
 						{
 							m_AudioObjectPtr->Stop(m_StopNowMusic);
@@ -242,7 +253,7 @@ namespace basecross
 		}
 
 		//ステージの数ループさせる
-		for (int i = 0; i < 10;i++) {
+		for (int i = 0; i < 10; i++) {
 			auto StageNum = to_wstring(i);
 			auto Door = GetSharedGameObject<Sprite>(StageNum);
 			auto Num = GetSharedGameObject<Sprite>(StageNum + L"Num");
@@ -255,9 +266,9 @@ namespace basecross
 			if (i != m_StageNumber) {
 				Door->SetActionflag(false);
 				Num->SetActionflag(false);
-			}
-		}
-		ScenePtr->SetStageNumber(m_StageNumber);
 
+			}
+			ScenePtr->SetStageNumber(m_StageNumber);
+		}
 	}
 }
