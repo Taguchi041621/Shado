@@ -125,7 +125,10 @@ namespace basecross{
 		virtual void OnCollisionExcute(vector<shared_ptr<GameObject>>& OtherVec) override;
 		//衝突が終わった時
 		virtual void OnCollisionExit(vector<shared_ptr<GameObject>>& OtherVec) override;
-
+		//物体にめり込まないように押し出す
+		void Extrusion(const shared_ptr<GameObject>& OtherVec);
+		//当たっているかを調べて、足元にいたら親にする
+		void FindParent(const shared_ptr<GameObject>& OtherVec);
 		//プレイヤーのHP
 		void PlayerHP();
 

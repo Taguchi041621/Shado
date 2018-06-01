@@ -113,41 +113,14 @@ namespace basecross{
 			auto EnemyPtr = dynamic_pointer_cast<Enemy>(obj);
 			//当たったのがシャドウオブジェクトで
 			if (ShadowPtr) {
-				//シャドウの判定
-				OBB p;
-				p.m_Center = ShadowPtr->GetComponent<Transform>()->GetWorldPosition();
-				p.m_Size = ShadowPtr->GetComponent<Transform>()->GetScale() * 0.5f;
-				Vec3 HitPoint;
-				//イデアの中心点からシャドウまでの最接近点の算出
-				HitTest::ClosestPtPointOBB(playerTrans->GetWorldPosition(), p, HitPoint);
-				//プレイヤーの判定よりも、ヒットポイントのYが低くて
-				//X幅の中に入っていたら
-				if ((playerTrans->GetWorldPosition().x - playerTrans->GetScale().x) <= HitPoint.x
-					&& (playerTrans->GetWorldPosition().x + playerTrans->GetScale().x) >= HitPoint.x
-					&& playerTrans->GetWorldPosition().y >= p.m_Center.y + p.m_Size.y) {
-					//ペアレント化してるオブジェクトが無かったらペアレント化
-					if (!playerTrans->GetParent()) {
-						//ペアレント化する
-						playerTrans->SetParent(ShadowPtr);
-						m_ParentFlag = true;
-					}
-					//当たってるオブジェクトが親オブジェクトじゃ無かったら
-					else if (!(playerTrans->GetParent() == ShadowPtr)) {
-						//今の親を消して新たに親を設定する
-						playerTrans->ClearParent();
-						playerTrans->SetParent(ShadowPtr);
-					}
-
-				}
+				Extrusion(ShadowPtr);//押し出す関数
+				FindParent(ShadowPtr);//親にするか調べる関数
 			}
-			else if (EnemyPtr)
-			{
+			else if (EnemyPtr) {
 				m_PlayerHP = 0;
-				if (m_PlayerHP == 0)
-				{
+				if (m_PlayerHP == 0) {
 					PostEvent(0.0f, GetThis<Player>(), App::GetApp()->GetSceneInterface(), L"ToGameOverStage");
 				}
-
 			}
 		}
 	}
@@ -155,22 +128,15 @@ namespace basecross{
 	//衝突している時
 	void Player::OnCollisionExcute(vector<shared_ptr<GameObject>>& OtherVec) {
 		for (auto &obj : OtherVec) {
-			//それが親だったら
-			if (GetComponent<Transform>()->GetParent() == obj) {
-				//プレイヤーのYを親の上に乗るようにして
-				auto ParentTrans = obj->GetComponent<Transform>();
-				auto Ppos = GetComponent<Transform>()->GetWorldPosition();
-				Ppos.y = ParentTrans->GetPosition().y + ParentTrans->GetScale().y * 0.5f
-									+ GetComponent<Transform>()->GetScale().y * 0.5f;
-				//適用する
-				GetComponent<Transform>()->SetWorldPosition(Ppos);
-			}
-
+			auto ShadowPtr = dynamic_pointer_cast<ShadowObject>(obj);
+			Extrusion(ShadowPtr);
+			FindParent(ShadowPtr);
 			OBB p;
-			p.m_Center = obj->GetComponent<Transform>()->GetWorldPosition();
-			p.m_Size = obj->GetComponent<Transform>()->GetScale() * 0.5f;
+			p.m_Center = ShadowPtr->GetComponent<Transform>()->GetWorldPosition();
+			p.m_Size = ShadowPtr->GetComponent<Transform>()->GetScale() * 0.5f;
 			//当たり判定の更新
 			m_DieOBB.m_Center = GetComponent<Transform>()->GetWorldPosition();
+			//m_DieOBB.m_Center.y = GetComponent<Transform>()->GetScale().y*0.3f;
 			//頭中心あたりが当たったら死ぬ
 			if (HitTest::OBB_OBB(m_DieOBB, p)) {
 				m_Death = 1;
@@ -181,20 +147,71 @@ namespace basecross{
 	//衝突しなくなった時
 	void Player::OnCollisionExit(vector<shared_ptr<GameObject>>& OtherVec) {
 		for (auto &obj : OtherVec) {
-			//シャドウオブジェクトを検出
-			auto ShadowPtr = dynamic_pointer_cast<ShadowObject>(obj);
-			//それが親のシャドウで
-			if (ShadowPtr == GetComponent<Transform>()->GetParent()) {
-				auto shadowPos = ShadowPtr->GetComponent<Transform>()->GetWorldPosition();
-				auto shadowSca = ShadowPtr->GetComponent<Transform>()->GetScale();
-				//影オブジェの横に落ちてたら
-				if((shadowPos.x - shadowSca.x * 0.5f) >= GetComponent<Transform>()->GetWorldPosition().x ||
-					(shadowPos.x + shadowSca.x * 0.5f) <= GetComponent<Transform>()->GetWorldPosition().x){
-					//ペアレント化を解く
-					GetComponent<Transform>()->ClearParent();
-					m_ParentFlag = false;
+			if (obj == GetComponent<Transform>()->GetParent()) {
+				//親と離れているかを検出
+				GetComponent<Transform>()->ClearParent();
+				m_ParentFlag = false;
+			}
+		}
+	}
+	//親になる条件を満たしているかを調べて、満たしていたら親にする
+	void Player::FindParent(const shared_ptr<GameObject>& OtherVec) {
+		auto playerTrans = GetComponent<Transform>();
+		auto ObjPos = OtherVec->GetComponent<Transform>()->GetPosition();
+		auto ObjSca = OtherVec->GetComponent<Transform>()->GetScale() * 0.5f;
+		//影の上に乗っているかを調べる
+		if ((ObjPos.x - ObjSca.x) < playerTrans->GetPosition().x
+			&& (ObjPos.x + ObjSca.x) > playerTrans->GetPosition().x
+			&& ObjPos.y + ObjSca.y <= playerTrans->GetPosition().y - playerTrans->GetScale().y * 0.45f) {
+			//ペアレント化してるオブジェクトが無かったらペアレント化
+			if (!playerTrans->GetParent()) {
+				//ペアレント化する
+				playerTrans->SetParent(OtherVec);
+				m_ParentFlag = true;
+			}
+		}
+	}
+
+	void Player::Extrusion(const shared_ptr<GameObject>& OtherVec) {
+		auto playerPos = GetComponent<Transform>()->GetWorldPosition();
+		auto playerScale = GetComponent<Transform>()->GetScale() * 0.5f;
+		auto otherPos = OtherVec->GetComponent<Transform>()->GetPosition();
+		auto otherScale = OtherVec->GetComponent<Transform>()->GetScale() * 0.5f;
+		//自機と相手が衝突しているかの判定
+		if (playerPos.y - playerScale.y < otherPos.y + otherScale.y && playerPos.y + playerScale.y > otherPos.y - otherScale.y &&
+			playerPos.x - playerScale.x < otherPos.x + otherScale.x && playerPos.x + playerScale.x > otherPos.x - otherScale.x) {
+			//各方向のめり込みを確認
+			float diff[4] = {
+				(otherPos.x + otherScale.x) - (playerPos.x - playerScale.x), // 右
+				(playerPos.x + playerScale.x) - (otherPos.x - otherScale.x), // 左
+				(otherPos.y + otherScale.y) - (playerPos.y - playerScale.y), // 上
+				(playerPos.y + playerScale.y) - (otherPos.y - otherScale.y), // 下
+			};
+			// 側面の距離が最小になっている要素を見つける
+			int min = 0;
+			for (int i = 0; i < 4; i++) {
+				if (diff[i] < diff[min]) {
+					min = i;
 				}
 			}
+			//もっともめり込みが少ない面に押し返す
+			switch (min) {
+			case 0:
+				playerPos.x += diff[min];
+				break;
+			case 1:
+				playerPos.x -= diff[min];
+				break;
+			case 2:
+				playerPos.y += diff[min];
+				break;
+			case 3:
+				//playerPos.y -= diff[min];
+				break;
+			default:
+				break;
+			}
+			GetComponent<Transform>()->SetWorldPosition(playerPos);
 		}
 	}
 
@@ -223,17 +240,18 @@ namespace basecross{
 		//衝突判定をつける
 		auto PtrCol = AddComponent<CollisionObb>();
 		//auto PtrCol = AddComponent<CollisionSphere>();
-		PtrCol->SetIsHitAction(IsHitAction::Auto);
+		PtrCol->SetIsHitAction(IsHitAction::None);
 		//コリジョンを表示する場合は以下を設定
-		//PtrCol->SetDrawActive(true);
+		PtrCol->SetDrawActive(true);
 		//デバッグ用文字列をつける
 		auto PtrString = AddComponent<StringSprite>();
 		PtrString->SetText(L"");
 		PtrString->SetTextRect(Rect2D<float>(16.0f, 16.0f, 640.0f, 480.0f));
 
 		//死亡判定用OBBの大きさ設定
-		m_DieOBB.m_Size.x = Ptr->GetScale().x * 0.3f;
-		m_DieOBB.m_Size.y = Ptr->GetScale().y * 0.3f;
+		m_DieOBB.m_Size.x = Ptr->GetScale().x * 0.4f;
+		m_DieOBB.m_Size.y = Ptr->GetScale().y * 0.4f;
+		m_DieOBB.m_Size.z = Ptr->GetScale().z * 0.4f;
 
 		//Actionをつける
 		//レイヤー変更用
@@ -260,16 +278,14 @@ namespace basecross{
 			//ステートマシンのUpdateを行う
 			//この中でステートの切り替えが行われる
 			m_StateMachine->Update();
-
-			//重力を加える
-			auto PtrGrav = GetBehavior<Gravity>();
-			PtrGrav->SetGravity(Vec3(0.0f, -9.8f, 0.0f));
-			PtrGrav->Execute();
 	}
 
 	void Player::OnUpdate2() {
 		auto ScenePtr = App::GetApp()->GetScene<Scene>();
 		if (m_ParentFlag && !m_GameOverFlag && !m_GameClearFlag && ScenePtr->GetStartFlag()&&!m_StandFlag) {
+			auto vero = GetComponent<Rigidbody>()->GetVelocity();
+			vero += (0.0f, -4.9f, 0.0f);
+			GetComponent<Rigidbody>()->SetVelocity(vero);
 			//プレイヤーの移動
 			MoveRotationMotion();
 			//文字列の表示
@@ -279,14 +295,17 @@ namespace basecross{
 		if (!m_ParentFlag) {
 			auto PtrRedit = GetComponent<Rigidbody>();
 			PtrRedit->SetVelocityZero();
-
+			//重力を加える
+			auto PtrGrav = GetBehavior<Gravity>();
+			PtrGrav->SetGravity(Vec3(0.0f, -9.8f, 0.0f));
+			PtrGrav->Execute();
 		}
 			PlayerHP();
 	}
 	//
 	void Player::PlayerHP() {
 		m_PlayerHP = 3;
-		auto PlayerPos = this->GetComponent<Transform>()->GetPosition();
+		auto PlayerPos = this->GetComponent<Transform>()->GetWorldPosition();
 		//落下死
 		if (PlayerPos.y < -25.0f){
 			m_PlayerHP = 0;
@@ -542,10 +561,10 @@ namespace basecross{
 	void WalkState::Execute(const shared_ptr<Player>& Obj) {
 		//アニメーション更新
 		Obj->LoopedAnimeUpdateMotion();
-		//潰れて死んだらDiedアニメーションを流す
 		if (!Obj->GetParentFlag()) {
 			Obj->GetStateMachine()->ChangeState(FallState::Instance());
 		}
+		//潰れて死んだらDiedアニメーションを流す
 		if (Obj->GetDeath() == 1) {
 			Obj->GetStateMachine()->ChangeState(DiedState::Instance());
 		}
