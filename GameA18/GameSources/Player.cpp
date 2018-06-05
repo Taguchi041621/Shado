@@ -201,6 +201,7 @@ namespace basecross{
 			//もっともめり込みが少ない面に押し返す
 			switch (min) {
 			case 0:
+				//段差があったら登る
 				if (diff[2] < 0.4f && diff[2] >0.0f && GetMoveVector(0) < -0.6f) {
 					playerPos.y += diff[2];
 					break;
@@ -208,6 +209,7 @@ namespace basecross{
 				playerPos.x += diff[min];
 				break;
 			case 1:
+				//段差があったら登る
 				if (diff[2] < 0.4f && diff[2] > 0.0f && GetMoveVector(0) > 0.6f) {
 					playerPos.y += diff[2];
 					break;
@@ -292,20 +294,19 @@ namespace basecross{
 
 	void Player::OnUpdate2() {
 		auto ScenePtr = App::GetApp()->GetScene<Scene>();
-		if (m_ParentFlag && !m_GameOverFlag && !m_GameClearFlag && ScenePtr->GetStartFlag()&&!m_StandFlag) {
+		if (m_ParentFlag && !m_GameOverFlag && !m_GameClearFlag && ScenePtr->GetStartFlag() && !m_StandFlag) {
 			//プレイヤーの移動
 			MoveRotationMotion();
 			//文字列の表示
-			//DrawStrings();
 		}
-
-		if (!m_ParentFlag) {
+		else if (!m_ParentFlag) {
 			auto PtrRedit = GetComponent<Rigidbody>();
 			PtrRedit->SetVelocityZero();
-			GetComponent<Rigidbody>()->SetVelocity(Vec3(0.0f,m_FallSpeed,0.0f));
+			GetComponent<Rigidbody>()->SetVelocity(Vec3(0.0f, m_FallSpeed, 0.0f));
 			m_FallSpeed += -0.2f;
 		}
-			PlayerHP();
+		PlayerHP();
+		DrawStrings();
 	}
 	//
 	void Player::PlayerHP() {
