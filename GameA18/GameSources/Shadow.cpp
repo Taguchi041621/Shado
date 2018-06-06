@@ -66,10 +66,11 @@ namespace basecross {
 
 	//変化
 	void ShadowObject::OnUpdate() {
+		GetComponent<Transform>()->SetPosition(ShadowLocation());
+
 	}
 	void ShadowObject::OnUpdate2() {
 		//影のポジションの更新
-		GetComponent<Transform>()->SetPosition(ShadowLocation());
 
 	}
 
