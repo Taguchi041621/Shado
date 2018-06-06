@@ -276,9 +276,9 @@ namespace basecross {
 		UpdateAnimeTime(ElapsedTime);
 		if (!m_LightFlag&&GetStage()->GetSharedGameObject<Player>(L"Player")->GetKey())
 		{
-			m_LightFlag = true;
-			ChangeAnimation(L"Light");
-			SetToAnimeMatrix(m_ToAnimeMatrixLight);
+			//m_LightFlag = true;
+			//ChangeAnimation(L"Light");
+			//SetToAnimeMatrix(m_ToAnimeMatrixLight);
 		}
 	}
 
