@@ -66,10 +66,11 @@ namespace basecross {
 
 	//変化
 	void ShadowObject::OnUpdate() {
+		GetComponent<Transform>()->SetPosition(ShadowLocation());
+
 	}
 	void ShadowObject::OnUpdate2() {
 		//影のポジションの更新
-		GetComponent<Transform>()->SetPosition(ShadowLocation());
 
 	}
 
@@ -276,9 +277,9 @@ namespace basecross {
 		UpdateAnimeTime(ElapsedTime);
 		if (!m_LightFlag&&GetStage()->GetSharedGameObject<Player>(L"Player")->GetKey())
 		{
-			m_LightFlag = true;
-			ChangeAnimation(L"Light");
-			SetToAnimeMatrix(m_ToAnimeMatrixLight);
+			//m_LightFlag = true;
+			//ChangeAnimation(L"Light");
+			//SetToAnimeMatrix(m_ToAnimeMatrixLight);
 		}
 	}
 
