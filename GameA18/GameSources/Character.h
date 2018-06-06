@@ -59,7 +59,58 @@ namespace basecross{
 
 		//}
 	};
+	class BlueCube : public GameObject {
+		Vec3 m_StartScale;
+		Quat m_StartQt;
+		Vec3 m_StartPos;
+		shared_ptr<MeshResource> m_MeshResource;
 
+		shared_ptr<Rigidbody> m_Rigidbody;
+
+		bool m_MoveFlag;
+		bool m_HengMoveFlag;
+		bool m_VerticalMoveFlag;
+		Vec3 m_Speed;
+
+		float m_HengTimer;
+		float m_VerticalTimer;
+	public:
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief コンストラクタ
+		@param[in]	StagePtr	ステージ
+		@param[in]	StartScale	初期スケール
+		@param[in]	StartQt	初期回転
+		@param[in]	StartPos	初期位置
+		*/
+		//--------------------------------------------------------------------------------------
+		BlueCube(const shared_ptr<Stage>& StagePtr,
+			const Vec3& StartScale, const Quat& StartQt, const Vec3& StartPos, const Vec3& StartSpeed, const bool& Move);
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief デストラクタ
+		*/
+		//--------------------------------------------------------------------------------------
+		virtual ~BlueCube() {}
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief 初期化
+		@return	なし
+		*/
+		//--------------------------------------------------------------------------------------
+		virtual void OnCreate() override;
+		//--------------------------------------------------------------------------------------
+		/*!
+		@brief 更新
+		@return	なし
+		*/
+		//--------------------------------------------------------------------------------------
+		virtual void OnUpdate()override;
+
+		//virtual  const Light& OnGetDrawLight() const override {
+
+		//}
+	};
 	class Goal : public GameObject {
 		Vec3 m_StartScale;
 		Quat m_StartQt;

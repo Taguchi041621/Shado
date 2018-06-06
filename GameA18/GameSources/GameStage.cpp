@@ -94,7 +94,7 @@ namespace basecross {
 				//Scl = Vector3(1, 1, 1);
 				//Rot = Vector3(0, 0, 0);
 				Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
-				auto PtrCube = AddGameObject<WhiteCube>(Scl, Qt, Pos, Vec3(1,0,0), true);
+				auto PtrCube = AddGameObject<BlueCube>(Scl, Qt, Pos, Vec3(1,0,0), true);
 			}
 
 			if (MapVec[0] == L"Player") {
