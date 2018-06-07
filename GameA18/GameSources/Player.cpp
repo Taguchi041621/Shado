@@ -133,13 +133,15 @@ namespace basecross{
 			if (ShadowPtr) {
 				Extrusion(ShadowPtr);
 				FindParent(ShadowPtr);
+
 				OBB p;
 				p.m_Center = ShadowPtr->GetComponent<Transform>()->GetWorldPosition();
 				p.m_Size = ShadowPtr->GetComponent<Transform>()->GetScale() * 0.5f;
-				//当たり判定の更新
-				m_DieOBB.m_Center = GetComponent<Transform>()->GetWorldPosition();
+				OBB m;
+				m.m_Center = GetComponent<Transform>()->GetWorldPosition();
+				m.m_Size = GetComponent<Transform>()->GetScale() * 0.3f;
 				//頭中心あたりが当たったら死ぬ
-				if (HitTest::OBB_OBB(p, m_DieOBB)) {
+				if (HitTest::OBB_OBB(p, m)) {
 					m_Death = 1;
 				}
 			}
@@ -262,9 +264,6 @@ namespace basecross{
 		PtrString->SetText(L"");
 		PtrString->SetTextRect(Rect2D<float>(16.0f, 16.0f, 640.0f, 480.0f));
 
-		//死亡判定用OBBの大きさ設定
-		m_DieOBB.m_Size = Ptr->GetScale() * 0.4f;
-
 		//Actionをつける
 		//レイヤー変更用
 		auto PtrAction = AddComponent<Action>();
@@ -303,7 +302,7 @@ namespace basecross{
 			auto PtrRedit = GetComponent<Rigidbody>();
 			PtrRedit->SetVelocityZero();
 			GetComponent<Rigidbody>()->SetVelocity(Vec3(0.0f, m_FallSpeed, 0.0f));
-			m_FallSpeed += -0.2f;
+			m_FallSpeed += -0.05f;
 		}
 		PlayerHP();
 		DrawStrings();
