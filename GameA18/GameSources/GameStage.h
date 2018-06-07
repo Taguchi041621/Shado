@@ -39,6 +39,7 @@ namespace basecross {
 
 		void CreatePause();
 
+		void CreateTutorial();
 
 		//‘I‘ðŠÖŒW
 		bool ActionFlag;

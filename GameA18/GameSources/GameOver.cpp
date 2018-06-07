@@ -70,7 +70,7 @@ namespace basecross
 			Vec2(640, 400), Vec3(270, -300, 0.2f));
 		//白い光
 		auto WLight = AddGameObject<ScaleChangeSprite>(L"GameOver_WhiteLight_TX",true,
-			Vec2(960, 600), Vec3(-370.0, -300, 0.1f),3.0f);
+			Vec2(960, 600), Vec3(-370.0, -300, 0.1f),3.0f,true);
 		//白い光のアニメーション
 		WLight->AddComponent<Action>();
 		WLight->GetComponent<Action>()->AllActionClear();

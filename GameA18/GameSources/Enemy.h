@@ -71,7 +71,7 @@ namespace basecross {
 	//--------------------------------------------------------------------------------------
 	//	ëÂñC
 	//--------------------------------------------------------------------------------------
-	class Cannon : public GameObject {
+	class Cannon : public SS5ssae {
 		Vec3 m_Scale;
 		Vec3 m_Rotation;
 		Vec3 m_Position;
@@ -85,9 +85,12 @@ namespace basecross {
 		float m_CoolTime;
 		bool m_BulletFlag;
 
+		Mat4x4 m_ToAnimeMatrix;
+
 	public:
 		//ç\ízÇ∆îjä¸
 		Cannon(const shared_ptr<Stage>& StagePtr,
+			const wstring BaseDir,
 			const Vec3& Scale,
 			const Vec3& Rotation,
 			GameObject& Obj

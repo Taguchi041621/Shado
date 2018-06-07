@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SpriteStudioCellMap version="1.00.00">
+    <name>Cannon</name>
+    <exportPath></exportPath>
+    <imagePath>Cannon.png</imagePath>
+    <pixelSize>1024 1024</pixelSize>
+    <overrideTexSettings>0</overrideTexSettings>
+    <wrapMode>clamp</wrapMode>
+    <filterMode>linear</filterMode>
+    <imagePathAtImport></imagePathAtImport>
+    <packInfoFilePath></packInfoFilePath>
+    <texPackSettings>
+        <maxSize>4096 4096</maxSize>
+        <forcePo2>1</forcePo2>
+        <forceSquare>0</forceSquare>
+        <margin>0</margin>
+        <padding>1</padding>
+    </texPackSettings>
+    <cells>
+        <cell>
+            <name>1</name>
+            <pos>248 4</pos>
+            <size>212 258</size>
+            <pivot>0.000000 0.000000</pivot>
+            <rotated>0</rotated>
+            <orgImageName></orgImageName>
+            <posStable>0</posStable>
+        </cell>
+        <cell>
+            <name>2</name>
+            <pos>650 4</pos>
+            <size>116 278</size>
+            <pivot>0.000000 0.000000</pivot>
+            <rotated>0</rotated>
+            <orgImageName></orgImageName>
+            <posStable>0</posStable>
+        </cell>
+        <cell>
+            <name>3</name>
+            <pos>856 4</pos>
+            <size>16 16</size>
+            <pivot>0.000000 0.000000</pivot>
+            <rotated>0</rotated>
+            <orgImageName></orgImageName>
+            <posStable>0</posStable>
+        </cell>
+        <cell>
+            <name>4</name>
+            <pos>4 4</pos>
+            <size>242 242</size>
+            <pivot>0.000000 0.000000</pivot>
+            <rotated>0</rotated>
+            <orgImageName></orgImageName>
+            <posStable>0</posStable>
+        </cell>
+        <cell>
+            <name>5</name>
+            <pos>462 4</pos>
+            <size>186 242</size>
+            <pivot>0.000000 0.000000</pivot>
+            <rotated>0</rotated>
+            <orgImageName></orgImageName>
+            <posStable>0</posStable>
+        </cell>
+        <cell>
+            <name>6</name>
+            <pos>768 4</pos>
+            <size>86 166</size>
+            <pivot>0.000000 0.000000</pivot>
+            <rotated>0</rotated>
+            <orgImageName></orgImageName>
+            <posStable>0</posStable>
+        </cell>
+    </cells>
+</SpriteStudioCellMap>

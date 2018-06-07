@@ -99,6 +99,12 @@ namespace basecross{
 		strTexture = DataDir + L"number_9.png";
 		App::GetApp()->RegisterTexture(L"9_TX", strTexture);
 
+		strTexture = DataDir + L"number.png";
+		App::GetApp()->RegisterTexture(L"NUMBER_TX", strTexture);
+
+		strTexture = DataDir + L"TiteleShadow.png";
+		App::GetApp()->RegisterTexture(L"TITLE_SHADOW_TX", strTexture);
+
 		/*BGM・SE関連*/
 		//ゲームオーバーBGM
 		wstring GameOver = DataDir + L"BGMSE\\GameOver.wav";

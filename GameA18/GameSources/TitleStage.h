@@ -13,6 +13,7 @@ namespace basecross
 		//スプライトの作成
 		void CreateTitleSprite();
 
+		void CreateFadeOutSprite();
 		void CreateFadeSprite();
 
 		bool m_SelectFlag;

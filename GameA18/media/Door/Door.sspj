@@ -117,11 +117,9 @@
 	</cellmapNames>
 	<animepackNames>
 		<value>Door.ssae</value>
-		<value>Door_Dark.ssae</value>
 	</animepackNames>
 	<lastAnimeFile>Door.ssae</lastAnimeFile>
-	<lastAnimeName>anime_2</lastAnimeName>
+	<lastAnimeName>Light</lastAnimeName>
 	<lastCellMapFile>Door_SS.ssce</lastCellMapFile>
-	<lastCell>Light_up</lastCell>
-	<lastPart>Light_up_1</lastPart>
+	<lastCell>Light_3</lastCell>
 </SpriteStudioProject>

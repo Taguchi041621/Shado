@@ -175,7 +175,10 @@ namespace basecross {
 		//ShadowPtr->SetMeshResource(L"DEFAULT_SQUARE");
 		//--------------------------------------------------------
 		//オブジェクトの影のコンストラクタ呼び出し
+		wstring DataDir;
+		App::GetApp()->GetDataDirectory(DataDir);
 		GetStage()->AddGameObject<Cannon>(
+			DataDir+L"Cannon\\",
 			GetComponent<Transform>()->GetScale(),
 			GetComponent<Transform>()->GetRotation(),
 			*GetThis<GameObject>()

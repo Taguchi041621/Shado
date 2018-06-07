@@ -45,9 +45,11 @@ namespace basecross
 		//AddGameObject<TitleSprite>(L"TITLE_TX", false,
 		//	Vec2(1000.0f, 600.0f), Vec2(0.0f, 0.0f));
 		AddGameObject<Sprite>(L"TITLE_TX", false,
-			Vec2(1280.0f, 800.0f), Vec3(0, 0.0f, 0.1f));
+			Vec2(1280.0f*1.2, 800.0f*1.2), Vec3(0, 50.0f, 0.1f));
 		AddGameObject<ScaleChangeSprite>(L"TITLE_TEXT_TX", true,
-			Vec2(960, 200), Vec3(0, -300, 0.1f),1.0f);
+			Vec2(960 * 0.8, 200 * 0.8), Vec3(0, -300, 0.1f), 0.5f, true);
+		AddGameObject<Sprite>(L"TITLE_SHADOW_TX", true,
+			Vec2(1280.0f*1.1, 800.0f*1.1), Vec3(0,0, 0.1f));
 	}
 
 	void TitleStage::CreateFadeSprite()
@@ -58,14 +60,23 @@ namespace basecross
 
 	}
 
+	void TitleStage::CreateFadeOutSprite()
+	{
+		auto Fade = AddGameObject<SpriteFadeOut>(L"Shadow_TX", true,
+			Vec2(50000 / 4, 30000 / 4), Vec3(0.0f, 0.0f, 0.0f));
+		SetSharedGameObject(L"FadeOut", Fade);
+
+	}
+
 	void TitleStage::OnCreate()
 	{
 		m_SelectFlag = false;
+
 		CreateViewLight();
 		//スプライトの作成
 		CreateTitleSprite();
 		CreateFadeSprite();
-
+		CreateFadeOutSprite();
 	}
 
 	//更新

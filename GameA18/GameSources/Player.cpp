@@ -241,7 +241,7 @@ namespace basecross{
 		//auto PtrCol = AddComponent<CollisionSphere>();
 		PtrCol->SetIsHitAction(IsHitAction::None);
 		//コリジョンを表示する場合は以下を設定
-		PtrCol->SetDrawActive(true);
+		//PtrCol->SetDrawActive(true);
 		//デバッグ用文字列をつける
 		auto PtrString = AddComponent<StringSprite>();
 		PtrString->SetText(L"");

@@ -66,7 +66,7 @@ namespace basecross
 	void ClearStage::CreateUI() {
 		//白い光
 		auto WLight = AddGameObject<ScaleChangeSprite>(L"GameOver_WhiteLight_TX", true,
-			Vec2(960, 600), Vec3(150.0, 60, 0.0f),3.0f);
+			Vec2(960, 600), Vec3(150.0, 60, 0.0f),3.0f,true);
 		//白い光のアニメーション
 		WLight->AddComponent<Action>();
 		WLight->GetComponent<Action>()->AllActionClear();

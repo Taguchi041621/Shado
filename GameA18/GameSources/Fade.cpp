@@ -14,7 +14,8 @@ namespace basecross
 		m_Trace(Trace),
 		m_StartScale(StartScale),
 		m_StartPos(StartPos),
-		m_Actionflag(false)
+		m_Actionflag(false),
+		m_Alpha(0)
 	{}
 
 	SpriteFade::~SpriteFade() {}

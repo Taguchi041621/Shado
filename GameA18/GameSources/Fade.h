@@ -15,6 +15,8 @@ namespace basecross
 		wstring m_TextureKey;
 
 		bool m_Actionflag;
+
+		float m_Alpha;
 	public:
 		//--------------------------------------------------------------------------------------
 		/*!

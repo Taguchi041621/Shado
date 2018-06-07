@@ -11,7 +11,7 @@ namespace basecross {
 		m_Scale(Scale), m_Rotation(Rotation), m_Obj(Obj), m_ScaleZ(0.05f)
 	{
 		m_ToAnimeMatrix.affineTransformation(
-			Vec3(1.0f, 1.0f, 0.1f),
+			Vec3(0.10f, 0.10f, 0.1f),
 			Vec3(0, 0, 0),
 			Vec3(0, 0, 0),
 			Vec3(0.0f, 0.0f, 0.0f)
@@ -75,7 +75,7 @@ namespace basecross {
 		m_kagePos.x = ObjPos.x - ObjPos.z * tanf(LightAngle.x);
 		m_kagePos.y = ObjPos.y - ObjPos.z * tanf(LightAngle.y);
 
-		m_kagePos.z = 0;
+		m_kagePos.z = -1;
 
 		return m_kagePos;
 	}
@@ -129,11 +129,17 @@ namespace basecross {
 	//--------------------------------------------------------------------------------------
 	//大砲
 	//--------------------------------------------------------------------------------------
-	Cannon::Cannon(const shared_ptr<Stage>& StagePtr,
+	Cannon::Cannon(const shared_ptr<Stage>& StagePtr, const wstring BaseDir,
 		const Vec3& Scale, const Vec3& Rotation, GameObject& Obj)
-		: GameObject(StagePtr),
+		: SS5ssae(StagePtr, BaseDir, L"Cannon.ssae", L"Fire"),
 		m_Scale(Scale), m_Rotation(Rotation), m_Obj(Obj), m_ScaleZ(0.05f), m_CoolTime(0), m_BulletFlag(false)
 	{
+		m_ToAnimeMatrix.affineTransformation(
+			Vec3(0.13f, 0.12f, 0.7f),
+			Vec3(0, 0, 0),
+			Vec3(0, 0, 0),
+			Vec3(0.0f, -0.01f, 0.0f)
+		);
 	}
 
 	Cannon::~Cannon() {}
@@ -141,86 +147,52 @@ namespace basecross {
 	void Cannon::OnCreate() {
 		//スケールのZを固定の大きさに
 		m_Scale.z = m_ScaleZ;
-		m_Scale.x *= -1;
-		m_Position.z = 0.1;
-		//AddComponent<Rigidbody>();
-		auto PtrTransform = AddComponent<Transform>();
+
+		auto PtrTransform = GetComponent<Transform>();
 		//影のスケール,角度,ポジションの設定
 		PtrTransform->SetScale(m_Scale);
 		PtrTransform->SetRotation(m_Rotation);
 		PtrTransform->SetPosition(ShadowLocation());
 
-		//auto PtrDraw = AddComponent<BcPNTStaticDraw>();
-		//PtrDraw->SetMeshResource(m_Obj.GetComponent<BcPNTStaticDraw>()->GetMeshResource());
-		////真っ黒
-		//PtrDraw->SetColorAndAlpha(Col4(1.0f, 1.0f, 1.0f, 0.0f));
-		////Mat4x4 au;
-		///*au.affineTransformation(
-		//	Vec3(1.0f, 1.0f, 0.1f),
-		//	Vec3(0, 0, 0),
-		//	Vec3(0, 0, 0),
-		//	Vec3(0.0f, 0.0f, 0.0f)
-		//	);
-		//PtrDraw->SetMeshToTransformMatrix(au);*/
-		//PtrDraw->SetTextureResource(L"Shadow_Blur_TX");
-		//PtrDraw->SetAlpha(1.0f);
-		//PtrDraw->SetPerPixelLighting(false);
-		//頂点配列
-		vector<VertexPositionNormalTexture> vertices;
-		//インデックスを作成するための配列
-		vector<uint16_t> indices;
-		//Squareの作成(ヘルパー関数を利用)
-		MeshUtill::CreateSquare(1.0f, vertices, indices);
-
-		//左上頂点
-		vertices[0].textureCoordinate = Vec2(0, 0);
-		//右上頂点
-		vertices[1].textureCoordinate = Vec2(1, 0);
-		//左下頂点
-		vertices[2].textureCoordinate = Vec2(0, 1.0f);
-		//右下頂点
-		vertices[3].textureCoordinate = Vec2(1, 1.0f);
-		//頂点の型を変えた新しい頂点を作成
-		vector<VertexPositionColorTexture> new_vertices;
-		for (auto& v : vertices) {
-			VertexPositionColorTexture nv;
-			nv.position = v.position;
-			nv.color = Col4(1.0f, 1.0f, 1.0f, 1.0f);
-			nv.textureCoordinate = v.textureCoordinate;
-			new_vertices.push_back(nv);
-		}
-		//新しい頂点を使ってメッシュリソースの作成
-		m_SquareMeshResource = MeshResource::CreateMeshResource<VertexPositionColorTexture>(new_vertices, indices, true);
-
-		auto DrawComp = AddComponent<PCTStaticDraw>();
-		DrawComp->SetMeshResource(m_SquareMeshResource);
-		//描画するテクスチャを設定
-		DrawComp->SetTextureResource(L"CANNON_TX");
-		//透明処理
-		SetAlphaActive(true);
-
-		/*Mat4x4 au;
-		au.affineTransformation(
-		Vec3(0.0f, 0.9f, 0.1f),
-		Vec3(0, 0, 0),
-		Vec3(0, 0, 0),
-		Vec3(0.0f, 0.0f, 0.0f)
-		);
-		PtrDraw->SetMeshToTransformMatrix(au);*/
+		//親クラスのクリエイトを呼ぶ
+		SS5ssae::OnCreate();
+		//値は秒あたりのフレーム数
+		SetFps(60);
+		//アニメーションのループ設定
+		SetLooped(false);
+		//アニメーションにかけるメトリックスの設定
+		SetToAnimeMatrix(m_ToAnimeMatrix);
+		//SetAlphaActive(true);
+		//auto PtrCol = AddComponent<CollisionObb>();
+		//PtrCol->SetDrawActive(true);
+		UpdateAnimeTime(0);
 	}
 
 	//変化
 	void Cannon::OnUpdate() {
 		float ElapsedTime = App::GetApp()->GetElapsedTime();
-		m_CoolTime += ElapsedTime;
+		if (!m_BulletFlag) {
+			m_CoolTime += ElapsedTime; 
+			UpdateAnimeTime(0);
+		}
+		
 		if (m_CoolTime >= 5)
 		{
+			m_BulletFlag = true;
+			ChangeAnimation(L"Fire");
 			m_CoolTime = 0;
-			GetStage()->AddGameObject<Bullet>(
-				GetComponent<Transform>()->GetScale(),
-				GetComponent<Transform>()->GetRotation(),
-				GetComponent<Transform>()->GetPosition() - Vec3(1,0,0)
-				);
+		}
+		if (m_BulletFlag) {
+			UpdateAnimeTime(ElapsedTime);
+			
+			if (IsAnimeEnd()) {
+				GetStage()->AddGameObject<Bullet>(
+					GetComponent<Transform>()->GetScale(),
+					GetComponent<Transform>()->GetRotation(),
+					GetComponent<Transform>()->GetPosition() - Vec3(1, -0.4f, 0)
+					);
+				m_BulletFlag = false;
+			}
 		}
 
 	}
@@ -243,20 +215,8 @@ namespace basecross {
 		Vec3 m_kagePos;
 		m_kagePos.x = ObjPos.x - ObjPos.z * tanf(LightAngle.x);
 		m_kagePos.y = ObjPos.y - ObjPos.z * tanf(LightAngle.y);
-		m_kagePos.z = -0.1f;
 
-		//ライトの角度を別変数で持つ
-		auto AngleX = LightAngle.x;
-		auto AngleY = LightAngle.y;
-		//マイナスの値だったらプラスにする
-		if (AngleX < 0) {
-			AngleX *= -1.0f;
-		}
-		if (AngleY < 0) {
-			AngleY *= -1.0f;
-		}
-		//スケールにアングルの値足す
-		//GetComponent<Transform>()->SetScale(m_Scale.x + AngleX, m_Scale.y + AngleY, m_ScaleZ);
+		m_kagePos.z = 0;
 
 		return m_kagePos;
 	}

@@ -70,7 +70,6 @@ namespace basecross {
 	void ShadowObject::OnUpdate2() {
 		//影のポジションの更新
 		GetComponent<Transform>()->SetPosition(ShadowLocation());
-
 	}
 
 	//物体とライトの位置から、影の位置を導き出す
@@ -207,11 +206,11 @@ namespace basecross {
 	//------------------------------------------------------------------------------------------
 	ShadowGoal::ShadowGoal(const shared_ptr<Stage>& StagePtr, const wstring BaseDir,
 		const Vec3& m_Scale, const Vec3& Rotation, GameObject& Obj)
-		: SS5ssae(StagePtr, BaseDir, L"Door.ssae", L"Dark"),
+		: SS5ssae(StagePtr, BaseDir, L"DoorSS_0605.ssae", L"Unlock"),
 		m_Scale(m_Scale),m_Rotation(Rotation),m_Obj(Obj), m_ScaleZ(0.05f)
 	{
 		m_ToAnimeMatrixDark.affineTransformation(
-			Vec3(0.18f, 0.14f, 0.1f),
+			Vec3(1.18f, 1.14f, 0.1f),
 			Vec3(0, 0, 0),
 			Vec3(0, 0, 0),
 			Vec3(0, 0.0f, 0.0f)
@@ -262,7 +261,7 @@ namespace basecross {
 		SetLooped(true);
 		//アニメーションにかけるメトリックスの設定
 		SetToAnimeMatrix(m_ToAnimeMatrixDark);
-
+		SetAlphaActive(true);
 		//auto PtrCol = AddComponent<CollisionObb>();
 		//PtrCol->SetDrawActive(true);
 	}
@@ -277,8 +276,8 @@ namespace basecross {
 		if (!m_LightFlag&&GetStage()->GetSharedGameObject<Player>(L"Player")->GetKey())
 		{
 			m_LightFlag = true;
-			ChangeAnimation(L"Light");
-			SetToAnimeMatrix(m_ToAnimeMatrixLight);
+			/*ChangeAnimation(L"Light");
+			SetToAnimeMatrix(m_ToAnimeMatrixLight);*/
 		}
 	}
 
@@ -327,11 +326,11 @@ namespace basecross {
 	//------------------------------------------------------------------------------------------
 	ShadowKey::ShadowKey(const shared_ptr<Stage>& StagePtr,const wstring BaseDir,
 		const Vec3& Scale, const Vec3& Rotation, GameObject& Obj)
-		: SS5ssae(StagePtr, BaseDir, L"KeySS_0522.ssae", L"anime_1"),
+		: SS5ssae(StagePtr, BaseDir, L"KeySS_0531.ssae", L"anime_1"),
 		m_Scale(Scale), m_Rotation(Rotation), m_Obj(Obj), m_ScaleZ(0.05f)
 	{
 		m_ToAnimeMatrix.affineTransformation(
-			Vec3(0.7f, 0.7f, 0.7f),
+			Vec3(0.3f, 0.3f, 0.7f),
 			Vec3(0, 0, 0),
 			Vec3(0, 0, 0),
 			Vec3(0.0f, 0.4f, 0.0f)
@@ -351,9 +350,11 @@ namespace basecross {
 		//親クラスのクリエイトを呼ぶ
 		SS5ssae::OnCreate();
 		//値は秒あたりのフレーム数
-		SetFps(49.0f);
+		SetFps(30.0f);
 		//アニメーションのループ設定
 		SetLooped(true);
+
+		SetAlphaActive(true);
 		//アニメーションにかけるメトリックスの設定
 		SetToAnimeMatrix(m_ToAnimeMatrix);
 	}

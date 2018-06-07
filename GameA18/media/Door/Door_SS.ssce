@@ -47,15 +47,6 @@
 			<posStable>0</posStable>
 		</cell>
 		<cell>
-			<name>Light_up</name>
-			<pos>36 763</pos>
-			<size>720 500</size>
-			<pivot>0 0</pivot>
-			<rotated>0</rotated>
-			<orgImageName></orgImageName>
-			<posStable>0</posStable>
-		</cell>
-		<cell>
 			<name>Light_2</name>
 			<pos>1436 795</pos>
 			<size>550 967</size>

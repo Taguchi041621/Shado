@@ -10,14 +10,10 @@ LRESULT CALLBACK	WndProc(HWND, UINT, WPARAM, LPARAM);
 
 //定数
 const wchar_t* pClassName = L"BaseCrossFullClass";
-const wchar_t* pWndTitle = L"BaseCrossFullSample";
+const wchar_t* pWndTitle = L"影道-Shadow-";
 
 
-//--------------------------------------------------------------------------------------
-//
-//  関数: MyRegisterClass()
-//
-//  目的: ウィンドウ クラスを登録します。
+//---------------------------------------------------------------------------//  目的: ウィンドウ クラスを登録します。 
 //
 //--------------------------------------------------------------------------------------
 ATOM MyRegisterClass(HINSTANCE hInstance)
@@ -128,6 +124,7 @@ int MainLoop(HINSTANCE hInstance, HWND hWnd, bool isFullScreen, int iClientWidth
 	ZeroMemory(&WinInfo, sizeof(WinInfo));
 	//例外処理開始
 	try {
+		::ShowCursor(false);
 		//COMの初期化
 		//サウンドで使用する
 		if (FAILED(CoInitializeEx(nullptr, COINIT_MULTITHREADED))) {
@@ -208,6 +205,7 @@ int MainLoop(HINSTANCE hInstance, HWND hWnd, bool isFullScreen, int iClientWidth
 	//例外処理終了
 	//COMのリリース
 	::CoUninitialize();
+	::ShowCursor(true);
 	return RetCode;
 }
 
@@ -234,7 +232,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 	int iClientHeight = 800;
 	// フルスクリーンにするかどうかの判定
 	// コマンドラインに/fが設定されていたらフルスクリーンにする
-	bool isFullScreen = false;
+	bool isFullScreen = true;
 	wstring wstrcmd = lpCmdLine;
 	if (wstrcmd == L"/f" || wstrcmd == L"/F") {
 		isFullScreen = true;     // フラグをtrueに設定
@@ -290,5 +288,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	}
 	return 0;
 }
+
 
 

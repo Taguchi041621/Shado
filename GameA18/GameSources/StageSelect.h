@@ -23,7 +23,9 @@ namespace basecross
 		int m_StageNumber;
 		bool onectrl;
 
+		int m_MaxStageNumber;
 		
+		float m_CoolTime;
 
 	public:
 		//\’z‚Æ”jŠü

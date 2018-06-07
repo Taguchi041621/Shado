@@ -70,12 +70,12 @@
 		<filterMode>linear</filterMode>
 		<interpolationType>linear</interpolationType>
 		<renderingSettings>
-			<outputFolder>/Users/shima/Desktop/ゲーム大賞2018 Aチーム/Snake/Export</outputFolder>
-			<outputType>GIF</outputType>
-			<bgColor>FFFFFFFF</bgColor>
+			<outputFolder></outputFolder>
+			<outputType>AVI</outputType>
+			<bgColor>FF606060</bgColor>
 			<addAnimeName>0</addAnimeName>
 			<addTimeStamp>0</addTimeStamp>
-			<addAlphaChanel>0</addAlphaChanel>
+			<addAlphaChanel>1</addAlphaChanel>
 		</renderingSettings>
 		<cellTags />
 	</settings>
@@ -101,11 +101,10 @@
 		<value>Snakeshdow.ssce</value>
 	</cellmapNames>
 	<animepackNames>
-		<value>SnakeTest.ssae</value>
+		<value>Snakeshdow.ssae</value>
 	</animepackNames>
-	<lastAnimeFile>SnakeTest.ssae</lastAnimeFile>
-	<lastAnimeName>Close</lastAnimeName>
+	<lastAnimeFile>Snakeshdow.ssae</lastAnimeFile>
+	<lastAnimeName>Pakupaku</lastAnimeName>
 	<lastCellMapFile>Snakeshdow.ssce</lastCellMapFile>
-	<lastCell>Head</lastCell>
-	<lastPart>Head</lastPart>
+	<lastCell>AGO</lastCell>
 </SpriteStudioProject>

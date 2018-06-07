@@ -14,7 +14,8 @@ namespace basecross
 		m_Trace(Trace),
 		m_StartScale(StartScale),
 		m_StartPos(StartPos),
-		m_Actionflag(false)
+		m_Actionflag(false),
+		m_Alpha(1)
 	{}
 
 	SpriteFadeOut::~SpriteFadeOut() {}
@@ -50,27 +51,16 @@ namespace basecross
 		auto PtrTransform = GetComponent<Transform>();
 		float ElapsedTime = App::GetApp()->GetElapsedTime();
 		//if (m_Actionflag == true) {
+
 			ActionPtr->Run();
+			auto PtrDraw = GetComponent<PCTSpriteDraw>();
+			PtrDraw->SetDiffuse(Col4(1, 1, 1, m_Alpha));
 		//}
 		//if (m_Actionflag == false) {
 		//	ActionPtr->Stop();
 		//	PtrTransform->SetScale(m_StartScale.x, m_StartScale.y, 1.0f);
 		//}
-			float a = 1 - ElapsedTime*2;
-
-			float HelfSize = 0.5f;
-			//頂点配列
-			vector<VertexPositionColorTexture> vertices = {
-				{ VertexPositionColorTexture(Vec3(-HelfSize, HelfSize, 0),Col4(1.0f,1.0f,1.0f,a), Vec2(0.0f, 0.0f)) },
-				{ VertexPositionColorTexture(Vec3(HelfSize, HelfSize, 0), Col4(1.0f,1.0f,1.0f,a), Vec2(1.0f, 0.0f)) },
-				{ VertexPositionColorTexture(Vec3(-HelfSize, -HelfSize, 0),Col4(1.0f,1.0f,1.0f,a), Vec2(0.0f, 1.0f)) },
-				{ VertexPositionColorTexture(Vec3(HelfSize, -HelfSize, 0),Col4(1.0f,1.0f,1.0f,a), Vec2(1.0f, 1.0f)) },
-			};
-			//インデックス配列
-			vector<uint16_t> indices = { 0, 1, 2, 1, 3, 2 };
-			SetAlphaActive(m_Trace);
-			auto PtrDraw = this->GetComponent<PCTSpriteDraw>();
-			PtrDraw->UpdateVertices(vertices);
+			m_Alpha -= ElapsedTime;
 	}
 	//end basecross
 }

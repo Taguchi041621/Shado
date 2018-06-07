@@ -16,6 +16,8 @@ namespace basecross
 
 		bool m_Actionflag;
 
+		float m_Alpha;
+
 	public:
 		//--------------------------------------------------------------------------------------
 		/*!

@@ -109,6 +109,16 @@ namespace basecross {
 				PlayerPtr->GetComponent<Transform>()->SetPosition(Pos);
 				//カメラのターゲットに設定
 				dynamic_pointer_cast<MyCamera>(GetView()->GetTargetCamera())->SetTargetObject(PlayerPtr);
+
+				Pos += Vec3(2, 2, 0.5);
+				if (ScenePtr->GetStageNumber()==1) {
+					AddGameObject<Tutorial>(
+						DataDir + L"Tutorial\\",
+						Vec3(1),
+						Vec3(0),
+						Vec3(Pos)
+						);
+				}
 			}
 
 			if (MapVec[0] == L"Goal") {
@@ -175,13 +185,24 @@ namespace basecross {
 		SetSharedGameObject(L"Pause", Pause);
 		Pause->SetDrawActive(false);
 		auto WLight = AddGameObject<ScaleChangeSprite>(L"GameOver_WhiteLight_TX", true,
-			Vec2(1000, 600), Vec3(-20, 130, 0.1f), 0.3f);
+			Vec2(1000, 600), Vec3(-20, 130, 0.1f), 0.3f,true);
 		WLight->SetDrawActive(false);
 
 		//白い光のアニメーション
 		WLight->AddComponent<Action>();
 		WLight->GetComponent<Action>()->AllActionClear();
 		SetSharedGameObject(L"WLight", WLight);
+	}
+
+	void GameStage::CreateTutorial() {
+		wstring DataDir;
+		App::GetApp()->GetDataDirectory(DataDir);
+		AddGameObject<Tutorial>(
+			DataDir + L"Tutorial\\",
+			Vec3(1),
+			Vec3(0),
+			Vec3(0)
+			);
 	}
 
 
@@ -317,7 +338,7 @@ namespace basecross {
 			CreateFadeOutSprite();
 			CreateFadeSprite();
 
-
+			//CreateTutorial();
 		}
 		catch (...) {
 			throw;
