@@ -203,6 +203,104 @@ namespace basecross {
 
 		return m_kagePos;
 	}
+	//--------------------------------------------------------------------------------------
+	//	class ShadowObject : public GameObject;
+	//	用途: オブジェクトの影
+	//--------------------------------------------------------------------------------------
+	ShadowObject3::ShadowObject3(const shared_ptr<Stage>& StagePtr,
+		const Vec3& Scale, const Vec3& Rotation, GameObject& Obj)
+		: GameObject(StagePtr),
+		m_Scale(Scale), m_Rotation(Rotation), m_Obj(Obj), m_ScaleZ(0.00005f)
+	{
+	}
+
+	ShadowObject3::~ShadowObject3() {}
+	//初期化
+	void ShadowObject3::OnCreate() {
+		//スケールのZを固定の大きさに
+		m_Scale.z = m_ScaleZ;
+		//AddComponent<Rigidbody>();
+		auto PtrTransform = AddComponent<Transform>();
+		//影のスケール,角度,ポジションの設定
+		PtrTransform->SetScale(m_Scale);
+		PtrTransform->SetRotation(m_Rotation);
+		PtrTransform->SetPosition(ShadowLocation());
+
+		//auto PtrDraw = AddComponent<BcPNTStaticDraw>();
+		//PtrDraw->SetMeshResource(m_Obj.GetComponent<BcPNTStaticDraw>()->GetMeshResource());
+		////真っ黒
+		//PtrDraw->SetColorAndAlpha(Col4(1.0f, 1.0f, 1.0f, 0.0f));
+		////Mat4x4 au;
+		///*au.affineTransformation(
+		//	Vec3(1.0f, 1.0f, 0.1f),
+		//	Vec3(0, 0, 0),
+		//	Vec3(0, 0, 0),
+		//	Vec3(0.0f, 0.0f, 0.0f)
+		//	);
+		//PtrDraw->SetMeshToTransformMatrix(au);*/
+		//PtrDraw->SetTextureResource(L"Shadow_Blur_TX");
+		//PtrDraw->SetAlpha(1.0f);
+		//PtrDraw->SetPerPixelLighting(false);
+
+
+
+		auto PtrDraw = AddComponent<PNTStaticDraw>();
+		//描画するメッシュを設定
+		PtrDraw->SetMeshResource(L"DEFAULT_CUBE");
+		//描画するテクスチャを設定
+		PtrDraw->SetTextureResource(L"Shadow_Blur_TX");
+		//透明処理
+		SetAlphaActive(true);
+
+		/*Mat4x4 au;
+		au.affineTransformation(
+		Vec3(0.0f, 0.9f, 0.1f),
+		Vec3(0, 0, 0),
+		Vec3(0, 0, 0),
+		Vec3(0.0f, 0.0f, 0.0f)
+		);
+		PtrDraw->SetMeshToTransformMatrix(au);*/
+	}
+
+	//変化
+	void ShadowObject3::OnUpdate() {
+	}
+	void ShadowObject3::OnUpdate2() {
+		//影のポジションの更新
+		GetComponent<Transform>()->SetPosition(ShadowLocation());
+
+	}
+
+	//物体とライトの位置から、影の位置を導き出す
+	Vec3 ShadowObject3::ShadowLocation() {
+		//実体ブロックのポジション
+		auto ObjPos = m_Obj.GetComponent<Transform>()->GetPosition();
+		//ライトのコントローラーを持ってくる
+		auto ptrMyLight = GetStage()->GetSharedGameObject<LightController>(L"LightController");
+		//角度を取り出す
+		auto LightAngle = ptrMyLight->GetLightAngle();
+
+		//ライトの角度と対応した実態ブロックの壁までの距離から影の位置を出す
+		Vec3 m_kagePos;
+		m_kagePos.x = ObjPos.x - ObjPos.z * tanf(LightAngle.x);
+		m_kagePos.y = ObjPos.y - ObjPos.z * tanf(LightAngle.y);
+		m_kagePos.z = 0.1f;
+
+		//ライトの角度を別変数で持つ
+		auto AngleX = LightAngle.x;
+		auto AngleY = LightAngle.y;
+		//マイナスの値だったらプラスにする
+		if (AngleX < 0) {
+			AngleX *= -1.0f;
+		}
+		if (AngleY < 0) {
+			AngleY *= -1.0f;
+		}
+		//スケールにアングルの値足す
+		GetComponent<Transform>()->SetScale(m_Scale.x + AngleX, m_Scale.y + AngleY, m_ScaleZ);
+
+		return m_kagePos;
+	}
 	//------------------------------------------------------------------------------------------
 	///ゴールの役割をする影
 	//------------------------------------------------------------------------------------------

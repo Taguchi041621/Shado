@@ -96,7 +96,16 @@ namespace basecross {
 				Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
 				auto PtrCube = AddGameObject<BlueCube>(Scl, Qt, Pos, Vec3(1,0,0), true);
 			}
-
+			if (MapVec[0] == L"VMoveCube") {
+				//FixedBox(const Vector3& Scale,const Vector3& Rotation,const Vector3& Position
+				//‚»‚ê‚¼‚ê‚Ì’l‚ğ“ü‚ê‚é
+				//ŒÅ’è‚·‚é’l‚ğİ’è
+				stringflag = true;
+				//Scl = Vector3(1, 1, 1);
+				//Rot = Vector3(0, 0, 0);
+				Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
+				auto PtrCube = AddGameObject<YellowCube>(Scl, Qt, Pos, Vec3(0, 1, 0), true);
+			}
 			if (MapVec[0] == L"Player") {
 				stringflag = true;
 				wstring DataDir;
