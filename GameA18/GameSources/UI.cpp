@@ -142,6 +142,74 @@ namespace basecross
 			SetPosition(Vec3(-540.0f + -90*sinf(LightAngle.x), -300.0f + -90*sinf(LightAngle.y), 0.1f));
 	};
 
+	//-------------------------------------------------------------------------------------
+	///ライトの位置を表示する光
+	//-------------------------------------------------------------------------------------
+	LightSign::LightSign(const shared_ptr<Stage>& StagePtr)
+		: GameObject(StagePtr)
+	{
+	};
+	//--------------------------------------------------------------------------------------
+	/*!
+	@brief デストラクタ
+	*/
+	//--------------------------------------------------------------------------------------
+	LightSign::~LightSign() {};
+	//--------------------------------------------------------------------------------------
+	/*!
+	@brief 初期化
+	@return	なし
+	*/
+	//--------------------------------------------------------------------------------------
+	void LightSign::OnCreate() {
+		auto light = GetStage()->AddGameObject<Sprite>(L"ball_yellow_TX", true, Vec2(80.0f, 80.0f), Vec3(0.0f, 0.0f, 0.1f));
+		light->AddComponent<Action>();
+		light->GetComponent<Action>()->AllActionClear();
+		GetStage()->SetSharedGameObject(L"LightSign", light);
+	};
+	//--------------------------------------------------------------------------------------
+	/*!
+	@brief 更新
+	@return	なし
+	*/
+	//--------------------------------------------------------------------------------------
+	void LightSign::OnUpdate() {
+		auto ptrMyLight = GetStage()->GetSharedGameObject<LightController>(L"LightController");
+		auto LightAngle = ptrMyLight->GetLightAngle();
+		auto MiniMapLight = GetStage()->GetSharedGameObject<Sprite>(L"LightSign");
+		//真ん中に居たら消える、イデアに被らないため
+		if (LightAngle.x < 0.3f && LightAngle.x > -0.3f && LightAngle.y <0.3f && LightAngle.y > -0.3f) {
+			//MiniMapLight->SetDrawActive(false);
+		}
+		else {
+			MiniMapLight->SetDrawActive(true);
+		}
+		Vec3 LightPos;
+		//ポジションの計算
+		LightPos.z = 0.1f;
+		LightPos.x = 840 * -sinf(LightAngle.x);
+		LightPos.y = 500 * -sinf(LightAngle.y);
+		//ポジションの反映
+		MiniMapLight->GetComponent<Transform>()->SetPosition(LightPos);
+
+		Vec3 angle = LightAngle;
+		if (LightAngle.x < 0) {
+			angle.x = -LightAngle.x;
+		}
+		if (LightAngle.y < 0) {
+			angle.y = -LightAngle.y;
+		}
+		//ライトアングルの値に応じてアルファ値を変える
+		float AlphaLight = angle.x;
+		if (AlphaLight < angle.y) {
+			AlphaLight = angle.y;
+		}
+
+		//透明度を変える
+		MiniMapLight->GetComponent<PCTSpriteDraw>()->SetDiffuse(Col4(1.0f, 1.0f, 1.0f, AlphaLight));
+
+	};
+
 	//--------------------------------------------------------------------------------------
 	///	拡大縮小を繰り返すスプライト
 	//--------------------------------------------------------------------------------------

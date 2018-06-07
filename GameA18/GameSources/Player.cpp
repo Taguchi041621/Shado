@@ -20,19 +20,20 @@ namespace basecross{
 		m_Decel(0.65f),	//減速値
 		m_Mass(0.5f),	//質量
 		m_Key(0),		//鍵の取得状況
-		m_Death(0)		//死因を0(生存)に
+		m_Death(0),		//死因を0(生存)に
+		m_FallSpeedFirst(-7.4f)
 	{
 		m_ToAnimeMatrixLeft.affineTransformation(
 			Vec3(0.1f, 0.05f, 0.1f),
 			Vec3(0, 0, 0),
 			Vec3(0, 0, 0),
-			Vec3(-0.5f, 0.0f, 0.0f)
+			Vec3(-0.5f, 0.03f, 0.0f)
 		);
 		m_ToAnimeMatrixRight.affineTransformation(
 			Vec3(-0.1f, 0.05f, 0.1f),
 			Vec3(0, 0, 0),
 			Vec3(0, 0, 0),
-			Vec3(0.5f, 0.0f, 0.0f)
+			Vec3(0.5f, 0.03f, 0.0f)
 		);
 	}
 
@@ -129,16 +130,18 @@ namespace basecross{
 	void Player::OnCollisionExcute(vector<shared_ptr<GameObject>>& OtherVec) {
 		for (auto &obj : OtherVec) {
 			auto ShadowPtr = dynamic_pointer_cast<ShadowObject>(obj);
-			Extrusion(ShadowPtr);
-			FindParent(ShadowPtr);
-			OBB p;
-			p.m_Center = ShadowPtr->GetComponent<Transform>()->GetWorldPosition();
-			p.m_Size = ShadowPtr->GetComponent<Transform>()->GetScale() * 0.5f;
-			//当たり判定の更新
-			m_DieOBB.m_Center = GetComponent<Transform>()->GetWorldPosition();
-			//頭中心あたりが当たったら死ぬ
-			if (HitTest::OBB_OBB(m_DieOBB, p)) {
-				m_Death = 1;
+			if (ShadowPtr) {
+				Extrusion(ShadowPtr);
+				FindParent(ShadowPtr);
+				OBB p;
+				p.m_Center = ShadowPtr->GetComponent<Transform>()->GetWorldPosition();
+				p.m_Size = ShadowPtr->GetComponent<Transform>()->GetScale() * 0.5f;
+				//当たり判定の更新
+				m_DieOBB.m_Center = GetComponent<Transform>()->GetWorldPosition();
+				//頭中心あたりが当たったら死ぬ
+				if (HitTest::OBB_OBB(p, m_DieOBB)) {
+					m_Death = 1;
+				}
 			}
 		}
 	}
@@ -150,21 +153,23 @@ namespace basecross{
 				//親と離れているかを検出
 				GetComponent<Transform>()->ClearParent();
 				m_ParentFlag = false;
+				//落下スピードの初期化
+				m_FallSpeed = m_FallSpeedFirst;
 			}
 		}
 	}
 	//親になる条件を満たしているかを調べて、満たしていたら親にする
 	void Player::FindParent(const shared_ptr<GameObject>& OtherVec) {
 		auto playerTrans = GetComponent<Transform>();
-		auto ObjPos = OtherVec->GetComponent<Transform>()->GetPosition();
+		auto playerPos = playerTrans->GetWorldPosition();
+		auto playerSca = playerTrans->GetScale();
+		auto ObjPos = OtherVec->GetComponent<Transform>()->GetWorldPosition();
 		auto ObjSca = OtherVec->GetComponent<Transform>()->GetScale() * 0.5f;
 		//影の上に乗っているかを調べる
-		if ((ObjPos.x - ObjSca.x) < playerTrans->GetPosition().x
-			&& (ObjPos.x + ObjSca.x) > playerTrans->GetPosition().x
-			&& ObjPos.y + ObjSca.y <= playerTrans->GetPosition().y - playerTrans->GetScale().y * 0.45f) {
-			//ペアレント化してるオブジェクトが無かったらペアレント化
+		if ((ObjPos.x - ObjSca.x) < playerPos.x + playerSca.x * 0.5f
+			&& (ObjPos.x + ObjSca.x) > playerPos.x - playerSca.x * 0.5f
+			&& ObjPos.y + ObjSca.y <= playerPos.y - playerTrans->GetScale().y * 0.48f) {
 			if (!playerTrans->GetParent()) {
-				//ペアレント化する
 				playerTrans->SetParent(OtherVec);
 				m_ParentFlag = true;
 			}
@@ -174,7 +179,7 @@ namespace basecross{
 	void Player::Extrusion(const shared_ptr<GameObject>& OtherVec) {
 		auto playerPos = GetComponent<Transform>()->GetWorldPosition();
 		auto playerScale = GetComponent<Transform>()->GetScale() * 0.5f;
-		auto otherPos = OtherVec->GetComponent<Transform>()->GetPosition();
+		auto otherPos = OtherVec->GetComponent<Transform>()->GetWorldPosition();
 		auto otherScale = OtherVec->GetComponent<Transform>()->GetScale() * 0.5f;
 		//自機と相手が衝突しているかの判定
 		if (playerPos.y - playerScale.y < otherPos.y + otherScale.y && playerPos.y + playerScale.y > otherPos.y - otherScale.y &&
@@ -196,9 +201,19 @@ namespace basecross{
 			//もっともめり込みが少ない面に押し返す
 			switch (min) {
 			case 0:
+				//段差があったら登る
+				if (diff[2] < 0.4f && diff[2] >0.0f && GetMoveVector(0) < -0.6f) {
+					playerPos.y += diff[2];
+					break;
+				}
 				playerPos.x += diff[min];
 				break;
 			case 1:
+				//段差があったら登る
+				if (diff[2] < 0.4f && diff[2] > 0.0f && GetMoveVector(0) > 0.6f) {
+					playerPos.y += diff[2];
+					break;
+				}
 				playerPos.x -= diff[min];
 				break;
 			case 2:
@@ -279,22 +294,19 @@ namespace basecross{
 
 	void Player::OnUpdate2() {
 		auto ScenePtr = App::GetApp()->GetScene<Scene>();
-		if (m_ParentFlag && !m_GameOverFlag && !m_GameClearFlag && ScenePtr->GetStartFlag()&&!m_StandFlag) {
-			auto vero = GetComponent<Rigidbody>()->GetVelocity();
-			vero += (0.0f, -4.9f, 0.0f);
-			GetComponent<Rigidbody>()->SetVelocity(vero);
+		if (m_ParentFlag && !m_GameOverFlag && !m_GameClearFlag && ScenePtr->GetStartFlag() && !m_StandFlag) {
 			//プレイヤーの移動
 			MoveRotationMotion();
 			//文字列の表示
-			//DrawStrings();
 		}
-
-		if (!m_ParentFlag) {
+		else if (!m_ParentFlag) {
 			auto PtrRedit = GetComponent<Rigidbody>();
 			PtrRedit->SetVelocityZero();
-			GetComponent<Rigidbody>()->SetVelocity(Vec3(0.0f,-7.4f,0.0f));
+			GetComponent<Rigidbody>()->SetVelocity(Vec3(0.0f, m_FallSpeed, 0.0f));
+			m_FallSpeed += -0.2f;
 		}
-			PlayerHP();
+		PlayerHP();
+		DrawStrings();
 	}
 	//
 	void Player::PlayerHP() {
@@ -304,7 +316,6 @@ namespace basecross{
 		if (PlayerPos.y < -25.0f){
 			m_PlayerHP = 0;
 		}
-
 		
 		if (m_PlayerHP == 0 && !m_GameOverFlag){
 			m_GameOverFlag = true;
@@ -407,10 +418,11 @@ namespace basecross{
 			Obj->GetStateMachine()->ChangeState(DiedState::Instance());
 		}
 		auto ScenePtr = App::GetApp()->GetScene<Scene>();
-		//左スティックの値が0以外ならWalkアニメを流す
+		//親がいなかったらFallアニメを流す
 		if (!Obj->GetParentFlag()) {
 			Obj->GetStateMachine()->ChangeState(FallState::Instance());
 		}
+		//左スティックの値が0以外ならWalkアニメを流す
 		if (Obj->GetParentFlag() && Obj->GetMoveVector(0)&& ScenePtr->GetStartFlag()) {
 			Obj->GetStateMachine()->ChangeState(WalkState::Instance());
 		}

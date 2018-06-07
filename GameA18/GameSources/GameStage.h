@@ -27,6 +27,8 @@ namespace basecross {
 		void CreateMiniMap();
 		//画面端を知らせる演出
 		void CreateMoveEnd();
+		//ライトの位置を知らせる演出
+		void CreateLightSign();
 		CsvFile m_Csv;//CSV関連の変数
 					  //DataIDを管理するフラグ
 		bool dataIdFlag = false;

@@ -93,6 +93,171 @@ namespace basecross {
 		}
 	}
 
+	BlueCube::BlueCube(const shared_ptr<Stage>& StagePtr,
+		const Vec3& StartScale, const Quat& StartQt, const Vec3& StartPos, const Vec3& StartSpeed, const bool& Move) :
+		GameObject(StagePtr),
+		m_StartScale(StartScale),
+		m_StartQt(StartQt),
+		m_StartPos(StartPos),
+		m_MoveFlag(Move),
+		m_HengMoveFlag(true),
+		m_VerticalMoveFlag(true),
+		m_Speed(StartSpeed),
+		m_HengTimer(0),
+		m_VerticalTimer(0)
+	{}
+
+	void BlueCube::OnCreate() {
+		auto PtrTransform = GetComponent<Transform>();
+		PtrTransform->SetScale(m_StartScale);
+		PtrTransform->SetQuaternion(m_StartQt);
+		PtrTransform->SetPosition(m_StartPos);
+
+		m_Rigidbody = AddComponent<Rigidbody>();
+
+		auto PtrDraw = AddComponent<BcPNTStaticDraw>();
+		PtrDraw->SetMeshResource(L"DEFAULT_CUBE");
+
+		PtrDraw->SetAlpha(0.5f);
+		PtrDraw->SetTextureResource(L"Blue_TX");
+
+		SetAlphaActive(true);
+		//影をつける
+		//auto ShadowPtr = AddComponent<Shadowmap>();
+		//ShadowPtr->SetMeshResource(L"DEFAULT_SQUARE");
+		//--------------------------------------------------------
+		//オブジェクトの影のコンストラクタ呼び出し
+		GetStage()->AddGameObject<ShadowObject>(
+			GetComponent<Transform>()->GetScale(),
+			GetComponent<Transform>()->GetRotation(),
+			*GetThis<GameObject>()
+			);
+		/*GetStage()->AddGameObject<ShadowObject2>(
+		GetComponent<Transform>()->GetScale(),
+		GetComponent<Transform>()->GetRotation(),
+		*GetThis<GameObject>()
+		);*/
+	}
+
+	void BlueCube::OnUpdate() {
+
+		float ElapsedTime = App::GetApp()->GetElapsedTime();
+
+		m_HengTimer += ElapsedTime;
+		m_VerticalTimer += ElapsedTime;
+		if (m_MoveFlag) {
+			if (m_HengMoveFlag)
+				m_Rigidbody->SetVelocity(Vec3(-m_Speed.x, m_Speed.y, 0));
+			if (!m_HengMoveFlag)
+				m_Rigidbody->SetVelocity(Vec3(m_Speed.x, m_Speed.y, 0));
+
+			if (m_HengTimer >= 3 && m_HengMoveFlag) {
+				m_HengMoveFlag = false;
+				m_HengTimer = 0;
+			}
+			if (m_HengTimer >= 3 && !m_HengMoveFlag) {
+				m_HengMoveFlag = true;
+				m_HengTimer = 0;
+			}
+
+			/*if (m_VerticalMoveFlag)
+			m_Rigidbody->SetVelocity(Vec3(0, m_Speed.y, 0));
+			if (!m_VerticalMoveFlag)
+			m_Rigidbody->SetVelocity(Vec3(0, -m_Speed.y, 0));
+
+			if (m_VerticalTimer >= 3 && m_VerticalMoveFlag) {
+			m_VerticalMoveFlag = false;
+			m_VerticalTimer = 0;
+			}
+			if (m_VerticalTimer >= 3 && !m_VerticalMoveFlag) {
+			m_VerticalMoveFlag = true;
+			m_VerticalTimer = 0;
+			}*/
+		}
+	}
+
+	YellowCube::YellowCube(const shared_ptr<Stage>& StagePtr,
+		const Vec3& StartScale, const Quat& StartQt, const Vec3& StartPos, const Vec3& StartSpeed, const bool& Move) :
+		GameObject(StagePtr),
+		m_StartScale(StartScale),
+		m_StartQt(StartQt),
+		m_StartPos(StartPos),
+		m_MoveFlag(Move),
+		m_HengMoveFlag(true),
+		m_VerticalMoveFlag(true),
+		m_Speed(StartSpeed),
+		m_HengTimer(0),
+		m_VerticalTimer(0)
+	{}
+
+	void YellowCube::OnCreate() {
+		auto PtrTransform = GetComponent<Transform>();
+		PtrTransform->SetScale(m_StartScale);
+		PtrTransform->SetQuaternion(m_StartQt);
+		PtrTransform->SetPosition(m_StartPos);
+
+		m_Rigidbody = AddComponent<Rigidbody>();
+
+		auto PtrDraw = AddComponent<BcPNTStaticDraw>();
+		PtrDraw->SetMeshResource(L"DEFAULT_CUBE");
+
+		PtrDraw->SetAlpha(0.5f);
+		PtrDraw->SetTextureResource(L"Yellow_TX");
+
+		SetAlphaActive(true);
+		//影をつける
+		//auto ShadowPtr = AddComponent<Shadowmap>();
+		//ShadowPtr->SetMeshResource(L"DEFAULT_SQUARE");
+		//--------------------------------------------------------
+		//オブジェクトの影のコンストラクタ呼び出し
+		GetStage()->AddGameObject<ShadowObject>(
+			GetComponent<Transform>()->GetScale(),
+			GetComponent<Transform>()->GetRotation(),
+			*GetThis<GameObject>()
+			);
+		/*GetStage()->AddGameObject<ShadowObject2>(
+		GetComponent<Transform>()->GetScale(),
+		GetComponent<Transform>()->GetRotation(),
+		*GetThis<GameObject>()
+		);*/
+	}
+
+	void YellowCube::OnUpdate() {
+
+		float ElapsedTime = App::GetApp()->GetElapsedTime();
+
+		m_HengTimer += ElapsedTime;
+		m_VerticalTimer += ElapsedTime;
+		if (m_MoveFlag) {
+			if (m_HengMoveFlag)
+				m_Rigidbody->SetVelocity(Vec3(0, -m_Speed.y, 0));
+			if (!m_HengMoveFlag)
+				m_Rigidbody->SetVelocity(Vec3(0, m_Speed.y, 0));
+
+			if (m_HengTimer >= 3 && m_HengMoveFlag) {
+				m_HengMoveFlag = false;
+				m_HengTimer = 0;
+			}
+			if (m_HengTimer >= 3 && !m_HengMoveFlag) {
+				m_HengMoveFlag = true;
+				m_HengTimer = 0;
+			}
+
+			/*if (m_VerticalMoveFlag)
+			m_Rigidbody->SetVelocity(Vec3(0, m_Speed.y, 0));
+			if (!m_VerticalMoveFlag)
+			m_Rigidbody->SetVelocity(Vec3(0, -m_Speed.y, 0));
+
+			if (m_VerticalTimer >= 3 && m_VerticalMoveFlag) {
+			m_VerticalMoveFlag = false;
+			m_VerticalTimer = 0;
+			}
+			if (m_VerticalTimer >= 3 && !m_VerticalMoveFlag) {
+			m_VerticalMoveFlag = true;
+			m_VerticalTimer = 0;
+			}*/
+		}
+	}
 	//--------------------------------------------------------------------------------------
 	///	三角形のオブジェ
 	//--------------------------------------------------------------------------------------

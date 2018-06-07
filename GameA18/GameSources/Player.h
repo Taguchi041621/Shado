@@ -37,6 +37,10 @@ namespace basecross{
 		OBB m_DieOBB;
 		//死亡状態を持つ変数[1:圧殺]
 		int m_Death;
+		//落下スピード
+		float m_FallSpeed;
+		//落下スピードの初期値
+		float m_FallSpeedFirst;
 
 		bool m_GameClearFlag;
 		bool m_GameOverFlag;

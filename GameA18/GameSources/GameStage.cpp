@@ -94,9 +94,18 @@ namespace basecross {
 				//Scl = Vector3(1, 1, 1);
 				//Rot = Vector3(0, 0, 0);
 				Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
-				auto PtrCube = AddGameObject<WhiteCube>(Scl, Qt, Pos, Vec3(1,0,0), true);
+				auto PtrCube = AddGameObject<BlueCube>(Scl, Qt, Pos, Vec3(1,0,0), true);
 			}
-
+			if (MapVec[0] == L"VMoveCube") {
+				//FixedBox(const Vector3& Scale,const Vector3& Rotation,const Vector3& Position
+				//それぞれの値を入れる
+				//固定する値を設定
+				stringflag = true;
+				//Scl = Vector3(1, 1, 1);
+				//Rot = Vector3(0, 0, 0);
+				Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
+				auto PtrCube = AddGameObject<YellowCube>(Scl, Qt, Pos, Vec3(0, 1, 0), true);
+			}
 			if (MapVec[0] == L"Player") {
 				stringflag = true;
 				wstring DataDir;
@@ -294,6 +303,9 @@ namespace basecross {
 	void GameStage::CreateMiniMap() {
 		AddGameObject<MiniMap>();
 	}
+	void GameStage::CreateLightSign() {
+		AddGameObject<LightSign>();
+	}
 
 	void GameStage::CreateMoveEnd() {
 		auto group = GetSharedObjectGroup(L"MoveEndGroup");
@@ -328,6 +340,8 @@ namespace basecross {
 			//CreateEnemy();
 			//ミニマップ
 			//CreateMiniMap();
+			//ライトの位置を知らせる演出
+			CreateLightSign();
 			//ライトの駆動限界を教える
 			CreateMoveEnd();
 			Csv();
