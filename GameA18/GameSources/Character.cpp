@@ -91,6 +91,13 @@ namespace basecross {
 				m_VerticalTimer = 0;
 			}*/
 		}
+		//右スティックを操作してたら濃くする
+		if (GetStage()->GetSharedGameObject<Player>(L"Player")->GetMoveVector(1)) {
+			GetComponent<BcPNTStaticDraw>()->SetAlpha(0.7f);
+		}
+		else {//薄くする
+			GetComponent<BcPNTStaticDraw>()->SetAlpha(0.32f);
+		}
 	}
 
 	BlueCube::BlueCube(const shared_ptr<Stage>& StagePtr,
@@ -174,6 +181,14 @@ namespace basecross {
 			m_VerticalTimer = 0;
 			}*/
 		}
+		//右スティックを操作してたら濃くする
+		if (GetStage()->GetSharedGameObject<Player>(L"Player")->GetMoveVector(1)) {
+			GetComponent<BcPNTStaticDraw>()->SetAlpha(0.7f);
+		}
+		else {//薄くする
+			GetComponent<BcPNTStaticDraw>()->SetAlpha(0.32f);
+		}
+
 	}
 
 	YellowCube::YellowCube(const shared_ptr<Stage>& StagePtr,
@@ -256,6 +271,13 @@ namespace basecross {
 			m_VerticalMoveFlag = true;
 			m_VerticalTimer = 0;
 			}*/
+		}
+		//右スティックを操作してたら濃くする
+		if (GetStage()->GetSharedGameObject<Player>(L"Player")->GetMoveVector(1)) {
+			GetComponent<BcPNTStaticDraw>()->SetAlpha(0.7f);
+		}
+		else {//薄くする
+			GetComponent<BcPNTStaticDraw>()->SetAlpha(0.32f);
 		}
 	}
 	//--------------------------------------------------------------------------------------
