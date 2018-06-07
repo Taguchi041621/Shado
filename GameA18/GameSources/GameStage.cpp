@@ -273,6 +273,9 @@ namespace basecross {
 	void GameStage::CreateMiniMap() {
 		AddGameObject<MiniMap>();
 	}
+	void GameStage::CreateLightSign() {
+		AddGameObject<LightSign>();
+	}
 
 	void GameStage::CreateMoveEnd() {
 		auto group = GetSharedObjectGroup(L"MoveEndGroup");
@@ -307,6 +310,8 @@ namespace basecross {
 			//CreateEnemy();
 			//ミニマップ
 			//CreateMiniMap();
+			//ライトの位置を知らせる演出
+			CreateLightSign();
 			//ライトの駆動限界を教える
 			CreateMoveEnd();
 			Csv();
