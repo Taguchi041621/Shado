@@ -19,6 +19,8 @@ namespace basecross{
 		bool m_HengMoveFlag;
 		bool m_VerticalMoveFlag;
 		Vec3 m_Speed;
+		//”Z‚³‚ğ‚Â
+		float m_alpha;
 
 		float m_HengTimer;
 		float m_VerticalTimer;
@@ -71,6 +73,8 @@ namespace basecross{
 		bool m_HengMoveFlag;
 		bool m_VerticalMoveFlag;
 		Vec3 m_Speed;
+		//”Z‚³‚ğ‚Â
+		float m_alpha;
 
 		float m_HengTimer;
 		float m_VerticalTimer;
@@ -123,6 +127,8 @@ namespace basecross{
 		bool m_HengMoveFlag;
 		bool m_VerticalMoveFlag;
 		Vec3 m_Speed;
+		//”Z‚³‚ğ‚Â
+		float m_alpha;
 
 		float m_HengTimer;
 		float m_VerticalTimer;

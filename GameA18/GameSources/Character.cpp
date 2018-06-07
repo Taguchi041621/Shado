@@ -21,7 +21,8 @@ namespace basecross {
 		m_VerticalMoveFlag(true),
 		m_Speed(StartSpeed),
 		m_HengTimer(0),
-		m_VerticalTimer(0)
+		m_VerticalTimer(0),
+		m_alpha(0.7f)
 	{}
 
 	void WhiteCube::OnCreate() {
@@ -93,11 +94,16 @@ namespace basecross {
 		}
 		//右スティックを操作してたら濃くする
 		if (GetStage()->GetSharedGameObject<Player>(L"Player")->GetMoveVector(1)) {
-			GetComponent<BcPNTStaticDraw>()->SetAlpha(0.7f);
+			if (m_alpha <= 0.7f) {
+				m_alpha += 0.05f;
+			}
 		}
 		else {//薄くする
-			GetComponent<BcPNTStaticDraw>()->SetAlpha(0.32f);
+			if (m_alpha >= 0.3f) {
+				m_alpha += -0.05f;
+			}
 		}
+		GetComponent<BcPNTStaticDraw>()->SetAlpha(m_alpha);
 	}
 
 	BlueCube::BlueCube(const shared_ptr<Stage>& StagePtr,
@@ -111,7 +117,8 @@ namespace basecross {
 		m_VerticalMoveFlag(true),
 		m_Speed(StartSpeed),
 		m_HengTimer(0),
-		m_VerticalTimer(0)
+		m_VerticalTimer(0),
+		m_alpha(0.7f)
 	{}
 
 	void BlueCube::OnCreate() {
@@ -183,11 +190,16 @@ namespace basecross {
 		}
 		//右スティックを操作してたら濃くする
 		if (GetStage()->GetSharedGameObject<Player>(L"Player")->GetMoveVector(1)) {
-			GetComponent<BcPNTStaticDraw>()->SetAlpha(0.7f);
+			if (m_alpha <= 0.7f) {
+				m_alpha += 0.05f;
+			}
 		}
 		else {//薄くする
-			GetComponent<BcPNTStaticDraw>()->SetAlpha(0.32f);
+			if (m_alpha >= 0.3f) {
+				m_alpha += -0.05f;
+			}
 		}
+		GetComponent<BcPNTStaticDraw>()->SetAlpha(m_alpha);
 
 	}
 
@@ -202,10 +214,12 @@ namespace basecross {
 		m_VerticalMoveFlag(true),
 		m_Speed(StartSpeed),
 		m_HengTimer(0),
-		m_VerticalTimer(0)
+		m_VerticalTimer(0),
+		m_alpha(0.7f)
 	{}
 
 	void YellowCube::OnCreate() {
+
 		auto PtrTransform = GetComponent<Transform>();
 		PtrTransform->SetScale(m_StartScale);
 		PtrTransform->SetQuaternion(m_StartQt);
@@ -274,11 +288,16 @@ namespace basecross {
 		}
 		//右スティックを操作してたら濃くする
 		if (GetStage()->GetSharedGameObject<Player>(L"Player")->GetMoveVector(1)) {
-			GetComponent<BcPNTStaticDraw>()->SetAlpha(0.7f);
+			if (m_alpha <= 0.7f) {
+				m_alpha += 0.05f;
+			}
 		}
 		else {//薄くする
-			GetComponent<BcPNTStaticDraw>()->SetAlpha(0.32f);
+			if (m_alpha >= 0.3f) {
+				m_alpha += -0.05f;
+			}
 		}
+		GetComponent<BcPNTStaticDraw>()->SetAlpha(m_alpha);
 	}
 	//--------------------------------------------------------------------------------------
 	///	三角形のオブジェ
