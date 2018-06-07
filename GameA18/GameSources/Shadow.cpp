@@ -70,12 +70,6 @@ namespace basecross {
 
 	}
 	void ShadowObject::OnUpdate2() {
-		//影のポジションの更新
-<<<<<<< HEAD
-		GetComponent<Transform>()->SetPosition(ShadowLocation());
-=======
-
->>>>>>> 681195c7a58f33b6f41574e04d21a21c54f3a612
 	}
 
 	//物体とライトの位置から、影の位置を導き出す
