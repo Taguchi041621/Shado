@@ -70,37 +70,38 @@ namespace basecross
 	void StageSelect::StageNumberSprite()
 	{
 		int interval = 0;
-		for (int i = 0; i < m_MaxStageNumber; i++) {
+		for (int i = 1; i <= m_MaxStageNumber; i++) {
+			interval = 380 * (i - m_StageNumber);
 			auto Door = AddGameObject<ScaleChangeSprite>(L"Door_TX", false,
 				Vec2(200.0f*1.2, 400.0f*1.2f), Vec3(0 + interval, -160.0f, 0.0f),1.0f,false);
 			shared_ptr<ScoreSprite> Number;
-			if (i < 9) {
+			if (i < 10) {
 				Number = AddGameObject<ScoreSprite>(1,
 					L"NUMBER_TX",
 					true,
-					Vec2(126.0f, 126.0f),
+					Vec2(100.0f, 100.0f),
 					Vec3(-10 + interval, -40.0f, 0.0f),
-					1.0f + i,
-					false, 1.0f);
+					i,
+					false, 0.3f);
 			}
 			else {
 				Number = AddGameObject<ScoreSprite>(2,
 					L"NUMBER_TX",
 					true,
-					Vec2(126.0f, 126.0f),
+					Vec2(100.0f, 100.0f),
 					Vec3(-10 + interval, -40.0f, 0.0f),
-					1.0f + i,
-					false, 1.0f);
+					i,
+					false, 0.3f);
 			}
 			interval += 380;
-			SetSharedGameObject(L"Door" + Util::IntToWStr(i+1), Door);
-			SetSharedGameObject(L"ScoreSprite" + Util::IntToWStr(i+1), Number);
+			SetSharedGameObject(L"Door" + Util::IntToWStr(i), Door);
+			SetSharedGameObject(L"ScoreSprite" + Util::IntToWStr(i), Number);
 			Door->AddComponent<Action>();
 			Number->AddComponent<Action>();
-			if (i == 0)
+			if (i == m_StageNumber)
 			{
 				Door->SetScaleChangeFlag(true);
-				Number->SetScaleChangeFlag(true);
+				//Number->SetScaleChangeFlag(true);
 			}
 		}
 	}
@@ -109,9 +110,10 @@ namespace basecross
 
 	void StageSelect::OnCreate()
 	{
+		auto ScenePtr = App::GetApp()->GetScene<Scene>();
 		m_MaxStageNumber = 10;
 		m_SelectFlag = true;
-		m_StageNumber = 1;
+		m_StageNumber = ScenePtr->GetStageNumber();
 		m_CoolTime = 0;
 		CreateViewLight();
 		//スプライトの作成
@@ -142,18 +144,18 @@ namespace basecross
 					if (onectrl == false)
 					{
 						if (!(m_StageNumber == 1)) {
-							for (int i = 0; i < m_MaxStageNumber; i++) {
-								auto Door = GetSharedGameObject<ScaleChangeSprite>(L"Door" + Util::IntToWStr(i + 1));
-								auto Number = GetSharedGameObject<ScoreSprite>(L"ScoreSprite" + Util::IntToWStr(i + 1));
+							for (int i = 1; i < m_MaxStageNumber; i++) {
+								auto Door = GetSharedGameObject<ScaleChangeSprite>(L"Door" + Util::IntToWStr(i));
+								auto Number = GetSharedGameObject<ScoreSprite>(L"ScoreSprite" + Util::IntToWStr(i));
 								Door->GetComponent<Action>()->AllActionClear();
 								Number->GetComponent<Action>()->AllActionClear();
 								Door->GetComponent<Action>()->AddMoveBy(0.3f, Vec3(380.0f, 0, 0));
 								Number->GetComponent<Action>()->AddMoveBy(0.3f, Vec3(380.0f, 0, 0));
 								Door->GetComponent<Action>()->Run();
 								Number->GetComponent<Action>()->Run();
-								if(i== m_StageNumber-2){
+								if(i== m_StageNumber-1){
 									Door->SetScaleChangeFlag(true);
-									Number->SetScaleChangeFlag(true);
+									//Number->SetScaleChangeFlag(true);
 								}
 								else {
 									Door->SetScaleChangeFlag(false);
@@ -186,19 +188,19 @@ namespace basecross
 				else if (CntlVec[0].fThumbLX > 0.5) {
 					if (onectrl == false)
 					{
-						if (!(m_StageNumber == m_MaxStageNumber)) {
-							for (int i = 0; i < m_MaxStageNumber; i++) {
-								auto Door = GetSharedGameObject<ScaleChangeSprite>(L"Door" + Util::IntToWStr(i + 1));
-								auto Number = GetSharedGameObject<ScoreSprite>(L"ScoreSprite" + Util::IntToWStr(i + 1));
+						if (!(m_StageNumber == m_MaxStageNumber-1)) {
+							for (int i = 1; i < m_MaxStageNumber; i++) {
+								auto Door = GetSharedGameObject<ScaleChangeSprite>(L"Door" + Util::IntToWStr(i));
+								auto Number = GetSharedGameObject<ScoreSprite>(L"ScoreSprite" + Util::IntToWStr(i));
 								Door->GetComponent<Action>()->AllActionClear();
 								Number->GetComponent<Action>()->AllActionClear();
 								Door->GetComponent<Action>()->AddMoveBy(0.3f, Vec3(-380.0f, 0, 0));
 								Number->GetComponent<Action>()->AddMoveBy(0.3f, Vec3(-380.0f, 0, 0));
 								Door->GetComponent<Action>()->Run();
 								Number->GetComponent<Action>()->Run();
-								if (i == m_StageNumber) {
+								if (i == m_StageNumber+1) {
 									Door->SetScaleChangeFlag(true);
-									Number->SetScaleChangeFlag(true);
+									//Number->SetScaleChangeFlag(true);
 								}
 								else {
 									Door->SetScaleChangeFlag(false);
@@ -222,7 +224,6 @@ namespace basecross
 							m_AudioObjectPtr->AddAudioResource(L"se2");
 							m_AudioObjectPtr->Start(L"se2", XAUDIO2_NO_LOOP_REGION, 0.1f);
 							SetNowMusic(L"se2");
-
 							onectrl = true;
 						}
 					}
@@ -263,6 +264,6 @@ namespace basecross
 				}
 			}
 		}
-		ScenePtr->SetStageNumber(m_StageNumber-1);
+		ScenePtr->SetStageNumber(m_StageNumber);
 	}
 }

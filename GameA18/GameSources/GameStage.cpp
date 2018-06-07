@@ -25,7 +25,7 @@ namespace basecross {
 		//ファイル名の設定
 		//wstring Map = Path + L"Stage_" + Util::IntToWStr(ScenePtr->GetStageNumber()) + L".csv";
 		//wstring Map = DataDir + L"Stage_" + Util::IntToWStr(ScenePtr->GetStageNumber()) + L".csv";
-		wstring Map = DataDir + L"CSV\\" + L"Stage_" + Util::IntToWStr(ScenePtr->GetStageNumber()) + L".csv";
+		wstring Map = DataDir + L"CSV\\" + L"Stage_" + Util::IntToWStr(ScenePtr->GetStageNumber()-1) + L".csv";
 
 		//ファイルの指定
 		m_Csv.SetFileName(Map);
@@ -186,6 +186,12 @@ namespace basecross {
 		auto Fade = AddGameObject<SpriteFade>(L"Shadow_TX", true,
 			Vec2(840, 600), Vec3(900.0f, 0.0f, 0.1f));
 		SetSharedGameObject(L"FadeIn", Fade);
+
+		auto PtrLight = AddGameObject<StageLight>(
+			Vec3(0.0f, 0.0, 0.0f),
+			Vec3(0.0f, 0.0f, 0.0f),
+			Vec3(1.0f, 0.2f, 1.0f));
+		SetSharedGameObject(L"StageLight", PtrLight);
 	}
 
 	void GameStage::CreatePause() {

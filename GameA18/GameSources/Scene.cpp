@@ -103,12 +103,15 @@ namespace basecross{
 		strTexture = DataDir + L"number_9.png";
 		App::GetApp()->RegisterTexture(L"9_TX", strTexture);
 
-		strTexture = DataDir + L"number.png";
+		strTexture = DataDir + L"Number2.png";
 		App::GetApp()->RegisterTexture(L"NUMBER_TX", strTexture);
 
 		strTexture = DataDir + L"TiteleShadow.png";
 		App::GetApp()->RegisterTexture(L"TITLE_SHADOW_TX", strTexture);
 
+		auto StaticModelMesh = MeshResource::CreateStaticModelMesh(DataDir + L"Light\\", L"LIGHT1.bmf");
+		App::GetApp()->RegisterResource(L"LIGHT_MESH", StaticModelMesh);
+		
 		/*BGM・SE関連*/
 		//ゲームオーバーBGM
 		wstring GameOver = DataDir + L"BGMSE\\GameOver.wav";

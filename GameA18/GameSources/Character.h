@@ -295,5 +295,28 @@ namespace basecross{
 		//}
 	};
 
+	//--------------------------------------------------------------------------------------
+	///	Paper
+	//--------------------------------------------------------------------------------------
+	class StageLight : public GameObject {
+		Vec3 m_Scale;
+		Vec3 m_Rotation;
+		Vec3 m_Position;
+
+	public:
+		//\’z‚Æ”jŠü
+		StageLight(const shared_ptr<Stage>& StagePtr,
+			const Vec3& Scale,
+			const Vec3& Rotation,
+			const Vec3& Position
+		);
+		virtual ~StageLight();
+		//‰Šú‰»
+		virtual void OnCreate() override;
+		//XV
+		virtual void OnUpdate() override;
+
+	};
+
 }
 //end basecross

@@ -6,7 +6,7 @@ namespace basecross {
 		Camera(),
 		m_StagePtr(StagePtr),
 		CameraPosZ(-40.0f),
-		CameraAngle(6),
+		CameraAngle(0),
 		CameraPos(0)
 	{}
 
@@ -48,7 +48,7 @@ namespace basecross {
 				}
 			}
 
-				if (CntlVec[0].bConnected) {
+				/*if (CntlVec[0].bConnected) {
 					if (CntlVec[0].wButtons & XINPUT_GAMEPAD_X) {
 						CameraAngle += 0.2;
 						if (CameraAngle >= 12) {
@@ -61,7 +61,7 @@ namespace basecross {
 							CameraAngle = 0;
 						}
 					}
-				}
+				}*/
 		}
 		else if(!m_StartFlag) {
 			CameraPosZ += 0.2;

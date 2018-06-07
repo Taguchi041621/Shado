@@ -410,5 +410,59 @@ namespace basecross {
 
 	void Goal::OnTriggerEnter(){
 	}
+
+
+	//--------------------------------------------------------------------------------------
+	///　懐中電灯
+	//--------------------------------------------------------------------------------------
+	StageLight::StageLight(const shared_ptr<Stage>& StagePtr,
+		const Vec3& Position,
+		const Vec3& Rotation,
+		const Vec3& Scale
+	) :
+		GameObject(StagePtr),
+		m_Position(Position),
+		m_Rotation(Rotation),
+		m_Scale(Scale)
+	{
+	}
+	StageLight::~StageLight() {}
+
+	//初期化
+	void StageLight::OnCreate() {
+		auto PtrTransform = GetComponent<Transform>();
+
+		PtrTransform->SetPosition(m_Position);
+		//m_Rotation.y =/* 90.0f*(DegToRad)*/;
+		PtrTransform->SetRotation(m_Rotation);
+
+		PtrTransform->SetScale(m_Scale);
+
+		Mat4x4 SpanMat; // モデルとトランスフォームの間の差分行列
+		SpanMat.affineTransformation(
+			Vec3(0.1f, 1.0f, 0.1f),
+			Vec3(0.0f, 0.0f, 0.0f),
+			Vec3(0.0f, 0.0f, 0.0f),
+			Vec3(0.0f, 0.0f, 0.0f)
+		);
+
+		//衝突判定
+		//auto PtrColl = AddComponent<CollisionObb>();
+		/*PtrColl->SetFixed(true);
+		PtrColl->SetDrawActive(true);*/
+
+		//物理
+		//auto PtrRigidB = AddComponent<Rigidbody>();
+
+		//モデル反映
+		auto PtrDraw = AddComponent<PNTStaticModelDraw>();
+		PtrDraw->SetMeshResource(L"LIGHT_MESH");
+		PtrDraw->SetMeshToTransformMatrix(SpanMat);
+
+	}
+
+	void StageLight::OnUpdate() {
+	}
+
 	//end basecross
 }

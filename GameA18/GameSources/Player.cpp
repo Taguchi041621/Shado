@@ -542,7 +542,8 @@ namespace basecross{
 	shared_ptr<WalkState> WalkState::Instance() {
 		static shared_ptr<WalkState> instance;
 		if (!instance) {
-			instance = shared_ptr<WalkState>(new WalkState);
+			instance = shared_ptr<WalkState>
+				(new WalkState);
 		}
 		return instance;
 	}

@@ -23,7 +23,7 @@ namespace basecross{
 		void CreateResourses();
 
 		//ゲームステージの作成用変数
-		int m_StageNumber=0;
+		int m_StageNumber=1;
 
 		bool m_StartFlag;
 
