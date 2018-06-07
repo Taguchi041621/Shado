@@ -187,11 +187,6 @@ namespace basecross {
 			Vec2(840, 600), Vec3(900.0f, 0.0f, 0.1f));
 		SetSharedGameObject(L"FadeIn", Fade);
 
-		auto PtrLight = AddGameObject<StageLight>(
-			Vec3(0.0f, 0.0, 0.0f),
-			Vec3(0.0f, 0.0f, 0.0f),
-			Vec3(1.0f, 0.2f, 1.0f));
-		SetSharedGameObject(L"StageLight", PtrLight);
 	}
 
 	void GameStage::CreatePause() {
@@ -305,19 +300,20 @@ namespace basecross {
 		DrawComp->SetMeshResource(L"DEFAULT_CUBE");
 		DrawComp->SetFogEnabled(true);
 	}
-
+	//左下のやつ
 	void GameStage::CreateMiniMap() {
 		AddGameObject<MiniMap>();
 	}
+	//画面内を動き回っているやつ
 	void GameStage::CreateLightSign() {
 		AddGameObject<LightSign>();
 	}
-
+	//画面端のやつ
 	void GameStage::CreateMoveEnd() {
 		auto group = GetSharedObjectGroup(L"MoveEndGroup");
 		for (int i = 1; i > -2 ; i += -2) {
-			auto vertical = AddGameObject<Sprite>(L"Shadow_TX", true, Vec2(10000, 600), Vec3(0, 470*(float)i, 0));
-			auto horizontal = AddGameObject<Sprite>(L"Shadow_TX", true, Vec2(800, 5000), Vec3(700*(float)i, 0, 0));
+			auto vertical = AddGameObject<Sprite>(L"Shadow_TX", true, Vec2(10000.0f, 600.0f), Vec3(0.0f, 470.0f*i, 0));
+			auto horizontal = AddGameObject<Sprite>(L"Shadow_TX", true, Vec2(800.0f, 5000.0f), Vec3(700.0f*i, 0, 0));
 			vertical->GetComponent<Action>()->AllActionClear();
 			horizontal->GetComponent<Action>()->AllActionClear();
 			vertical->SetActionflag(true);
@@ -325,6 +321,14 @@ namespace basecross {
 			group->IntoGroup(vertical);
 			group->IntoGroup(horizontal);
 		}
+	}
+	//ライト代わりのオブジェクト
+	void GameStage::CreateLightObject() {
+		auto PtrLight = AddGameObject<StageLight>(
+			Vec3(0.0f, 0.0, -35.0f),
+			Vec3(1.5f, 0.0f, 0.0f),
+			Vec3(3.0f, 0.6f, 3.0f));
+		SetSharedGameObject(L"StageLight", PtrLight);
 	}
 
 	void GameStage::OnCreate() {
@@ -350,6 +354,8 @@ namespace basecross {
 			CreateLightSign();
 			//ライトの駆動限界を教える
 			CreateMoveEnd();
+			//ライト代わりのオブジェクト
+			CreateLightObject();
 			Csv();
 			//鍵の数に応じて作るため、鍵ができてから呼び出す
 			CreateHaveKeys();
