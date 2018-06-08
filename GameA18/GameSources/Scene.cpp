@@ -20,15 +20,27 @@ namespace basecross{
 		App::GetApp()->GetDataDirectory(DataDir);
 		wstring strTexture = DataDir + L"Title.jpg";
 		App::GetApp()->RegisterTexture(L"TITLE_TX", strTexture);
-		strTexture = DataDir + L"Select.png";
-		App::GetApp()->RegisterTexture(L"SELECT_TX", strTexture);
+
+		//クリア画面
 		strTexture = DataDir + L"Clear.png";
 		App::GetApp()->RegisterTexture(L"CLEAR_TX", strTexture);
-		//GameOver = 文字あり、GameOver1 = 文字なし
+		strTexture = DataDir + L"GAMECLEAR_NoText.png";
+		App::GetApp()->RegisterTexture(L"CLEAR_ColorNoText_TX", strTexture);
+		strTexture = DataDir + L"STAGESELECT.png";
+		App::GetApp()->RegisterTexture(L"CLEAR_STAGESELECT_TX", strTexture);
+		strTexture = DataDir + L"NEXTSTAGE.png";
+		App::GetApp()->RegisterTexture(L"CLEAR_NEXTSTAGE_TX", strTexture);
+		strTexture = DataDir + L"RETRY.png";
+		App::GetApp()->RegisterTexture(L"CLEAR_RETRY_TX", strTexture);
+		strTexture = DataDir + L"STAGECLEAR.png";
+		App::GetApp()->RegisterTexture(L"CLEAR_STAGECLEAR_TX", strTexture);
+
+		//ゲームオーバー画面
 		strTexture = DataDir + L"GameOver1.png";
 		App::GetApp()->RegisterTexture(L"GAMEOVER_TX", strTexture);
 		strTexture = DataDir + L"GameOverMoji.png";
 		App::GetApp()->RegisterTexture(L"GameOverMoji_TX", strTexture);
+		//壁
 		strTexture = DataDir + L"WallTexture.png";
 		App::GetApp()->RegisterTexture(L"WallTexture_TX", strTexture);
 		strTexture = DataDir + L"Red.tga";
@@ -140,7 +152,8 @@ namespace basecross{
 			CreateResourses();
 			//自分自身にイベントを送る
 			//これにより各ステージやオブジェクトがCreate時にシーンにアクセスできる
-			PostEvent(0.0f, GetThis<ObjectInterface>(), GetThis<Scene>(), L"ToTitleStage");
+			//PostEvent(0.0f, GetThis<ObjectInterface>(), GetThis<Scene>(), L"ToTitleStage");
+			PostEvent(0.0f, GetThis<ObjectInterface>(), GetThis<Scene>(), L"ToClearStage");
 		}
 		catch (...) {
 			throw;
