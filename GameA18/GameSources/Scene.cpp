@@ -25,12 +25,27 @@ namespace basecross{
 		//strTexture = DataDir + L"Clear.png";
 		//App::GetApp()->RegisterTexture(L"CLEAR_TX", strTexture);
 		strTexture = DataDir + L"GAMECLEAR.png";
+
+		//クリア画面
+		strTexture = DataDir + L"Clear.png";
 		App::GetApp()->RegisterTexture(L"CLEAR_TX", strTexture);
-		//GameOver = 文字あり、GameOver1 = 文字なし
+		strTexture = DataDir + L"GAMECLEAR_NoText.png";
+		App::GetApp()->RegisterTexture(L"CLEAR_ColorNoText_TX", strTexture);
+		strTexture = DataDir + L"STAGESELECT.png";
+		App::GetApp()->RegisterTexture(L"CLEAR_STAGESELECT_TX", strTexture);
+		strTexture = DataDir + L"NEXTSTAGE.png";
+		App::GetApp()->RegisterTexture(L"CLEAR_NEXTSTAGE_TX", strTexture);
+		strTexture = DataDir + L"RETRY.png";
+		App::GetApp()->RegisterTexture(L"CLEAR_RETRY_TX", strTexture);
+		strTexture = DataDir + L"STAGECLEAR.png";
+		App::GetApp()->RegisterTexture(L"CLEAR_STAGECLEAR_TX", strTexture);
+
+		//ゲームオーバー画面
 		strTexture = DataDir + L"GameOver1.png";
 		App::GetApp()->RegisterTexture(L"GAMEOVER_TX", strTexture);
 		strTexture = DataDir + L"GameOverMoji.png";
 		App::GetApp()->RegisterTexture(L"GameOverMoji_TX", strTexture);
+		//壁
 		strTexture = DataDir + L"WallTexture.png";
 		App::GetApp()->RegisterTexture(L"WallTexture_TX", strTexture);
 		strTexture = DataDir + L"Red.tga";
@@ -58,11 +73,14 @@ namespace basecross{
 		strTexture = DataDir + L"PressAStart_0424.png";
 		App::GetApp()->RegisterTexture(L"TITLE_TEXT_TX", strTexture);
 		strTexture = DataDir + L"StageSlect.png";
+		App::GetApp()->RegisterTexture(L"SELECT_TEXT_TX", strTexture); 
+
+			strTexture = DataDir + L"StageSlect.png";
 		App::GetApp()->RegisterTexture(L"SELECT_TEXT_TX", strTexture);
 
+		strTexture = DataDir + L"StageselectScreen_0515.png";
+		App::GetApp()->RegisterTexture(L"STAGESELECT_BG_TX", strTexture);
 
-		strTexture = DataDir + L"Cannon2.png";
-		App::GetApp()->RegisterTexture(L"CANNON_TX", strTexture);
 		strTexture = DataDir + L"Bullet.png";
 		App::GetApp()->RegisterTexture(L"BULLET_TX", strTexture);
 
@@ -70,16 +88,11 @@ namespace basecross{
 		App::GetApp()->RegisterTexture(L"PAUSE_TX", strTexture);
 
 
-		//鍵のUI候補↓
+		//鍵のUI
 		strTexture = DataDir + L"UI_Key.png";//黒塗り
 		App::GetApp()->RegisterTexture(L"UI_Key_TX", strTexture);
-		//strTexture = DataDir + L"UI_Key_None.png";//ふち細中抜き
-		//App::GetApp()->RegisterTexture(L"UI_Key_None_TX", strTexture);
 		strTexture = DataDir + L"UI_Key_NoneBigLine.png";//ふち太中抜き
 		App::GetApp()->RegisterTexture(L"UI_Key_None_TX", strTexture);
-		//strTexture = DataDir + L"UI_Key_NoneWhite.png";//白塗
-		//App::GetApp()->RegisterTexture(L"UI_Key_None_TX", strTexture);
-		//鍵のUI候補↑
 
 		strTexture = DataDir + L"Door.png";
 		App::GetApp()->RegisterTexture(L"Door_TX", strTexture);
@@ -111,9 +124,13 @@ namespace basecross{
 		strTexture = DataDir + L"TiteleShadow.png";
 		App::GetApp()->RegisterTexture(L"TITLE_SHADOW_TX", strTexture);
 
+		//ライトのモデル
 		auto StaticModelMesh = MeshResource::CreateStaticModelMesh(DataDir + L"Light\\", L"LIGHT1.bmf");
 		App::GetApp()->RegisterResource(L"LIGHT_MESH", StaticModelMesh);
-		
+		//ライトのイラスト
+		strTexture = DataDir + L"Light\\LIGHT_Illust.png";
+		App::GetApp()->RegisterTexture(L"LIGHT_Illust_TX", strTexture);
+
 		/*BGM・SE関連*/
 		//ゲームオーバーBGM
 		wstring GameOver = DataDir + L"BGMSE\\GameOver.wav";

@@ -155,6 +155,12 @@ namespace basecross {
 		GameObject& m_Obj;
 		//スケールのZの固定値
 		float m_ScaleZ;
+		//ゴールに飛んでいくフラグ
+		bool m_GoGoal = false;
+		//補完の際に使う現在時間
+		float m_Lerp = 0;
+		//経路を出すための点
+		Vec3 p0,p1,p2,p3;
 		shared_ptr<MeshResource> m_MeshResource;
 		Mat4x4 m_ToAnimeMatrix;
 	public:

@@ -44,8 +44,14 @@ namespace basecross
 
 		////描画コンポーネントテクスチャの設定
 		//DrawComp->SetTextureResource(L"SELECT_TX");
-		AddGameObject<Sprite>(L"WallTexture_TX", false,
-			Vec2(1280.0f, 800.0f), Vec3(0, 0.0f, 0.1f));
+		float a = 0;
+		for (int i = 1; i <= 4; i++) {
+			auto BG = AddGameObject<Sprite>(L"STAGESELECT_BG_TX", false,
+				Vec2(1280.0f, 800.0f), Vec3(0 +a, 0.0f, 0.2f));
+			a += 1280;
+			BG->AddComponent<Action>();
+			SetSharedGameObject(L"BG" + Util::IntToWStr(i), BG);
+		}
 		AddGameObject<Sprite>(L"SELECT_TEXT_TX", true,
 			Vec2(960, 200), Vec3(0, 270, 0.1f));
 		AddGameObject<Sprite>(L"TITLE_SHADOW_TX", true,
@@ -73,7 +79,7 @@ namespace basecross
 		for (int i = 1; i <= m_MaxStageNumber; i++) {
 			interval = 380 * (i - m_StageNumber);
 			auto Door = AddGameObject<ScaleChangeSprite>(L"Door_TX", false,
-				Vec2(200.0f*1.2, 400.0f*1.2f), Vec3(0 + interval, -160.0f, 0.0f),1.0f,false);
+				Vec2(200.0f*1.2, 400.0f*1.2f), Vec3(0 + interval, -160.0f, 0.0f), 1.0f, false);
 			shared_ptr<ScoreSprite> Number;
 			if (i < 10) {
 				Number = AddGameObject<ScoreSprite>(1,
@@ -153,7 +159,7 @@ namespace basecross
 								Number->GetComponent<Action>()->AddMoveBy(0.3f, Vec3(380.0f, 0, 0));
 								Door->GetComponent<Action>()->Run();
 								Number->GetComponent<Action>()->Run();
-								if(i== m_StageNumber-1){
+								if (i == m_StageNumber - 1) {
 									Door->SetScaleChangeFlag(true);
 									//Number->SetScaleChangeFlag(true);
 								}
@@ -179,90 +185,105 @@ namespace basecross
 							m_AudioObjectPtr->AddAudioResource(L"se2");
 							m_AudioObjectPtr->Start(L"se2", XAUDIO2_NO_LOOP_REGION, 0.1f);
 							SetNowMusic(L"se2");
+							for (int i = 1; i <= 4; i++) {
+							auto BG = GetSharedGameObject<Sprite>(L"BG" + Util::IntToWStr(i));
+							BG->GetComponent<Action>()->AllActionClear();
+							BG->GetComponent<Action>()->AddMoveBy(0.3f, Vec3(380.0f, 0, 0));
+							BG->GetComponent<Action>()->Run();
+						}
 
 							onectrl = true;
-							
+
 						}
+						
 					}
 				}
-				else if (CntlVec[0].fThumbLX > 0.5) {
-					if (onectrl == false)
-					{
-						if (!(m_StageNumber == m_MaxStageNumber-1)) {
-							for (int i = 1; i < m_MaxStageNumber; i++) {
-								auto Door = GetSharedGameObject<ScaleChangeSprite>(L"Door" + Util::IntToWStr(i));
-								auto Number = GetSharedGameObject<ScoreSprite>(L"ScoreSprite" + Util::IntToWStr(i));
-								Door->GetComponent<Action>()->AllActionClear();
-								Number->GetComponent<Action>()->AllActionClear();
-								Door->GetComponent<Action>()->AddMoveBy(0.3f, Vec3(-380.0f, 0, 0));
-								Number->GetComponent<Action>()->AddMoveBy(0.3f, Vec3(-380.0f, 0, 0));
-								Door->GetComponent<Action>()->Run();
-								Number->GetComponent<Action>()->Run();
-								if (i == m_StageNumber+1) {
-									Door->SetScaleChangeFlag(true);
-									//Number->SetScaleChangeFlag(true);
-								}
-								else {
-									Door->SetScaleChangeFlag(false);
-									Number->SetScaleChangeFlag(false);
-								}
-							}
-
-							m_StageNumber += 1;
-
-							if (m_StopNowMusic != L"")
-							{
-								m_AudioObjectPtr->Stop(m_StopNowMusic);
-							}
-							wstring DataDir;
-							//サンプルのためアセットディレクトリを取得
-							//App::GetApp()->GetAssetsDirectory(DataDir);
-							//各ゲームは以下のようにデータディレクトリを取得すべき
-							App::GetApp()->GetDataDirectory(DataDir);
-
-							m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
-							m_AudioObjectPtr->AddAudioResource(L"se2");
-							m_AudioObjectPtr->Start(L"se2", XAUDIO2_NO_LOOP_REGION, 0.1f);
-							SetNowMusic(L"se2");
-							onectrl = true;
-						}
-					}
-				}
-				/*else
+			else if (CntlVec[0].fThumbLX > 0.5) {
+				if (onectrl == false)
 				{
-					onectrl = false;
-				}*/
+					if (!(m_StageNumber == m_MaxStageNumber - 1)) {
+						for (int i = 1; i < m_MaxStageNumber; i++) {
+							auto Door = GetSharedGameObject<ScaleChangeSprite>(L"Door" + Util::IntToWStr(i));
+							auto Number = GetSharedGameObject<ScoreSprite>(L"ScoreSprite" + Util::IntToWStr(i));
+							Door->GetComponent<Action>()->AllActionClear();
+							Number->GetComponent<Action>()->AllActionClear();
+							Door->GetComponent<Action>()->AddMoveBy(0.3f, Vec3(-380.0f, 0, 0));
+							Number->GetComponent<Action>()->AddMoveBy(0.3f, Vec3(-380.0f, 0, 0));
+							Door->GetComponent<Action>()->Run();
+							Number->GetComponent<Action>()->Run();
+							if (i == m_StageNumber + 1) {
+								Door->SetScaleChangeFlag(true);
+								//Number->SetScaleChangeFlag(true);
+							}
+							else {
+								Door->SetScaleChangeFlag(false);
+								Number->SetScaleChangeFlag(false);
+							}
+						}
 
-				/*if (m_StageNumber < 0) {
-					m_StageNumber = 0;
-				}
-				else if (m_StageNumber > m_MaxStageNumber) {
-					m_StageNumber = m_MaxStageNumber;
-				}*/
-				//Aボタン
-				if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A) {
-					if (m_StopNowMusic != L"")
-					{
-						m_AudioObjectPtr->Stop(m_StopNowMusic);
+						m_StageNumber += 1;
+
+						if (m_StopNowMusic != L"")
+						{
+							m_AudioObjectPtr->Stop(m_StopNowMusic);
+						}
+						wstring DataDir;
+						//サンプルのためアセットディレクトリを取得
+						//App::GetApp()->GetAssetsDirectory(DataDir);
+						//各ゲームは以下のようにデータディレクトリを取得すべき
+						App::GetApp()->GetDataDirectory(DataDir);
+
+						m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
+						m_AudioObjectPtr->AddAudioResource(L"se2");
+						m_AudioObjectPtr->Start(L"se2", XAUDIO2_NO_LOOP_REGION, 0.1f);
+						SetNowMusic(L"se2");
+						for (int i = 1; i <= 4; i++) {
+						auto BG = GetSharedGameObject<Sprite>(L"BG" + Util::IntToWStr(i));
+						BG->GetComponent<Action>()->AllActionClear();
+						BG->GetComponent<Action>()->AddMoveBy(0.3f, Vec3(-380.0f, 0, 0));
+						BG->GetComponent<Action>()->Run();
 					}
-					wstring DataDir;
-					//サンプルのためアセットディレクトリを取得
-					//App::GetApp()->GetAssetsDirectory(DataDir);
-					//各ゲームは以下のようにデータディレクトリを取得すべき
-					App::GetApp()->GetDataDirectory(DataDir);
-
-					m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
-					m_AudioObjectPtr->AddAudioResource(L"se");
-					m_AudioObjectPtr->Start(L"se", XAUDIO2_NO_LOOP_REGION, 0.1f);
-					SetNowMusic(L"se");
-
-					auto FadeIn = GetSharedGameObject<SpriteFade>(L"FadeIn");
-					FadeIn->SetActionflag(true);
-					m_SelectFlag = false;
-					ScenePtr->SetRespawnFlag(false);
-					PostEvent(0.8f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameStage");
+						onectrl = true;
+					}
+					
 				}
 			}
+
+			/*else
+			{
+				onectrl = false;
+			}*/
+
+			/*if (m_StageNumber < 0) {
+				m_StageNumber = 0;
+			}
+			else if (m_StageNumber > m_MaxStageNumber) {
+				m_StageNumber = m_MaxStageNumber;
+			}*/
+			//Aボタン
+			if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A) {
+				if (m_StopNowMusic != L"")
+				{
+					m_AudioObjectPtr->Stop(m_StopNowMusic);
+				}
+				wstring DataDir;
+				//サンプルのためアセットディレクトリを取得
+				//App::GetApp()->GetAssetsDirectory(DataDir);
+				//各ゲームは以下のようにデータディレクトリを取得すべき
+				App::GetApp()->GetDataDirectory(DataDir);
+
+				m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
+				m_AudioObjectPtr->AddAudioResource(L"se");
+				m_AudioObjectPtr->Start(L"se", XAUDIO2_NO_LOOP_REGION, 0.1f);
+				SetNowMusic(L"se");
+
+				auto FadeIn = GetSharedGameObject<SpriteFade>(L"FadeIn");
+				FadeIn->SetActionflag(true);
+				m_SelectFlag = false;
+				ScenePtr->SetRespawnFlag(false);
+				PostEvent(0.8f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameStage");
+			}
+		}
 		}
 		ScenePtr->SetStageNumber(m_StageNumber);
 	}

@@ -97,9 +97,11 @@ namespace basecross{
 		//SpriteStdioの部分だけ変更する
 		if (MoveX > 0.0f) {
 			SetToAnimeMatrix(m_ToAnimeMatrixRight);
+			m_RightOrLeft = true;
 		}
 		else if (MoveX < 0.0f) {
 			SetToAnimeMatrix(m_ToAnimeMatrixLeft);
+			m_RightOrLeft = false;
 		}
 		//MoveXを返す
 		return MoveX;
@@ -133,17 +135,6 @@ namespace basecross{
 			if (ShadowPtr) {
 				Extrusion(ShadowPtr);
 				FindParent(ShadowPtr);
-
-				OBB p;
-				p.m_Center = ShadowPtr->GetComponent<Transform>()->GetWorldPosition();
-				p.m_Size = ShadowPtr->GetComponent<Transform>()->GetScale() * 0.5f;
-				OBB m;
-				m.m_Center = GetComponent<Transform>()->GetWorldPosition();
-				m.m_Size = GetComponent<Transform>()->GetScale() * 0.3f;
-				//頭中心あたりが当たったら死ぬ
-				if (HitTest::OBB_OBB(p, m)) {
-					m_Death = 1;
-				}
 			}
 		}
 	}
@@ -186,6 +177,16 @@ namespace basecross{
 		//自機と相手が衝突しているかの判定
 		if (playerPos.y - playerScale.y < otherPos.y + otherScale.y && playerPos.y + playerScale.y > otherPos.y - otherScale.y &&
 			playerPos.x - playerScale.x < otherPos.x + otherScale.x && playerPos.x + playerScale.x > otherPos.x - otherScale.x) {
+			//死亡判定用のOBB
+			//敵
+			OBB p;
+			p.m_Center = otherPos;
+			p.m_Size = otherScale;
+			//イデア
+			OBB m;
+			m.m_Center = GetComponent<Transform>()->GetWorldPosition();
+			m.m_Size = GetComponent<Transform>()->GetScale() * 0.3f;
+
 			//各方向のめり込みを確認
 			float diff[4] = {
 				(otherPos.x + otherScale.x) - (playerPos.x - playerScale.x), // 右
@@ -209,6 +210,10 @@ namespace basecross{
 					break;
 				}
 				playerPos.x += diff[min];
+				//頭中心あたりが当たったら死ぬ
+				if (HitTest::OBB_OBB(p, m)) {
+					m_Death = 1;
+				}
 				break;
 			case 1:
 				//段差があったら登る
@@ -217,12 +222,20 @@ namespace basecross{
 					break;
 				}
 				playerPos.x -= diff[min];
+				//頭中心あたりが当たったら死ぬ
+				if (HitTest::OBB_OBB(p, m)) {
+					m_Death = 1;
+				}
 				break;
 			case 2:
 				playerPos.y += diff[min];
 				break;
 			case 3:
 				//playerPos.y -= diff[min];
+				//頭中心あたりが当たったら死ぬ
+				if (HitTest::OBB_OBB(p, m)) {
+					m_Death = 1;
+				}
 				break;
 			default:
 				break;
@@ -237,6 +250,7 @@ namespace basecross{
 		m_GameOverFlag = false;
 		m_ParentFlag = false;
 		m_StandFlag = false;
+		m_DamageFlag = false;
 		//初期位置などの設定
 		auto Ptr = GetComponent<Transform>();
 		Ptr->SetScale(0.80f, 1.60f, 0.040f);	//X,Z25、Y50の長方形
@@ -293,19 +307,24 @@ namespace basecross{
 
 	void Player::OnUpdate2() {
 		auto ScenePtr = App::GetApp()->GetScene<Scene>();
-		if (m_ParentFlag && !m_GameOverFlag && !m_GameClearFlag && ScenePtr->GetStartFlag() && !m_StandFlag) {
+		auto PtrRedit = GetComponent<Rigidbody>();
+		if (m_ParentFlag && !m_GameOverFlag && !m_GameClearFlag && ScenePtr->GetStartFlag() && !m_StandFlag && !m_DamageFlag) {
 			//プレイヤーの移動
 			MoveRotationMotion();
 			//文字列の表示
 		}
 		else if (!m_ParentFlag) {
-			auto PtrRedit = GetComponent<Rigidbody>();
+			
 			PtrRedit->SetVelocityZero();
 			GetComponent<Rigidbody>()->SetVelocity(Vec3(0.0f, m_FallSpeed, 0.0f));
 			m_FallSpeed += -0.05f;
 		}
+	    else if (m_DamageFlag)
+		{
+			//PtrRedit->SetVelocityZero();
+		}
 		PlayerHP();
-		DrawStrings();
+		//DrawStrings();
 	}
 	//
 	void Player::PlayerHP() {
@@ -389,6 +408,16 @@ namespace basecross{
 	void Player::AnimeChangeMotion(const wstring& key, bool looped) {
 		ChangeAnimation(key);
 		SetLooped(looped);
+	}
+
+	void Player::Damage() {
+		if (!m_DamageFlag) {
+			m_DamageFlag = true;
+			auto PtrRedit = GetComponent<Rigidbody>();
+			PtrRedit->SetVelocityZero();
+			GetComponent<Rigidbody>()->SetVelocity(Vec3(-1.0f, 0, 0.0f));
+			GetStateMachine()->ChangeState(DamageState1::Instance());
+		}
 	}
 
 	//--------------------------------------------------------------------------------------
@@ -659,6 +688,80 @@ namespace basecross{
 	}
 	//ステートにから抜けるときに呼ばれる関数
 	void GoalState::Exit(const shared_ptr<Player>& Obj) {
+	}
+
+	//--------------------------------------------------------------------------------------
+	//	class DamageState1 : public ObjState<Player>;
+	//	用途: Damage状態
+	//--------------------------------------------------------------------------------------
+	//ステートのインスタンス取得
+	shared_ptr<DamageState1> DamageState1::Instance() {
+		static shared_ptr<DamageState1> instance;
+		if (!instance) {
+			instance = shared_ptr<DamageState1>(new DamageState1);
+		}
+		return instance;
+	}
+	//ステートに入ったときに呼ばれる関数
+	void DamageState1::Enter(const shared_ptr<Player>& Obj) {
+		Obj->SetFps(60.0f);
+		if (Obj->GetRightOrLeft()) {
+			Obj->AnimeChangeMotion(L"Knockdown", false);
+		}
+		else {
+			Obj->AnimeChangeMotion(L"Knockdown_front", false);
+		}
+	}
+	//ステート実行中に毎ターン呼ばれる関数
+	void DamageState1::Execute(const shared_ptr<Player>& Obj) {
+		//アニメーション更新
+		Obj->LoopedAnimeUpdateMotion();
+		if (Obj->IsAnimeEnd()) {
+			Obj->GetStateMachine()->ChangeState(DamageState2::Instance());
+		}
+	}
+	//ステートにから抜けるときに呼ばれる関数
+	void DamageState1::Exit(const shared_ptr<Player>& Obj) {
+		//Obj->SetDamageFlag(false);
+	}
+
+	//--------------------------------------------------------------------------------------
+	//	class DamageState2 : public ObjState<Player>;
+	//	用途: Damage状態
+	//--------------------------------------------------------------------------------------
+	//ステートのインスタンス取得
+	shared_ptr<DamageState2> DamageState2::Instance() {
+		static shared_ptr<DamageState2> instance;
+		if (!instance) {
+			instance = shared_ptr<DamageState2>(new DamageState2);
+		}
+		return instance;
+	}
+	//ステートに入ったときに呼ばれる関数
+	void DamageState2::Enter(const shared_ptr<Player>& Obj) {
+		Obj->SetFps(60.0f);
+		if (Obj->GetRightOrLeft()) {
+			Obj->AnimeChangeMotion(L"StandUp", false);
+		}
+		else {
+			Obj->AnimeChangeMotion(L"Stand", false);
+		}
+		auto PtrRedit = Obj->GetComponent<Rigidbody>();
+		PtrRedit->SetVelocityZero();
+		Obj->SetStandFlag(true);
+	}
+	//ステート実行中に毎ターン呼ばれる関数
+	void DamageState2::Execute(const shared_ptr<Player>& Obj) {
+		//アニメーション更新
+		Obj->LoopedAnimeUpdateMotion();
+		if (Obj->IsAnimeEnd()) {
+			Obj->GetStateMachine()->ChangeState(WaitState::Instance());
+		}
+	}
+	//ステートにから抜けるときに呼ばれる関数
+	void DamageState2::Exit(const shared_ptr<Player>& Obj) {
+		Obj->SetDamageFlag(false);
+		Obj->SetStandFlag(false);
 	}
 
 }

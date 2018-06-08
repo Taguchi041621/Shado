@@ -1,8 +1,8 @@
-なぜ見た(ﾟДﾟ;)
-<<<<<<< HEAD
-(′・ω・`)らんらん
-aaa
-agyo
-=======
-(′・ω・`)らんらん豚だよ
->>>>>>> kakeru
+ベジェ曲線サンプルコード 
+Vec2 p0 = m_StartPosition;
+  Vec2 p1 = m_EndPosition + Vec2(128.0f, -256.0f);
+  Vec2 p2 = m_EndPosition;
+
+  Vec2 m01 = Lerp::CalculateLerp(p0, p1, 0, 1, m_Lerp, Lerp::Linear);
+  Vec2 m12 = Lerp::CalculateLerp(p1, p2, 0, 1, m_Lerp, Lerp::Linear);
+  m_Position = Lerp::CalculateLerp(m01, m12, 0, 1, m_Lerp, Lerp::Linear);

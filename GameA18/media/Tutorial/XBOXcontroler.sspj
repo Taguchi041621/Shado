@@ -104,7 +104,7 @@
 		<value>XBOXcontroler.ssae</value>
 	</animepackNames>
 	<lastAnimeFile>XBOXcontroler.ssae</lastAnimeFile>
-	<lastAnimeName>LButton</lastAnimeName>
+	<lastAnimeName>R_stick</lastAnimeName>
 	<lastCellMapFile>XBOXcontroler.ssce</lastCellMapFile>
-	<lastCell>Carsol</lastCell>
+	<lastCell>Rst1</lastCell>
 </SpriteStudioProject>

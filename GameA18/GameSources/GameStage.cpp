@@ -54,6 +54,8 @@ namespace basecross {
 		//float DegToRad = 3.14159265f / 180.0f;
 
 		int Wcount = 0;
+
+
 		//最後まで読み込む
 		while (MapVec[0] != L"end") {
 			//文字列があったかを判断
@@ -186,7 +188,6 @@ namespace basecross {
 		auto Fade = AddGameObject<SpriteFade>(L"Shadow_TX", true,
 			Vec2(840, 600), Vec3(900.0f, 0.0f, 0.1f));
 		SetSharedGameObject(L"FadeIn", Fade);
-
 	}
 
 	void GameStage::CreatePause() {
@@ -327,7 +328,7 @@ namespace basecross {
 		auto PtrLight = AddGameObject<StageLight>(
 			Vec3(0.0f, 0.0, -35.0f),
 			Vec3(1.5f, 0.0f, 0.0f),
-			Vec3(3.0f, 0.6f, 3.0f));
+			Vec3(5.0f, 1.0f, 5.0f));
 		SetSharedGameObject(L"StageLight", PtrLight);
 	}
 
@@ -358,7 +359,7 @@ namespace basecross {
 			CreateLightObject();
 			Csv();
 			//鍵の数に応じて作るため、鍵ができてから呼び出す
-			CreateHaveKeys();
+			//CreateHaveKeys();
 			CreatePause();
 			//フェード
 			CreateFadeOutSprite();
@@ -375,6 +376,7 @@ namespace basecross {
 		auto ScenePtr = App::GetApp()->GetScene<Scene>();
 		auto Fade = GetSharedGameObject<SpriteFade>(L"FadeIn");
 		auto PtrPlayer = GetSharedGameObject<Player>(L"Player");
+
 
 		auto Pause = GetSharedGameObject<Sprite>(L"Pause");
 		auto WLight = GetSharedGameObject<ScaleChangeSprite>(L"WLight");

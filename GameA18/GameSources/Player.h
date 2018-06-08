@@ -44,12 +44,17 @@ namespace basecross{
 		bool m_GameOverFlag;
 		bool m_FadeFlag;
 
+		//true::Right false::Left
+		bool m_RightOrLeft;
+
 		shared_ptr<MultiAudioObject> m_AudioObjectPtr;
 		wstring m_StopNowMusic;
 
 		bool m_ParentFlag;
 
 		bool m_StandFlag;
+
+		bool m_DamageFlag;
 	public:
 		//構築と破棄
 		//--------------------------------------------------------------------------------------
@@ -186,9 +191,11 @@ namespace basecross{
 		void SetStandFlag(bool f) { m_StandFlag = f; }
 		bool GetStandFlag() { return m_StandFlag; }
 
-		void SetDeath(int n) {
-			m_Death = 1;
-		}
+		void SetDamageFlag(bool f) { m_DamageFlag = f; }
+		bool GetDamageFlag() { return m_DamageFlag; }
+
+		void SetRightOrLeft(bool f) { m_RightOrLeft = f; }
+		bool GetRightOrLeft() { return m_RightOrLeft; }
 	};
 
 	//--------------------------------------------------------------------------------------
@@ -315,6 +322,40 @@ namespace basecross{
 	public:
 		//ステートのインスタンス取得
 		static shared_ptr<GoalState> Instance();
+		//ステートに入ったときに呼ばれる関数
+		virtual void Enter(const shared_ptr<Player>& Obj)override;
+		//ステート実行中に毎ターン呼ばれる関数
+		virtual void Execute(const shared_ptr<Player>& Obj)override;
+		//ステートにから抜けるときに呼ばれる関数
+		virtual void Exit(const shared_ptr<Player>& Obj)override;
+	};
+
+	//--------------------------------------------------------------------------------------
+	//	class DamageState1 : public ObjState<Player>;
+	//	用途: Damage状態
+	//--------------------------------------------------------------------------------------
+	class DamageState1 : public ObjState<Player> {
+		DamageState1() {}
+	public:
+		//ステートのインスタンス取得
+		static shared_ptr<DamageState1> Instance();
+		//ステートに入ったときに呼ばれる関数
+		virtual void Enter(const shared_ptr<Player>& Obj)override;
+		//ステート実行中に毎ターン呼ばれる関数
+		virtual void Execute(const shared_ptr<Player>& Obj)override;
+		//ステートにから抜けるときに呼ばれる関数
+		virtual void Exit(const shared_ptr<Player>& Obj)override;
+	};
+
+	//--------------------------------------------------------------------------------------
+	//	class DamageState2 : public ObjState<Player>;
+	//	用途: Damage状態
+	//--------------------------------------------------------------------------------------
+	class DamageState2 : public ObjState<Player> {
+		DamageState2() {}
+	public:
+		//ステートのインスタンス取得
+		static shared_ptr<DamageState2> Instance();
 		//ステートに入ったときに呼ばれる関数
 		virtual void Enter(const shared_ptr<Player>& Obj)override;
 		//ステート実行中に毎ターン呼ばれる関数
