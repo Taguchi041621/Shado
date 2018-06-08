@@ -135,17 +135,6 @@ namespace basecross{
 			if (ShadowPtr) {
 				Extrusion(ShadowPtr);
 				FindParent(ShadowPtr);
-
-				OBB p;
-				p.m_Center = ShadowPtr->GetComponent<Transform>()->GetWorldPosition();
-				p.m_Size = ShadowPtr->GetComponent<Transform>()->GetScale() * 0.5f;
-				OBB m;
-				m.m_Center = GetComponent<Transform>()->GetWorldPosition();
-				m.m_Size = GetComponent<Transform>()->GetScale() * 0.3f;
-				//頭中心あたりが当たったら死ぬ
-				if (HitTest::OBB_OBB(p, m)) {
-					m_Death = 1;
-				}
 			}
 		}
 	}
@@ -188,6 +177,16 @@ namespace basecross{
 		//自機と相手が衝突しているかの判定
 		if (playerPos.y - playerScale.y < otherPos.y + otherScale.y && playerPos.y + playerScale.y > otherPos.y - otherScale.y &&
 			playerPos.x - playerScale.x < otherPos.x + otherScale.x && playerPos.x + playerScale.x > otherPos.x - otherScale.x) {
+			//死亡判定用のOBB
+			//敵
+			OBB p;
+			p.m_Center = otherPos;
+			p.m_Size = otherScale;
+			//イデア
+			OBB m;
+			m.m_Center = GetComponent<Transform>()->GetWorldPosition();
+			m.m_Size = GetComponent<Transform>()->GetScale() * 0.3f;
+
 			//各方向のめり込みを確認
 			float diff[4] = {
 				(otherPos.x + otherScale.x) - (playerPos.x - playerScale.x), // 右
@@ -211,6 +210,10 @@ namespace basecross{
 					break;
 				}
 				playerPos.x += diff[min];
+				//頭中心あたりが当たったら死ぬ
+				if (HitTest::OBB_OBB(p, m)) {
+					m_Death = 1;
+				}
 				break;
 			case 1:
 				//段差があったら登る
@@ -219,12 +222,20 @@ namespace basecross{
 					break;
 				}
 				playerPos.x -= diff[min];
+				//頭中心あたりが当たったら死ぬ
+				if (HitTest::OBB_OBB(p, m)) {
+					m_Death = 1;
+				}
 				break;
 			case 2:
 				playerPos.y += diff[min];
 				break;
 			case 3:
 				//playerPos.y -= diff[min];
+				//頭中心あたりが当たったら死ぬ
+				if (HitTest::OBB_OBB(p, m)) {
+					m_Death = 1;
+				}
 				break;
 			default:
 				break;
