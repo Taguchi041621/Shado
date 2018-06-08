@@ -162,7 +162,7 @@ namespace basecross
 	*/
 	//--------------------------------------------------------------------------------------
 	void LightSign::OnCreate() {
-		auto light = GetStage()->AddGameObject<Sprite>(L"ball_yellow_TX", true, Vec2(80.0f, 80.0f), Vec3(0.0f, 0.0f, 0.1f));
+		auto light = GetStage()->AddGameObject<Sprite>(L"LIGHT_Illust_TX", true, Vec2(160.0f, 160.0f), Vec3(0.0f, 0.0f, 0.1f));
 		light->AddComponent<Action>();
 		light->GetComponent<Action>()->AllActionClear();
 		GetStage()->SetSharedGameObject(L"LightSign", light);
@@ -174,12 +174,11 @@ namespace basecross
 	*/
 	//--------------------------------------------------------------------------------------
 	void LightSign::OnUpdate() {
-		auto ptrMyLight = GetStage()->GetSharedGameObject<LightController>(L"LightController");
-		auto LightAngle = ptrMyLight->GetLightAngle();
+		auto LightAngle = GetStage()->GetSharedGameObject<LightController>(L"LightController")->GetLightAngle();
 		auto MiniMapLight = GetStage()->GetSharedGameObject<Sprite>(L"LightSign");
-		//真ん中に居たら消える、イデアに被らないため
-		if (LightAngle.x < 0.3f && LightAngle.x > -0.3f && LightAngle.y <0.3f && LightAngle.y > -0.3f) {
-			//MiniMapLight->SetDrawActive(false);
+		//画面端でだけ出るようにする
+		if (LightAngle.x < 0.5f && LightAngle.x > -0.5f && LightAngle.y <0.5f && LightAngle.y > -0.5f) {
+			MiniMapLight->SetDrawActive(false);
 		}
 		else {
 			MiniMapLight->SetDrawActive(true);
@@ -192,7 +191,13 @@ namespace basecross
 		//ポジションの反映
 		MiniMapLight->GetComponent<Transform>()->SetPosition(LightPos);
 
+		//ステージのライト角度からオブジェクトの角度を出す
+		auto an = atan2f(LightAngle.x, LightAngle.y);
+		MiniMapLight->GetComponent<Transform>()->SetRotation(Vec3(0.0f,0.0f,-an));
+
+		//ステージのライトを別で持って
 		Vec3 angle = LightAngle;
+		//正の数にする
 		if (LightAngle.x < 0) {
 			angle.x = -LightAngle.x;
 		}
@@ -204,10 +209,8 @@ namespace basecross
 		if (AlphaLight < angle.y) {
 			AlphaLight = angle.y;
 		}
-
 		//透明度を変える
 		MiniMapLight->GetComponent<PCTSpriteDraw>()->SetDiffuse(Col4(1.0f, 1.0f, 1.0f, AlphaLight));
-
 	};
 
 	//--------------------------------------------------------------------------------------
