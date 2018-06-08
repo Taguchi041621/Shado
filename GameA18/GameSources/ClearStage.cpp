@@ -44,10 +44,19 @@ namespace basecross
 		////描画コンポーネントテクスチャの設定
 		//DrawComp->SetTextureResource(L"CLEAR_TX");
 
-		//AddGameObject<TitleSprite>(L"TITLE_TX", false,
-		//	Vec2(1000.0f, 600.0f), Vec2(0.0f, 0.0f));
-		AddGameObject<Sprite>(L"CLEAR_TX", false,
-			Vec2(1280.0f, 800.0f), Vec3(0, 0.0f, 0.1f));
+		AddGameObject<Sprite>(L"CLEAR_ColorNoText_TX", true,
+			Vec2(1280.0f, 800.0f), Vec3(0.0f, 0.0f, 0.1f));
+		AddGameObject<Sprite>(L"CLEAR_STAGECLEAR_TX", true,
+			Vec2(1280.0f, 800.0f), Vec3(200.0f, 300.0f, 0.0f));
+		auto nextStage = AddGameObject<ScaleChangeSprite>(L"CLEAR_NEXTSTAGE_TX", true,
+			Vec2(1600.0f, 1000.0f), Vec3(150.0f, 100.0f, 0.0f),3,true);
+		SetSharedGameObject(L"NextStage", nextStage);
+		auto retry = AddGameObject<ScaleChangeSprite>(L"CLEAR_RETRY_TX", true,
+			Vec2(1600.0f, 1000.0f), Vec3(225.0f, -50.0f, 0.0f),3,false);
+		SetSharedGameObject(L"Retry", retry);
+		auto StageSelect = AddGameObject<ScaleChangeSprite>(L"CLEAR_STAGESELECT_TX", true,
+			Vec2(1600.0f, 1000.0f), Vec3(300.0f, -250.0f, 0.0f),3,false);
+		SetSharedGameObject(L"StageSelect", StageSelect);
 	}
 	void ClearStage::CreateFadeOutSprite()
 	{
@@ -94,6 +103,9 @@ namespace basecross
 	void ClearStage::OnUpdate() {
 		auto ScenePtr = App::GetApp()->GetScene<Scene>();
 		auto WLight = GetSharedGameObject<ScaleChangeSprite>(L"WLight");
+		auto NextStage = GetSharedGameObject<ScaleChangeSprite>(L"NextStage");
+		auto Retry = GetSharedGameObject<ScaleChangeSprite>(L"Retry");
+		auto StageSelect = GetSharedGameObject<ScaleChangeSprite>(L"StageSelect");
 		auto Time = App::GetApp()->GetElapsedTime();
 		ThumbTimer += Time;
 		m_ScaleTimer += Time;
@@ -104,27 +116,20 @@ namespace basecross
 				ThumbFlag = true;
 			}
 			if (!SelectFlag) {//コントローラーの処理
-				if (CntlVec[0].fThumbLX < -0.5f) {
+				if (CntlVec[0].fThumbLY < -0.5f) {
 					if (ThumbFlag) {
 						NowSelect += 1;
 						ThumbTimer = 0.0f;
 						ThumbFlag = false;
 					}
 				}
-				else if (CntlVec[0].fThumbLX > 0.5f) {
+				else if (CntlVec[0].fThumbLY > 0.5f) {
 					if (ThumbFlag) {
 						NowSelect += -1;
 						ThumbTimer = 0.0f;
 						ThumbFlag = false;
 					}
 				}
-				//else if (CntlVec[0].fThumbLY > 0.5f) {
-				//	if (ThumbFlag) {
-				//		NowSelect = 0;
-				//		ThumbTimer = 0.0f;
-				//		ThumbFlag = false;
-				//	}
-				//}
 			}
 
 			if (NowSelect < 0) {
@@ -138,25 +143,34 @@ namespace basecross
 
 			switch (NowSelect) {//現在選択中の状態によって処理を分岐
 			case 0:
-				WLight->GetComponent<Action>()->Stop();
-					WLight->GetComponent<Action>()->AllActionClear();
-					WLight->GetComponent<Action>()->
-						AddMoveTo(0.2f, Vec3(150.0, 60, 0.0f));
-					WLight->GetComponent<Action>()->Run();
+				//WLight->GetComponent<Action>()->Stop();
+				//	WLight->GetComponent<Action>()->AllActionClear();
+				//	WLight->GetComponent<Action>()->
+				//		AddMoveTo(0.2f, Vec3(150.0, 60, 0.0f));
+				//	WLight->GetComponent<Action>()->Run();
+				NextStage->SetScaleChangeFlag(true);
+				Retry->SetScaleChangeFlag(false);
+				StageSelect->SetScaleChangeFlag(false);
 				break;
 			case 1:
-				WLight->GetComponent<Action>()->Stop();
-					WLight->GetComponent<Action>()->AllActionClear();
-					WLight->GetComponent<Action>()->
-						AddMoveTo(0.2f, Vec3(-100.0, -230, 0.0f));
-					WLight->GetComponent<Action>()->Run();
+				//WLight->GetComponent<Action>()->Stop();
+				//	WLight->GetComponent<Action>()->AllActionClear();
+				//	WLight->GetComponent<Action>()->
+				//		AddMoveTo(0.2f, Vec3(-100.0, -230, 0.0f));
+				//	WLight->GetComponent<Action>()->Run();
+					NextStage->SetScaleChangeFlag(false);
+					Retry->SetScaleChangeFlag(true);
+					StageSelect->SetScaleChangeFlag(false);
 				break;
 			case 2:
-				WLight->GetComponent<Action>()->Stop();
-					WLight->GetComponent<Action>()->AllActionClear();
-					WLight->GetComponent<Action>()->
-						AddMoveTo(0.2f, Vec3(420.0, -230, 0.0f));
-					WLight->GetComponent<Action>()->Run();
+				//WLight->GetComponent<Action>()->Stop();
+				//	WLight->GetComponent<Action>()->AllActionClear();
+				//	WLight->GetComponent<Action>()->
+				//		AddMoveTo(0.2f, Vec3(420.0, -230, 0.0f));
+				//	WLight->GetComponent<Action>()->Run();
+				NextStage->SetScaleChangeFlag(false);
+				Retry->SetScaleChangeFlag(false);
+				StageSelect->SetScaleChangeFlag(true);
 				break;
 			}
 
