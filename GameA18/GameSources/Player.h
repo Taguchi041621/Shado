@@ -33,8 +33,6 @@ namespace basecross{
 		//データとゲームとの変換行列
 		Mat4x4 m_ToAnimeMatrixLeft;
 		Mat4x4 m_ToAnimeMatrixRight;
-		//死亡判定のためのOBB
-		OBB m_DieOBB;
 		//死亡状態を持つ変数[1:圧殺]
 		int m_Death;
 		//落下スピード

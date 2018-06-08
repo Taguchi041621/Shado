@@ -5,7 +5,7 @@ namespace basecross {
 	MyCamera::MyCamera(const shared_ptr<GameStage>&StagePtr) :
 		Camera(),
 		m_StagePtr(StagePtr),
-		CameraPosZ(-40.0f),
+		CameraPosZ(-56.0f),
 		CameraAngle(0),
 		CameraPos(0)
 	{}
@@ -65,8 +65,8 @@ namespace basecross {
 		}
 		else if(!m_StartFlag) {
 			CameraPosZ += 0.2;
-			if (CameraPosZ >= -10) {
-				CameraPosZ = -10;
+			if (CameraPosZ >= -14) {
+				CameraPosZ = -14;
 				m_StartFlag = true;
 				auto ScenePtr = App::GetApp()->GetScene<Scene>();
 				ScenePtr->SetStartFlag(m_StartFlag);

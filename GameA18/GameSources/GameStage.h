@@ -29,6 +29,8 @@ namespace basecross {
 		void CreateMoveEnd();
 		//ライトの位置を知らせる演出
 		void CreateLightSign();
+		//ライト代わりのオブジェクト
+		void CreateLightObject();
 		CsvFile m_Csv;//CSV関連の変数
 					  //DataIDを管理するフラグ
 		bool dataIdFlag = false;

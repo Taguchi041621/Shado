@@ -71,16 +71,11 @@ namespace basecross{
 		App::GetApp()->RegisterTexture(L"PAUSE_TX", strTexture);
 
 
-		//鍵のUI候補↓
+		//鍵のUI
 		strTexture = DataDir + L"UI_Key.png";//黒塗り
 		App::GetApp()->RegisterTexture(L"UI_Key_TX", strTexture);
-		//strTexture = DataDir + L"UI_Key_None.png";//ふち細中抜き
-		//App::GetApp()->RegisterTexture(L"UI_Key_None_TX", strTexture);
 		strTexture = DataDir + L"UI_Key_NoneBigLine.png";//ふち太中抜き
 		App::GetApp()->RegisterTexture(L"UI_Key_None_TX", strTexture);
-		//strTexture = DataDir + L"UI_Key_NoneWhite.png";//白塗
-		//App::GetApp()->RegisterTexture(L"UI_Key_None_TX", strTexture);
-		//鍵のUI候補↑
 
 		strTexture = DataDir + L"Door.png";
 		App::GetApp()->RegisterTexture(L"Door_TX", strTexture);
@@ -112,9 +107,13 @@ namespace basecross{
 		strTexture = DataDir + L"TiteleShadow.png";
 		App::GetApp()->RegisterTexture(L"TITLE_SHADOW_TX", strTexture);
 
+		//ライトのモデル
 		auto StaticModelMesh = MeshResource::CreateStaticModelMesh(DataDir + L"Light\\", L"LIGHT1.bmf");
 		App::GetApp()->RegisterResource(L"LIGHT_MESH", StaticModelMesh);
-		
+		//ライトのイラスト
+		strTexture = DataDir + L"Light\\LIGHT_Illust.png";
+		App::GetApp()->RegisterTexture(L"LIGHT_Illust_TX", strTexture);
+
 		/*BGM・SE関連*/
 		//ゲームオーバーBGM
 		wstring GameOver = DataDir + L"BGMSE\\GameOver.wav";

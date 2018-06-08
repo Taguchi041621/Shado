@@ -474,9 +474,8 @@ namespace basecross {
 		auto PtrTransform = GetComponent<Transform>();
 
 		PtrTransform->SetPosition(m_Position);
-		//m_Rotation.y =/* 90.0f*(DegToRad)*/;
+		//m_Rotation = m_Rotation*(DegToRad);
 		PtrTransform->SetRotation(m_Rotation);
-
 		PtrTransform->SetScale(m_Scale);
 
 		Mat4x4 SpanMat; // モデルとトランスフォームの間の差分行列
