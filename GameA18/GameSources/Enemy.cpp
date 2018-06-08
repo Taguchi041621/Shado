@@ -207,24 +207,26 @@ namespace basecross {
 				m_AudioObjectPtr->AddAudioResource(L"se4");
 				m_AudioObjectPtr->Start(L"se4", XAUDIO2_NO_LOOP_REGION, 0.1f);
 				SetNowMusic(L"se4");
-		auto ScenePtr = App::GetApp()->GetScene<Scene>();
-		if (!ScenePtr->GetPauseFlag()) {
-			if (m_CoolTime >= 5)
-			{
-				m_BulletFlag = true;
-				ChangeAnimation(L"Fire");
-				m_CoolTime = 0;
-			}
-			if (m_BulletFlag) {
-				UpdateAnimeTime(ElapsedTime);
+				auto ScenePtr = App::GetApp()->GetScene<Scene>();
+				if (!ScenePtr->GetPauseFlag()) {
+					if (m_CoolTime >= 5)
+					{
+						m_BulletFlag = true;
+						ChangeAnimation(L"Fire");
+						m_CoolTime = 0;
+					}
+					if (m_BulletFlag) {
+						UpdateAnimeTime(ElapsedTime);
 
-				if (IsAnimeEnd()) {
-					GetStage()->AddGameObject<Bullet>(
-						GetComponent<Transform>()->GetScale(),
-						GetComponent<Transform>()->GetRotation(),
-						GetComponent<Transform>()->GetPosition() - Vec3(1, -0.4f, 0)
-						);
-					m_BulletFlag = false;
+						if (IsAnimeEnd()) {
+							GetStage()->AddGameObject<Bullet>(
+								GetComponent<Transform>()->GetScale(),
+								GetComponent<Transform>()->GetRotation(),
+								GetComponent<Transform>()->GetPosition() - Vec3(1, -0.4f, 0)
+								);
+							m_BulletFlag = false;
+						}
+					}
 				}
 			}
 		}
