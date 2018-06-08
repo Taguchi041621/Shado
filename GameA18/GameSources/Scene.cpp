@@ -22,7 +22,9 @@ namespace basecross{
 		App::GetApp()->RegisterTexture(L"TITLE_TX", strTexture);
 		strTexture = DataDir + L"Select.png";
 		App::GetApp()->RegisterTexture(L"SELECT_TX", strTexture);
-		strTexture = DataDir + L"Clear.png";
+		//strTexture = DataDir + L"Clear.png";
+		//App::GetApp()->RegisterTexture(L"CLEAR_TX", strTexture);
+		strTexture = DataDir + L"GAMECLEAR.png";
 		App::GetApp()->RegisterTexture(L"CLEAR_TX", strTexture);
 		//GameOver = •¶Žš‚ ‚èAGameOver1 = •¶Žš‚È‚µ
 		strTexture = DataDir + L"GameOver1.png";
@@ -128,7 +130,13 @@ namespace basecross{
 		App::GetApp()->RegisterWav(L"se", SE);
 		wstring SE2 = DataDir + L"BGMSE\\SE2.wav";
 		App::GetApp()->RegisterWav(L"se2", SE2);
-		wstring Clear = DataDir + L"BGMSE\\kuria.wav";
+		wstring SE3 = DataDir + L"BGMSE\\bon.wav";
+		App::GetApp()->RegisterWav(L"se3", SE3);
+		wstring SE4 = DataDir + L"BGMSE\\bomb.wav";
+		App::GetApp()->RegisterWav(L"se4", SE4);
+		//wstring Clear = DataDir + L"BGMSE\\kuria.wav";
+		//App::GetApp()->RegisterWav(L"clear", Clear);
+		wstring Clear = DataDir + L"BGMSE\\yakusoku.wav";
 		App::GetApp()->RegisterWav(L"clear", Clear);
 	}
 
@@ -159,7 +167,7 @@ namespace basecross{
 		}
 		//------------------------------------------------------
 		else if (event->m_MsgStr == L"ToStageSelect") {
-			if (m_StopNowMusic == L"gameover")
+			if (m_StopNowMusic == L"gameover", L"clear")
 			{
 			m_AudioObjectPtr->Stop(m_StopNowMusic);	
 			m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
@@ -206,8 +214,9 @@ namespace basecross{
 			ResetActiveStage<ClearStage>();
 			m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
 			m_AudioObjectPtr->AddAudioResource(L"clear");
-			m_AudioObjectPtr->Start(L"clear", XAUDIO2_NO_LOOP_REGION, 0.1f);
+			m_AudioObjectPtr->Start(L"clear", XAUDIO2_LOOP_INFINITE, 0.4f);
 			m_StopNowMusic = L"clear";
+			
 
 		}
 	}

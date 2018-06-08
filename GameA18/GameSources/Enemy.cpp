@@ -172,10 +172,10 @@ namespace basecross {
 	void Cannon::OnUpdate() {
 		float ElapsedTime = App::GetApp()->GetElapsedTime();
 		if (!m_BulletFlag) {
-			m_CoolTime += ElapsedTime; 
+			m_CoolTime += ElapsedTime;
 			UpdateAnimeTime(0);
 		}
-		
+
 		if (m_CoolTime >= 5)
 		{
 			m_BulletFlag = true;
@@ -184,7 +184,7 @@ namespace basecross {
 		}
 		if (m_BulletFlag) {
 			UpdateAnimeTime(ElapsedTime);
-			
+
 			if (IsAnimeEnd()) {
 				GetStage()->AddGameObject<Bullet>(
 					GetComponent<Transform>()->GetScale(),
@@ -192,10 +192,26 @@ namespace basecross {
 					GetComponent<Transform>()->GetPosition() - Vec3(1, -0.4f, 0)
 					);
 				m_BulletFlag = false;
+
+				if (m_StopNowMusic != L"")
+				{
+					m_AudioObjectPtr->Stop(m_StopNowMusic);
+				}
+				wstring DataDir;
+				//サンプルのためアセットディレクトリを取得
+				//App::GetApp()->GetAssetsDirectory(DataDir);
+				//各ゲームは以下のようにデータディレクトリを取得すべき
+				App::GetApp()->GetDataDirectory(DataDir);
+
+				m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
+				m_AudioObjectPtr->AddAudioResource(L"se4");
+				m_AudioObjectPtr->Start(L"se4", XAUDIO2_NO_LOOP_REGION, 0.1f);
+				SetNowMusic(L"se4");
 			}
 		}
 
 	}
+
 	void Cannon::OnUpdate2() {
 		//影のポジションの更新
 		GetComponent<Transform>()->SetPosition(ShadowLocation());

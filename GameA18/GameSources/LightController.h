@@ -15,11 +15,25 @@ namespace basecross {
 		float m_Speed;
 		//スティックを放したときのスピードをもつ
 		Vec2 m_Lingering;
+
+		bool SoundPlay;
+
+		shared_ptr<MultiAudioObject> m_AudioObjectPtr;
+		wstring m_StopNowMusic;
+
 	public:
 		LightController(const shared_ptr<Stage>& StagePtr);
 		virtual ~LightController();
 		virtual void OnCreate()override;
 		virtual void OnUpdate()override;
+
+		void SetNowMusic(wstring NowMusic) {
+			m_StopNowMusic = NowMusic;
+		}
+		wstring GetNowMusic() {
+			return m_StopNowMusic;
+		}
+
 		Vec3 GetLightAngle();
 	};
 }

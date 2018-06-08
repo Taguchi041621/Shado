@@ -24,20 +24,20 @@ namespace basecross {
 			//右スティックが動いていたら
 			if (CntlVec[0].fThumbRX != 0 || CntlVec[0].fThumbRY != 0) {
 				//X方向にステックが倒れていたら
-				if (CntlVec[0].fThumbRX > 0.4f) {
+				if (CntlVec[0].fThumbRX >= 0.4f) {
 					m_LightAngle.x += -CntlVec[0].fThumbRX * ElapsedTime*m_Speed;
 					m_Lingering.x = -CntlVec[0].fThumbRX*m_Speed;
 				}
-				else if (CntlVec[0].fThumbRX < -0.4f) {
+				else if (CntlVec[0].fThumbRX <= -0.4f) {
 					m_LightAngle.x += -CntlVec[0].fThumbRX * ElapsedTime*m_Speed;
 					m_Lingering.x = -CntlVec[0].fThumbRX*m_Speed;
 				}
 				//Y方向にスティックが倒れていたら
-				if (CntlVec[0].fThumbRY > 0.4f) {
+				if (CntlVec[0].fThumbRY >= 0.4f) {
 					m_LightAngle.y += -CntlVec[0].fThumbRY * ElapsedTime*m_Speed;
 					m_Lingering.y = -CntlVec[0].fThumbRY*m_Speed;
 				}
-				else if (CntlVec[0].fThumbRY < -0.4f) {
+				else if (CntlVec[0].fThumbRY <= -0.4f) {
 					m_LightAngle.y += -CntlVec[0].fThumbRY * ElapsedTime*m_Speed;
 					m_Lingering.y = -CntlVec[0].fThumbRY*m_Speed;
 				}
@@ -51,11 +51,32 @@ namespace basecross {
 			}
 			//限界位置表示のやつが入ってるグループの取得
 			auto MoveEndGroup = GetStage()->GetSharedObjectGroup(L"MoveEndGroup");
+
+			if (m_LightAngle.x >= m_MaxAngle || m_LightAngle.x <= -m_MaxAngle ||
+				m_LightAngle.y >= m_MaxAngle || m_LightAngle.y <= -m_MaxAngle) {
+				if (SoundPlay == true) {
+					wstring DataDir;
+					//サンプルのためアセットディレクトリを取得
+					//App::GetApp()->GetAssetsDirectory(DataDir);
+					//各ゲームは以下のようにデータディレクトリを取得すべき
+					App::GetApp()->GetDataDirectory(DataDir);
+
+					m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
+					m_AudioObjectPtr->AddAudioResource(L"se3");
+					m_AudioObjectPtr->Start(L"se3", XAUDIO2_NO_LOOP_REGION, 0.3f);
+					SetNowMusic(L"se3");
+					SoundPlay = false;
+				}
+			}
+			else {
+				SoundPlay = true;
+			}
 			//マックスアングルを超えたらマックスアングルの値に戻す
 			//左
 			if (m_LightAngle.x >= m_MaxAngle - 0.3f) {
 				if (m_LightAngle.x >= m_MaxAngle) {
 					m_LightAngle.x = m_MaxAngle;
+
 				}
 				MoveEndGroup->at(1)->GetComponent<Action>()->AllActionClear();
 				MoveEndGroup->at(1)->GetComponent<Action>()->
@@ -88,7 +109,6 @@ namespace basecross {
 				MoveEndGroup->at(2)->GetComponent<Action>()->
 					AddMoveTo(0.1f, Vec3(0.0f, -410.0f - (m_MaxAngle - -m_LightAngle.y)*200.0f, 0.0f));
 			}
-
 
 			//---------------------------------------------------------------------------------------
 			//角度からポジション出す

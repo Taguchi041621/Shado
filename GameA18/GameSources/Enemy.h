@@ -87,6 +87,9 @@ namespace basecross {
 
 		Mat4x4 m_ToAnimeMatrix;
 
+		shared_ptr<MultiAudioObject> m_AudioObjectPtr;
+		wstring m_StopNowMusic;
+
 	public:
 		//\’z‚Æ”jŠü
 		Cannon(const shared_ptr<Stage>& StagePtr,
@@ -101,6 +104,12 @@ namespace basecross {
 		virtual void OnCreate() override;
 		//‘€ì
 		virtual void OnUpdate();
+		void SetNowMusic(wstring NowMusic) {
+			m_StopNowMusic = NowMusic;
+		}
+		wstring GetNowMusic() {
+			return m_StopNowMusic;
+		}
 		virtual void OnUpdate2();
 		//‰e‚ÌêŠ‚ğŒvZ‚·‚é
 		Vec3 ShadowLocation();
