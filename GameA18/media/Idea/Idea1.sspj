@@ -104,8 +104,7 @@
 		<value>Idea1.ssae</value>
 	</animepackNames>
 	<lastAnimeFile>Idea1.ssae</lastAnimeFile>
-	<lastAnimeName>StandUp</lastAnimeName>
+	<lastAnimeName>Fall</lastAnimeName>
 	<lastCellMapFile>Idea1.ssce</lastCellMapFile>
-	<lastCell>Hair1</lastCell>
-	<lastPart>Hair1</lastPart>
+	<lastCell>BODY1</lastCell>
 </SpriteStudioProject>

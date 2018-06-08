@@ -171,30 +171,32 @@ namespace basecross {
 	//変化
 	void Cannon::OnUpdate() {
 		float ElapsedTime = App::GetApp()->GetElapsedTime();
-		if (!m_BulletFlag) {
-			m_CoolTime += ElapsedTime; 
-			UpdateAnimeTime(0);
-		}
-		
-		if (m_CoolTime >= 5)
-		{
-			m_BulletFlag = true;
-			ChangeAnimation(L"Fire");
-			m_CoolTime = 0;
-		}
-		if (m_BulletFlag) {
-			UpdateAnimeTime(ElapsedTime);
-			
-			if (IsAnimeEnd()) {
-				GetStage()->AddGameObject<Bullet>(
-					GetComponent<Transform>()->GetScale(),
-					GetComponent<Transform>()->GetRotation(),
-					GetComponent<Transform>()->GetPosition() - Vec3(1, -0.4f, 0)
-					);
-				m_BulletFlag = false;
+		auto ScenePtr = App::GetApp()->GetScene<Scene>();
+		if (!ScenePtr->GetPauseFlag()) {
+			if (!m_BulletFlag) {
+				m_CoolTime += ElapsedTime;
+				UpdateAnimeTime(0);
+			}
+
+			if (m_CoolTime >= 5)
+			{
+				m_BulletFlag = true;
+				ChangeAnimation(L"Fire");
+				m_CoolTime = 0;
+			}
+			if (m_BulletFlag) {
+				UpdateAnimeTime(ElapsedTime);
+
+				if (IsAnimeEnd()) {
+					GetStage()->AddGameObject<Bullet>(
+						GetComponent<Transform>()->GetScale(),
+						GetComponent<Transform>()->GetRotation(),
+						GetComponent<Transform>()->GetPosition() - Vec3(1, -0.4f, 0)
+						);
+					m_BulletFlag = false;
+				}
 			}
 		}
-
 	}
 	void Cannon::OnUpdate2() {
 		//影のポジションの更新
@@ -307,13 +309,16 @@ namespace basecross {
 		float ElapsedTime = App::GetApp()->GetElapsedTime();
 		auto PtrTransform = AddComponent<Transform>();
 		auto Pos = PtrTransform->GetPosition();
-		Pos.x -= 5.0f*ElapsedTime;
-		PtrTransform->SetPosition(Pos);
+		auto ScenePtr = App::GetApp()->GetScene<Scene>();
+		if (!ScenePtr->GetPauseFlag()) {
+			Pos.x -= 5.0f*ElapsedTime;
+			PtrTransform->SetPosition(Pos);
 
-		OnTriggerEnter();
+			OnTriggerEnter();
 
-		if (Pos.x<=-30) {
-			GetStage()->RemoveGameObject<Bullet>(GetThis<Bullet>());
+			if (Pos.x <= -30) {
+				GetStage()->RemoveGameObject<Bullet>(GetThis<Bullet>());
+			}
 		}
 	}
 	void Bullet::OnUpdate2() {

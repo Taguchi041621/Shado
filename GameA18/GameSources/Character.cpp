@@ -36,7 +36,7 @@ namespace basecross {
 		auto PtrDraw = AddComponent<BcPNTStaticDraw>();
 		PtrDraw->SetMeshResource(L"DEFAULT_CUBE");
 
-		PtrDraw->SetAlpha(0.5f);
+		PtrDraw->SetAlpha(1.0f);
 		PtrDraw->SetTextureResource(L"Red_TX");
 
 		SetAlphaActive(true);
@@ -63,47 +63,54 @@ namespace basecross {
 
 		m_HengTimer += ElapsedTime;
 		m_VerticalTimer += ElapsedTime;
-		if (m_MoveFlag) {
-			if (m_HengMoveFlag)
-				m_Rigidbody->SetVelocity(Vec3(-m_Speed.x, m_Speed.y, 0));
-			if (!m_HengMoveFlag)
-				m_Rigidbody->SetVelocity(Vec3(m_Speed.x, m_Speed.y, 0));
+		auto ScenePtr = App::GetApp()->GetScene<Scene>();
+		if (!ScenePtr->GetPauseFlag()) {
+			if (m_MoveFlag) {
+				if (m_HengMoveFlag)
+					m_Rigidbody->SetVelocity(Vec3(-m_Speed.x, m_Speed.y, 0));
+				if (!m_HengMoveFlag)
+					m_Rigidbody->SetVelocity(Vec3(m_Speed.x, m_Speed.y, 0));
 
-			if (m_HengTimer >= 3 && m_HengMoveFlag) {
-				m_HengMoveFlag = false;
-				m_HengTimer = 0;
-			}
-			if (m_HengTimer >= 3 && !m_HengMoveFlag) {
-				m_HengMoveFlag = true;
-				m_HengTimer = 0;
-			}
+				if (m_HengTimer >= 3 && m_HengMoveFlag) {
+					m_HengMoveFlag = false;
+					m_HengTimer = 0;
+				}
+				if (m_HengTimer >= 3 && !m_HengMoveFlag) {
+					m_HengMoveFlag = true;
+					m_HengTimer = 0;
+				}
 
-			/*if (m_VerticalMoveFlag)
-				m_Rigidbody->SetVelocity(Vec3(0, m_Speed.y, 0));
-			if (!m_VerticalMoveFlag)
-				m_Rigidbody->SetVelocity(Vec3(0, -m_Speed.y, 0));
+				/*if (m_VerticalMoveFlag)
+					m_Rigidbody->SetVelocity(Vec3(0, m_Speed.y, 0));
+				if (!m_VerticalMoveFlag)
+					m_Rigidbody->SetVelocity(Vec3(0, -m_Speed.y, 0));
 
-			if (m_VerticalTimer >= 3 && m_VerticalMoveFlag) {
-				m_VerticalMoveFlag = false;
-				m_VerticalTimer = 0;
+				if (m_VerticalTimer >= 3 && m_VerticalMoveFlag) {
+					m_VerticalMoveFlag = false;
+					m_VerticalTimer = 0;
+				}
+				if (m_VerticalTimer >= 3 && !m_VerticalMoveFlag) {
+					m_VerticalMoveFlag = true;
+					m_VerticalTimer = 0;
+				}*/
 			}
-			if (m_VerticalTimer >= 3 && !m_VerticalMoveFlag) {
-				m_VerticalMoveFlag = true;
-				m_VerticalTimer = 0;
-			}*/
-		}
-		//右スティックを操作してたら濃くする
-		if (GetStage()->GetSharedGameObject<Player>(L"Player")->GetMoveVector(1)) {
-			if (m_alpha <= 0.7f) {
-				m_alpha += 0.05f;
+			if (ScenePtr->GetStartFlag()) {
+				//右スティックを操作してたら濃くする
+				if (GetStage()->GetSharedGameObject<Player>(L"Player")->GetMoveVector(1)) {
+					if (m_alpha <= 0.7f) {
+						m_alpha += 0.05f;
+					}
+				}
+				else {//薄くする
+					if (m_alpha >= 0.3f) {
+						m_alpha += -0.05f;
+					}
+				}
 			}
 		}
-		else {//薄くする
-			if (m_alpha >= 0.3f) {
-				m_alpha += -0.05f;
-			}
+		if (ScenePtr->GetStartFlag()) {
+			GetComponent<BcPNTStaticDraw>()->SetAlpha(m_alpha);
 		}
-		GetComponent<BcPNTStaticDraw>()->SetAlpha(m_alpha);
 	}
 
 	BlueCube::BlueCube(const shared_ptr<Stage>& StagePtr,
@@ -132,7 +139,7 @@ namespace basecross {
 		auto PtrDraw = AddComponent<BcPNTStaticDraw>();
 		PtrDraw->SetMeshResource(L"DEFAULT_CUBE");
 
-		PtrDraw->SetAlpha(0.5f);
+		PtrDraw->SetAlpha(1.0f);
 		PtrDraw->SetTextureResource(L"Blue_TX");
 
 		SetAlphaActive(true);
@@ -159,48 +166,58 @@ namespace basecross {
 
 		m_HengTimer += ElapsedTime;
 		m_VerticalTimer += ElapsedTime;
-		if (m_MoveFlag) {
-			if (m_HengMoveFlag)
-				m_Rigidbody->SetVelocity(Vec3(-m_Speed.x, m_Speed.y, 0));
-			if (!m_HengMoveFlag)
-				m_Rigidbody->SetVelocity(Vec3(m_Speed.x, m_Speed.y, 0));
+		auto ScenePtr = App::GetApp()->GetScene<Scene>();
+		if (!ScenePtr->GetPauseFlag()) {
+			if (m_MoveFlag) {
+				if (m_HengMoveFlag)
+					m_Rigidbody->SetVelocity(Vec3(-m_Speed.x, m_Speed.y, 0));
+				if (!m_HengMoveFlag)
+					m_Rigidbody->SetVelocity(Vec3(m_Speed.x, m_Speed.y, 0));
 
-			if (m_HengTimer >= 3 && m_HengMoveFlag) {
-				m_HengMoveFlag = false;
-				m_HengTimer = 0;
-			}
-			if (m_HengTimer >= 3 && !m_HengMoveFlag) {
-				m_HengMoveFlag = true;
-				m_HengTimer = 0;
-			}
+				if (m_HengTimer >= 3 && m_HengMoveFlag) {
+					m_HengMoveFlag = false;
+					m_HengTimer = 0;
+				}
+				if (m_HengTimer >= 3 && !m_HengMoveFlag) {
+					m_HengMoveFlag = true;
+					m_HengTimer = 0;
+				}
 
-			/*if (m_VerticalMoveFlag)
-			m_Rigidbody->SetVelocity(Vec3(0, m_Speed.y, 0));
-			if (!m_VerticalMoveFlag)
-			m_Rigidbody->SetVelocity(Vec3(0, -m_Speed.y, 0));
+				/*if (m_VerticalMoveFlag)
+				m_Rigidbody->SetVelocity(Vec3(0, m_Speed.y, 0));
+				if (!m_VerticalMoveFlag)
+				m_Rigidbody->SetVelocity(Vec3(0, -m_Speed.y, 0));
 
-			if (m_VerticalTimer >= 3 && m_VerticalMoveFlag) {
-			m_VerticalMoveFlag = false;
-			m_VerticalTimer = 0;
+				if (m_VerticalTimer >= 3 && m_VerticalMoveFlag) {
+				m_VerticalMoveFlag = false;
+				m_VerticalTimer = 0;
+				}
+				if (m_VerticalTimer >= 3 && !m_VerticalMoveFlag) {
+				m_VerticalMoveFlag = true;
+				m_VerticalTimer = 0;
+				}*/
 			}
-			if (m_VerticalTimer >= 3 && !m_VerticalMoveFlag) {
-			m_VerticalMoveFlag = true;
-			m_VerticalTimer = 0;
-			}*/
+			//右スティックを操作してたら濃くする
+			if (ScenePtr->GetStartFlag()) {
+				if (GetStage()->GetSharedGameObject<Player>(L"Player")->GetMoveVector(1)) {
+					if (m_alpha <= 0.7f) {
+						m_alpha += 0.05f;
+					}
+				}
+				else {//薄くする
+					if (m_alpha >= 0.3f) {
+						m_alpha += -0.05f;
+					}
+				}
+			}
 		}
-		//右スティックを操作してたら濃くする
-		if (GetStage()->GetSharedGameObject<Player>(L"Player")->GetMoveVector(1)) {
-			if (m_alpha <= 0.7f) {
-				m_alpha += 0.05f;
-			}
-		}
-		else {//薄くする
-			if (m_alpha >= 0.3f) {
-				m_alpha += -0.05f;
-			}
-		}
-		GetComponent<BcPNTStaticDraw>()->SetAlpha(m_alpha);
 
+		else {
+			m_Rigidbody->SetVelocity(Vec3(0));
+		}
+		if (ScenePtr->GetStartFlag()) {
+			GetComponent<BcPNTStaticDraw>()->SetAlpha(m_alpha);
+		}
 	}
 
 	YellowCube::YellowCube(const shared_ptr<Stage>& StagePtr,
@@ -230,7 +247,7 @@ namespace basecross {
 		auto PtrDraw = AddComponent<BcPNTStaticDraw>();
 		PtrDraw->SetMeshResource(L"DEFAULT_CUBE");
 
-		PtrDraw->SetAlpha(0.5f);
+		PtrDraw->SetAlpha(1.0f);
 		PtrDraw->SetTextureResource(L"Yellow_TX");
 
 		SetAlphaActive(true);
@@ -254,50 +271,59 @@ namespace basecross {
 	void YellowCube::OnUpdate() {
 
 		float ElapsedTime = App::GetApp()->GetElapsedTime();
+		auto ScenePtr = App::GetApp()->GetScene<Scene>();
+		if (!ScenePtr->GetPauseFlag()) {
+			m_HengTimer += ElapsedTime;
+			m_VerticalTimer += ElapsedTime;
+			if (m_MoveFlag) {
+				if (m_HengMoveFlag)
+					m_Rigidbody->SetVelocity(Vec3(0, -m_Speed.y, 0));
+				if (!m_HengMoveFlag)
+					m_Rigidbody->SetVelocity(Vec3(0, m_Speed.y, 0));
 
-		m_HengTimer += ElapsedTime;
-		m_VerticalTimer += ElapsedTime;
-		if (m_MoveFlag) {
-			if (m_HengMoveFlag)
-				m_Rigidbody->SetVelocity(Vec3(0, -m_Speed.y, 0));
-			if (!m_HengMoveFlag)
+				if (m_HengTimer >= 3 && m_HengMoveFlag) {
+					m_HengMoveFlag = false;
+					m_HengTimer = 0;
+				}
+				if (m_HengTimer >= 3 && !m_HengMoveFlag) {
+					m_HengMoveFlag = true;
+					m_HengTimer = 0;
+				}
+
+				/*if (m_VerticalMoveFlag)
 				m_Rigidbody->SetVelocity(Vec3(0, m_Speed.y, 0));
+				if (!m_VerticalMoveFlag)
+				m_Rigidbody->SetVelocity(Vec3(0, -m_Speed.y, 0));
 
-			if (m_HengTimer >= 3 && m_HengMoveFlag) {
-				m_HengMoveFlag = false;
-				m_HengTimer = 0;
+				if (m_VerticalTimer >= 3 && m_VerticalMoveFlag) {
+				m_VerticalMoveFlag = false;
+				m_VerticalTimer = 0;
+				}
+				if (m_VerticalTimer >= 3 && !m_VerticalMoveFlag) {
+				m_VerticalMoveFlag = true;
+				m_VerticalTimer = 0;
+				}*/
 			}
-			if (m_HengTimer >= 3 && !m_HengMoveFlag) {
-				m_HengMoveFlag = true;
-				m_HengTimer = 0;
-			}
-
-			/*if (m_VerticalMoveFlag)
-			m_Rigidbody->SetVelocity(Vec3(0, m_Speed.y, 0));
-			if (!m_VerticalMoveFlag)
-			m_Rigidbody->SetVelocity(Vec3(0, -m_Speed.y, 0));
-
-			if (m_VerticalTimer >= 3 && m_VerticalMoveFlag) {
-			m_VerticalMoveFlag = false;
-			m_VerticalTimer = 0;
-			}
-			if (m_VerticalTimer >= 3 && !m_VerticalMoveFlag) {
-			m_VerticalMoveFlag = true;
-			m_VerticalTimer = 0;
-			}*/
-		}
-		//右スティックを操作してたら濃くする
-		if (GetStage()->GetSharedGameObject<Player>(L"Player")->GetMoveVector(1)) {
-			if (m_alpha <= 0.7f) {
-				m_alpha += 0.05f;
+			if (ScenePtr->GetStartFlag()) {
+				//右スティックを操作してたら濃くする
+				if (GetStage()->GetSharedGameObject<Player>(L"Player")->GetMoveVector(1)) {
+					if (m_alpha <= 0.7f) {
+						m_alpha += 0.05f;
+					}
+				}
+				else {//薄くする
+					if (m_alpha >= 0.3f) {
+						m_alpha += -0.05f;
+					}
+				}
 			}
 		}
-		else {//薄くする
-			if (m_alpha >= 0.3f) {
-				m_alpha += -0.05f;
-			}
+		else {
+			m_Rigidbody->SetVelocity(Vec3(0));
 		}
-		GetComponent<BcPNTStaticDraw>()->SetAlpha(m_alpha);
+		if (ScenePtr->GetStartFlag()) {
+			GetComponent<BcPNTStaticDraw>()->SetAlpha(m_alpha);
+		}
 	}
 	//--------------------------------------------------------------------------------------
 	///	三角形のオブジェ

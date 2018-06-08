@@ -54,6 +54,8 @@ namespace basecross {
 		//float DegToRad = 3.14159265f / 180.0f;
 
 		int Wcount = 0;
+
+
 		//ÅŒã‚Ü‚Å“Ç‚Ýž‚Þ
 		while (MapVec[0] != L"end") {
 			//•¶Žš—ñ‚ª‚ ‚Á‚½‚©‚ð”»’f
@@ -374,6 +376,7 @@ namespace basecross {
 		auto ScenePtr = App::GetApp()->GetScene<Scene>();
 		auto Fade = GetSharedGameObject<SpriteFade>(L"FadeIn");
 		auto PtrPlayer = GetSharedGameObject<Player>(L"Player");
+
 
 		auto Pause = GetSharedGameObject<Sprite>(L"Pause");
 		auto WLight = GetSharedGameObject<ScaleChangeSprite>(L"WLight");

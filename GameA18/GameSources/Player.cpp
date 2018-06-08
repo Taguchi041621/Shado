@@ -695,10 +695,10 @@ namespace basecross{
 	void DamageState::Enter(const shared_ptr<Player>& Obj) {
 		Obj->SetFps(60.0f);
 		if (Obj->GetRightOrLeft()) {
-			Obj->AnimeChangeMotion(L"Knockdown", false);
+			Obj->AnimeChangeMotion(L"Damaged_4", false);
 		}
 		else {
-			Obj->AnimeChangeMotion(L"Knockdown", false);
+			Obj->AnimeChangeMotion(L"Damaged_5", false);
 		}
 	}
 	//ステート実行中に毎ターン呼ばれる関数
