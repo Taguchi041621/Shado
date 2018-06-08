@@ -187,11 +187,11 @@ namespace basecross {
 			Vec2(840, 600), Vec3(900.0f, 0.0f, 0.1f));
 		SetSharedGameObject(L"FadeIn", Fade);
 
-		auto PtrLight = AddGameObject<StageLight>(
+		/*auto PtrLight = AddGameObject<StageLight>(
 			Vec3(0.0f, 0.0, 0.0f),
 			Vec3(0.0f, 0.0f, 0.0f),
 			Vec3(1.0f, 0.2f, 1.0f));
-		SetSharedGameObject(L"StageLight", PtrLight);
+		SetSharedGameObject(L"StageLight", PtrLight);*/
 	}
 
 	void GameStage::CreatePause() {
@@ -352,7 +352,7 @@ namespace basecross {
 			CreateMoveEnd();
 			Csv();
 			//鍵の数に応じて作るため、鍵ができてから呼び出す
-			CreateHaveKeys();
+			//CreateHaveKeys();
 			CreatePause();
 			//フェード
 			CreateFadeOutSprite();

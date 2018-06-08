@@ -304,7 +304,7 @@ namespace basecross {
 	//------------------------------------------------------------------------------------------
 	ShadowGoal::ShadowGoal(const shared_ptr<Stage>& StagePtr, const wstring BaseDir,
 		const Vec3& m_Scale, const Vec3& Rotation, GameObject& Obj)
-		: SS5ssae(StagePtr, BaseDir, L"DoorSS_0605.ssae", L"Unlock"),
+		: SS5ssae(StagePtr, BaseDir, L"DoorSS_0605.ssae", L"Unlock_After"),
 		m_Scale(m_Scale),m_Rotation(Rotation),m_Obj(Obj), m_ScaleZ(0.05f)
 	{
 		m_ToAnimeMatrixDark.affineTransformation(

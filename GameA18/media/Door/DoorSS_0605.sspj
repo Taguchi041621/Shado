@@ -34,7 +34,7 @@
 		<rootPartFunctionAsVer4>0</rootPartFunctionAsVer4>
 		<interpolateColorBlendAsVer4>1</interpolateColorBlendAsVer4>
 		<interpolateVertexOffsetAsVer4>1</interpolateVertexOffsetAsVer4>
-		<restrictXYAsInteger>0</restrictXYAsInteger>
+		<restrictXYAsInteger>1</restrictXYAsInteger>
 		<inheritRatesNoKeySave>1</inheritRatesNoKeySave>
 		<availableAttributes>
 			<item>CELL</item>
@@ -71,9 +71,7 @@
 			<item>IPRM</item>
 			<item>EFCT</item>
 		</availableAttributes>
-		<availableFeatures>
-			<value>effect</value>
-		</availableFeatures>
+		<availableFeatures />
 		<defaultSetAttributes>
 			<item>POSX</item>
 			<item>POSY</item>
@@ -119,8 +117,8 @@
 		<value>DoorSS_0605.ssae</value>
 	</animepackNames>
 	<lastAnimeFile>DoorSS_0605.ssae</lastAnimeFile>
-	<lastAnimeName>anime_1</lastAnimeName>
+	<lastAnimeName>Unlock</lastAnimeName>
 	<lastCellMapFile>DoorSS_0605.ssce</lastCellMapFile>
-	<lastCell>Light_2</lastCell>
-	<lastPart>Light_2</lastPart>
+	<lastCell>window</lastCell>
+	<lastPart>window</lastPart>
 </SpriteStudioProject>

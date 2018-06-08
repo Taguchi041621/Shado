@@ -333,9 +333,9 @@ namespace basecross {
 		p.m_Center.z = 0;
 		p.m_Size = PtrPlayer->GetComponent<Transform>()->GetScale()/2.3;
 
-		//ƒvƒŒƒCƒ„[‚ªŒ®‚ÉG‚ê‚½‚©‚ð’²‚×‚é”»’è
+		//ƒvƒŒƒCƒ„[‚ª’e‚ÉG‚ê‚½‚©‚ð’²‚×‚é”»’è
 		if (HitTest::SPHERE_OBB(t, p,Vec3(0))) {
-			PtrPlayer->SetDeath(1);
+			PtrPlayer->Damage();
 		}
 	}
 }

@@ -97,9 +97,11 @@ namespace basecross{
 		//SpriteStdioの部分だけ変更する
 		if (MoveX > 0.0f) {
 			SetToAnimeMatrix(m_ToAnimeMatrixRight);
+			m_RightOrLeft = true;
 		}
 		else if (MoveX < 0.0f) {
 			SetToAnimeMatrix(m_ToAnimeMatrixLeft);
+			m_RightOrLeft = false;
 		}
 		//MoveXを返す
 		return MoveX;
@@ -235,6 +237,7 @@ namespace basecross{
 		m_GameOverFlag = false;
 		m_ParentFlag = false;
 		m_StandFlag = false;
+		m_DamageFlag = false;
 		//初期位置などの設定
 		auto Ptr = GetComponent<Transform>();
 		Ptr->SetScale(0.80f, 1.60f, 0.040f);	//X,Z25、Y50の長方形
@@ -294,19 +297,24 @@ namespace basecross{
 
 	void Player::OnUpdate2() {
 		auto ScenePtr = App::GetApp()->GetScene<Scene>();
-		if (m_ParentFlag && !m_GameOverFlag && !m_GameClearFlag && ScenePtr->GetStartFlag() && !m_StandFlag) {
+		auto PtrRedit = GetComponent<Rigidbody>();
+		if (m_ParentFlag && !m_GameOverFlag && !m_GameClearFlag && ScenePtr->GetStartFlag() && !m_StandFlag && !m_DamageFlag) {
 			//プレイヤーの移動
 			MoveRotationMotion();
 			//文字列の表示
 		}
 		else if (!m_ParentFlag) {
-			auto PtrRedit = GetComponent<Rigidbody>();
+			
 			PtrRedit->SetVelocityZero();
 			GetComponent<Rigidbody>()->SetVelocity(Vec3(0.0f, m_FallSpeed, 0.0f));
 			m_FallSpeed += -0.2f;
 		}
+	    else if (m_DamageFlag)
+		{
+			//PtrRedit->SetVelocityZero();
+		}
 		PlayerHP();
-		DrawStrings();
+		//DrawStrings();
 	}
 	//
 	void Player::PlayerHP() {
@@ -390,6 +398,16 @@ namespace basecross{
 	void Player::AnimeChangeMotion(const wstring& key, bool looped) {
 		ChangeAnimation(key);
 		SetLooped(looped);
+	}
+
+	void Player::Damage() {
+		if (!m_DamageFlag) {
+			m_DamageFlag = true;
+			auto PtrRedit = GetComponent<Rigidbody>();
+			PtrRedit->SetVelocityZero();
+			GetComponent<Rigidbody>()->SetVelocity(Vec3(-1.0f, 0, 0.0f));
+			GetStateMachine()->ChangeState(DamageState::Instance());
+		}
 	}
 
 	//--------------------------------------------------------------------------------------
@@ -660,6 +678,41 @@ namespace basecross{
 	}
 	//ステートにから抜けるときに呼ばれる関数
 	void GoalState::Exit(const shared_ptr<Player>& Obj) {
+	}
+
+	//--------------------------------------------------------------------------------------
+	//	class DamageState : public ObjState<Player>;
+	//	用途: Damage状態
+	//--------------------------------------------------------------------------------------
+	//ステートのインスタンス取得
+	shared_ptr<DamageState> DamageState::Instance() {
+		static shared_ptr<DamageState> instance;
+		if (!instance) {
+			instance = shared_ptr<DamageState>(new DamageState);
+		}
+		return instance;
+	}
+	//ステートに入ったときに呼ばれる関数
+	void DamageState::Enter(const shared_ptr<Player>& Obj) {
+		Obj->SetFps(60.0f);
+		if (Obj->GetRightOrLeft()) {
+			Obj->AnimeChangeMotion(L"Knockdown", false);
+		}
+		else {
+			Obj->AnimeChangeMotion(L"Knockdown", false);
+		}
+	}
+	//ステート実行中に毎ターン呼ばれる関数
+	void DamageState::Execute(const shared_ptr<Player>& Obj) {
+		//アニメーション更新
+		Obj->LoopedAnimeUpdateMotion();
+		if (Obj->IsAnimeEnd()) {
+			Obj->GetStateMachine()->ChangeState(WaitState::Instance());
+		}
+	}
+	//ステートにから抜けるときに呼ばれる関数
+	void DamageState::Exit(const shared_ptr<Player>& Obj) {
+		Obj->SetDamageFlag(false);
 	}
 
 }
