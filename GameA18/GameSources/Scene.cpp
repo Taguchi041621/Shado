@@ -131,6 +131,15 @@ namespace basecross{
 		strTexture = DataDir + L"Light\\LIGHT_Illust.png";
 		App::GetApp()->RegisterTexture(L"LIGHT_Illust_TX", strTexture);
 
+
+		//Tutorial　
+		strTexture = DataDir + L"Tutorial_cameraMove.png";
+		App::GetApp()->RegisterTexture(L"TUTORIAL_CAMERA_MOVE_TX", strTexture);
+		strTexture = DataDir + L"Tutorial_CharaMove.png";
+		App::GetApp()->RegisterTexture(L"TUTORIAL_CHARA_MOVE_TX", strTexture);
+		strTexture = DataDir + L"Tutorial_LjghtMove.png";
+		App::GetApp()->RegisterTexture(L"TUTORIAL_LIGHT_MOVE_TX", strTexture);
+
 		/*BGM・SE関連*/
 		//ゲームオーバーBGM
 		wstring GameOver = DataDir + L"BGMSE\\GameOver.wav";

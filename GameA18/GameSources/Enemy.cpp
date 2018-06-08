@@ -175,13 +175,6 @@ namespace basecross {
 			m_CoolTime += ElapsedTime;
 			UpdateAnimeTime(0);
 		}
-
-		if (m_CoolTime >= 5)
-		{
-			m_BulletFlag = true;
-			ChangeAnimation(L"Fire");
-			m_CoolTime = 0;
-		}
 		if (m_BulletFlag) {
 			UpdateAnimeTime(ElapsedTime);
 

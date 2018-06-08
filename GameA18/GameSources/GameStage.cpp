@@ -25,7 +25,7 @@ namespace basecross {
 		//ファイル名の設定
 		//wstring Map = Path + L"Stage_" + Util::IntToWStr(ScenePtr->GetStageNumber()) + L".csv";
 		//wstring Map = DataDir + L"Stage_" + Util::IntToWStr(ScenePtr->GetStageNumber()) + L".csv";
-		wstring Map = DataDir + L"CSV\\" + L"Stage_" + Util::IntToWStr(ScenePtr->GetStageNumber()-1) + L".csv";
+		wstring Map = DataDir + L"CSV\\" + L"Stage_" + Util::IntToWStr(ScenePtr->GetStageNumber()) + L".csv";
 
 		//ファイルの指定
 		m_Csv.SetFileName(Map);
@@ -121,7 +121,7 @@ namespace basecross {
 				//カメラのターゲットに設定
 				dynamic_pointer_cast<MyCamera>(GetView()->GetTargetCamera())->SetTargetObject(PlayerPtr);
 
-				Pos += Vec3(2, 2, 0.5);
+				/*Pos += Vec3(2, 2, 0.5);
 				if (ScenePtr->GetStageNumber()==1) {
 					AddGameObject<Tutorial>(
 						DataDir + L"Tutorial\\",
@@ -129,8 +129,46 @@ namespace basecross {
 						Vec3(0),
 						Vec3(Pos)
 						);
+				}*/
+			}
+
+			if (MapVec[0] == L"Tutorial") {
+				stringflag = true;
+				wstring DataDir;
+				App::GetApp()->GetDataDirectory(DataDir);
+				if (ScenePtr->GetStageNumber() == 1) {
+					AddGameObject<Tutorial>(
+						DataDir + L"Tutorial\\",
+						Vec3(1),
+						Vec3(0),
+						Vec3(Pos + Vec3(3, 3,1.5)),
+						L"R_stick"
+						);
+
+					AddGameObject<Sprite3D>(
+						Vec3(10, 5, 0),
+						Vec3(0),
+						Vec3(Pos + Vec3(3, 5.3, 1.5)),
+						L"TUTORIAL_LIGHT_MOVE_TX"
+						);
+
+					AddGameObject<Tutorial>(
+						DataDir + L"Tutorial\\",
+						Vec3(1),
+						Vec3(0),
+						Vec3(Pos + Vec3(-3, 3,1.5)),
+						L"L_stick"
+						);
+					AddGameObject<Sprite3D>(
+						Vec3(10, 5, 0),
+						Vec3(0),
+						Vec3(Pos + Vec3(-3, 5.3, 1.5)),
+						L"TUTORIAL_CHARA_MOVE_TX"
+						);
 				}
 			}
+
+
 
 			if (MapVec[0] == L"Goal") {
 				stringflag = true;
@@ -208,12 +246,12 @@ namespace basecross {
 	void GameStage::CreateTutorial() {
 		wstring DataDir;
 		App::GetApp()->GetDataDirectory(DataDir);
-		AddGameObject<Tutorial>(
+		/*AddGameObject<Tutorial>(
 			DataDir + L"Tutorial\\",
 			Vec3(1),
 			Vec3(0),
 			Vec3(0)
-			);
+			);*/
 	}
 
 

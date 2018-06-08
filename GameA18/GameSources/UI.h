@@ -303,7 +303,7 @@ namespace basecross
 		//コンストラクタ
 		//--------------------------------------------------------------------------------------
 		Tutorial(const shared_ptr<Stage>& StagePtr, const wstring BaseDir,
-			const Vec3& Scale, const Vec3& Rotation, const Vec3& Position);
+			const Vec3& Scale, const Vec3& Rotation, const Vec3& Position, const wstring AnimeName);
 		//--------------------------------------------------------------------------------------
 		/*!
 		@brief デストラクタ
@@ -324,6 +324,37 @@ namespace basecross
 		*/
 		//--------------------------------------------------------------------------------------
 		virtual void OnUpdate()override;
+	};
+
+	//--------------------------------------------------------------------------------------
+	//	３Ｄ空間のスプライト
+	//--------------------------------------------------------------------------------------
+
+	class Sprite3D : public GameObject {
+		Vec3 m_Scale;
+		Vec3 m_Rotation;
+		Vec3 m_Position;
+		//スケールのZの固定値
+		float m_ScaleZ;
+		//このオブジェクトのみで使用するスクエアメッシュ
+		shared_ptr<MeshResource> m_SquareMeshResource;
+
+		wstring m_TextureName;
+	public:
+		//構築と破棄
+		Sprite3D(const shared_ptr<Stage>& StagePtr,
+			const Vec3& Scale,
+			const Vec3& Rotation,
+			const Vec3& Position,
+			const wstring TextureName
+		);
+
+		virtual ~Sprite3D();
+		//初期化
+		virtual void OnCreate() override;
+		//操作
+		virtual void OnUpdate();
+		virtual void OnUpdate2();
 	};
 
 }

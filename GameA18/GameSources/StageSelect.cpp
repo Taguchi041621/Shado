@@ -45,9 +45,9 @@ namespace basecross
 		////描画コンポーネントテクスチャの設定
 		//DrawComp->SetTextureResource(L"SELECT_TX");
 		float a = 0;
-		for (int i = 1; i <= 4; i++) {
+		for (int i = 1; i <= 10; i++) {
 			auto BG = AddGameObject<Sprite>(L"STAGESELECT_BG_TX", false,
-				Vec2(1280.0f, 800.0f), Vec3(0 +a, 0.0f, 0.2f));
+				Vec2(1280.0f, 800.0f), Vec3((1280.0f * -5) +a, 0.0f, 0.2f));
 			a += 1280;
 			BG->AddComponent<Action>();
 			SetSharedGameObject(L"BG" + Util::IntToWStr(i), BG);
@@ -117,7 +117,7 @@ namespace basecross
 	void StageSelect::OnCreate()
 	{
 		auto ScenePtr = App::GetApp()->GetScene<Scene>();
-		m_MaxStageNumber = 10;
+		m_MaxStageNumber = 11;
 		m_SelectFlag = true;
 		m_StageNumber = ScenePtr->GetStageNumber();
 		m_CoolTime = 0;
@@ -150,7 +150,7 @@ namespace basecross
 					if (onectrl == false)
 					{
 						if (!(m_StageNumber == 1)) {
-							for (int i = 1; i < m_MaxStageNumber; i++) {
+							for (int i = 1; i <= m_MaxStageNumber; i++) {
 								auto Door = GetSharedGameObject<ScaleChangeSprite>(L"Door" + Util::IntToWStr(i));
 								auto Number = GetSharedGameObject<ScoreSprite>(L"ScoreSprite" + Util::IntToWStr(i));
 								Door->GetComponent<Action>()->AllActionClear();
@@ -185,7 +185,7 @@ namespace basecross
 							m_AudioObjectPtr->AddAudioResource(L"se2");
 							m_AudioObjectPtr->Start(L"se2", XAUDIO2_NO_LOOP_REGION, 0.1f);
 							SetNowMusic(L"se2");
-							for (int i = 1; i <= 4; i++) {
+							for (int i = 1; i <= 10; i++) {
 							auto BG = GetSharedGameObject<Sprite>(L"BG" + Util::IntToWStr(i));
 							BG->GetComponent<Action>()->AllActionClear();
 							BG->GetComponent<Action>()->AddMoveBy(0.3f, Vec3(380.0f, 0, 0));
@@ -201,8 +201,8 @@ namespace basecross
 			else if (CntlVec[0].fThumbLX > 0.5) {
 				if (onectrl == false)
 				{
-					if (!(m_StageNumber == m_MaxStageNumber - 1)) {
-						for (int i = 1; i < m_MaxStageNumber; i++) {
+					if (!(m_StageNumber == m_MaxStageNumber)) {
+						for (int i = 1; i <= m_MaxStageNumber; i++) {
 							auto Door = GetSharedGameObject<ScaleChangeSprite>(L"Door" + Util::IntToWStr(i));
 							auto Number = GetSharedGameObject<ScoreSprite>(L"ScoreSprite" + Util::IntToWStr(i));
 							Door->GetComponent<Action>()->AllActionClear();
@@ -237,7 +237,7 @@ namespace basecross
 						m_AudioObjectPtr->AddAudioResource(L"se2");
 						m_AudioObjectPtr->Start(L"se2", XAUDIO2_NO_LOOP_REGION, 0.1f);
 						SetNowMusic(L"se2");
-						for (int i = 1; i <= 4; i++) {
+						for (int i = 1; i <= 10; i++) {
 						auto BG = GetSharedGameObject<Sprite>(L"BG" + Util::IntToWStr(i));
 						BG->GetComponent<Action>()->AllActionClear();
 						BG->GetComponent<Action>()->AddMoveBy(0.3f, Vec3(-380.0f, 0, 0));

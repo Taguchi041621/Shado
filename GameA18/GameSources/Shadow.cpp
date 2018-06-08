@@ -488,9 +488,9 @@ namespace basecross {
 		//プレイヤーが鍵に触れたかを調べる判定
 		if (HitTest::OBB_OBB(t, p) && !m_GoGoal) {
 			//鍵の所持数の表示を変える
-			GetStage()->AddGameObject<HaveKeys>((wstring)L"UI_Key_TX",
+			/*GetStage()->AddGameObject<HaveKeys>((wstring)L"UI_Key_TX",
 				GetStage()->GetSharedGameObject<Player>(L"Player")->GetKey()
-			);
+			);*/
 			//プレイヤーの所持鍵数を増やす
 			GetStage()->GetSharedGameObject<Player>(L"Player")->AddKey();
 			//ゴールに向かうフラグを立てる

@@ -428,8 +428,8 @@ namespace basecross
 	///Tutorial
 	//------------------------------------------------------------------------------------------
 	Tutorial::Tutorial(const shared_ptr<Stage>& StagePtr, const wstring BaseDir,
-		const Vec3& m_Scale, const Vec3& Rotation, const Vec3& Position)
-		: SS5ssae(StagePtr, BaseDir, L"XBOXcontroler.ssae", L"R_stick"),
+		const Vec3& m_Scale, const Vec3& Rotation, const Vec3& Position, const wstring AnimeName)
+		: SS5ssae(StagePtr, BaseDir, L"XBOXcontroler.ssae", AnimeName),
 		m_Scale(m_Scale), m_Rotation(Rotation), m_Position(Position), m_ScaleZ(0.05f)
 	{
 		m_ToAnimeMatrix.affineTransformation(
@@ -484,6 +484,86 @@ namespace basecross
 		float ElapsedTime = App::GetApp()->GetElapsedTime();
 		//アニメーションを更新する
 		UpdateAnimeTime(ElapsedTime);
+	}
+
+	//--------------------------------------------------------------------------------------
+	// ３Ｄ空間のスプライト
+	//--------------------------------------------------------------------------------------
+	Sprite3D::Sprite3D(const shared_ptr<Stage>& StagePtr,
+		const Vec3& Scale, const Vec3& Rotation, const Vec3& Position,const wstring TextureName)
+		: GameObject(StagePtr),
+		m_Scale(Scale), m_Rotation(Rotation), m_Position(Position), m_ScaleZ(0.05f), m_TextureName(TextureName)
+	{
+	}
+
+	Sprite3D::~Sprite3D() {}
+	//初期化
+	void Sprite3D::OnCreate() {
+		//スケールのZを固定の大きさに
+		m_Scale.z = m_ScaleZ;
+		//AddComponent<Rigidbody>();
+		auto PtrTransform = AddComponent<Transform>();
+		//影のスケール,角度,ポジションの設定
+		PtrTransform->SetScale(m_Scale);
+		PtrTransform->SetRotation(m_Rotation);
+		PtrTransform->SetPosition(m_Position);
+
+		//auto PtrDraw = AddComponent<BcPNTStaticDraw>();
+		//PtrDraw->SetMeshResource(m_Obj.GetComponent<BcPNTStaticDraw>()->GetMeshResource());
+		////真っ黒
+		//PtrDraw->SetColorAndAlpha(Col4(1.0f, 1.0f, 1.0f, 0.0f));
+		////Mat4x4 au;
+		///*au.affineTransformation(
+		//	Vec3(1.0f, 1.0f, 0.1f),
+		//	Vec3(0, 0, 0),
+		//	Vec3(0, 0, 0),
+		//	Vec3(0.0f, 0.0f, 0.0f)
+		//	);
+		//PtrDraw->SetMeshToTransformMatrix(au);*/
+		//PtrDraw->SetTextureResource(L"Shadow_Blur_TX");
+		//PtrDraw->SetAlpha(1.0f);
+		//PtrDraw->SetPerPixelLighting(false);
+		//頂点配列
+		vector<VertexPositionNormalTexture> vertices;
+		//インデックスを作成するための配列
+		vector<uint16_t> indices;
+		//Squareの作成(ヘルパー関数を利用)
+		MeshUtill::CreateSquare(1.0f, vertices, indices);
+
+		//左上頂点
+		vertices[0].textureCoordinate = Vec2(0, 0);
+		//右上頂点
+		vertices[1].textureCoordinate = Vec2(1, 0);
+		//左下頂点
+		vertices[2].textureCoordinate = Vec2(0, 1.0f);
+		//右下頂点
+		vertices[3].textureCoordinate = Vec2(1, 1.0f);
+		//頂点の型を変えた新しい頂点を作成
+		vector<VertexPositionColorTexture> new_vertices;
+		for (auto& v : vertices) {
+			VertexPositionColorTexture nv;
+			nv.position = v.position;
+			nv.color = Col4(1.0f, 1.0f, 1.0f, 1.0f);
+			nv.textureCoordinate = v.textureCoordinate;
+			new_vertices.push_back(nv);
+		}
+		//新しい頂点を使ってメッシュリソースの作成
+		m_SquareMeshResource = MeshResource::CreateMeshResource<VertexPositionColorTexture>(new_vertices, indices, true);
+
+		auto DrawComp = AddComponent<PCTStaticDraw>();
+		DrawComp->SetMeshResource(m_SquareMeshResource);
+		//描画するテクスチャを設定
+		DrawComp->SetTextureResource(m_TextureName);
+		//透明処理
+		SetAlphaActive(true);
+	}
+
+	//変化
+	void Sprite3D::OnUpdate() {
+
+	}
+	void Sprite3D::OnUpdate2() {
+
 	}
 	//end basecross
 }
