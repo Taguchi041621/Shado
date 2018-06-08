@@ -328,7 +328,7 @@ namespace basecross {
 		auto PtrLight = AddGameObject<StageLight>(
 			Vec3(0.0f, 0.0, -35.0f),
 			Vec3(1.5f, 0.0f, 0.0f),
-			Vec3(3.0f, 0.6f, 3.0f));
+			Vec3(5.0f, 1.0f, 5.0f));
 		SetSharedGameObject(L"StageLight", PtrLight);
 	}
 

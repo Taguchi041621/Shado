@@ -322,23 +322,11 @@ namespace basecross {
 	}
 
 	void ShadowGoal::OnCreate() {
-		////スケールのZを固定の大きさに
-		//m_Scale.z = m_ScaleZ;
-
-		//auto PtrTransform = GetComponent<Transform>();
-		////影のスケール,角度,ポジションの設定
-		//PtrTransform->SetScale(m_Scale);
-		//PtrTransform->SetRotation(m_Rotation);
-		//PtrTransform->SetPosition(ShadowLocation());
-
 		//auto PtrDraw = AddComponent<BcPNTStaticDraw>();
 		//PtrDraw->SetFogEnabled(true);
 		////実体から形を持ってくる
 		//PtrDraw->SetMeshResource(m_Obj.GetComponent<BcPNTStaticDraw>()->GetMeshResource());
 		//PtrDraw->SetOwnShadowActive(true);
-
-		////真っ赤
-		//PtrDraw->SetColorAndAlpha(Col4(1.0f, 0.4f, 0.0f, 1.0f));
 
 		//flag = false;
 
@@ -362,6 +350,7 @@ namespace basecross {
 		SetAlphaActive(true);
 		//auto PtrCol = AddComponent<CollisionObb>();
 		//PtrCol->SetDrawActive(true);
+		GetStage()->SetSharedGameObject(L"ShadowGoal", GetThis<ShadowGoal>());
 	}
 
 	void ShadowGoal::OnUpdate() {
@@ -459,7 +448,27 @@ namespace basecross {
 
 	void ShadowKey::OnUpdate() {
 		OnTriggerEnter();
-		GetComponent<Transform>()->SetPosition(ShadowLocation());
+		if (m_GoGoal) {
+			//計算のための時間加算
+			m_Lerp += App::GetApp()->GetElapsedTime();
+			//ゴール位置は動くので更新する
+			p3 = GetStage()->GetSharedGameObject<ShadowGoal>(L"ShadowGoal")->
+				GetComponent<Transform>()->GetWorldPosition();
+			//位置計算
+			m_Position.x = (1 - m_Lerp)*(1 - m_Lerp)*(1 - m_Lerp)*p0.x + 3 * (1 - m_Lerp)*(1 - m_Lerp)*m_Lerp*p1.x 
+				+ 3 * (1 - m_Lerp)*m_Lerp*m_Lerp*p2.x + m_Lerp*m_Lerp*m_Lerp*p3.x;
+			m_Position.y = (1 - m_Lerp)*(1 - m_Lerp)*(1 - m_Lerp)*p0.y + 3 * (1 - m_Lerp)*(1 - m_Lerp)*m_Lerp*p1.y
+				+ 3 * (1 - m_Lerp)*m_Lerp*m_Lerp*p2.y + m_Lerp*m_Lerp*m_Lerp*p3.y;
+			GetComponent<Transform>()->SetPosition(m_Position);
+			//動きが終わったら
+			if (m_Lerp >= 1) {
+				//鍵を消す
+				GetStage()->RemoveGameObject<ShadowKey>(GetThis<ShadowKey>());
+			}
+		}
+		else {
+			GetComponent<Transform>()->SetPosition(ShadowLocation());
+		}
 
 		float ElapsedTime = App::GetApp()->GetElapsedTime();
 		//アニメーションを更新する
@@ -477,15 +486,21 @@ namespace basecross {
 		p.m_Center.z = 0;
 		p.m_Size = GetStage()->GetSharedGameObject<Player>(L"Player")->GetComponent<Transform>()->GetScale() * 0.5f;
 		//プレイヤーが鍵に触れたかを調べる判定
-		if (HitTest::OBB_OBB(t, p)) {
+		if (HitTest::OBB_OBB(t, p) && !m_GoGoal) {
 			//鍵の所持数の表示を変える
 			GetStage()->AddGameObject<HaveKeys>((wstring)L"UI_Key_TX",
 				GetStage()->GetSharedGameObject<Player>(L"Player")->GetKey()
 			);
 			//プレイヤーの所持鍵数を増やす
 			GetStage()->GetSharedGameObject<Player>(L"Player")->AddKey();
-			//鍵を消す
-			GetStage()->RemoveGameObject<ShadowKey>(GetThis<ShadowKey>());
+			//ゴールに向かうフラグを立てる
+			m_GoGoal = true;
+			//初期位置の設定
+			p0 = GetComponent<Transform>()->GetWorldPosition();
+			//経由位置の設定
+			p1 = GetComponent<Transform>()->GetWorldPosition() + Vec3(-1.0f,4.0f,0.0f);
+			p2 = GetStage()->GetSharedGameObject<ShadowGoal>(L"ShadowGoal")->
+				GetComponent<Transform>()->GetWorldPosition() + Vec3(-3.0f,3.0f, 0.0f);
 		}
 	}
 	//物体とライトの位置から、影の位置を導き出す
