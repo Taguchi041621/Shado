@@ -416,7 +416,7 @@ namespace basecross{
 			auto PtrRedit = GetComponent<Rigidbody>();
 			PtrRedit->SetVelocityZero();
 			GetComponent<Rigidbody>()->SetVelocity(Vec3(-1.0f, 0, 0.0f));
-			GetStateMachine()->ChangeState(DamageState::Instance());
+			GetStateMachine()->ChangeState(DamageState1::Instance());
 		}
 	}
 
@@ -691,29 +691,67 @@ namespace basecross{
 	}
 
 	//--------------------------------------------------------------------------------------
-	//	class DamageState : public ObjState<Player>;
+	//	class DamageState1 : public ObjState<Player>;
 	//	用途: Damage状態
 	//--------------------------------------------------------------------------------------
 	//ステートのインスタンス取得
-	shared_ptr<DamageState> DamageState::Instance() {
-		static shared_ptr<DamageState> instance;
+	shared_ptr<DamageState1> DamageState1::Instance() {
+		static shared_ptr<DamageState1> instance;
 		if (!instance) {
-			instance = shared_ptr<DamageState>(new DamageState);
+			instance = shared_ptr<DamageState1>(new DamageState1);
 		}
 		return instance;
 	}
 	//ステートに入ったときに呼ばれる関数
-	void DamageState::Enter(const shared_ptr<Player>& Obj) {
+	void DamageState1::Enter(const shared_ptr<Player>& Obj) {
 		Obj->SetFps(60.0f);
 		if (Obj->GetRightOrLeft()) {
-			Obj->AnimeChangeMotion(L"Damaged_4", false);
+			Obj->AnimeChangeMotion(L"Knockdown", false);
 		}
 		else {
-			Obj->AnimeChangeMotion(L"Damaged_5", false);
+			Obj->AnimeChangeMotion(L"Knockdown_front", false);
 		}
 	}
 	//ステート実行中に毎ターン呼ばれる関数
-	void DamageState::Execute(const shared_ptr<Player>& Obj) {
+	void DamageState1::Execute(const shared_ptr<Player>& Obj) {
+		//アニメーション更新
+		Obj->LoopedAnimeUpdateMotion();
+		if (Obj->IsAnimeEnd()) {
+			Obj->GetStateMachine()->ChangeState(DamageState2::Instance());
+		}
+	}
+	//ステートにから抜けるときに呼ばれる関数
+	void DamageState1::Exit(const shared_ptr<Player>& Obj) {
+		//Obj->SetDamageFlag(false);
+	}
+
+	//--------------------------------------------------------------------------------------
+	//	class DamageState2 : public ObjState<Player>;
+	//	用途: Damage状態
+	//--------------------------------------------------------------------------------------
+	//ステートのインスタンス取得
+	shared_ptr<DamageState2> DamageState2::Instance() {
+		static shared_ptr<DamageState2> instance;
+		if (!instance) {
+			instance = shared_ptr<DamageState2>(new DamageState2);
+		}
+		return instance;
+	}
+	//ステートに入ったときに呼ばれる関数
+	void DamageState2::Enter(const shared_ptr<Player>& Obj) {
+		Obj->SetFps(60.0f);
+		if (Obj->GetRightOrLeft()) {
+			Obj->AnimeChangeMotion(L"StandUp", false);
+		}
+		else {
+			Obj->AnimeChangeMotion(L"Stand", false);
+		}
+		auto PtrRedit = Obj->GetComponent<Rigidbody>();
+		PtrRedit->SetVelocityZero();
+		Obj->SetStandFlag(true);
+	}
+	//ステート実行中に毎ターン呼ばれる関数
+	void DamageState2::Execute(const shared_ptr<Player>& Obj) {
 		//アニメーション更新
 		Obj->LoopedAnimeUpdateMotion();
 		if (Obj->IsAnimeEnd()) {
@@ -721,8 +759,9 @@ namespace basecross{
 		}
 	}
 	//ステートにから抜けるときに呼ばれる関数
-	void DamageState::Exit(const shared_ptr<Player>& Obj) {
+	void DamageState2::Exit(const shared_ptr<Player>& Obj) {
 		Obj->SetDamageFlag(false);
+		Obj->SetStandFlag(false);
 	}
 
 }

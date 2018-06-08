@@ -331,14 +331,31 @@ namespace basecross{
 	};
 
 	//--------------------------------------------------------------------------------------
-	//	class DamageState : public ObjState<Player>;
+	//	class DamageState1 : public ObjState<Player>;
 	//	用途: Damage状態
 	//--------------------------------------------------------------------------------------
-	class DamageState : public ObjState<Player> {
-		DamageState() {}
+	class DamageState1 : public ObjState<Player> {
+		DamageState1() {}
 	public:
 		//ステートのインスタンス取得
-		static shared_ptr<DamageState> Instance();
+		static shared_ptr<DamageState1> Instance();
+		//ステートに入ったときに呼ばれる関数
+		virtual void Enter(const shared_ptr<Player>& Obj)override;
+		//ステート実行中に毎ターン呼ばれる関数
+		virtual void Execute(const shared_ptr<Player>& Obj)override;
+		//ステートにから抜けるときに呼ばれる関数
+		virtual void Exit(const shared_ptr<Player>& Obj)override;
+	};
+
+	//--------------------------------------------------------------------------------------
+	//	class DamageState2 : public ObjState<Player>;
+	//	用途: Damage状態
+	//--------------------------------------------------------------------------------------
+	class DamageState2 : public ObjState<Player> {
+		DamageState2() {}
+	public:
+		//ステートのインスタンス取得
+		static shared_ptr<DamageState2> Instance();
 		//ステートに入ったときに呼ばれる関数
 		virtual void Enter(const shared_ptr<Player>& Obj)override;
 		//ステート実行中に毎ターン呼ばれる関数

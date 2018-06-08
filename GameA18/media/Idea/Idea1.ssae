@@ -76,7 +76,7 @@
 				<show>1</show>
 				<locked>0</locked>
 				<expandAttribute>0</expandAttribute>
-				<expandChildren>0</expandChildren>
+				<expandChildren>1</expandChildren>
 			</value>
 			<value>
 				<name>Hair1</name>
@@ -42816,6 +42816,12 @@
 									<name>BODY1</name>
 								</value>
 							</key>
+							<key time="56">
+								<value>
+									<mapId>0</mapId>
+									<name>BODY1</name>
+								</value>
+							</key>
 						</attribute>
 						<attribute tag="POSX">
 							<key time="0" ipType="linear">
@@ -42931,6 +42937,12 @@
 									<name>Head1</name>
 								</value>
 							</key>
+							<key time="56">
+								<value>
+									<mapId>0</mapId>
+									<name>Head1</name>
+								</value>
+							</key>
 						</attribute>
 						<attribute tag="POSX">
 							<key time="0" ipType="linear">
@@ -43030,6 +43042,12 @@
 					<attributes>
 						<attribute tag="CELL">
 							<key time="0">
+								<value>
+									<mapId>0</mapId>
+									<name>Hair1</name>
+								</value>
+							</key>
+							<key time="56">
 								<value>
 									<mapId>0</mapId>
 									<name>Hair1</name>
@@ -43139,6 +43157,12 @@
 									<name>Hair2</name>
 								</value>
 							</key>
+							<key time="56">
+								<value>
+									<mapId>0</mapId>
+									<name>Hair2</name>
+								</value>
+							</key>
 						</attribute>
 						<attribute tag="POSX">
 							<key time="0" ipType="linear">
@@ -43238,6 +43262,12 @@
 					<attributes>
 						<attribute tag="CELL">
 							<key time="0">
+								<value>
+									<mapId>0</mapId>
+									<name>Hair3</name>
+								</value>
+							</key>
+							<key time="56">
 								<value>
 									<mapId>0</mapId>
 									<name>Hair3</name>
@@ -43347,6 +43377,12 @@
 									<name>Hair4</name>
 								</value>
 							</key>
+							<key time="56">
+								<value>
+									<mapId>0</mapId>
+									<name>Hair4</name>
+								</value>
+							</key>
 						</attribute>
 						<attribute tag="POSX">
 							<key time="0" ipType="linear">
@@ -43446,6 +43482,12 @@
 					<attributes>
 						<attribute tag="CELL">
 							<key time="0">
+								<value>
+									<mapId>0</mapId>
+									<name>Yokogami1</name>
+								</value>
+							</key>
+							<key time="56">
 								<value>
 									<mapId>0</mapId>
 									<name>Yokogami1</name>
@@ -43555,6 +43597,12 @@
 									<name>Yokogami1</name>
 								</value>
 							</key>
+							<key time="56">
+								<value>
+									<mapId>0</mapId>
+									<name>Yokogami1</name>
+								</value>
+							</key>
 						</attribute>
 						<attribute tag="POSX">
 							<key time="0" ipType="linear">
@@ -43654,6 +43702,12 @@
 					<attributes>
 						<attribute tag="CELL">
 							<key time="0">
+								<value>
+									<mapId>0</mapId>
+									<name>Yokogami2</name>
+								</value>
+							</key>
+							<key time="56">
 								<value>
 									<mapId>0</mapId>
 									<name>Yokogami2</name>
@@ -43763,6 +43817,12 @@
 									<name>MAegami</name>
 								</value>
 							</key>
+							<key time="56">
+								<value>
+									<mapId>0</mapId>
+									<name>MAegami</name>
+								</value>
+							</key>
 						</attribute>
 						<attribute tag="POSX">
 							<key time="0" ipType="linear">
@@ -43862,6 +43922,12 @@
 					<attributes>
 						<attribute tag="CELL">
 							<key time="0">
+								<value>
+									<mapId>0</mapId>
+									<name>BODY2</name>
+								</value>
+							</key>
+							<key time="56">
 								<value>
 									<mapId>0</mapId>
 									<name>BODY2</name>
@@ -43971,6 +44037,12 @@
 									<name>BODY2</name>
 								</value>
 							</key>
+							<key time="56">
+								<value>
+									<mapId>0</mapId>
+									<name>BODY2</name>
+								</value>
+							</key>
 						</attribute>
 						<attribute tag="POSX">
 							<key time="0" ipType="linear">
@@ -44070,6 +44142,12 @@
 					<attributes>
 						<attribute tag="CELL">
 							<key time="0">
+								<value>
+									<mapId>0</mapId>
+									<name>RArm1</name>
+								</value>
+							</key>
+							<key time="56">
 								<value>
 									<mapId>0</mapId>
 									<name>RArm1</name>
@@ -44189,6 +44267,12 @@
 					<attributes>
 						<attribute tag="CELL">
 							<key time="0">
+								<value>
+									<mapId>0</mapId>
+									<name>RArm2</name>
+								</value>
+							</key>
+							<key time="56">
 								<value>
 									<mapId>0</mapId>
 									<name>RArm2</name>
@@ -44325,6 +44409,12 @@
 									<name>RHand</name>
 								</value>
 							</key>
+							<key time="56">
+								<value>
+									<mapId>0</mapId>
+									<name>RHand</name>
+								</value>
+							</key>
 						</attribute>
 						<attribute tag="POSX">
 							<key time="0" ipType="linear">
@@ -44441,6 +44531,12 @@
 									<name>Lreg1</name>
 								</value>
 							</key>
+							<key time="56">
+								<value>
+									<mapId>0</mapId>
+									<name>Lreg1</name>
+								</value>
+							</key>
 						</attribute>
 						<attribute tag="POSX">
 							<key time="0" ipType="linear">
@@ -44540,6 +44636,12 @@
 					<attributes>
 						<attribute tag="CELL">
 							<key time="0">
+								<value>
+									<mapId>0</mapId>
+									<name>Lreg2</name>
+								</value>
+							</key>
+							<key time="56">
 								<value>
 									<mapId>0</mapId>
 									<name>Lreg2</name>
@@ -44649,6 +44751,12 @@
 									<name>Lfoot</name>
 								</value>
 							</key>
+							<key time="56">
+								<value>
+									<mapId>0</mapId>
+									<name>Lfoot</name>
+								</value>
+							</key>
 						</attribute>
 						<attribute tag="POSX">
 							<key time="0" ipType="linear">
@@ -44745,6 +44853,12 @@
 					<attributes>
 						<attribute tag="CELL">
 							<key time="0">
+								<value>
+									<mapId>0</mapId>
+									<name>Rreg1</name>
+								</value>
+							</key>
+							<key time="56">
 								<value>
 									<mapId>0</mapId>
 									<name>Rreg1</name>
@@ -44863,6 +44977,12 @@
 									<name>Rreg2</name>
 								</value>
 							</key>
+							<key time="56">
+								<value>
+									<mapId>0</mapId>
+									<name>Rreg2</name>
+								</value>
+							</key>
 						</attribute>
 						<attribute tag="POSX">
 							<key time="0" ipType="linear">
@@ -44967,6 +45087,12 @@
 									<name>Rfoot</name>
 								</value>
 							</key>
+							<key time="56">
+								<value>
+									<mapId>0</mapId>
+									<name>Rfoot</name>
+								</value>
+							</key>
 						</attribute>
 						<attribute tag="POSX">
 							<key time="0" ipType="linear">
@@ -45063,6 +45189,12 @@
 					<attributes>
 						<attribute tag="CELL">
 							<key time="0">
+								<value>
+									<mapId>0</mapId>
+									<name>Larm1</name>
+								</value>
+							</key>
+							<key time="56">
 								<value>
 									<mapId>0</mapId>
 									<name>Larm1</name>
@@ -45172,6 +45304,12 @@
 									<name>Larm2</name>
 								</value>
 							</key>
+							<key time="56">
+								<value>
+									<mapId>0</mapId>
+									<name>Larm2</name>
+								</value>
+							</key>
 						</attribute>
 						<attribute tag="POSX">
 							<key time="0" ipType="linear">
@@ -45271,6 +45409,12 @@
 					<attributes>
 						<attribute tag="CELL">
 							<key time="0">
+								<value>
+									<mapId>0</mapId>
+									<name>Lhand</name>
+								</value>
+							</key>
+							<key time="56">
 								<value>
 									<mapId>0</mapId>
 									<name>Lhand</name>
@@ -71313,6 +71457,12 @@
 					<partName>BODY1</partName>
 					<attributes>
 						<attribute tag="CELL">
+							<key time="0">
+								<value>
+									<mapId>0</mapId>
+									<name>BODY1</name>
+								</value>
+							</key>
 							<key time="55">
 								<value>
 									<mapId>0</mapId>
@@ -71420,6 +71570,12 @@
 					<partName>Head1</partName>
 					<attributes>
 						<attribute tag="CELL">
+							<key time="0">
+								<value>
+									<mapId>0</mapId>
+									<name>Head1</name>
+								</value>
+							</key>
 							<key time="55">
 								<value>
 									<mapId>0</mapId>
@@ -71494,6 +71650,12 @@
 					<partName>Hair1</partName>
 					<attributes>
 						<attribute tag="CELL">
+							<key time="0">
+								<value>
+									<mapId>0</mapId>
+									<name>Hair1</name>
+								</value>
+							</key>
 							<key time="58">
 								<value>
 									<mapId>0</mapId>
@@ -71547,6 +71709,12 @@
 					<partName>Hair2</partName>
 					<attributes>
 						<attribute tag="CELL">
+							<key time="0">
+								<value>
+									<mapId>0</mapId>
+									<name>Hair2</name>
+								</value>
+							</key>
 							<key time="58">
 								<value>
 									<mapId>0</mapId>
@@ -71600,6 +71768,12 @@
 					<partName>Hair3</partName>
 					<attributes>
 						<attribute tag="CELL">
+							<key time="0">
+								<value>
+									<mapId>0</mapId>
+									<name>Hair3</name>
+								</value>
+							</key>
 							<key time="58">
 								<value>
 									<mapId>0</mapId>
@@ -71653,6 +71827,12 @@
 					<partName>Hair4</partName>
 					<attributes>
 						<attribute tag="CELL">
+							<key time="0">
+								<value>
+									<mapId>0</mapId>
+									<name>Hair4</name>
+								</value>
+							</key>
 							<key time="58">
 								<value>
 									<mapId>0</mapId>
@@ -71706,6 +71886,12 @@
 					<partName>Yokogami1</partName>
 					<attributes>
 						<attribute tag="CELL">
+							<key time="0">
+								<value>
+									<mapId>0</mapId>
+									<name>Yokogami1</name>
+								</value>
+							</key>
 							<key time="58">
 								<value>
 									<mapId>0</mapId>
@@ -71759,6 +71945,12 @@
 					<partName>Yokogami1_1</partName>
 					<attributes>
 						<attribute tag="CELL">
+							<key time="0">
+								<value>
+									<mapId>0</mapId>
+									<name>Yokogami1</name>
+								</value>
+							</key>
 							<key time="58">
 								<value>
 									<mapId>0</mapId>
@@ -71812,6 +72004,12 @@
 					<partName>Yokogami2</partName>
 					<attributes>
 						<attribute tag="CELL">
+							<key time="0">
+								<value>
+									<mapId>0</mapId>
+									<name>Yokogami2</name>
+								</value>
+							</key>
 							<key time="58">
 								<value>
 									<mapId>0</mapId>
@@ -71865,6 +72063,12 @@
 					<partName>MAegami</partName>
 					<attributes>
 						<attribute tag="CELL">
+							<key time="0">
+								<value>
+									<mapId>0</mapId>
+									<name>MAegami</name>
+								</value>
+							</key>
 							<key time="58">
 								<value>
 									<mapId>0</mapId>
@@ -71918,6 +72122,12 @@
 					<partName>BODY2</partName>
 					<attributes>
 						<attribute tag="CELL">
+							<key time="0">
+								<value>
+									<mapId>0</mapId>
+									<name>BODY2</name>
+								</value>
+							</key>
 							<key time="55">
 								<value>
 									<mapId>0</mapId>
@@ -71989,6 +72199,12 @@
 					<partName>BODY2_1</partName>
 					<attributes>
 						<attribute tag="CELL">
+							<key time="0">
+								<value>
+									<mapId>0</mapId>
+									<name>BODY2</name>
+								</value>
+							</key>
 							<key time="55">
 								<value>
 									<mapId>0</mapId>
@@ -72069,6 +72285,12 @@
 					<partName>RArm1</partName>
 					<attributes>
 						<attribute tag="CELL">
+							<key time="0">
+								<value>
+									<mapId>0</mapId>
+									<name>RArm1</name>
+								</value>
+							</key>
 							<key time="55">
 								<value>
 									<mapId>0</mapId>
@@ -72137,6 +72359,12 @@
 					<partName>RArm2</partName>
 					<attributes>
 						<attribute tag="CELL">
+							<key time="0">
+								<value>
+									<mapId>0</mapId>
+									<name>RArm2</name>
+								</value>
+							</key>
 							<key time="55">
 								<value>
 									<mapId>0</mapId>
@@ -72205,6 +72433,12 @@
 					<partName>RHand</partName>
 					<attributes>
 						<attribute tag="CELL">
+							<key time="0">
+								<value>
+									<mapId>0</mapId>
+									<name>RHand</name>
+								</value>
+							</key>
 							<key time="55">
 								<value>
 									<mapId>0</mapId>
@@ -72273,6 +72507,12 @@
 					<partName>Lreg1</partName>
 					<attributes>
 						<attribute tag="CELL">
+							<key time="0">
+								<value>
+									<mapId>0</mapId>
+									<name>Lreg1</name>
+								</value>
+							</key>
 							<key time="55">
 								<value>
 									<mapId>0</mapId>
@@ -72341,6 +72581,12 @@
 					<partName>Lreg2</partName>
 					<attributes>
 						<attribute tag="CELL">
+							<key time="0">
+								<value>
+									<mapId>0</mapId>
+									<name>Lreg2</name>
+								</value>
+							</key>
 							<key time="55">
 								<value>
 									<mapId>0</mapId>
@@ -72403,6 +72649,12 @@
 					<partName>Lfoot</partName>
 					<attributes>
 						<attribute tag="CELL">
+							<key time="0">
+								<value>
+									<mapId>0</mapId>
+									<name>Lfoot</name>
+								</value>
+							</key>
 							<key time="55">
 								<value>
 									<mapId>0</mapId>
@@ -72465,6 +72717,12 @@
 					<partName>Rreg1</partName>
 					<attributes>
 						<attribute tag="CELL">
+							<key time="0">
+								<value>
+									<mapId>0</mapId>
+									<name>Rreg1</name>
+								</value>
+							</key>
 							<key time="55">
 								<value>
 									<mapId>0</mapId>
@@ -72533,6 +72791,12 @@
 					<partName>Rreg2</partName>
 					<attributes>
 						<attribute tag="CELL">
+							<key time="0">
+								<value>
+									<mapId>0</mapId>
+									<name>Rreg2</name>
+								</value>
+							</key>
 							<key time="55">
 								<value>
 									<mapId>0</mapId>
@@ -72595,6 +72859,12 @@
 					<partName>Rfoot</partName>
 					<attributes>
 						<attribute tag="CELL">
+							<key time="0">
+								<value>
+									<mapId>0</mapId>
+									<name>Rfoot</name>
+								</value>
+							</key>
 							<key time="55">
 								<value>
 									<mapId>0</mapId>
@@ -72657,6 +72927,12 @@
 					<partName>Larm1</partName>
 					<attributes>
 						<attribute tag="CELL">
+							<key time="0">
+								<value>
+									<mapId>0</mapId>
+									<name>Larm1</name>
+								</value>
+							</key>
 							<key time="55">
 								<value>
 									<mapId>0</mapId>
@@ -72722,6 +72998,12 @@
 					<partName>Larm2</partName>
 					<attributes>
 						<attribute tag="CELL">
+							<key time="0">
+								<value>
+									<mapId>0</mapId>
+									<name>Larm2</name>
+								</value>
+							</key>
 							<key time="55">
 								<value>
 									<mapId>0</mapId>
@@ -72787,6 +73069,12 @@
 					<partName>Lhand</partName>
 					<attributes>
 						<attribute tag="CELL">
+							<key time="0">
+								<value>
+									<mapId>0</mapId>
+									<name>Lhand</name>
+								</value>
+							</key>
 							<key time="55">
 								<value>
 									<mapId>0</mapId>
@@ -72837,9 +73125,6 @@
 							</key>
 						</attribute>
 						<attribute tag="PRIO">
-							<key time="0" ipType="linear">
-								<value>16</value>
-							</key>
 							<key time="55" ipType="linear">
 								<value>16</value>
 							</key>
