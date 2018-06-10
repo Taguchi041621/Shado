@@ -175,6 +175,15 @@ namespace basecross {
 			m_CoolTime += ElapsedTime;
 			UpdateAnimeTime(0);
 		}
+
+		auto ScenePtr = App::GetApp()->GetScene<Scene>();
+		if (!ScenePtr->GetPauseFlag()) {
+			if (m_CoolTime >= 5)
+			{
+				m_BulletFlag = true;
+				ChangeAnimation(L"Fire");
+				m_CoolTime = 0;
+			}
 		if (m_BulletFlag) {
 			UpdateAnimeTime(ElapsedTime);
 
@@ -200,26 +209,6 @@ namespace basecross {
 				m_AudioObjectPtr->AddAudioResource(L"se4");
 				m_AudioObjectPtr->Start(L"se4", XAUDIO2_NO_LOOP_REGION, 0.1f);
 				SetNowMusic(L"se4");
-				auto ScenePtr = App::GetApp()->GetScene<Scene>();
-				if (!ScenePtr->GetPauseFlag()) {
-					if (m_CoolTime >= 5)
-					{
-						m_BulletFlag = true;
-						ChangeAnimation(L"Fire");
-						m_CoolTime = 0;
-					}
-					if (m_BulletFlag) {
-						UpdateAnimeTime(ElapsedTime);
-
-						if (IsAnimeEnd()) {
-							GetStage()->AddGameObject<Bullet>(
-								GetComponent<Transform>()->GetScale(),
-								GetComponent<Transform>()->GetRotation(),
-								GetComponent<Transform>()->GetPosition() - Vec3(1, -0.4f, 0)
-								);
-							m_BulletFlag = false;
-						}
-					}
 				}
 			}
 		}
@@ -328,7 +317,19 @@ namespace basecross {
 		Vec3(0.0f, 0.0f, 0.0f)
 		);
 		PtrDraw->SetMeshToTransformMatrix(au);*/
+		auto PtrRedid = AddComponent<Rigidbody>();
+		auto PtrCol = AddComponent<CollisionObb>();
+	}
 
+	void Bullet::OnCollision(vector<shared_ptr<GameObject>>& OtherVec) {
+		auto playerTrans = GetComponent<Transform>();
+		for (auto &obj : OtherVec) {
+			//シャドウオブジェクトを検出
+			auto ShadowPtr = dynamic_pointer_cast<ShadowObject>(obj);
+			if (ShadowPtr) {
+				GetStage()->RemoveGameObject<Bullet>(GetThis<Bullet>());
+			}
+		}
 	}
 
 	//変化
@@ -338,7 +339,7 @@ namespace basecross {
 		auto Pos = PtrTransform->GetPosition();
 		auto ScenePtr = App::GetApp()->GetScene<Scene>();
 		if (!ScenePtr->GetPauseFlag()) {
-			Pos.x -= 5.0f*ElapsedTime;
+			Pos.x -= 7.0f*ElapsedTime;
 			PtrTransform->SetPosition(Pos);
 
 			OnTriggerEnter();
@@ -368,6 +369,7 @@ namespace basecross {
 		//プレイヤーが弾に触れたかを調べる判定
 		if (HitTest::SPHERE_OBB(t, p,Vec3(0))) {
 			PtrPlayer->Damage();
+			GetStage()->RemoveGameObject<Bullet>(GetThis<Bullet>());
 		}
 	}
 }

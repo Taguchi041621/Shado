@@ -142,5 +142,6 @@ namespace basecross {
 		virtual void OnUpdate();
 		virtual void OnUpdate2();
 		void OnTriggerEnter();
+		void OnCollision(vector<shared_ptr<GameObject>>& OtherVec);
 	};
 }
