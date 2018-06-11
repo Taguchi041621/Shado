@@ -364,7 +364,7 @@ namespace basecross {
 		OBB p;
 		p.m_Center = PtrPlayer->GetComponent<Transform>()->GetWorldPosition();
 		p.m_Center.z = 0;
-		p.m_Size = PtrPlayer->GetComponent<Transform>()->GetScale()/2.3;
+		p.m_Size = PtrPlayer->GetComponent<Transform>()->GetScale()/2.2;
 
 		//ƒvƒŒƒCƒ„[‚ª’e‚ÉG‚ê‚½‚©‚ğ’²‚×‚é”»’è
 		if (HitTest::SPHERE_OBB(t, p,Vec3(0))) {
