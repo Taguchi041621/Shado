@@ -50,4 +50,51 @@ namespace basecross {
 	//鍵が当たったとき
 	void KeyItem::OnTriggerEnter() {
 	}
+
+	//-----------------------------------------------------------------------------------------------------------
+	//ステージ開始時にカメラが追いかける見えないオブジェクト
+	//-----------------------------------------------------------------------------------------------------------
+	TargetObjectToStart::TargetObjectToStart(const shared_ptr<Stage>& StagePtr)
+		: GameObject(StagePtr),m_TargetPos(0.0f,0.0f,0.0f)
+	{}
+	//初期化
+	void TargetObjectToStart::OnCreate() {
+		auto trans = GetComponent<Transform>();
+		trans->SetWorldPosition(Vec3(0.0f, 0.0f, 0.0f));
+		trans->SetScale(Vec3(0.1f, 0.1f, 0.1f));
+		auto drawComp = AddComponent<BcPNTStaticDraw>();
+		//見えないようにする
+		drawComp->SetDrawActive(false);
+		//ゴールの場所とイデアの場所を取得
+		GoalPos = GetStage()->GetSharedGameObject<ShadowGoal>(L"ShadowGoal")->GetComponent<Transform>()->GetWorldPosition();
+		PlayerPos = GetStage()->GetSharedGameObject<Player>(L"Player")->GetComponent<Transform>()->GetWorldPosition();
+
+	}
+	void TargetObjectToStart::OnUpdate() {
+		auto ScenePtr = App::GetApp()->GetScene<Scene>();
+		Vec3 pos;
+		if (m_Lerp < 1.0f) {
+			m_Lerp += App::GetApp()->GetElapsedTime() / 4.0f;
+
+			pos.x = (1 - m_Lerp)*m_TargetPos.x + m_Lerp*GoalPos.x;
+			pos.y = (1 - m_Lerp)*m_TargetPos.y + m_Lerp*GoalPos.y;
+			pos.z = (1 - m_Lerp)*m_TargetPos.z + m_Lerp*GoalPos.z;
+		}
+		if (m_Lerp >= 1.0f && m_Lerp < 2.0f) {
+			m_Lerp += App::GetApp()->GetElapsedTime() / 3.0f;
+
+			pos.x = (2 - m_Lerp)*GoalPos.x + (m_Lerp - 1)*PlayerPos.x;
+			pos.y = (2 - m_Lerp)*GoalPos.y + (m_Lerp - 1)*PlayerPos.y;
+			pos.z = (2 - m_Lerp)*GoalPos.z + (m_Lerp - 1)*PlayerPos.z;
+		}
+		if (m_Lerp >= 2.0f || ScenePtr->GetRespawnFlag()) {
+			auto camera = dynamic_pointer_cast<MyCamera>(GetStage()->GetView()->GetTargetCamera());
+			camera->SetStartFlag(true);
+			ScenePtr->SetStartFlag(true);
+			auto player = GetStage()->GetSharedGameObject<Player>(L"Player");
+			camera->SetTargetObject(player);
+			GetStage()->RemoveGameObject<TargetObjectToStart>(GetThis<TargetObjectToStart>());
+		}
+		GetComponent<Transform>()->SetPosition(pos);
+	}
 }

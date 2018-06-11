@@ -415,6 +415,25 @@ namespace basecross
 				{
 					Door->SetSelectFlag(false);
 				}
+//<<<<<<< HEAD
+//=======
+//				wstring DataDir;
+//				//サンプルのためアセットディレクトリを取得
+//				//App::GetApp()->GetAssetsDirectory(DataDir);
+//				//各ゲームは以下のようにデータディレクトリを取得すべき
+//				App::GetApp()->GetDataDirectory(DataDir);
+//
+//				m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
+//				m_AudioObjectPtr->AddAudioResource(L"opendoor");
+//				m_AudioObjectPtr->Start(L"opendoor", XAUDIO2_NO_LOOP_REGION, 0.1f);
+//				SetNowMusic(L"opendoor");
+//
+//				auto FadeIn = GetSharedGameObject<SpriteFade>(L"FadeIn");
+//				FadeIn->SetActionflag(true);
+//				m_SelectFlag = false;
+//				ScenePtr->SetRespawnFlag(false);
+//				PostEvent(0.8f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameStage");
+//>>>>>>> 461c6d109ef9a2ea6a24272b2be17499d07851d5
 			}
 		}
 	}

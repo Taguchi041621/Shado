@@ -501,6 +501,22 @@ namespace basecross {
 			p1 = GetComponent<Transform>()->GetWorldPosition() + Vec3(-1.0f,4.0f,0.0f);
 			p2 = GetStage()->GetSharedGameObject<ShadowGoal>(L"ShadowGoal")->
 				GetComponent<Transform>()->GetWorldPosition() + Vec3(-3.0f,3.0f, 0.0f);
+
+			if (m_StopNowMusic != L"")
+			{
+				m_AudioObjectPtr->Stop(m_StopNowMusic);
+			}
+			wstring DataDir;
+			//サンプルのためアセットディレクトリを取得
+			//App::GetApp()->GetAssetsDirectory(DataDir);
+			//各ゲームは以下のようにデータディレクトリを取得すべき
+			App::GetApp()->GetDataDirectory(DataDir);
+
+			m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
+			m_AudioObjectPtr->AddAudioResource(L"KeySound");
+			m_AudioObjectPtr->Start(L"KeySound", XAUDIO2_NO_LOOP_REGION, 0.1f);
+			SetNowMusic(L"KeySound");
+
 		}
 	}
 	//物体とライトの位置から、影の位置を導き出す

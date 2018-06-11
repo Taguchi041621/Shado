@@ -26,5 +26,6 @@ namespace basecross
 		virtual void OnUpdate()override;
 
 		bool GetStartFlag() { return m_StartFlag; }
+		void SetStartFlag(bool f) { m_StartFlag = f; }
 	};
 }

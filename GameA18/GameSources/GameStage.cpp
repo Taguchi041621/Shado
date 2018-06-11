@@ -119,7 +119,7 @@ namespace basecross {
 				Pos.z = 0.0f;
 				PlayerPtr->GetComponent<Transform>()->SetPosition(Pos);
 				//カメラのターゲットに設定
-				dynamic_pointer_cast<MyCamera>(GetView()->GetTargetCamera())->SetTargetObject(PlayerPtr);
+				//dynamic_pointer_cast<MyCamera>(GetView()->GetTargetCamera())->SetTargetObject(PlayerPtr);
 
 				/*Pos += Vec3(2, 2, 0.5);
 				if (ScenePtr->GetStageNumber()==1) {
@@ -419,6 +419,8 @@ namespace basecross {
 			//フェード
 			CreateFadeOutSprite();
 			CreateFadeSprite();
+			auto Target = AddGameObject<TargetObjectToStart>();
+			dynamic_pointer_cast<MyCamera>(GetView()->GetTargetCamera())->SetTargetObject(Target);
 
 			//CreateTutorial();
 		}
@@ -543,7 +545,7 @@ namespace basecross {
 					SelectFlag = false;
 					break;
 				case 1:
-					ScenePtr->SetRespawnFlag(false);
+					ScenePtr->SetRespawnFlag(true);
 					ScenePtr->SetPauseFlag(false);
 					FadeIn->SetActionflag(true);
 					PostEvent(0.8f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameStage");

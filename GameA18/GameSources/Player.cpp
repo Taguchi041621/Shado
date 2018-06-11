@@ -317,7 +317,7 @@ namespace basecross{
 			
 			PtrRedit->SetVelocityZero();
 			GetComponent<Rigidbody>()->SetVelocity(Vec3(0.0f, m_FallSpeed, 0.0f));
-			m_FallSpeed += -0.05f;
+			m_FallSpeed += -0.08f;
 		}
 	    else if (m_DamageFlag)
 		{
@@ -481,7 +481,7 @@ namespace basecross{
 		float ElapsedTime = App::GetApp()->GetElapsedTime();
 		m_Timer += ElapsedTime;
 
-		if (m_Timer >= 1.3f)
+		if (m_Timer >= 0.7f)
 		{
 			Obj->AnimeChangeMotion(L"Fall", false);
 			m_FallFlag = true;
