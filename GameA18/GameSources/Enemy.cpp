@@ -326,7 +326,12 @@ namespace basecross {
 		for (auto &obj : OtherVec) {
 			//シャドウオブジェクトを検出
 			auto ShadowPtr = dynamic_pointer_cast<ShadowObject>(obj);
+			auto PlayerPtr = dynamic_pointer_cast<Player>(obj);
 			if (ShadowPtr) {
+				GetStage()->RemoveGameObject<Bullet>(GetThis<Bullet>());
+			}
+			if (PlayerPtr) {
+				PlayerPtr->Damage();
 				GetStage()->RemoveGameObject<Bullet>(GetThis<Bullet>());
 			}
 		}
@@ -342,7 +347,7 @@ namespace basecross {
 			Pos.x -= 7.0f*ElapsedTime;
 			PtrTransform->SetPosition(Pos);
 
-			OnTriggerEnter();
+			//OnTriggerEnter();
 
 			if (Pos.x <= -30) {
 				GetStage()->RemoveGameObject<Bullet>(GetThis<Bullet>());
