@@ -63,13 +63,11 @@ namespace basecross {
 					}
 				}*/
 		}
+		//ステージ開始時(リスタート時はやらない)
 		else if(!m_StartFlag) {
 			CameraPosZ += 0.2;
-			if (CameraPosZ >= -14) {
-				CameraPosZ = -14;
-				m_StartFlag = true;
-				auto ScenePtr = App::GetApp()->GetScene<Scene>();
-				ScenePtr->SetStartFlag(m_StartFlag);
+			if (CameraPosZ >= -10) {
+				CameraPosZ = -10;
 			}
 		}
 		if (CntlVec[0].bConnected) {
@@ -96,6 +94,7 @@ namespace basecross {
 		m_StartFlag = false;
 		auto ScenePtr = App::GetApp()->GetScene<Scene>();
 		ScenePtr->SetStartFlag(m_StartFlag);
+		//リスタート時
 		if (ScenePtr->GetRespawnFlag())
 		{
 			m_StartFlag = true;
