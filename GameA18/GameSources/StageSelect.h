@@ -43,4 +43,49 @@ namespace basecross
 		}
 	};
 
+	//--------------------------------------------------------------------------------------
+	//	Door
+	//--------------------------------------------------------------------------------------
+	class StageSelectDoor : public SS5ssae {
+		Vec3 m_Scale;
+		Vec3 m_Rotation;
+		Vec3 m_Position;
+		//スケールのZの固定値
+		float m_ScaleZ;
+		//このオブジェクトのみで使用するスクエアメッシュ
+		shared_ptr<MeshResource> m_SquareMeshResource;
+		Mat4x4 m_ToAnimeMatrix;
+
+		shared_ptr<MultiAudioObject> m_AudioObjectPtr;
+		wstring m_StopNowMusic;
+
+		bool m_SelectFlag;
+		bool m_OpenFlag;
+	public:
+		//構築と破棄
+		StageSelectDoor(const shared_ptr<Stage>& StagePtr,
+			const wstring BaseDir,
+			const Vec3& Scale,
+			const Vec3& Position,
+			const Vec3& Rotation
+		);
+
+		virtual ~StageSelectDoor();
+		//初期化
+		virtual void OnCreate() override;
+		//操作
+		virtual void OnUpdate();
+		void SetNowMusic(wstring NowMusic) {
+			m_StopNowMusic = NowMusic;
+		}
+		wstring GetNowMusic() {
+			return m_StopNowMusic;
+		}
+		virtual void OnUpdate2();
+
+		void SetSelectFlag(bool f) { m_SelectFlag = f; }
+		bool GetSelectFlag() { return m_SelectFlag; }
+
+		void Open();
+	};
 }

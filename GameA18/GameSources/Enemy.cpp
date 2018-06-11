@@ -7,7 +7,7 @@ namespace basecross {
 	//------------------------------------------------------------------------------------------
 	ShadowEnemy::ShadowEnemy(const shared_ptr<Stage>& StagePtr, const wstring BaseDir,
 		const Vec3& Scale, const Vec3& Rotation, GameObject& Obj)
-		: SS5ssae(StagePtr, BaseDir, L"SnakeTest.ssae", L"Attack"),
+		: SS5ssae(StagePtr, BaseDir, L"Snakeshdow.ssae", L"pakupaku"),
 		m_Scale(Scale), m_Rotation(Rotation), m_Obj(Obj), m_ScaleZ(0.05f)
 	{
 		m_ToAnimeMatrix.affineTransformation(

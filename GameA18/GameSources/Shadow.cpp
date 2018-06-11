@@ -308,7 +308,7 @@ namespace basecross {
 		m_Scale(m_Scale),m_Rotation(Rotation),m_Obj(Obj), m_ScaleZ(0.05f)
 	{
 		m_ToAnimeMatrixDark.affineTransformation(
-			Vec3(1.18f, 1.14f, 0.1f),
+			Vec3(1.8f, 1.5f, 0.1f),
 			Vec3(0, 0, 0),
 			Vec3(0, 0, 0),
 			Vec3(0, 0.0f, 0.0f)
@@ -342,7 +342,7 @@ namespace basecross {
 		//親クラスのクリエイトを呼ぶ
 		SS5ssae::OnCreate();
 		//値は秒あたりのフレーム数
-		SetFps(60);
+		SetFps(10);
 		//アニメーションのループ設定
 		SetLooped(true);
 		//アニメーションにかけるメトリックスの設定

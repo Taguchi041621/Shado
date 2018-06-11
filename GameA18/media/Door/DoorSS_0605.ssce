@@ -74,6 +74,15 @@
 			<posStable>0</posStable>
 		</cell>
 		<cell>
+			<name>KeyHole</name>
+			<pos>576 155</pos>
+			<size>16 44</size>
+			<pivot>0 0</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
 			<name>Light_1</name>
 			<pos>256 361</pos>
 			<size>128 182</size>
