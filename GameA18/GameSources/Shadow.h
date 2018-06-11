@@ -163,6 +163,10 @@ namespace basecross {
 		Vec3 p0,p1,p2,p3;
 		shared_ptr<MeshResource> m_MeshResource;
 		Mat4x4 m_ToAnimeMatrix;
+
+		shared_ptr<MultiAudioObject> m_AudioObjectPtr;
+		wstring m_StopNowMusic;
+
 	public:
 		//--------------------------------------------------------------------------------------
 		/*!
@@ -195,6 +199,12 @@ namespace basecross {
 		*/
 		//--------------------------------------------------------------------------------------
 		virtual void OnUpdate()override;
+		void SetNowMusic(wstring NowMusic) {
+			m_StopNowMusic = NowMusic;
+		}
+		wstring GetNowMusic() {
+			return m_StopNowMusic;
+		}
 
 		void OnTriggerEnter();
 
