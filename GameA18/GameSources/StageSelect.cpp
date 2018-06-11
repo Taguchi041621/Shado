@@ -273,9 +273,9 @@ namespace basecross
 				App::GetApp()->GetDataDirectory(DataDir);
 
 				m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
-				m_AudioObjectPtr->AddAudioResource(L"se");
-				m_AudioObjectPtr->Start(L"se", XAUDIO2_NO_LOOP_REGION, 0.1f);
-				SetNowMusic(L"se");
+				m_AudioObjectPtr->AddAudioResource(L"opendoor");
+				m_AudioObjectPtr->Start(L"opendoor", XAUDIO2_NO_LOOP_REGION, 0.1f);
+				SetNowMusic(L"opendoor");
 
 				auto FadeIn = GetSharedGameObject<SpriteFade>(L"FadeIn");
 				FadeIn->SetActionflag(true);

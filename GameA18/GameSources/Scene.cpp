@@ -156,6 +156,8 @@ namespace basecross{
 		App::GetApp()->RegisterWav(L"se", SE);
 		wstring SE2 = DataDir + L"BGMSE\\SE2.wav";
 		App::GetApp()->RegisterWav(L"se2", SE2);
+		wstring opendoor = DataDir + L"BGMSE\\opendoor.wav";
+		App::GetApp()->RegisterWav(L"opendoor", opendoor);
 		wstring SE3 = DataDir + L"BGMSE\\bon.wav";
 		App::GetApp()->RegisterWav(L"se3", SE3);
 		wstring SE4 = DataDir + L"BGMSE\\bomb.wav";
@@ -164,6 +166,8 @@ namespace basecross{
 		//App::GetApp()->RegisterWav(L"clear", Clear);
 		wstring Clear = DataDir + L"BGMSE\\yakusoku.wav";
 		App::GetApp()->RegisterWav(L"clear", Clear);
+		wstring KeySound = DataDir + L"BGMSE\\Getkey.wav";
+		App::GetApp()->RegisterWav(L"KeySound", KeySound);
 	}
 
 	void Scene::OnCreate() {
