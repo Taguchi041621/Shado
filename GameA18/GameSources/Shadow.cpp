@@ -448,6 +448,7 @@ namespace basecross {
 
 	void ShadowKey::OnUpdate() {
 		OnTriggerEnter();
+		//鍵が取られたら
 		if (m_GoGoal) {
 			//計算のための時間加算
 			m_Lerp += App::GetApp()->GetElapsedTime();
@@ -461,8 +462,8 @@ namespace basecross {
 			//回る
 			GetComponent<Transform>()->SetRotation(Vec3(0.0f, 0.0f, m_spin*30.0f));
 			//位置計算
-			m_Position.x = (1 - m_Lerp)*(1 - m_Lerp)*p0.x + 2 * (1 - m_Lerp)*m_Lerp*p1.x + m_Lerp*m_Lerp*p2.x;
-			m_Position.y = (1 - m_Lerp)*(1 - m_Lerp)*p0.y + 2 * (1 - m_Lerp)*m_Lerp*p1.y + m_Lerp*m_Lerp*p2.y;
+			m_Position.x = (1 - m_Lerp)*p0.x + m_Lerp*p1.x;
+			m_Position.y = (1 - m_Lerp)*p0.y + m_Lerp*p1.y;
 			GetComponent<Transform>()->SetPosition(m_Position);
 		}
 		else {
@@ -497,9 +498,8 @@ namespace basecross {
 			m_GoGoal = true;
 			//ベジエ曲線初期位置の設定
 			p0 = GetComponent<Transform>()->GetWorldPosition();
-			//ベジエ曲線経由位置の設定
-			p1 = GetComponent<Transform>()->GetWorldPosition() + Vec3(0.0f, 5.0f,0.0f);
-			p2 = GetComponent<Transform>()->GetWorldPosition() + Vec3(0.0f,30.0f, 0.0f);
+			//ベジエ曲線最終位置の設定
+			p1 = GetComponent<Transform>()->GetWorldPosition() + Vec3(0.0f,20.0f, 0.0f);
 			//回す
 			m_spinB = true;
 

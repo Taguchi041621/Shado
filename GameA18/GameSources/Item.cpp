@@ -93,7 +93,6 @@ namespace basecross {
 			pos.y = (1 - m_Lerp)*GoalPos.y + m_Lerp *PlayerPos.y;
 			pos.z = (1 - m_Lerp)*GoalPos.z + m_Lerp *PlayerPos.z;
 			if (m_Lerp > 1.0f) {
-				m_Lerp = 0;
 				m_Move = 2;
 			}
 		}
