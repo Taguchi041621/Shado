@@ -66,7 +66,8 @@ namespace basecross {
 		//ステージ開始時(リスタート時はやらない)
 		else if(!m_StartFlag) {
 			//壁の方に近寄る
-			CameraPosZ += 0.2;
+			//CameraPosZ += 0.2;
+			CameraPosZ += 40.0f / 180.0f;
 			if (CameraPosZ >= -16) {
 				CameraPosZ = -16;
 			}

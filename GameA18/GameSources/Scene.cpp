@@ -22,15 +22,16 @@ namespace basecross{
 		App::GetApp()->RegisterTexture(L"TITLE_TX", strTexture);
 		/*strTexture = DataDir + L"Select.png";
 		App::GetApp()->RegisterTexture(L"SELECT_TX", strTexture);*/
-		//strTexture = DataDir + L"Clear.png";
-		//App::GetApp()->RegisterTexture(L"CLEAR_TX", strTexture);
-		strTexture = DataDir + L"GAMECLEAR.png";
 
 		//ƒNƒŠƒA‰æ–Ê
+		strTexture = DataDir + L"Clear_Sample_image.png";
+		App::GetApp()->RegisterTexture(L"CLEAR_NoText_TX", strTexture);
 		strTexture = DataDir + L"Clear.png";
 		App::GetApp()->RegisterTexture(L"CLEAR_TX", strTexture);
 		strTexture = DataDir + L"GAMECLEAR_NoText.png";
 		App::GetApp()->RegisterTexture(L"CLEAR_ColorNoText_TX", strTexture);
+		strTexture = DataDir + L"GAMECLEAR.png";
+		App::GetApp()->RegisterTexture(L"CLEAR_Color_TX", strTexture);
 		strTexture = DataDir + L"STAGESELECT.png";
 		App::GetApp()->RegisterTexture(L"CLEAR_STAGESELECT_TX", strTexture);
 		strTexture = DataDir + L"NEXTSTAGE.png";

@@ -44,8 +44,10 @@ namespace basecross
 		////描画コンポーネントテクスチャの設定
 		//DrawComp->SetTextureResource(L"CLEAR_TX");
 
-		AddGameObject<Sprite>(L"CLEAR_ColorNoText_TX", true,
+		AddGameObject<Sprite>(L"CLEAR_NoText_TX", true,
 			Vec2(1280.0f, 800.0f), Vec3(0.0f, 0.0f, 0.1f));
+		//AddGameObject<Sprite>(L"CLEAR_ColorNoText_TX", true,
+		//	Vec2(1280.0f, 800.0f), Vec3(0.0f, 0.0f, 0.1f));
 		AddGameObject<Sprite>(L"CLEAR_STAGECLEAR_TX", true,
 			Vec2(1280.0f, 800.0f), Vec3(200.0f, 300.0f, 0.0f));
 		auto nextStage = AddGameObject<ScaleChangeSprite>(L"CLEAR_NEXTSTAGE_TX", true,
@@ -93,16 +95,15 @@ namespace basecross
 
 		//スプライトの作成
 		CreateTitleSprite();
-		CreateUI();
+		//CreateUI();
 		CreateFadeOutSprite();
 		CreateFadeSprite();
-
 	}
 
 	//更新
 	void ClearStage::OnUpdate() {
 		auto ScenePtr = App::GetApp()->GetScene<Scene>();
-		auto WLight = GetSharedGameObject<ScaleChangeSprite>(L"WLight");
+		//auto WLight = GetSharedGameObject<ScaleChangeSprite>(L"WLight");
 		auto NextStage = GetSharedGameObject<ScaleChangeSprite>(L"NextStage");
 		auto Retry = GetSharedGameObject<ScaleChangeSprite>(L"Retry");
 		auto StageSelect = GetSharedGameObject<ScaleChangeSprite>(L"StageSelect");
