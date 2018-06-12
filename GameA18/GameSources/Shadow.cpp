@@ -449,21 +449,30 @@ namespace basecross {
 	void ShadowKey::OnUpdate() {
 		OnTriggerEnter();
 		if (m_GoGoal) {
-			//計算のための時間加算
-			m_Lerp += App::GetApp()->GetElapsedTime();
-			//ゴール位置は動くので更新する
-			p3 = GetStage()->GetSharedGameObject<ShadowGoal>(L"ShadowGoal")->
-				GetComponent<Transform>()->GetWorldPosition();
-			//位置計算
-			m_Position.x = (1 - m_Lerp)*(1 - m_Lerp)*(1 - m_Lerp)*p0.x + 3 * (1 - m_Lerp)*(1 - m_Lerp)*m_Lerp*p1.x 
-				+ 3 * (1 - m_Lerp)*m_Lerp*m_Lerp*p2.x + m_Lerp*m_Lerp*m_Lerp*p3.x;
-			m_Position.y = (1 - m_Lerp)*(1 - m_Lerp)*(1 - m_Lerp)*p0.y + 3 * (1 - m_Lerp)*(1 - m_Lerp)*m_Lerp*p1.y
-				+ 3 * (1 - m_Lerp)*m_Lerp*m_Lerp*p2.y + m_Lerp*m_Lerp*m_Lerp*p3.y;
-			GetComponent<Transform>()->SetPosition(m_Position);
-			//動きが終わったら
-			if (m_Lerp >= 1) {
-				//鍵を消す
-				GetStage()->RemoveGameObject<ShadowKey>(GetThis<ShadowKey>());
+			//回転のための時間加算
+			m_spin += App::GetApp()->GetElapsedTime();
+			//回転時間が終わったら
+			if (m_spin>=1.0f) {
+				//計算のための時間加算
+				m_Lerp += App::GetApp()->GetElapsedTime();
+				//ゴール位置は動くので更新する
+				p3 = GetStage()->GetSharedGameObject<ShadowGoal>(L"ShadowGoal")->
+					GetComponent<Transform>()->GetWorldPosition();
+				//位置計算
+				m_Position.x = (1 - m_Lerp)*(1 - m_Lerp)*(1 - m_Lerp)*p0.x + 3 * (1 - m_Lerp)*(1 - m_Lerp)*m_Lerp*p1.x
+					+ 3 * (1 - m_Lerp)*m_Lerp*m_Lerp*p2.x + m_Lerp*m_Lerp*m_Lerp*p3.x;
+				m_Position.y = (1 - m_Lerp)*(1 - m_Lerp)*(1 - m_Lerp)*p0.y + 3 * (1 - m_Lerp)*(1 - m_Lerp)*m_Lerp*p1.y
+					+ 3 * (1 - m_Lerp)*m_Lerp*m_Lerp*p2.y + m_Lerp*m_Lerp*m_Lerp*p3.y;
+				GetComponent<Transform>()->SetPosition(m_Position);
+				//動きが終わったら
+				if (m_Lerp >= 1) {
+					//鍵を消す
+					GetStage()->RemoveGameObject<ShadowKey>(GetThis<ShadowKey>());
+				}
+			}
+			else {
+				//回る
+				GetComponent<Transform>()->SetRotation(Vec3(0.0f,0.0f,m_spin*30.0f));
 			}
 		}
 		else {
@@ -474,13 +483,14 @@ namespace basecross {
 		//アニメーションを更新する
 		UpdateAnimeTime(ElapsedTime);
 	}
-
+	//当たったかの判定
 	void ShadowKey::OnTriggerEnter() {
+		//鍵
 		OBB t;
 		t.m_Center = this->GetComponent<Transform>()->GetWorldPosition();
 		t.m_Center.z = 0;
 		t.m_Size = this->GetComponent<Transform>()->GetScale() * 0.5f;
-
+		//イデア
 		OBB p;
 		p.m_Center = GetStage()->GetSharedGameObject<Player>(L"Player")->GetComponent<Transform>()->GetWorldPosition();
 		p.m_Center.z = 0;
@@ -495,20 +505,18 @@ namespace basecross {
 			GetStage()->GetSharedGameObject<Player>(L"Player")->AddKey();
 			//ゴールに向かうフラグを立てる
 			m_GoGoal = true;
-			//初期位置の設定
+			//ベジエ曲線初期位置の設定
 			p0 = GetComponent<Transform>()->GetWorldPosition();
-			//経由位置の設定
+			//ベジエ曲線経由位置の設定
 			p1 = GetComponent<Transform>()->GetWorldPosition() + Vec3(-1.0f,4.0f,0.0f);
 			p2 = GetStage()->GetSharedGameObject<ShadowGoal>(L"ShadowGoal")->
 				GetComponent<Transform>()->GetWorldPosition() + Vec3(-3.0f,3.0f, 0.0f);
 
-			if (m_StopNowMusic != L"")
-			{
+			if (m_StopNowMusic != L""){
 				m_AudioObjectPtr->Stop(m_StopNowMusic);
 			}
 			wstring DataDir;
 			//サンプルのためアセットディレクトリを取得
-			//App::GetApp()->GetAssetsDirectory(DataDir);
 			//各ゲームは以下のようにデータディレクトリを取得すべき
 			App::GetApp()->GetDataDirectory(DataDir);
 
@@ -516,7 +524,6 @@ namespace basecross {
 			m_AudioObjectPtr->AddAudioResource(L"KeySound");
 			m_AudioObjectPtr->Start(L"KeySound", XAUDIO2_NO_LOOP_REGION, 0.1f);
 			SetNowMusic(L"KeySound");
-
 		}
 	}
 	//物体とライトの位置から、影の位置を導き出す
