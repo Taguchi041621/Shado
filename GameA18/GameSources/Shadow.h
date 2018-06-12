@@ -157,8 +157,10 @@ namespace basecross {
 		float m_ScaleZ;
 		//ゴールに飛んでいくフラグ
 		bool m_GoGoal = false;
+		//ゴールに飛ぶ前に回る際の現在時間
+		float m_spin = 0.0f;
 		//補完の際に使う現在時間
-		float m_Lerp = 0;
+		float m_Lerp = 0.0f;
 		//経路を出すための点
 		Vec3 p0,p1,p2,p3;
 		shared_ptr<MeshResource> m_MeshResource;
