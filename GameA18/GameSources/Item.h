@@ -25,6 +25,8 @@ namespace basecross {
 		Vec3 PlayerPos;
 		//•âŠ®‚ÌÛ‚Ég‚¤Œ»İŠÔ
 		float m_Lerp = 0.0f;
+		//¡‚Ì“®‚«‚Ì’iŠK‚ğ‚à‚Â
+		int m_Move = 0;
 	public:
 		TargetObjectToStart(const shared_ptr<Stage>& StagePtr);
 		virtual ~TargetObjectToStart() {}

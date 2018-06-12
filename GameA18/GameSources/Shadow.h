@@ -159,10 +159,12 @@ namespace basecross {
 		bool m_GoGoal = false;
 		//ゴールに飛ぶ前に回る際の現在時間
 		float m_spin = 0.0f;
+		//回っていたらtrue
+		bool m_spinB = false;
 		//補完の際に使う現在時間
 		float m_Lerp = 0.0f;
 		//経路を出すための点
-		Vec3 p0,p1,p2,p3;
+		Vec3 p0,p1,p2;
 		shared_ptr<MeshResource> m_MeshResource;
 		Mat4x4 m_ToAnimeMatrix;
 

@@ -73,21 +73,32 @@ namespace basecross {
 	void TargetObjectToStart::OnUpdate() {
 		auto ScenePtr = App::GetApp()->GetScene<Scene>();
 		Vec3 pos;
-		if (m_Lerp < 1.0f) {
-			m_Lerp += App::GetApp()->GetElapsedTime() / 4.0f;
+		//ゴールに行く
+		if (m_Move == 0) {
+			m_Lerp += App::GetApp()->GetElapsedTime() / 3.0f;
 
 			pos.x = (1 - m_Lerp)*m_TargetPos.x + m_Lerp*GoalPos.x;
 			pos.y = (1 - m_Lerp)*m_TargetPos.y + m_Lerp*GoalPos.y;
 			pos.z = (1 - m_Lerp)*m_TargetPos.z + m_Lerp*GoalPos.z;
+			if (m_Lerp > 1.0f) {
+				m_Lerp = 0;
+				m_Move = 1;
+			}
 		}
-		if (m_Lerp >= 1.0f && m_Lerp < 2.0f) {
-			m_Lerp += App::GetApp()->GetElapsedTime() / 3.0f;
+		//イデアに行く
+		if (m_Move == 1) {
+			m_Lerp += App::GetApp()->GetElapsedTime() / 1.0f;
 
-			pos.x = (2 - m_Lerp)*GoalPos.x + (m_Lerp - 1)*PlayerPos.x;
-			pos.y = (2 - m_Lerp)*GoalPos.y + (m_Lerp - 1)*PlayerPos.y;
-			pos.z = (2 - m_Lerp)*GoalPos.z + (m_Lerp - 1)*PlayerPos.z;
+			pos.x = (1 - m_Lerp)*GoalPos.x + m_Lerp *PlayerPos.x;
+			pos.y = (1 - m_Lerp)*GoalPos.y + m_Lerp *PlayerPos.y;
+			pos.z = (1 - m_Lerp)*GoalPos.z + m_Lerp *PlayerPos.z;
+			if (m_Lerp > 1.0f) {
+				m_Lerp = 0;
+				m_Move = 2;
+			}
 		}
-		if (m_Lerp >= 2.0f || ScenePtr->GetRespawnFlag()) {
+		//イデアまで行った、もしくはリスタートの場合
+		if (m_Move == 2.0f || ScenePtr->GetRespawnFlag()) {
 			auto camera = dynamic_pointer_cast<MyCamera>(GetStage()->GetView()->GetTargetCamera());
 			camera->SetStartFlag(true);
 			ScenePtr->SetStartFlag(true);
