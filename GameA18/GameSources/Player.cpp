@@ -340,6 +340,10 @@ namespace basecross{
 			m_FadeFlag = true;
 		}
 	}
+	//着地したときの演出
+	void Player::LandingDirecting() {
+		GetStage()->AddGameObject<DirectingRing>(GetComponent<Transform>()->GetWorldPosition(),Vec3(0.0f,-0.7f,0.0f));
+	}
 	//GameOverSceneに移行する
 	void Player::GoGameOverScene() {
 		m_GameOverFlag = true;
@@ -570,7 +574,8 @@ namespace basecross{
 		m_AudioObjectPtr->AddAudioResource(L"se6");
 		m_AudioObjectPtr->Start(L"se6", XAUDIO2_NO_LOOP_REGION, 0.32f);
 		Obj->SetNowMusic(L"se6");
-
+		//輪っか出す
+		Obj->LandingDirecting();
 	}
 	//ステート実行中に毎ターン呼ばれる関数
 	void StandState::Execute(const shared_ptr<Player>& Obj) {
