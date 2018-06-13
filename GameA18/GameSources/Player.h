@@ -138,6 +138,8 @@ namespace basecross{
 		void FindParent(const shared_ptr<GameObject>& OtherVec);
 		//プレイヤーのHP
 		void PlayerHP();
+		//着地時に輪っかを出す
+		void LandingDirecting();
 
 		//鍵に触れたときに使う、m_Keyの値を増やす
 		void AddKey() { m_Key += 1; }

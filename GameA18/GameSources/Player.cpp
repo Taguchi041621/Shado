@@ -340,6 +340,10 @@ namespace basecross{
 			m_FadeFlag = true;
 		}
 	}
+	//着地したときの演出
+	void Player::LandingDirecting() {
+		GetStage()->AddGameObject<DirectingRing>(GetComponent<Transform>()->GetWorldPosition(),Vec3(0.0f,-0.7f,0.0f));
+	}
 	//GameOverSceneに移行する
 	void Player::GoGameOverScene() {
 		m_GameOverFlag = true;
@@ -547,6 +551,7 @@ namespace basecross{
 		Obj->AnimeChangeMotion(L"Stand", false);
 		Obj->SetFps(45.0f);
 		Obj->SetStandFlag(true);
+		Obj->LandingDirecting();
 	}
 	//ステート実行中に毎ターン呼ばれる関数
 	void StandState::Execute(const shared_ptr<Player>& Obj) {

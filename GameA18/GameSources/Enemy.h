@@ -147,14 +147,16 @@ namespace basecross {
 	//--------------------------------------------------------------------------------------
 	//弾が消えるときの演出用輪っか
 	//--------------------------------------------------------------------------------------
-	class PerformanceRing : public GameObject {
+	class DirectingRing : public GameObject {
 		Vec3 m_Position;
 		Vec3 m_Scale;
+		//演出を出すオブジェクトからどれだけずらすかを持つ
+		Vec3 m_Shift;
 		float m_Time = 0;
 		shared_ptr<MeshResource> m_SquareMeshResource;
 	public:
-		PerformanceRing(const shared_ptr<Stage>& StagePtr,Vec3 position, shared_ptr<MeshResource> Mesh);
-		virtual ~PerformanceRing();
+		DirectingRing(const shared_ptr<Stage>& StagePtr,Vec3 position, Vec3 shift);
+		virtual ~DirectingRing();
 		//初期化
 		virtual void OnCreate() override;
 		//操作
