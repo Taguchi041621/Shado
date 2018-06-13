@@ -499,7 +499,7 @@ namespace basecross{
 	}
 	//ステートから抜けるときに呼ばれる関数
 	void FallState::Exit(const shared_ptr<Player>& Obj) {
-		
+
 	}
 	//--------------------------------------------------------------------------------------
 	//	class LandingState : public ObjState<Player>;
@@ -516,6 +516,17 @@ namespace basecross{
 	//ステートに入ったときに呼ばれる関数
 	void LandingState::Enter(const shared_ptr<Player>& Obj) {
 		Obj->AnimeChangeMotion(L"Down_landing", false);
+
+			wstring DataDir;
+			//サンプルのためアセットディレクトリを取得
+			//App::GetApp()->GetAssetsDirectory(DataDir);
+			//各ゲームは以下のようにデータディレクトリを取得すべき
+			App::GetApp()->GetDataDirectory(DataDir);
+
+			m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
+			m_AudioObjectPtr->AddAudioResource(L"se5");
+			m_AudioObjectPtr->Start(L"se5", XAUDIO2_NO_LOOP_REGION, 0.32f);
+			Obj->SetNowMusic(L"se5");
 	}
 	//ステート実行中に毎ターン呼ばれる関数
 	void LandingState::Execute(const shared_ptr<Player>& Obj) {
@@ -523,6 +534,7 @@ namespace basecross{
 		Obj->LoopedAnimeUpdateMotion();
 		if (Obj->IsAnimeEnd()) {
 			Obj->GetStateMachine()->ChangeState(WaitState::Instance());
+
 		}
 	}
 	//ステートから抜けるときに呼ばれる関数
@@ -547,6 +559,18 @@ namespace basecross{
 		Obj->AnimeChangeMotion(L"Stand", false);
 		Obj->SetFps(45.0f);
 		Obj->SetStandFlag(true);
+
+		wstring DataDir;
+		//サンプルのためアセットディレクトリを取得
+		//App::GetApp()->GetAssetsDirectory(DataDir);
+		//各ゲームは以下のようにデータディレクトリを取得すべき
+		App::GetApp()->GetDataDirectory(DataDir);
+
+		m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
+		m_AudioObjectPtr->AddAudioResource(L"se6");
+		m_AudioObjectPtr->Start(L"se6", XAUDIO2_NO_LOOP_REGION, 0.32f);
+		Obj->SetNowMusic(L"se6");
+
 	}
 	//ステート実行中に毎ターン呼ばれる関数
 	void StandState::Execute(const shared_ptr<Player>& Obj) {
@@ -588,7 +612,7 @@ namespace basecross{
 
 		m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
 		m_AudioObjectPtr->AddAudioResource(L"walk");
-		m_AudioObjectPtr->Start(L"walk", XAUDIO2_LOOP_INFINITE, 0.1f);
+		m_AudioObjectPtr->Start(L"walk", XAUDIO2_LOOP_INFINITE, 0.28f);
 		Obj->SetNowMusic(L"walk");
 		//----------------------------------------------------------------
 	}
@@ -642,7 +666,7 @@ namespace basecross{
 
 		m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
 		m_AudioObjectPtr->AddAudioResource(L"dead");
-		m_AudioObjectPtr->Start(L"dead", XAUDIO2_NO_LOOP_REGION, 0.1f);
+		m_AudioObjectPtr->Start(L"dead", XAUDIO2_NO_LOOP_REGION, 0.3f);
 		Obj->SetNowMusic(L"dead");
 		//----------------------------------------------------------------
 	}

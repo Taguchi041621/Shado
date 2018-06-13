@@ -328,6 +328,7 @@ namespace basecross {
 			auto ShadowPtr = dynamic_pointer_cast<ShadowObject>(obj);
 			auto PlayerPtr = dynamic_pointer_cast<Player>(obj);
 			if (ShadowPtr) {
+				GetStage()->AddGameObject<PerformanceRing>(playerTrans->GetWorldPosition(),m_SquareMeshResource);
 				GetStage()->RemoveGameObject<Bullet>(GetThis<Bullet>());
 			}
 			if (PlayerPtr) {
@@ -375,6 +376,37 @@ namespace basecross {
 		if (HitTest::SPHERE_OBB(t, p,Vec3(0))) {
 			PtrPlayer->Damage();
 			GetStage()->RemoveGameObject<Bullet>(GetThis<Bullet>());
+		}
+	}
+	//--------------------------------------------------------------------------------------
+	//íeÇ™è¡Ç¶ÇÈÇ∆Ç´ÇÃââèoópó÷Ç¡Ç©
+	//--------------------------------------------------------------------------------------
+	PerformanceRing::PerformanceRing(const shared_ptr<Stage>& StagePtr,Vec3 position, shared_ptr<MeshResource> Mesh)
+		: GameObject(StagePtr),m_Position(position), m_SquareMeshResource(Mesh)
+	{}
+	PerformanceRing::~PerformanceRing() {};
+	void PerformanceRing::OnCreate() {
+		auto Trans = GetComponent<Transform>();
+		m_Position.x += -0.4f;
+		Trans->SetWorldPosition(m_Position);
+		Trans->SetRotation(Vec3(0.0f,0.0f,0.0f));
+		Trans->SetScale(Vec3(1.0f,1.0f,0.05f));
+		m_Scale = Trans->GetScale();
+
+		auto DrawComp = AddComponent<PCTStaticDraw>();
+		DrawComp->SetMeshResource(m_SquareMeshResource);
+		DrawComp->SetTextureResource(L"Ring_TX");
+		SetAlphaActive(true);
+		auto act = AddComponent<Action>();
+		act->AddScaleTo(1.0f, Vec3(m_Scale.x + 0.5f, m_Scale.y + 0.5f, 0.1f), Lerp::Linear);
+		act->Run();
+	}
+	void PerformanceRing::OnUpdate() {
+		m_Time += App::GetApp()->GetElapsedTime();
+		if (m_Time >= 0.5f) {
+			if (GetComponent<Action>()->GetArrived()){
+				GetStage()->RemoveGameObject<PerformanceRing>(GetThis<PerformanceRing>());
+			}
 		}
 	}
 }

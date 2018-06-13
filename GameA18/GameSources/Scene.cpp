@@ -86,6 +86,8 @@ namespace basecross{
 		
 		strTexture = DataDir + L"Bullet.png";
 		App::GetApp()->RegisterTexture(L"BULLET_TX", strTexture);
+		strTexture = DataDir + L"ring.png"; 
+		App::GetApp()->RegisterTexture(L"Ring_TX", strTexture);
 
 		strTexture = DataDir + L"Pause.png";
 		App::GetApp()->RegisterTexture(L"PAUSE_TX", strTexture);
@@ -159,14 +161,16 @@ namespace basecross{
 		App::GetApp()->RegisterWav(L"se", SE);
 		wstring SE2 = DataDir + L"BGMSE\\SE2.wav";
 		App::GetApp()->RegisterWav(L"se2", SE2);
-		wstring opendoor = DataDir + L"BGMSE\\opendoor.wav";
-		App::GetApp()->RegisterWav(L"opendoor", opendoor);
 		wstring SE3 = DataDir + L"BGMSE\\bon.wav";
 		App::GetApp()->RegisterWav(L"se3", SE3);
 		wstring SE4 = DataDir + L"BGMSE\\bomb.wav";
 		App::GetApp()->RegisterWav(L"se4", SE4);
-		//wstring Clear = DataDir + L"BGMSE\\kuria.wav";
-		//App::GetApp()->RegisterWav(L"clear", Clear);
+		wstring SE5 = DataDir + L"BGMSE\\chakuchi.wav";
+		App::GetApp()->RegisterWav(L"se5", SE5);
+		wstring SE6 = DataDir + L"BGMSE\\Collapse.wav";
+		App::GetApp()->RegisterWav(L"se6", SE6);
+		wstring opendoor = DataDir + L"BGMSE\\opendoor.wav";
+		App::GetApp()->RegisterWav(L"opendoor", opendoor);
 		wstring Clear = DataDir + L"BGMSE\\yakusoku.wav";
 		App::GetApp()->RegisterWav(L"clear", Clear);
 		wstring KeySound = DataDir + L"BGMSE\\Getkey.wav";
@@ -194,7 +198,7 @@ namespace basecross{
 			ResetActiveStage<TitleStage>();
 			m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
 			m_AudioObjectPtr->AddAudioResource(L"titel");
-			m_AudioObjectPtr->Start(L"titel", XAUDIO2_LOOP_INFINITE, 0.1f);
+			m_AudioObjectPtr->Start(L"titel", XAUDIO2_LOOP_INFINITE, 0.62f);
 			m_StopNowMusic = L"titel";
 
 		}
@@ -205,7 +209,7 @@ namespace basecross{
 			m_AudioObjectPtr->Stop(m_StopNowMusic);	
 			m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
 			m_AudioObjectPtr->AddAudioResource(L"titel");
-			m_AudioObjectPtr->Start(L"titel", XAUDIO2_NO_LOOP_REGION, 0.1f);
+			m_AudioObjectPtr->Start(L"titel", XAUDIO2_NO_LOOP_REGION, 0.6f);
 			m_StopNowMusic = L"titel";
 			}
 
@@ -221,7 +225,7 @@ namespace basecross{
 
 			m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
 			m_AudioObjectPtr->AddAudioResource(L"gamestage");
-			m_AudioObjectPtr->Start(L"gamestage", XAUDIO2_LOOP_INFINITE, 0.1f);
+			m_AudioObjectPtr->Start(L"gamestage", XAUDIO2_LOOP_INFINITE, 0.6f);
 			m_StopNowMusic = L"gamestage";
 		}
 		//------------------------------------------------------
@@ -234,7 +238,7 @@ namespace basecross{
 			
 			m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
 			m_AudioObjectPtr->AddAudioResource(L"gameover");
-			m_AudioObjectPtr->Start(L"gameover", XAUDIO2_LOOP_INFINITE, 0.1f);
+			m_AudioObjectPtr->Start(L"gameover", XAUDIO2_LOOP_INFINITE, 0.62f);
 			m_StopNowMusic = L"gameover";
 			
 		}
@@ -247,7 +251,7 @@ namespace basecross{
 			ResetActiveStage<ClearStage>();
 			m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
 			m_AudioObjectPtr->AddAudioResource(L"clear");
-			m_AudioObjectPtr->Start(L"clear", XAUDIO2_LOOP_INFINITE, 0.4f);
+			m_AudioObjectPtr->Start(L"clear", XAUDIO2_LOOP_INFINITE, 0.62f);
 			m_StopNowMusic = L"clear";
 			
 
