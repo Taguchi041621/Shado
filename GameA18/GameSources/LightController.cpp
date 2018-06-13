@@ -63,7 +63,7 @@ namespace basecross {
 
 					m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
 					m_AudioObjectPtr->AddAudioResource(L"se3");
-					m_AudioObjectPtr->Start(L"se3", XAUDIO2_NO_LOOP_REGION, 0.3f);
+					m_AudioObjectPtr->Start(L"se3", XAUDIO2_NO_LOOP_REGION, 0.5f);
 					SetNowMusic(L"se3");
 					SoundPlay = false;
 				}

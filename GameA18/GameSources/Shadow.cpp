@@ -513,7 +513,7 @@ namespace basecross {
 
 			m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
 			m_AudioObjectPtr->AddAudioResource(L"KeySound");
-			m_AudioObjectPtr->Start(L"KeySound", XAUDIO2_NO_LOOP_REGION, 0.1f);
+			m_AudioObjectPtr->Start(L"KeySound", XAUDIO2_NO_LOOP_REGION, 0.6f);
 			SetNowMusic(L"KeySound");
 		}
 	}
