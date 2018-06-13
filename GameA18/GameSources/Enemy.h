@@ -144,4 +144,20 @@ namespace basecross {
 		void OnTriggerEnter();
 		void OnCollision(vector<shared_ptr<GameObject>>& OtherVec);
 	};
+	//--------------------------------------------------------------------------------------
+	//’e‚ªÁ‚¦‚é‚Æ‚«‚Ì‰‰o—p—Ö‚Á‚©
+	//--------------------------------------------------------------------------------------
+	class PerformanceRing : public GameObject {
+		Vec3 m_Position;
+		Vec3 m_Scale;
+		float m_Time = 0;
+		shared_ptr<MeshResource> m_SquareMeshResource;
+	public:
+		PerformanceRing(const shared_ptr<Stage>& StagePtr,Vec3 position, shared_ptr<MeshResource> Mesh);
+		virtual ~PerformanceRing();
+		//‰Šú‰»
+		virtual void OnCreate() override;
+		//‘€ì
+		virtual void OnUpdate();
+	};
 }
