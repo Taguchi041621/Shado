@@ -371,8 +371,9 @@ namespace basecross {
 	void ShadowGoal::OnTriggerEnter(){
 		OBB t;
 		t.m_Center = this->GetComponent<Transform>()->GetWorldPosition();
+		t.m_Center.y = t.m_Center.y - 0.2f;//ƒhƒA‚Ì”»’èˆÊ’u‚ð‰º‚°‚é
 		t.m_Center.z = 0;
-		t.m_Size = this->GetComponent<Transform>()->GetScale() * 0.5f;
+		t.m_Size = this->GetComponent<Transform>()->GetScale() * 0.3f;
 		OBB p;
 		p.m_Center = GetStage()->GetSharedGameObject<Player>(L"Player")->GetComponent<Transform>()->GetWorldPosition();
 		p.m_Center.z = 0;

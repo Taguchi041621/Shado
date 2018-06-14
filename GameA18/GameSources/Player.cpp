@@ -495,6 +495,8 @@ namespace basecross{
 		//アニメーション更新
 		Obj->LoopedAnimeUpdateMotion();
 		if (Obj->GetParentFlag() && m_FallFlag) {
+			//輪っか出す
+			Obj->LandingDirecting();
 			Obj->GetStateMachine()->ChangeState(StandState::Instance());
 		}
 		else if (Obj->GetParentFlag()) {
@@ -574,8 +576,6 @@ namespace basecross{
 		m_AudioObjectPtr->AddAudioResource(L"se6");
 		m_AudioObjectPtr->Start(L"se6", XAUDIO2_NO_LOOP_REGION, 0.32f);
 		Obj->SetNowMusic(L"se6");
-		//輪っか出す
-		Obj->LandingDirecting();
 	}
 	//ステート実行中に毎ターン呼ばれる関数
 	void StandState::Execute(const shared_ptr<Player>& Obj) {
