@@ -415,12 +415,19 @@ namespace basecross{
 		SetLooped(looped);
 	}
 
-	void Player::Damage() {
+	void Player::Damage(bool LR) {
 		if (!m_DamageFlag) {
 			m_DamageFlag = true;
 			auto PtrRedit = GetComponent<Rigidbody>();
 			PtrRedit->SetVelocityZero();
-			GetComponent<Rigidbody>()->SetVelocity(Vec3(-1.0f, 0, 0.0f));
+			if (LR == false) {
+				//ç∂Ç…îÚÇ‘
+				GetComponent<Rigidbody>()->SetVelocity(Vec3(-1.0f, 0, 0.0f));
+			}
+			else {
+				//âEÇ…îÚÇ‘
+				GetComponent<Rigidbody>()->SetVelocity(Vec3(1.0f, 0, 0.0f));
+			}
 			GetStateMachine()->ChangeState(DamageState1::Instance());
 		}
 	}

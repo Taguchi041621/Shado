@@ -217,6 +217,13 @@ namespace basecross {
 				Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
 				AddGameObject<CannonBase>(Scl, Qt, Pos);
 			}
+			if (MapVec[0] == L"CannonR") {
+				//‚»‚ê‚¼‚ê‚Ì’l‚ğ“ü‚ê‚é
+				//ŒÅ’è‚·‚é’l‚ğİ’è
+				stringflag = true;
+				Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
+				AddGameObject<CannonBaseR>(Scl, Qt, Pos);
+			}
 
 			if (!stringflag) {
 				throw BaseException(

@@ -155,7 +155,7 @@ namespace basecross{
 		//ゴールに入った時に呼ぶ、クリア演出をする
 		void InGoal();
 
-		void Damage();
+		void Damage(bool LR);
 
 		///音声
 		void SetNowMusic(wstring NowMusic) {

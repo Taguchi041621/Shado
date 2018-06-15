@@ -130,12 +130,18 @@ namespace basecross {
 	//大砲
 	//--------------------------------------------------------------------------------------
 	Cannon::Cannon(const shared_ptr<Stage>& StagePtr, const wstring BaseDir,
-		const Vec3& Scale, const Vec3& Rotation, GameObject& Obj)
+		const Vec3& Scale, const Vec3& Rotation, GameObject& Obj,bool LR)
 		: SS5ssae(StagePtr, BaseDir, L"Cannon.ssae", L"Fire"),
-		m_Scale(Scale), m_Rotation(Rotation), m_Obj(Obj), m_ScaleZ(0.05f), m_CoolTime(0), m_BulletFlag(false)
+		m_Scale(Scale), m_Rotation(Rotation), m_Obj(Obj), m_ScaleZ(0.05f), m_CoolTime(0), m_BulletFlag(false),m_LR(LR)
 	{
-		m_ToAnimeMatrix.affineTransformation(
+		m_ToAnimeMatrixLeft.affineTransformation(
 			Vec3(0.13f, 0.12f, 0.7f),
+			Vec3(0, 0, 0),
+			Vec3(0, 0, 0),
+			Vec3(0.0f, -0.01f, 0.0f)
+		);
+		m_ToAnimeMatrixRight.affineTransformation(
+			Vec3(-0.13f, 0.12f, 0.7f),
 			Vec3(0, 0, 0),
 			Vec3(0, 0, 0),
 			Vec3(0.0f, -0.01f, 0.0f)
@@ -160,8 +166,14 @@ namespace basecross {
 		SetFps(60);
 		//アニメーションのループ設定
 		SetLooped(false);
-		//アニメーションにかけるメトリックスの設定
-		SetToAnimeMatrix(m_ToAnimeMatrix);
+		if (m_LR == false) {
+			//アニメーションにかけるメトリックスの設定
+			SetToAnimeMatrix(m_ToAnimeMatrixLeft);
+		}
+		else {
+			//アニメーションにかけるメトリックスの設定
+			SetToAnimeMatrix(m_ToAnimeMatrixRight);
+		}
 		//SetAlphaActive(true);
 		//auto PtrCol = AddComponent<CollisionObb>();
 		//PtrCol->SetDrawActive(true);
@@ -188,16 +200,33 @@ namespace basecross {
 				UpdateAnimeTime(ElapsedTime);
 
 				if (IsAnimeEnd()) {
-					GetStage()->AddGameObject<Bullet>(
-						GetComponent<Transform>()->GetScale(),
-						GetComponent<Transform>()->GetRotation(),
-						GetComponent<Transform>()->GetPosition() - Vec3(1, -0.4f, 0)
-						);
+					//左向き
+					if (m_LR == false) {
+						GetStage()->AddGameObject<Bullet>(
+							GetComponent<Transform>()->GetScale(),
+							GetComponent<Transform>()->GetRotation(),
+							GetComponent<Transform>()->GetPosition() - Vec3(1, -0.4f, 0),
+							m_LR
+							);
+						//煙だす
+						GetStage()->AddGameObject<DirectingRing>(GetComponent<Transform>()->GetWorldPosition(),
+							Vec3(1.5f, 1.5f, 0.05f), Vec3(-1.0f, 0.5f, 0.0f), L"Smoke_Black_TX");
+					}
+					//右向き
+					else {
+						GetStage()->AddGameObject<Bullet>(
+							GetComponent<Transform>()->GetScale(),
+							GetComponent<Transform>()->GetRotation(),
+							GetComponent<Transform>()->GetPosition() - Vec3(-1, -0.4f, 0),
+							m_LR
+							);
+						//煙だす
+						GetStage()->AddGameObject<DirectingRing>(GetComponent<Transform>()->GetWorldPosition(),
+							Vec3(1.5f, 1.5f, 0.05f), Vec3(1.0f, 0.5f, 0.0f), L"Smoke_Black_TX");
+
+					}
 					m_BulletFlag = false;
 
-					//煙だす
-					GetStage()->AddGameObject<DirectingRing>(GetComponent<Transform>()->GetWorldPosition(),
-						Vec3(1.5f, 1.5f, 0.05f), Vec3(-1.0f, 0.5f, 0.0f), L"Smoke_Black_TX");
 
 					if (m_StopNowMusic != L"")
 					{
@@ -247,15 +276,18 @@ namespace basecross {
 	//弾
 	//--------------------------------------------------------------------------------------
 	Bullet::Bullet(const shared_ptr<Stage>& StagePtr,
-		const Vec3& Scale, const Vec3& Rotation, const Vec3& Position)
+		const Vec3& Scale, const Vec3& Rotation, const Vec3& Position,bool LR)
 		: GameObject(StagePtr),
-		m_Scale(Scale), m_Rotation(Rotation), m_Position(Position), m_ScaleZ(0.05f)
+		m_Scale(Scale), m_Rotation(Rotation), m_Position(Position), m_ScaleZ(0.05f),m_LR(LR)
 	{
 	}
 
 	Bullet::~Bullet() {}
 	//初期化
 	void Bullet::OnCreate() {
+		if (m_LR == true) {
+			m_Scale *= -1.0f;
+		}
 		//スケールのZを固定の大きさに
 		m_Scale.z = m_ScaleZ;
 		//AddComponent<Rigidbody>();
@@ -265,21 +297,6 @@ namespace basecross {
 		PtrTransform->SetRotation(m_Rotation);
 		PtrTransform->SetPosition(m_Position);
 
-		//auto PtrDraw = AddComponent<BcPNTStaticDraw>();
-		//PtrDraw->SetMeshResource(m_Obj.GetComponent<BcPNTStaticDraw>()->GetMeshResource());
-		////真っ黒
-		//PtrDraw->SetColorAndAlpha(Col4(1.0f, 1.0f, 1.0f, 0.0f));
-		////Mat4x4 au;
-		///*au.affineTransformation(
-		//	Vec3(1.0f, 1.0f, 0.1f),
-		//	Vec3(0, 0, 0),
-		//	Vec3(0, 0, 0),
-		//	Vec3(0.0f, 0.0f, 0.0f)
-		//	);
-		//PtrDraw->SetMeshToTransformMatrix(au);*/
-		//PtrDraw->SetTextureResource(L"Shadow_Blur_TX");
-		//PtrDraw->SetAlpha(1.0f);
-		//PtrDraw->SetPerPixelLighting(false);
 		//頂点配列
 		vector<VertexPositionNormalTexture> vertices;
 		//インデックスを作成するための配列
@@ -313,18 +330,10 @@ namespace basecross {
 		DrawComp->SetTextureResource(L"BULLET_TX");
 		//透明処理
 		SetAlphaActive(true);
-		/*Mat4x4 au;
-		au.affineTransformation(
-		Vec3(0.0f, 0.9f, 0.1f),
-		Vec3(0, 0, 0),
-		Vec3(0, 0, 0),
-		Vec3(0.0f, 0.0f, 0.0f)
-		);
-		PtrDraw->SetMeshToTransformMatrix(au);*/
 		auto PtrRedid = AddComponent<Rigidbody>();
 		auto PtrCol = AddComponent<CollisionObb>();
 	}
-
+	//当たり判定
 	void Bullet::OnCollision(vector<shared_ptr<GameObject>>& OtherVec) {
 		auto playerTrans = GetComponent<Transform>();
 		for (auto &obj : OtherVec) {
@@ -338,7 +347,7 @@ namespace basecross {
 				GetStage()->RemoveGameObject<Bullet>(GetThis<Bullet>());
 			}
 			if (PlayerPtr) {
-				PlayerPtr->Damage();
+				PlayerPtr->Damage(m_LR);
 				//輪っかを出す
 				GetStage()->AddGameObject<DirectingRing>(playerTrans->GetWorldPosition(),
 					Vec3(1.0f, 1.0f, 0.05f), Vec3(-0.5f, 0.0f, 0.0f),L"Ring_TX");
@@ -354,13 +363,21 @@ namespace basecross {
 		auto Pos = PtrTransform->GetPosition();
 		auto ScenePtr = App::GetApp()->GetScene<Scene>();
 		if (!ScenePtr->GetPauseFlag()) {
-			Pos.x -= 7.0f*ElapsedTime;
-			PtrTransform->SetPosition(Pos);
+			if (m_LR == false) {
+				Pos.x -= 7.0f*ElapsedTime;
+				PtrTransform->SetPosition(Pos);
 
-			//OnTriggerEnter();
-
-			if (Pos.x <= -30) {
-				GetStage()->RemoveGameObject<Bullet>(GetThis<Bullet>());
+				//OnTriggerEnter();
+				if (Pos.x <= -30) {
+					GetStage()->RemoveGameObject<Bullet>(GetThis<Bullet>());
+				}
+			}
+			else {
+				Pos.x += 7.0f*ElapsedTime;
+				PtrTransform->SetPosition(Pos);
+				if (Pos.x >= 30) {
+					GetStage()->RemoveGameObject<Bullet>(GetThis<Bullet>());
+				}
 			}
 		}
 	}
@@ -369,22 +386,22 @@ namespace basecross {
 	}
 
 	void Bullet::OnTriggerEnter() {
-		auto PtrPlayer = GetStage()->GetSharedGameObject<Player>(L"Player");
+		//auto PtrPlayer = GetStage()->GetSharedGameObject<Player>(L"Player");
 
-		SPHERE t;
-		t.m_Center = GetComponent<Transform>()->GetWorldPosition();
-		t.m_Center.z = 0;
-		t.m_Radius = GetComponent<Transform>()->GetScale().x/2;
+		//SPHERE t;
+		//t.m_Center = GetComponent<Transform>()->GetWorldPosition();
+		//t.m_Center.z = 0;
+		//t.m_Radius = GetComponent<Transform>()->GetScale().x/2;
 
-		OBB p;
-		p.m_Center = PtrPlayer->GetComponent<Transform>()->GetWorldPosition();
-		p.m_Center.z = 0;
-		p.m_Size = PtrPlayer->GetComponent<Transform>()->GetScale()/2.2;
+		//OBB p;
+		//p.m_Center = PtrPlayer->GetComponent<Transform>()->GetWorldPosition();
+		//p.m_Center.z = 0;
+		//p.m_Size = PtrPlayer->GetComponent<Transform>()->GetScale()/2.2;
 
-		//プレイヤーが弾に触れたかを調べる判定
-		if (HitTest::SPHERE_OBB(t, p,Vec3(0))) {
-			PtrPlayer->Damage();
-			GetStage()->RemoveGameObject<Bullet>(GetThis<Bullet>());
-		}
+		////プレイヤーが弾に触れたかを調べる判定
+		//if (HitTest::SPHERE_OBB(t, p,Vec3(0))) {
+		//	PtrPlayer->Damage();
+		//	GetStage()->RemoveGameObject<Bullet>(GetThis<Bullet>());
+		//}
 	}
 }

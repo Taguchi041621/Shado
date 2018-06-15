@@ -84,8 +84,12 @@ namespace basecross {
 
 		float m_CoolTime;
 		bool m_BulletFlag;
+		//Lがfalse,Rがtrue
+		bool m_LR;
 
-		Mat4x4 m_ToAnimeMatrix;
+		//データとゲームとの変換行列
+		Mat4x4 m_ToAnimeMatrixLeft;
+		Mat4x4 m_ToAnimeMatrixRight;
 
 		shared_ptr<MultiAudioObject> m_AudioObjectPtr;
 		wstring m_StopNowMusic;
@@ -96,7 +100,8 @@ namespace basecross {
 			const wstring BaseDir,
 			const Vec3& Scale,
 			const Vec3& Rotation,
-			GameObject& Obj
+			GameObject& Obj,
+			bool LR
 		);
 
 		virtual ~Cannon();
@@ -127,12 +132,15 @@ namespace basecross {
 		float m_ScaleZ;
 		//このオブジェクトのみで使用するスクエアメッシュ
 		shared_ptr<MeshResource> m_SquareMeshResource;
+		//Lがfalse,Rがtrue
+		bool m_LR;
 	public:
 		//構築と破棄
 		Bullet(const shared_ptr<Stage>& StagePtr,
 			const Vec3& Scale,
 			const Vec3& Rotation,
-			const Vec3& Position
+			const Vec3& Position,
+			bool LR
 		);
 
 		virtual ~Bullet();
