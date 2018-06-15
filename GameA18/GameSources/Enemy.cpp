@@ -197,7 +197,7 @@ namespace basecross {
 
 					//‰Œ‚¾‚·
 					GetStage()->AddGameObject<DirectingRing>(GetComponent<Transform>()->GetWorldPosition(),
-						Vec3(1.5f, 1.5f, 0.05f), Vec3(-1.0f, 0.5f, 0.0f), L"Smoke_TX");
+						Vec3(1.5f, 1.5f, 0.05f), Vec3(-1.0f, 0.5f, 0.0f), L"Smoke_Black_TX");
 
 					if (m_StopNowMusic != L"")
 					{

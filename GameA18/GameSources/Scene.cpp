@@ -90,8 +90,12 @@ namespace basecross{
 		App::GetApp()->RegisterTexture(L"BULLET_TX", strTexture);
 		strTexture = DataDir + L"ring.png"; 
 		App::GetApp()->RegisterTexture(L"Ring_TX", strTexture);
+		//”’‚¢‰Œ
 		strTexture = DataDir + L"smoke.png";
 		App::GetApp()->RegisterTexture(L"Smoke_TX", strTexture);
+		//•‚¢‰Œ
+		strTexture = DataDir + L"smoke_Black.png";
+		App::GetApp()->RegisterTexture(L"Smoke_Black_TX", strTexture);
 
 		strTexture = DataDir + L"Pause.png";
 		App::GetApp()->RegisterTexture(L"PAUSE_TX", strTexture); 
