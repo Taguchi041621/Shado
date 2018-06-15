@@ -67,9 +67,9 @@ namespace basecross {
 		else if(!m_StartFlag) {
 			//•Ç‚Ì•û‚É‹ßŠñ‚é
 			//CameraPosZ += 0.2;
-			CameraPosZ += 40.0f / 180.0f;
-			if (CameraPosZ >= -16) {
-				CameraPosZ = -16;
+			CameraPosZ += 36.0f / 180.0f;
+			if (CameraPosZ >= -20) {
+				CameraPosZ = -20;
 			}
 		}
 		if (CntlVec[0].bConnected) {

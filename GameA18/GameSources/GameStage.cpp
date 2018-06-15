@@ -312,26 +312,12 @@ namespace basecross {
 		DrawComp->SetTextureResource(L"WallTexture_TX");
 		Flt4 Color(1.0f, 1.0f, 1.0f, 0.7f);
 		DrawComp->SetColorAndAlpha(Color);
-
-		//壁、影がないほう
-		Ptr = AddGameObject<GameObject>();
-		PtrTrans = Ptr->GetComponent<Transform>();
-		Qt.rotationRollPitchYawFromVector(Vec3(0, XM_PIDIV2, 0));
-		PtrTrans->SetScale(80.0f, 100.0f, 1.0f);
-		PtrTrans->SetQuaternion(Qt);
-		PtrTrans->SetWorldPosition(Vec3(50.0f, 0.0f, 0.5f));
-		DrawComp = Ptr->AddComponent<BcPNTStaticDraw>();
-		//描画コンポーネントに形状（メッシュ）を設定
-		DrawComp->SetMeshResource(L"DEFAULT_SQUARE");
-		DrawComp->SetFogEnabled(true);
-		DrawComp->SetOwnShadowActive(true);
-		DrawComp->SetTextureResource(L"WallTexture_TX");
-		DrawComp->SetColorAndAlpha(Color);
 	}
 
 	void GameStage::CreateHaveKeys() {
 		auto group = GetSharedObjectGroup(L"KeyGroup");
-		for (int i = 0; i < group->size(); i++) {
+		int s = group->size();
+		for (int i = 0; i < s; i++) {
 			//鍵のグループに入ってる数、表示する
 			auto key = AddGameObject<HaveKeys>((wstring)L"UI_Key_None_TX", i);
 			if (i == 0) {
@@ -360,27 +346,15 @@ namespace basecross {
 	void GameStage::CreateMiniMap() {
 		AddGameObject<MiniMap>();
 	}
-	//画面内を動き回っているやつ
+	//画面内を動き回っているライトイラスト
 	void GameStage::CreateLightSign() {
 		AddGameObject<LightSign>();
 	}
 	//画面端のやつ
 	void GameStage::CreateMoveEnd() {
-		//auto group = GetSharedObjectGroup(L"MoveEndGroup");
-		//for (int i = 1; i > -2 ; i += -2) {
-
 		auto frame = AddGameObject<Sprite>(L"Shadowframe_TX", true, Vec2(1330.0f, 870.0f), Vec3(0.3f, 0.0f, 0));
 		frame->GetComponent<Action>()->AllActionClear();
 		frame->SetActionflag(true);
-		//group->IntoGroup(frame);
-		//auto vertical = AddGameObject<Sprite>(L"Shadow_TX", true, Vec2(10000.0f, 600.0f), Vec3(0.0f, 470.0f*i, 0));
-		//auto horizontal = AddGameObject<Sprite>(L"Shadow_TX", true, Vec2(800.0f, 5000.0f), Vec3(700.0f*i, 0, 0));
-		//vertical->GetComponent<Action>()->AllActionClear();
-		//horizontal->GetComponent<Action>()->AllActionClear();
-		//vertical->SetActionflag(true);
-		//horizontal->SetActionflag(true);
-		//group->IntoGroup(vertical);
-		//group->IntoGroup(horizontal);
 	}
 	
 	//ライト代わりのオブジェクト
