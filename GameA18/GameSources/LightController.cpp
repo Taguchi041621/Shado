@@ -50,7 +50,7 @@ namespace basecross {
 				m_Lingering *= 0.8f;
 			}
 			//限界位置表示のやつが入ってるグループの取得
-			auto MoveEndGroup = GetStage()->GetSharedObjectGroup(L"MoveEndGroup");
+			//auto MoveEndGroup = GetStage()->GetSharedObjectGroup(L"MoveEndGroup");
 
 			if (m_LightAngle.x >= m_MaxAngle || m_LightAngle.x <= -m_MaxAngle ||
 				m_LightAngle.y >= m_MaxAngle || m_LightAngle.y <= -m_MaxAngle) {
@@ -78,36 +78,36 @@ namespace basecross {
 					m_LightAngle.x = m_MaxAngle;
 
 				}
-				MoveEndGroup->at(1)->GetComponent<Action>()->AllActionClear();
-				MoveEndGroup->at(1)->GetComponent<Action>()->
-					AddMoveTo(0.1f,Vec3(640.0f + (m_MaxAngle - m_LightAngle.x)*200.0f, 0.0f, 0.0f));
+				//MoveEndGroup->at(1)->GetComponent<Action>()->AllActionClear();
+				//MoveEndGroup->at(1)->GetComponent<Action>()->
+				//	AddMoveTo(0.1f,Vec3(640.0f + (m_MaxAngle - m_LightAngle.x)*200.0f, 0.0f, 0.0f));
 			}
 			//右
 			if (m_LightAngle.x <= -m_MaxAngle + 0.3f) {
 				if (m_LightAngle.x <= -m_MaxAngle) {
 					m_LightAngle.x = -m_MaxAngle;
 				}
-				MoveEndGroup->at(3)->GetComponent<Action>()->AllActionClear();
-				MoveEndGroup->at(3)->GetComponent<Action>()->
-					AddMoveTo(0.1f, Vec3(-640.0f - (m_MaxAngle - -m_LightAngle.x)*200.0f, 0.0f, 0.0f));
+				//MoveEndGroup->at(3)->GetComponent<Action>()->AllActionClear();
+				//MoveEndGroup->at(3)->GetComponent<Action>()->
+				//	AddMoveTo(0.1f, Vec3(-640.0f - (m_MaxAngle - -m_LightAngle.x)*200.0f, 0.0f, 0.0f));
 			}
 			//下
 			if (m_LightAngle.y >= m_MaxAngle - 0.3f) {
 				if (m_LightAngle.y >= m_MaxAngle) {
 					m_LightAngle.y = m_MaxAngle;
 				}				
-				MoveEndGroup->at(0)->GetComponent<Action>()->AllActionClear();
-				MoveEndGroup->at(0)->GetComponent<Action>()->
-					AddMoveTo(0.1f, Vec3(0.0f,410.0f + (m_MaxAngle - m_LightAngle.y)*200.0f,0.0f));
+				//MoveEndGroup->at(0)->GetComponent<Action>()->AllActionClear();
+				//MoveEndGroup->at(0)->GetComponent<Action>()->
+				//	AddMoveTo(0.1f, Vec3(0.0f,410.0f + (m_MaxAngle - m_LightAngle.y)*200.0f,0.0f));
 			}
 			//上
 			if (m_LightAngle.y <= -m_MaxAngle + 0.3f) {
 				if (m_LightAngle.y <= -m_MaxAngle) {
 					m_LightAngle.y = -m_MaxAngle;
 				}
-				MoveEndGroup->at(2)->GetComponent<Action>()->AllActionClear();
-				MoveEndGroup->at(2)->GetComponent<Action>()->
-					AddMoveTo(0.1f, Vec3(0.0f, -410.0f - (m_MaxAngle - -m_LightAngle.y)*200.0f, 0.0f));
+				//MoveEndGroup->at(2)->GetComponent<Action>()->AllActionClear();
+				//MoveEndGroup->at(2)->GetComponent<Action>()->
+				//	AddMoveTo(0.1f, Vec3(0.0f, -410.0f - (m_MaxAngle - -m_LightAngle.y)*200.0f, 0.0f));
 			}
 
 			//---------------------------------------------------------------------------------------
