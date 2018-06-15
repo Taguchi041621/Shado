@@ -253,7 +253,7 @@ namespace basecross{
 		m_DamageFlag = false;
 		//初期位置などの設定
 		auto Ptr = GetComponent<Transform>();
-		Ptr->SetScale(0.80f, 1.60f, 0.040f);	//X,Z25、Y50の長方形
+		Ptr->SetScale(0.80f, 1.60f, 0.2f);	//X,Z25、Y50の長方形
 		Ptr->SetRotation(0.0f, 0.0f, 0.0f);
 		Ptr->SetPosition(-8.0f, 5.5f, 0.0f);
 
@@ -342,7 +342,8 @@ namespace basecross{
 	}
 	//着地したときの演出
 	void Player::LandingDirecting() {
-		GetStage()->AddGameObject<DirectingRing>(GetComponent<Transform>()->GetWorldPosition(),Vec3(0.0f,-0.7f,0.0f));
+		GetStage()->AddGameObject<DirectingRing>(GetComponent<Transform>()->GetWorldPosition(),
+			Vec3(1.0f, 1.0f, 0.05f), Vec3(0.0f, -0.7f, 0.0f), L"Smoke_TX");
 	}
 	//GameOverSceneに移行する
 	void Player::GoGameOverScene() {

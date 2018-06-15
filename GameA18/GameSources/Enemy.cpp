@@ -195,8 +195,9 @@ namespace basecross {
 						);
 					m_BulletFlag = false;
 
-					//輪っかだす
-					GetStage()->AddGameObject<DirectingRing>(GetComponent<Transform>()->GetWorldPosition(), Vec3(-0.5f, 0.5f, 0.0f));
+					//煙だす
+					GetStage()->AddGameObject<DirectingRing>(GetComponent<Transform>()->GetWorldPosition(),
+						Vec3(1.5f, 1.5f, 0.05f), Vec3(-1.0f, 0.5f, 0.0f), L"Smoke_TX");
 
 					if (m_StopNowMusic != L"")
 					{
@@ -332,13 +333,15 @@ namespace basecross {
 			auto PlayerPtr = dynamic_pointer_cast<Player>(obj);
 			if (ShadowPtr) {
 				//輪っかを出す
-				GetStage()->AddGameObject<DirectingRing>(playerTrans->GetWorldPosition(),Vec3(-0.5f,0.0f,0.0f));
+				GetStage()->AddGameObject<DirectingRing>(playerTrans->GetWorldPosition(),
+					Vec3(1.0f,1.0f,0.05f), Vec3(-0.5f, 0.0f, 0.0f),L"Ring_TX");
 				GetStage()->RemoveGameObject<Bullet>(GetThis<Bullet>());
 			}
 			if (PlayerPtr) {
 				PlayerPtr->Damage();
 				//輪っかを出す
-				GetStage()->AddGameObject<DirectingRing>(playerTrans->GetWorldPosition(),Vec3(-0.5f, 0.0f, 0.0f));
+				GetStage()->AddGameObject<DirectingRing>(playerTrans->GetWorldPosition(),
+					Vec3(1.0f, 1.0f, 0.05f), Vec3(-0.5f, 0.0f, 0.0f),L"Ring_TX");
 				GetStage()->RemoveGameObject<Bullet>(GetThis<Bullet>());
 			}
 		}
@@ -382,70 +385,6 @@ namespace basecross {
 		if (HitTest::SPHERE_OBB(t, p,Vec3(0))) {
 			PtrPlayer->Damage();
 			GetStage()->RemoveGameObject<Bullet>(GetThis<Bullet>());
-		}
-	}
-	//--------------------------------------------------------------------------------------
-	//弾が消えるときの演出用輪っか
-	//--------------------------------------------------------------------------------------
-	DirectingRing::DirectingRing(const shared_ptr<Stage>& StagePtr,Vec3 position, Vec3 shift)
-		: GameObject(StagePtr),m_Position(position),m_Shift(shift)
-	{}
-	DirectingRing::~DirectingRing() {};
-	void DirectingRing::OnCreate() {
-		auto Trans = GetComponent<Transform>();
-		//中心点をずらす
-		m_Position += m_Shift;
-		Trans->SetWorldPosition(m_Position);
-		Trans->SetRotation(Vec3(0.0f,0.0f,0.0f));
-		Trans->SetScale(Vec3(1.0f,1.0f,0.05f));
-		m_Scale = Trans->GetScale();
-
-		//頂点配列
-		vector<VertexPositionNormalTexture> vertices;
-		//インデックスを作成するための配列
-		vector<uint16_t> indices;
-		//Squareの作成(ヘルパー関数を利用)
-		MeshUtill::CreateSquare(1.0f, vertices, indices);
-
-		//左上頂点
-		vertices[0].textureCoordinate = Vec2(0, 0);
-		//右上頂点
-		vertices[1].textureCoordinate = Vec2(1, 0);
-		//左下頂点
-		vertices[2].textureCoordinate = Vec2(0, 1.0f);
-		//右下頂点
-		vertices[3].textureCoordinate = Vec2(1, 1.0f);
-		//頂点の型を変えた新しい頂点を作成
-		vector<VertexPositionColorTexture> new_vertices;
-		for (auto& v : vertices) {
-			VertexPositionColorTexture nv;
-			nv.position = v.position;
-			nv.color = Col4(1.0f, 1.0f, 1.0f, 1.0f);
-			nv.textureCoordinate = v.textureCoordinate;
-			new_vertices.push_back(nv);
-		}
-		//新しい頂点を使ってメッシュリソースの作成
-		m_SquareMeshResource = MeshResource::CreateMeshResource<VertexPositionColorTexture>(new_vertices, indices, true);
-
-		auto DrawComp = AddComponent<PCTStaticDraw>();
-		DrawComp->SetMeshResource(m_SquareMeshResource);
-		DrawComp->SetTextureResource(L"Ring_TX");
-		SetAlphaActive(true);
-		auto act = AddComponent<Action>();
-		//少しずつ大きくする
-		act->AddScaleTo(1.0f, Vec3(m_Scale.x + 0.5f, m_Scale.y + 0.5f, 0.1f), Lerp::Linear);
-		act->Run();
-	}
-	void DirectingRing::OnUpdate() {
-		m_Time += App::GetApp()->GetElapsedTime();
-		if (m_Time >= 0.3f) {
-			//少しずつ薄くする
-			GetComponent<PCTStaticDraw>()->SetDiffuse(Col4(1.0f, 1.0f, 1.0f, 1.3 - m_Time));
-			//設定した大きさまで大きくなったら
-			if (GetComponent<Action>()->GetArrived()){
-				//消える
-				GetStage()->RemoveGameObject<DirectingRing>(GetThis<DirectingRing>());
-			}
 		}
 	}
 }

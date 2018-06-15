@@ -55,6 +55,9 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)FadeOut.cpp">
       <Filter>ソース</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Performance.cpp">
+      <Filter>ソース</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Character.h">
@@ -109,6 +112,9 @@
       <Filter>ヘッダー</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)FadeOut.h">
+      <Filter>ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Performance.h">
       <Filter>ヘッダー</Filter>
     </ClInclude>
   </ItemGroup>

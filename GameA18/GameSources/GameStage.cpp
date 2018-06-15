@@ -116,7 +116,7 @@ namespace basecross {
 				auto PlayerPtr = AddGameObject<Player>(DataDir + L"Idea\\");
 				//シェア配列にプレイヤーを追加
 				SetSharedGameObject(L"Player", PlayerPtr);
-				Pos.z = 0.0f;
+				Pos.z = -0.1f;
 				PlayerPtr->GetComponent<Transform>()->SetPosition(Pos);
 				//カメラのターゲットに設定
 				//dynamic_pointer_cast<MyCamera>(GetView()->GetTargetCamera())->SetTargetObject(PlayerPtr);

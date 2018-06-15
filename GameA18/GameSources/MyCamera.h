@@ -9,7 +9,12 @@ namespace basecross
 		weak_ptr<GameObject>m_TargetObject;
 		weak_ptr<GameStage>m_StagePtr;
 		float CameraAngle;
-		float CameraPosZ;
+		//カメラのZ値を持つ
+		float m_CameraPosZ;
+		//1回目のステージ突入時位置
+		float m_FarstPosZ;
+		//カメラが寄る演出の際に止まる位置
+		float m_StartPosZ;
 
 		Vec3 CameraPos;
 

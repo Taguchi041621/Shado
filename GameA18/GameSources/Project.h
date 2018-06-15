@@ -23,3 +23,4 @@
 #include "UI.h"
 #include "Fade.h"
 #include "FadeOut.h"
+#include "Performance.h"

@@ -5,7 +5,8 @@ namespace basecross {
 	MyCamera::MyCamera(const shared_ptr<GameStage>&StagePtr) :
 		Camera(),
 		m_StagePtr(StagePtr),
-		CameraPosZ(-56.0f),
+		m_FarstPosZ(-56.0f),
+		m_StartPosZ(-20.0f),
 		CameraAngle(0),
 		CameraPos(0)
 	{}
@@ -35,15 +36,15 @@ namespace basecross {
 		if (m_StartFlag && !ScenePtr->GetPauseFlag()) {
 			if (CntlVec[0].bConnected) {
 				if (CntlVec[0].wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) {
-					CameraPosZ += 0.2;
-					if (CameraPosZ >= -10) {
-						CameraPosZ = -10;
+					m_CameraPosZ += 0.2;
+					if (m_CameraPosZ >= -10) {
+						m_CameraPosZ = -10;
 					}
 				}
 				else if (CntlVec[0].wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) {
-					CameraPosZ -= 0.2;
-					if (CameraPosZ <= -30) {
-						CameraPosZ = -30;
+					m_CameraPosZ -= 0.2;
+					if (m_CameraPosZ <= -30) {
+						m_CameraPosZ = -30;
 					}
 				}
 			}
@@ -66,10 +67,10 @@ namespace basecross {
 		//ステージ開始時(リスタート時はやらない)
 		else if(!m_StartFlag) {
 			//壁の方に近寄る
-			//CameraPosZ += 0.2;
-			CameraPosZ += 36.0f / 180.0f;
-			if (CameraPosZ >= -20) {
-				CameraPosZ = -20;
+			//ゴールに寄り終わるのと同タイミングでスタートZ位置まで動き終わる
+			m_CameraPosZ += (-m_FarstPosZ + m_StartPosZ) / 180.0f;
+			if (m_CameraPosZ >= m_StartPosZ) {
+				m_CameraPosZ = m_StartPosZ;
 			}
 		}
 		if (CntlVec[0].bConnected) {
@@ -82,18 +83,20 @@ namespace basecross {
 		auto TargetPos = GetTargetObject()->GetComponent<Transform>()->GetWorldPosition();
 		TargetPos.x += CameraPos.x;
 		TargetPos.y += CameraPos.y;
-		Vec3 ArmVec(-CameraAngle, CameraAngle, CameraPosZ);
+		Vec3 ArmVec(-CameraAngle, CameraAngle, m_CameraPosZ);
 		Vec3 Eye = TargetPos + ArmVec;
 		SetAt(TargetPos);
 		SetEye(Eye);
 		ScenePtr->SetCameraAngle(CameraAngle);
-		ScenePtr->SetCameraPosZ(CameraPosZ);
+		ScenePtr->SetCameraPosZ(m_CameraPosZ);
 	}
 
 	void MyCamera::OnCreate() {
 		SetUp(Vec3(0, 1.0f, 0));
 		Camera::OnCreate();
 		m_StartFlag = false;
+		//カメラのZに初期位置を入れる
+		m_CameraPosZ = m_FarstPosZ;
 		auto ScenePtr = App::GetApp()->GetScene<Scene>();
 		ScenePtr->SetStartFlag(m_StartFlag);
 		//リスタート時
@@ -101,7 +104,7 @@ namespace basecross {
 		{
 			m_StartFlag = true;
 			ScenePtr->SetStartFlag(m_StartFlag);
-			CameraPosZ = ScenePtr->GetCameraPosZ();
+			m_CameraPosZ = ScenePtr->GetCameraPosZ();
 			CameraAngle = ScenePtr->GetCameraAngle();
 		}
 	}

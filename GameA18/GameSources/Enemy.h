@@ -144,22 +144,4 @@ namespace basecross {
 		void OnTriggerEnter();
 		void OnCollision(vector<shared_ptr<GameObject>>& OtherVec);
 	};
-	//--------------------------------------------------------------------------------------
-	//弾が消えるときの演出用輪っか
-	//--------------------------------------------------------------------------------------
-	class DirectingRing : public GameObject {
-		Vec3 m_Position;
-		Vec3 m_Scale;
-		//演出を出すオブジェクトからどれだけずらすかを持つ
-		Vec3 m_Shift;
-		float m_Time = 0;
-		shared_ptr<MeshResource> m_SquareMeshResource;
-	public:
-		DirectingRing(const shared_ptr<Stage>& StagePtr,Vec3 position, Vec3 shift);
-		virtual ~DirectingRing();
-		//初期化
-		virtual void OnCreate() override;
-		//操作
-		virtual void OnUpdate();
-	};
 }
