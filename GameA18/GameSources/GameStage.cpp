@@ -366,18 +366,23 @@ namespace basecross {
 	}
 	//画面端のやつ
 	void GameStage::CreateMoveEnd() {
-		auto group = GetSharedObjectGroup(L"MoveEndGroup");
-		for (int i = 1; i > -2 ; i += -2) {
-			auto vertical = AddGameObject<Sprite>(L"Shadow_TX", true, Vec2(10000.0f, 600.0f), Vec3(0.0f, 470.0f*i, 0));
-			auto horizontal = AddGameObject<Sprite>(L"Shadow_TX", true, Vec2(800.0f, 5000.0f), Vec3(700.0f*i, 0, 0));
-			vertical->GetComponent<Action>()->AllActionClear();
-			horizontal->GetComponent<Action>()->AllActionClear();
-			vertical->SetActionflag(true);
-			horizontal->SetActionflag(true);
-			group->IntoGroup(vertical);
-			group->IntoGroup(horizontal);
-		}
+		//auto group = GetSharedObjectGroup(L"MoveEndGroup");
+		//for (int i = 1; i > -2 ; i += -2) {
+
+		auto frame = AddGameObject<Sprite>(L"Shadowframe_TX", true, Vec2(1330.0f, 870.0f), Vec3(0.3f, 0.0f, 0));
+		frame->GetComponent<Action>()->AllActionClear();
+		frame->SetActionflag(true);
+		//group->IntoGroup(frame);
+		//auto vertical = AddGameObject<Sprite>(L"Shadow_TX", true, Vec2(10000.0f, 600.0f), Vec3(0.0f, 470.0f*i, 0));
+		//auto horizontal = AddGameObject<Sprite>(L"Shadow_TX", true, Vec2(800.0f, 5000.0f), Vec3(700.0f*i, 0, 0));
+		//vertical->GetComponent<Action>()->AllActionClear();
+		//horizontal->GetComponent<Action>()->AllActionClear();
+		//vertical->SetActionflag(true);
+		//horizontal->SetActionflag(true);
+		//group->IntoGroup(vertical);
+		//group->IntoGroup(horizontal);
 	}
+	
 	//ライト代わりのオブジェクト
 	void GameStage::CreateLightObject() {
 		auto PtrLight = AddGameObject<StageLight>(
