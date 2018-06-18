@@ -360,11 +360,12 @@ namespace basecross {
 		float ElapsedTime = App::GetApp()->GetElapsedTime();
 		//アニメーションを更新する
 		UpdateAnimeTime(ElapsedTime);
-		if (!m_LightFlag&&GetStage()->GetSharedGameObject<Player>(L"Player")->GetKey())
-		{
-			m_LightFlag = true;
-			/*ChangeAnimation(L"Light");
-			SetToAnimeMatrix(m_ToAnimeMatrixLight);*/
+		if (m_LightFlag&&GetStage()->GetSharedGameObject<Player>(L"Player")->GetKey()){
+			m_LightFlag = false;
+			SetFps(60.0f);
+			ChangeAnimation(L"Unlock");
+			SetLooped(false);
+			//SetToAnimeMatrix(m_ToAnimeMatrixLight);
 		}
 	}
 
@@ -452,20 +453,25 @@ namespace basecross {
 		//鍵が取られたら
 		if (m_GoGoal) {
 			//計算のための時間加算
-			m_Lerp += App::GetApp()->GetElapsedTime();
+			m_Lerp += App::GetApp()->GetElapsedTime()*2.0f;
 			//回転のための時間加算
 			m_spin += App::GetApp()->GetElapsedTime();
-			//動きが終わったら
-			if (m_Lerp >= 1) {
-				//鍵を消す
-				GetStage()->RemoveGameObject<ShadowKey>(GetThis<ShadowKey>());
-			}
+			//ベジエ曲線最終位置の設定
+			p1 = GetStage()->GetSharedGameObject<ShadowGoal>(L"ShadowGoal")->
+				GetComponent<Transform>()->GetWorldPosition() + Vec3(0.0f,3.0f, 0.0f);
 			//回る
 			GetComponent<Transform>()->SetRotation(Vec3(0.0f, 0.0f, m_spin*30.0f));
 			//位置計算
 			m_Position.x = (1 - m_Lerp)*p0.x + m_Lerp*p1.x;
 			m_Position.y = (1 - m_Lerp)*p0.y + m_Lerp*p1.y;
 			GetComponent<Transform>()->SetPosition(m_Position);
+			//動きが終わったら
+			if (m_Lerp >= 1.0f) {
+				//ゴールのアニメ起動のフラグを立てる
+				GetStage()->GetSharedGameObject<ShadowGoal>(L"ShadowGoal")->SetLightFlag(true);
+				//鍵を消す
+				GetStage()->RemoveGameObject<ShadowKey>(GetThis<ShadowKey>());
+			}
 		}
 		else {
 			GetComponent<Transform>()->SetPosition(ShadowLocation());
@@ -500,7 +506,7 @@ namespace basecross {
 			//ベジエ曲線初期位置の設定
 			p0 = GetComponent<Transform>()->GetWorldPosition();
 			//ベジエ曲線最終位置の設定
-			p1 = GetComponent<Transform>()->GetWorldPosition() + Vec3(0.0f,20.0f, 0.0f);
+			//p1 = GetComponent<Transform>()->GetWorldPosition() + Vec3(0.0f,20.0f, 0.0f);
 			//回す
 			m_spinB = true;
 

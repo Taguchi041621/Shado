@@ -141,6 +141,7 @@ namespace basecross {
 		virtual void OnUpdate()override;
 
 		void OnTriggerEnter();
+		void SetLightFlag(bool f) { m_LightFlag = f; };
 
 		//‰e‚ÌêŠ‚ğŒvZ‚·‚é
 		Vec3 ShadowLocation();

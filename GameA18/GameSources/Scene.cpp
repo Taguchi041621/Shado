@@ -24,7 +24,7 @@ namespace basecross{
 		App::GetApp()->RegisterTexture(L"SELECT_TX", strTexture);*/
 
 		//ƒNƒŠƒA‰æ–Ê
-		strTexture = DataDir + L"Clear_Sample_image.png";
+		strTexture = DataDir + L"Clear_Image.png";
 		App::GetApp()->RegisterTexture(L"CLEAR_NoText_TX", strTexture);
 		strTexture = DataDir + L"Clear.png";
 		App::GetApp()->RegisterTexture(L"CLEAR_TX", strTexture);
