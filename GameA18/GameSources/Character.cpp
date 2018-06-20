@@ -329,14 +329,15 @@ namespace basecross {
 		}
 	}
 	//--------------------------------------------------------------------------------------
-	///	大砲の元(左向き)
+	///	大砲の元(左false,右true)
 	//--------------------------------------------------------------------------------------
 	CannonBase::CannonBase(const shared_ptr<Stage>& StagePtr,
-		const Vec3& StartScale, const Quat& StartQt, const Vec3& StartPos) :
+		const Vec3& StartScale, const Quat& StartQt, const Vec3& StartPos, bool LR) :
 		GameObject(StagePtr),
 		m_StartScale(StartScale),
 		m_StartQt(StartQt),
-		m_StartPos(StartPos)
+		m_StartPos(StartPos),
+		m_LR(LR)
 	{}
 
 	void CannonBase::OnCreate() {
@@ -355,45 +356,11 @@ namespace basecross {
 			GetComponent<Transform>()->GetScale(),
 			GetComponent<Transform>()->GetRotation(),
 			*GetThis<GameObject>(),
-			false
+			m_LR
 			);
 	}
 
 	void CannonBase::OnUpdate() {
-	}
-	//--------------------------------------------------------------------------------------
-	///	大砲の元(右向き)
-	//--------------------------------------------------------------------------------------
-	CannonBaseR::CannonBaseR(const shared_ptr<Stage>& StagePtr,
-		const Vec3& StartScale, const Quat& StartQt, const Vec3& StartPos) :
-		GameObject(StagePtr),
-		m_StartScale(StartScale),
-		m_StartQt(StartQt),
-		m_StartPos(StartPos)
-	{}
-
-	void CannonBaseR::OnCreate() {
-		auto PtrTransform = GetComponent<Transform>();
-		PtrTransform->SetScale(m_StartScale);
-		PtrTransform->SetQuaternion(m_StartQt);
-		PtrTransform->SetPosition(m_StartPos);
-
-		SetAlphaActive(true);
-		//--------------------------------------------------------
-		//オブジェクトの影のコンストラクタ呼び出し
-		wstring DataDir;
-		App::GetApp()->GetDataDirectory(DataDir);
-		//右向き
-		GetStage()->AddGameObject<Cannon>(
-			DataDir + L"Cannon\\",
-			GetComponent<Transform>()->GetScale(),
-			GetComponent<Transform>()->GetRotation(),
-			*GetThis<GameObject>(),
-			true
-			);
-	}
-
-	void CannonBaseR::OnUpdate() {
 	}
 
 	//--------------------------------------------------------------------------------------

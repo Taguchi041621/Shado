@@ -215,14 +215,14 @@ namespace basecross {
 				//固定する値を設定
 				stringflag = true;
 				Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
-				AddGameObject<CannonBase>(Scl, Qt, Pos);
+				AddGameObject<CannonBase>(Scl, Qt, Pos,false);
 			}
 			if (MapVec[0] == L"CannonR") {
 				//それぞれの値を入れる
 				//固定する値を設定
 				stringflag = true;
 				Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
-				AddGameObject<CannonBaseR>(Scl, Qt, Pos);
+				AddGameObject<CannonBase>(Scl, Qt, Pos,true);
 			}
 
 			if (!stringflag) {
@@ -385,9 +385,6 @@ namespace basecross {
 			CreateSharedObjectGroup(L"KeyGroup");
 			//ステージにある鍵の数
 			CreateSharedObjectGroup(L"HaveKeysGroup");
-			//4方向のライト限界を教えるスプライトのグループ
-			//上から登録、時計回り
-			CreateSharedObjectGroup(L"MoveEndGroup");
 			//敵
 			//CreateEnemy();
 			//ミニマップ
