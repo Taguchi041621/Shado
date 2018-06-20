@@ -378,14 +378,10 @@ namespace basecross
 				}*/
 				//Aボタン
 				if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A) {
-					if (m_StopNowMusic != L"")
-					{
+					if (m_StopNowMusic != L""){
 						m_AudioObjectPtr->Stop(m_StopNowMusic);
 					}
 					wstring DataDir;
-					//サンプルのためアセットディレクトリを取得
-					//App::GetApp()->GetAssetsDirectory(DataDir);
-					//各ゲームは以下のようにデータディレクトリを取得すべき
 					App::GetApp()->GetDataDirectory(DataDir);
 
 					m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
@@ -401,8 +397,8 @@ namespace basecross
 						auto Door = GetSharedGameObject<StageSelectDoor>(L"Door" + Util::IntToWStr(i));
 						if (i == m_StageNumber) {
 							Door->Open();
+							PostEvent(0.8f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameStage");
 						}
-						PostEvent(0.8f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameStage");
 					}
 				}
 			}
