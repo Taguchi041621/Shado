@@ -57,7 +57,7 @@ namespace basecross {
 		m_Time += App::GetApp()->GetElapsedTime();
 		if (m_Time >= 0.3f) {
 			//­‚µ‚¸‚Â”–‚­‚·‚é
-			GetComponent<PCTStaticDraw>()->SetDiffuse(Col4(1.0f, 1.0f, 1.0f, 1.3 - m_Time));
+			GetComponent<PCTStaticDraw>()->SetDiffuse(Col4(1.0f, 1.0f, 1.0f, 1.3f - m_Time));
 			//İ’è‚µ‚½‘å‚«‚³‚Ü‚Å‘å‚«‚­‚È‚Á‚½‚ç
 			if (GetComponent<Action>()->GetArrived()) {
 				//Á‚¦‚é

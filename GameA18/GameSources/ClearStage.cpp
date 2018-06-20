@@ -177,7 +177,7 @@ namespace basecross
 
 			//Aƒ{ƒ^ƒ“
 			auto Number = ScenePtr->GetStageNumber();
-			if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A) {
+			if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A && !SelectFlag) {
 				auto FadeIn = GetSharedGameObject<SpriteFade>(L"FadeIn");
 				FadeIn->SetActionflag(true);
 				SelectFlag = true;

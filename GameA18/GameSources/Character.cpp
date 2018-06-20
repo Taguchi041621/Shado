@@ -95,8 +95,9 @@ namespace basecross {
 				}*/
 			}
 			if (ScenePtr->GetStartFlag()) {
-				//右スティックを操作してたら濃くする
-				if (GetStage()->GetSharedGameObject<Player>(L"Player")->GetMoveVector(1)) {
+				//スティックを操作してたら濃くする
+				if (!GetStage()->GetSharedGameObject<Player>(L"Player")->GetMoveVector(1)
+					&& !GetStage()->GetSharedGameObject<Player>(L"Player")->GetMoveVector(0)) {
 					if (m_alpha <= 0.7f) {
 						m_alpha += 0.05f;
 					}
@@ -199,7 +200,8 @@ namespace basecross {
 			}
 			//右スティックを操作してたら濃くする
 			if (ScenePtr->GetStartFlag()) {
-				if (GetStage()->GetSharedGameObject<Player>(L"Player")->GetMoveVector(1)) {
+				if (!GetStage()->GetSharedGameObject<Player>(L"Player")->GetMoveVector(1) 
+					&& !GetStage()->GetSharedGameObject<Player>(L"Player")->GetMoveVector(0)) {
 					if (m_alpha <= 0.7f) {
 						m_alpha += 0.05f;
 					}
@@ -306,7 +308,8 @@ namespace basecross {
 			}
 			if (ScenePtr->GetStartFlag()) {
 				//右スティックを操作してたら濃くする
-				if (GetStage()->GetSharedGameObject<Player>(L"Player")->GetMoveVector(1)) {
+				if (!GetStage()->GetSharedGameObject<Player>(L"Player")->GetMoveVector(1)
+					&& !GetStage()->GetSharedGameObject<Player>(L"Player")->GetMoveVector(0)) {
 					if (m_alpha <= 0.7f) {
 						m_alpha += 0.05f;
 					}

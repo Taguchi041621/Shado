@@ -110,17 +110,18 @@ namespace basecross
 		//		//Number->SetScaleChangeFlag(true);
 		//	}
 		//}
-		int interval = 0;
+
+		float interval = 0;
 		for (int i = 1; i <= 5; i++) {
 			wstring DataDir;
 			App::GetApp()->GetDataDirectory(DataDir);
 			auto Door = AddGameObject<StageSelectDoor>(
 				DataDir + L"StageSelectDoor\\",
-				Vec3(0.4, 0.4, 0.1),
-				Vec3(-5.3+interval, 0.88, 0),
+				Vec3(0.4f, 0.4f, 0.1f),
+				Vec3(-5.3f + interval, 0.88f, 0),
 				Vec3(0)
 				);
-			interval += 2.5;
+			interval += 2.5f;
 			SetSharedGameObject(L"Door" + Util::IntToWStr(i), Door);
 		}
 		interval = 0;
@@ -130,10 +131,10 @@ namespace basecross
 			auto Door = AddGameObject<StageSelectDoor>(
 				DataDir + L"StageSelectDoor\\",
 				Vec3(0.4, 0.4, 0.1),
-				Vec3(-5.3 + interval, -2.72, 0),
+				Vec3(-5.3f + interval, -2.72f, 0),
 				Vec3(0)
 				);
-			interval += 2.5;
+			interval += 2.5f;
 			SetSharedGameObject(L"Door" + Util::IntToWStr(i), Door);
 		}
 

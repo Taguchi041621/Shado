@@ -415,14 +415,14 @@ namespace basecross {
 	//------------------------------------------------------------------------------------------
 	ShadowKey::ShadowKey(const shared_ptr<Stage>& StagePtr,const wstring BaseDir,
 		const Vec3& Scale, const Vec3& Rotation, GameObject& Obj)
-		: SS5ssae(StagePtr, BaseDir, L"KeySS_0531.ssae", L"anime_1"),
+		: SS5ssae(StagePtr, BaseDir, L"KeySS_0522.ssae", L"anime_1"),
 		m_Scale(Scale), m_Rotation(Rotation), m_Obj(Obj), m_ScaleZ(0.05f)
 	{
 		m_ToAnimeMatrix.affineTransformation(
-			Vec3(0.3f, 0.3f, 0.7f),
+			Vec3(0.9f, 0.9f, 0.7f),
 			Vec3(0, 0, 0),
 			Vec3(0, 0, 0),
-			Vec3(0.0f, 0.4f, 0.0f)
+			Vec3(0.0f, 0.6f, 0.0f)
 			);
 	}
 
