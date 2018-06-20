@@ -146,11 +146,11 @@ namespace basecross{
 
 
 		//TutorialÅ@
-		strTexture = DataDir + L"Tutorial_cameraMove.png";
+		strTexture = DataDir + L"Tutorial_cameraMove_Mono.png";
 		App::GetApp()->RegisterTexture(L"TUTORIAL_CAMERA_MOVE_TX", strTexture);
-		strTexture = DataDir + L"Tutorial_CharaMove.png";
+		strTexture = DataDir + L"Tutorial_CharaMove_Mono.png";
 		App::GetApp()->RegisterTexture(L"TUTORIAL_CHARA_MOVE_TX", strTexture);
-		strTexture = DataDir + L"Tutorial_LjghtMove.png";
+		strTexture = DataDir + L"Tutorial_LightMove_Mono.png";
 		App::GetApp()->RegisterTexture(L"TUTORIAL_LIGHT_MOVE_TX", strTexture);
 
 		/*BGMÅESEä÷òA*/
