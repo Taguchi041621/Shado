@@ -426,7 +426,14 @@ namespace basecross{
 			}
 			else {
 				//‰E‚É”ò‚Ô
+
 				GetComponent<Rigidbody>()->SetVelocity(Vec3(3.0f, 0, 0.0f));
+				if (m_RightOrLeft == true) {
+					m_RightOrLeft = false;
+				}
+				else {
+					m_RightOrLeft = true;
+				}
 			}
 			GetStateMachine()->ChangeState(DamageState1::Instance());
 		}
