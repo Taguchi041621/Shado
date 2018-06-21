@@ -422,11 +422,11 @@ namespace basecross{
 			PtrRedit->SetVelocityZero();
 			if (LR == false) {
 				//ç∂Ç…îÚÇ‘
-				GetComponent<Rigidbody>()->SetVelocity(Vec3(-1.0f, 0, 0.0f));
+				GetComponent<Rigidbody>()->SetVelocity(Vec3(-3.0f, 0, 0.0f));
 			}
 			else {
 				//âEÇ…îÚÇ‘
-				GetComponent<Rigidbody>()->SetVelocity(Vec3(1.0f, 0, 0.0f));
+				GetComponent<Rigidbody>()->SetVelocity(Vec3(3.0f, 0, 0.0f));
 			}
 			GetStateMachine()->ChangeState(DamageState1::Instance());
 		}
