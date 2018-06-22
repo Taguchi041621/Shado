@@ -45,9 +45,9 @@ namespace basecross
 		////描画コンポーネントテクスチャの設定
 		//DrawComp->SetTextureResource(L"SELECT_TX");
 		float a = 0;
-		for (int i = 1; i <= 10; i++) {
+		for (int i = 1; i <= 2; i++) {
 			auto BG = AddGameObject<Sprite>(L"STAGESELECT_BG_TX", false,
-				Vec2(1280.0f, 800.0f), Vec3((1280.0f * -5) +a, 0.0f, 0.2f));
+				Vec2(1280.0f, 800.0f), Vec3(0 +a, 0.0f, 0.2f));
 			a += 1280;
 			BG->AddComponent<Action>();
 			SetSharedGameObject(L"BG" + Util::IntToWStr(i), BG);
@@ -75,34 +75,24 @@ namespace basecross
 
 	void StageSelect::CreateDoor() {
 		float interval = 0;
-		for (int i = 1; i <= 5; i++){
+		float hight = 0.88f;
+		for (int i = 1; i <= 10; i++){
 			//ドア
 			wstring DataDir;
 			App::GetApp()->GetDataDirectory(DataDir);
 			auto Door = AddGameObject<StageSelectDoor>(
 				DataDir + L"StageSelectDoor\\",
 				Vec3(0.4f, 0.4f, 0.1f),
-				Vec3(-5.3f + interval, 0.88f, 0),
+				Vec3(-5.3f + interval, hight, 0),
 				Vec3(0),
 				Util::IntToWStr(i)
 				);
 			interval += 2.2f;
 			SetSharedGameObject(L"Door" + Util::IntToWStr(i), Door);
-		}
-		interval = 0;
-		for (int i = 6; i <= 10; i++) {
-			//ドア
-			wstring DataDir;
-			App::GetApp()->GetDataDirectory(DataDir);
-			auto Door = AddGameObject<StageSelectDoor>(
-				DataDir + L"StageSelectDoor\\",
-				Vec3(0.4, 0.4, 0.1),
-				Vec3(-5.3f + interval, -2.72f, 0),
-				Vec3(0),
-				Util::IntToWStr(i)
-				);
-			interval += 2.2f;
-			SetSharedGameObject(L"Door" + Util::IntToWStr(i), Door);
+			if (i % 5 == 0) {
+				interval = 0;
+				hight = -2.72f;
+			}
 		}
 		//画面横の→
 		AddGameObject<ScaleChangeSprite>(L"ARROW_TX", true,

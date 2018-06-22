@@ -98,6 +98,14 @@ namespace basecross {
 				Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
 				auto PtrCube = AddGameObject<BlueCube>(Scl, Qt, Pos, Vec3(1,0,0), true);
 			}
+			if (MapVec[0] == L"CustomMoveCube") {
+				//‚»‚ê‚¼‚ê‚Ì’l‚ğ“ü‚ê‚é
+				stringflag = true;
+				Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
+				//ˆÚ“®•‚ğæ‚Á‚Ä‚­‚é
+				float MoveX = (float)_wtof(MapVec[10].c_str());
+				auto PtrCube = AddGameObject<BlueCube>(Scl, Qt, Pos, Vec3(MoveX, 0, 0), true);
+			}
 			if (MapVec[0] == L"VMoveCube") {
 				//FixedBox(const Vector3& Scale,const Vector3& Rotation,const Vector3& Position
 				//‚»‚ê‚¼‚ê‚Ì’l‚ğ“ü‚ê‚é
@@ -107,6 +115,14 @@ namespace basecross {
 				//Rot = Vector3(0, 0, 0);
 				Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
 				auto PtrCube = AddGameObject<YellowCube>(Scl, Qt, Pos, Vec3(0, 1, 0), true);
+			}
+			if (MapVec[0] == L"CustomVMoveCube") {
+				//‚»‚ê‚¼‚ê‚Ì’l‚ğ“ü‚ê‚é
+				stringflag = true;
+				Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
+				//ˆÚ“®•‚ğæ‚Á‚Ä‚­‚é
+				float MoveY = (float)_wtof(MapVec[10].c_str());
+				auto PtrCube = AddGameObject<YellowCube>(Scl, Qt, Pos, Vec3(0,MoveY, 0), true);
 			}
 			if (MapVec[0] == L"Player") {
 				stringflag = true;
