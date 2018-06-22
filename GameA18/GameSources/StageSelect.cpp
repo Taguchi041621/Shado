@@ -220,8 +220,7 @@ namespace basecross
 		if (onectrl)
 		{
 			m_CoolTime += Time;
-			if (m_CoolTime >= 0.2f)
-			{
+			if (m_CoolTime >= 0.2f){
 				onectrl = false;
 				m_CoolTime = 0;
 			}
@@ -230,6 +229,7 @@ namespace basecross
 		auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
 		if (m_SelectFlag) {
 			if (CntlVec[0].bConnected) {
+				//左スティック左方向
 				if (CntlVec[0].fThumbLX < -0.5) {
 					if (onectrl == false){
 						if (!(m_StageNumber == 1)) {
@@ -274,6 +274,7 @@ namespace basecross
 						}
 					}
 				}
+				//左スティック右方向
 				else if (CntlVec[0].fThumbLX > 0.5) {
 					if (onectrl == false){
 						if (!(m_StageNumber == m_MaxStageNumber)) {
@@ -325,7 +326,7 @@ namespace basecross
 				{
 					onectrl = false;
 				}*/
-
+				//左スティック下方向
 				if (CntlVec[0].fThumbLY < -0.5) {
 					if (onectrl == false){
 						//上の段から下の段へ行く
@@ -364,7 +365,7 @@ namespace basecross
 
 					}
 				}
-
+				//左スティック上方向
 				if (CntlVec[0].fThumbLY > 0.5) {
 					if (onectrl == false){
 						if (m_StageNumber < 6) {
@@ -432,7 +433,9 @@ namespace basecross
 						//auto num = GetSharedGameObject<ScoreSprite>(L"ScoreSprite" + Util::IntToWStr(i));
 						//RemoveGameObject<ScoreSprite>(num);
 						auto Door = GetSharedGameObject<StageSelectDoor>(L"Door" + Util::IntToWStr(i));
+						//選んでるステージは
 						if (i == m_StageNumber) {
+							//開くアニメーションを流す
 							Door->Open();
 							PostEvent(0.8f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameStage");
 						}
