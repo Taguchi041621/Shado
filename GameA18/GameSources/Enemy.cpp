@@ -340,14 +340,24 @@ namespace basecross {
 		for (auto &obj : OtherVec) {
 			//シャドウオブジェクトを検出
 			auto ShadowPtr = dynamic_pointer_cast<ShadowObject>(obj);
+			auto BulletPtr = dynamic_pointer_cast<Bullet>(obj);
 			auto PlayerPtr = dynamic_pointer_cast<Player>(obj);
+			//影ブロックと当たる
 			if (ShadowPtr) {
 				//輪っかを出す
 				GetStage()->AddGameObject<DirectingRing>(playerTrans->GetWorldPosition(),
 					Vec3(1.0f,1.0f,0.05f), Vec3(-0.5f, 0.0f, 0.0f),L"Ring_TX");
 				GetStage()->RemoveGameObject<Bullet>(GetThis<Bullet>());
 			}
-			if (PlayerPtr) {
+			//弾と当たる
+			else if (BulletPtr) {
+				//輪っかを出す
+				GetStage()->AddGameObject<DirectingRing>(playerTrans->GetWorldPosition(),
+					Vec3(1.0f, 1.0f, 0.05f), Vec3(-0.5f, 0.0f, 0.0f), L"Ring_TX");
+				GetStage()->RemoveGameObject<Bullet>(GetThis<Bullet>());
+			}
+			//イデアと当たりう
+			else if (PlayerPtr) {
 				PlayerPtr->Damage(m_LR);
 				//輪っかを出す
 				GetStage()->AddGameObject<DirectingRing>(playerTrans->GetWorldPosition(),
