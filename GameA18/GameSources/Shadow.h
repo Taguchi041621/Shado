@@ -11,7 +11,7 @@ namespace basecross {
 		Vec3 m_Rotation;
 		Vec3 m_Position;
 		//対応した実態オブジェクトのポインタ
-		GameObject& m_Obj;
+		weak_ptr<GameObject> m_Obj;
 		//スケールのZの固定値
 		float m_ScaleZ;
 	public:
@@ -19,7 +19,7 @@ namespace basecross {
 		ShadowObject(const shared_ptr<Stage>& StagePtr,
 			const Vec3& Scale,
 			const Vec3& Rotation,
-			GameObject& Obj
+			weak_ptr<GameObject> Obj
 			);
 
 		virtual ~ShadowObject();
@@ -97,7 +97,7 @@ namespace basecross {
 		Vec3 m_Scale;
 		Vec3 m_Rotation;
 		Vec3 m_Position;
-		GameObject& m_Obj;
+		weak_ptr<GameObject> m_Obj;
 		//スケールのZの固定値
 		float m_ScaleZ;
 
@@ -118,7 +118,7 @@ namespace basecross {
 		*/
 		//--------------------------------------------------------------------------------------
 		ShadowGoal(const shared_ptr<Stage>& StagePtr, const wstring BaseDir,
-			const Vec3& m_Scale, const Vec3& Rotation, GameObject& Obj);
+			const Vec3& m_Scale, const Vec3& Rotation, weak_ptr<GameObject> Obj);
 		//--------------------------------------------------------------------------------------
 		/*!
 		@brief デストラクタ
@@ -153,7 +153,7 @@ namespace basecross {
 		Vec3 m_Scale;
 		Vec3 m_Rotation;
 		Vec3 m_Position;
-		GameObject& m_Obj;
+		weak_ptr<GameObject> m_Obj;
 		//スケールのZの固定値
 		float m_ScaleZ;
 		//ゴールに飛んでいくフラグ
@@ -183,7 +183,7 @@ namespace basecross {
 		*/
 		//--------------------------------------------------------------------------------------
 		ShadowKey(const shared_ptr<Stage>& StagePtr, const wstring BaseDir,
-			const Vec3& m_Scale, const Vec3& Rotation, GameObject& Obj);
+			const Vec3& m_Scale, const Vec3& Rotation, weak_ptr<GameObject> Obj);
 		//--------------------------------------------------------------------------------------
 		/*!
 		@brief デストラクタ

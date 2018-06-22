@@ -76,7 +76,7 @@ namespace basecross {
 		Vec3 m_Rotation;
 		Vec3 m_Position;
 		//対応した実態オブジェクトのポインタ
-		GameObject& m_Obj;
+		weak_ptr<GameObject> m_Obj;
 		//スケールのZの固定値
 		float m_ScaleZ;
 		//このオブジェクトのみで使用するスクエアメッシュ
@@ -100,7 +100,7 @@ namespace basecross {
 			const wstring BaseDir,
 			const Vec3& Scale,
 			const Vec3& Rotation,
-			GameObject& Obj,
+			weak_ptr<GameObject> Obj,
 			bool LR
 		);
 

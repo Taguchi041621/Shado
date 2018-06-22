@@ -104,8 +104,8 @@
 		<value>StageSelectDoor.ssae</value>
 	</animepackNames>
 	<lastAnimeFile>StageSelectDoor.ssae</lastAnimeFile>
-	<lastAnimeName>SELECT</lastAnimeName>
+	<lastAnimeName>SELECT_2</lastAnimeName>
 	<lastCellMapFile>StageSelectDoor.ssce</lastCellMapFile>
-	<lastCell>Shadow</lastCell>
-	<lastPart>part_1</lastPart>
+	<lastCell>Door</lastCell>
+	<lastPart>Door2</lastPart>
 </SpriteStudioProject>

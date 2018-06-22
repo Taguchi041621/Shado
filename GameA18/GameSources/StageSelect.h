@@ -11,12 +11,16 @@ namespace basecross
 		void CreateViewLight();
 		//スプライトの作成
 		void CreateTitleSprite();
+		//枠の作成
+		void CreateFrame();
 
 		//フェードの作成
 		void CreateFadeOutSprite();
 		void CreateFadeSprite();
 		bool m_SelectFlag;
 
+		//ドア
+		void CreateDoor();
 		//ステージ番号の作成
 		void StageNumberSprite();
 
@@ -52,6 +56,8 @@ namespace basecross
 		Vec3 m_Position;
 		//スケールのZの固定値
 		float m_ScaleZ;
+		//自身の番号を持つ
+		wstring m_DoorNum;
 		//このオブジェクトのみで使用するスクエアメッシュ
 		shared_ptr<MeshResource> m_SquareMeshResource;
 		Mat4x4 m_ToAnimeMatrix;
@@ -69,6 +75,13 @@ namespace basecross
 			const Vec3& Position,
 			const Vec3& Rotation
 		);
+		StageSelectDoor(const shared_ptr<Stage>& StagePtr,
+			const wstring BaseDir,
+			const Vec3& Scale,
+			const Vec3& Position,
+			const Vec3& Rotation,
+			const wstring DoorNum
+			);
 
 		virtual ~StageSelectDoor();
 		//初期化

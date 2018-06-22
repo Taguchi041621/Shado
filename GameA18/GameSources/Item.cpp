@@ -39,7 +39,7 @@ namespace basecross {
 			DataDir + L"KeyAni\\",
 			GetComponent<Transform>()->GetScale(),
 			GetComponent<Transform>()->GetRotation(),
-			*GetThis<GameObject>()
+			GetThis<GameObject>()
 			);
 	}
 

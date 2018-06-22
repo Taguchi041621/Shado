@@ -7,7 +7,7 @@ namespace basecross {
 	//	用途: オブジェクトの影
 	//--------------------------------------------------------------------------------------
 	ShadowObject::ShadowObject(const shared_ptr<Stage>& StagePtr,
-		const Vec3& Scale, const Vec3& Rotation, GameObject& Obj)
+		const Vec3& Scale, const Vec3& Rotation, weak_ptr<GameObject> Obj)
 		: GameObject(StagePtr),
 		m_Scale(Scale), m_Rotation(Rotation), m_Obj(Obj), m_ScaleZ(0.05f)
 	{
@@ -30,7 +30,8 @@ namespace basecross {
 		//PtrObb->SetDrawActive(true);
 
 		auto PtrDraw = AddComponent<BcPNTStaticDraw>();
-		PtrDraw->SetMeshResource(m_Obj.GetComponent<BcPNTStaticDraw>()->GetMeshResource());
+		auto obj = m_Obj.lock();
+		PtrDraw->SetMeshResource(obj->GetComponent<BcPNTStaticDraw>()->GetMeshResource());
 		//真っ黒
 		PtrDraw->SetColorAndAlpha(Col4(1.0f, 1.0f, 1.0f, 0.0f));
 		//Mat4x4 au;
@@ -74,8 +75,9 @@ namespace basecross {
 
 	//物体とライトの位置から、影の位置を導き出す
 	Vec3 ShadowObject::ShadowLocation() {
+		auto obj = m_Obj.lock();
 		//実体ブロックのポジション
-		auto ObjPos = m_Obj.GetComponent<Transform>()->GetPosition();
+		auto ObjPos = obj->GetComponent<Transform>()->GetPosition();
 		//ライトのコントローラーを持ってくる
 		auto ptrMyLight = GetStage()->GetSharedGameObject<LightController>(L"LightController");
 		//角度を取り出す
@@ -303,7 +305,7 @@ namespace basecross {
 	///ゴールの役割をする影
 	//------------------------------------------------------------------------------------------
 	ShadowGoal::ShadowGoal(const shared_ptr<Stage>& StagePtr, const wstring BaseDir,
-		const Vec3& m_Scale, const Vec3& Rotation, GameObject& Obj)
+		const Vec3& m_Scale, const Vec3& Rotation, weak_ptr<GameObject> Obj)
 		: SS5ssae(StagePtr, BaseDir, L"DoorSS_0605.ssae", L"Lock"),
 		m_Scale(m_Scale),m_Rotation(Rotation),m_Obj(Obj), m_ScaleZ(0.05f)
 	{
@@ -394,8 +396,9 @@ namespace basecross {
 
 	//物体とライトの位置から、影の位置を導き出す
 	Vec3 ShadowGoal::ShadowLocation() {
+		auto obj = m_Obj.lock();
 		//実体ブロックのポジション
-		auto ObjPos = m_Obj.GetComponent<Transform>()->GetPosition();
+		auto ObjPos = obj->GetComponent<Transform>()->GetPosition();
 		//ライトのコントローラーを持ってくる
 		auto ptrMyLight = GetStage()->GetSharedGameObject<LightController>(L"LightController");
 		//角度を取り出す
@@ -414,7 +417,7 @@ namespace basecross {
 	///鍵の役割をする影
 	//------------------------------------------------------------------------------------------
 	ShadowKey::ShadowKey(const shared_ptr<Stage>& StagePtr,const wstring BaseDir,
-		const Vec3& Scale, const Vec3& Rotation, GameObject& Obj)
+		const Vec3& Scale, const Vec3& Rotation, weak_ptr<GameObject> Obj)
 		: SS5ssae(StagePtr, BaseDir, L"KeySS_0522.ssae", L"anime_1"),
 		m_Scale(Scale), m_Rotation(Rotation), m_Obj(Obj), m_ScaleZ(0.05f)
 	{
@@ -453,7 +456,7 @@ namespace basecross {
 		//鍵が取られたら
 		if (m_GoGoal) {
 			//計算のための時間加算
-			m_Lerp += App::GetApp()->GetElapsedTime()*2.0f;
+			m_Lerp += App::GetApp()->GetElapsedTime()*2.5f;
 			//回転のための時間加算
 			m_spin += App::GetApp()->GetElapsedTime();
 			//ベジエ曲線最終位置の設定
@@ -526,8 +529,9 @@ namespace basecross {
 	}
 	//物体とライトの位置から、影の位置を導き出す
 	Vec3 ShadowKey::ShadowLocation() {
+		auto obj = m_Obj.lock();
 		//実体ブロックのポジション
-		auto ObjPos = m_Obj.GetComponent<Transform>()->GetPosition();
+		auto ObjPos = obj->GetComponent<Transform>()->GetPosition();
 		//ライトのコントローラーを持ってくる
 		auto ptrMyLight = GetStage()->GetSharedGameObject<LightController>(L"LightController");
 		//角度を取り出す

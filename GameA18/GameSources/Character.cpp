@@ -48,7 +48,7 @@ namespace basecross {
 		GetStage()->AddGameObject<ShadowObject>(
 			GetComponent<Transform>()->GetScale(),
 			GetComponent<Transform>()->GetRotation(),
-			*GetThis<GameObject>()
+			GetThis<GameObject>()
 			);
 		/*GetStage()->AddGameObject<ShadowObject2>(
 			GetComponent<Transform>()->GetScale(),
@@ -152,7 +152,7 @@ namespace basecross {
 		GetStage()->AddGameObject<ShadowObject>(
 			GetComponent<Transform>()->GetScale(),
 			GetComponent<Transform>()->GetRotation(),
-			*GetThis<GameObject>()
+			GetThis<GameObject>()
 			);
 		/*GetStage()->AddGameObject<ShadowObject2>(
 		GetComponent<Transform>()->GetScale(),
@@ -261,7 +261,7 @@ namespace basecross {
 		GetStage()->AddGameObject<ShadowObject>(
 			GetComponent<Transform>()->GetScale(),
 			GetComponent<Transform>()->GetRotation(),
-			*GetThis<GameObject>()
+			GetThis<GameObject>()
 			);
 		/*GetStage()->AddGameObject<ShadowObject2>(
 		GetComponent<Transform>()->GetScale(),
@@ -355,7 +355,7 @@ namespace basecross {
 			DataDir+L"Cannon\\",
 			GetComponent<Transform>()->GetScale(),
 			GetComponent<Transform>()->GetRotation(),
-			*GetThis<GameObject>(),
+			GetThis<GameObject>(),
 			m_LR
 			);
 	}
@@ -408,7 +408,7 @@ namespace basecross {
 			DataDir + L"Door\\",
 			GetComponent<Transform>()->GetScale(),
 			GetComponent<Transform>()->GetRotation(),
-			*GetThis<GameObject>()
+			GetThis<GameObject>()
 			);
 
 	}

@@ -130,7 +130,7 @@ namespace basecross {
 	//大砲
 	//--------------------------------------------------------------------------------------
 	Cannon::Cannon(const shared_ptr<Stage>& StagePtr, const wstring BaseDir,
-		const Vec3& Scale, const Vec3& Rotation, GameObject& Obj,bool LR)
+		const Vec3& Scale, const Vec3& Rotation, weak_ptr<GameObject> Obj,bool LR)
 		: SS5ssae(StagePtr, BaseDir, L"Cannon.ssae", L"Fire"),
 		m_Scale(Scale), m_Rotation(Rotation), m_Obj(Obj), m_ScaleZ(0.05f), m_CoolTime(0), m_BulletFlag(false),m_LR(LR)
 	{
@@ -255,8 +255,9 @@ namespace basecross {
 
 	//物体とライトの位置から、影の位置を導き出す
 	Vec3 Cannon::ShadowLocation() {
+		auto obj = m_Obj.lock();
 		//実体ブロックのポジション
-		auto ObjPos = m_Obj.GetComponent<Transform>()->GetPosition();
+		auto ObjPos = obj->GetComponent<Transform>()->GetPosition();
 		//ライトのコントローラーを持ってくる
 		auto ptrMyLight = GetStage()->GetSharedGameObject<LightController>(L"LightController");
 		//角度を取り出す
