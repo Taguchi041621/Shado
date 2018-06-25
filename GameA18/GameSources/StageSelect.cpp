@@ -72,68 +72,45 @@ namespace basecross
 			Vec2(840, 600), Vec3(900.0f, 0.0f, 0.0f));
 		SetSharedGameObject(L"FadeIn", Fade);
 	}
-
+	//ドアを作る
 	void StageSelect::CreateDoor() {
 		float interval = 0;
 		float hight = 0.88f;
-		for (int i = 1; i <= 10; i++){
+		for (int i = 1; i <= m_MaxStageNumber; i++){
 			//ドア
 			wstring DataDir;
 			App::GetApp()->GetDataDirectory(DataDir);
 			auto Door = AddGameObject<StageSelectDoor>(
 				DataDir + L"StageSelectDoor\\",
 				Vec3(0.4f, 0.4f, 0.1f),
-				Vec3(-5.3f + interval, hight, 0),
+				Vec3(-5.5f + interval, hight, 0),
 				Vec3(0),
 				Util::IntToWStr(i)
 				);
 			interval += 2.2f;
 			SetSharedGameObject(L"Door" + Util::IntToWStr(i), Door);
-			if (i % 5 == 0) {
+			if (i % (m_MaxStageNumber / 2) == 0) {
 				interval = 0;
 				hight = -2.72f;
 			}
 		}
 		//画面横の→
-		AddGameObject<ScaleChangeSprite>(L"ARROW_TX", true,
-			Vec2(1000.0f, 1000), Vec3(500, -90.0f, 0.0f), 1.0f, true);
+		//AddGameObject<ScaleChangeSprite>(L"ARROW_TX", true,
+		//	Vec2(1000.0f, 1000), Vec3(500, -90.0f, 0.0f), 1.0f, true);
 
 	}
 	void StageSelect::StageNumberSprite(){
 		float intervalNum = 0;
+		float Paragraph = 140.0f;
 		shared_ptr<ScoreSprite> Number;
-		for (int i = 1; i <= 5; i++) {
+		for (int i = 1; i <= 12; i++) {
 			//数字
 			if (i < 10) {
 				Number = AddGameObject<ScoreSprite>(1,
 					L"NUMBER_TX",
 					true,
 					Vec2(50.0f, 50.0f),
-					Vec3(-512.0f + intervalNum, 140.0f, 0.0f),
-					i,
-					false, 0.3f);
-			}
-			else {
-				Number = AddGameObject<ScoreSprite>(2,
-					L"NUMBER_TX",
-					true,
-					Vec2(50.0f, 50.0f),
-					Vec3(-510.0f + intervalNum, 140.0f, 0.0f),
-					i,
-					false, 0.3f);
-			}
-			SetSharedGameObject(L"ScoreSprite" + Util::IntToWStr(i), Number);
-			intervalNum += 210;
-		}
-		intervalNum = 0;
-		for (int i = 6; i <= 10; i++) {
-			//数字
-			if (i < 10) {
-				Number = AddGameObject<ScoreSprite>(1,
-					L"NUMBER_TX",
-					true,
-					Vec2(50.0f, 50.0f),
-					Vec3(-512.0f + intervalNum, -210.0f, 0.0f),
+					Vec3(-512.0f + intervalNum, Paragraph, 0.0f),
 					i,
 					false, 0.3f);
 			}
@@ -147,6 +124,10 @@ namespace basecross
 					false, 0.3f);
 			}
 			SetSharedGameObject(L"ScoreSprite" + Util::IntToWStr(i), Number);
+			if (i % 6 == 0) {
+				Paragraph = -210.0f;
+				intervalNum = 0;
+			}
 			intervalNum += 210;
 		}
 
@@ -189,7 +170,7 @@ namespace basecross
 	void StageSelect::OnCreate()
 	{
 		auto ScenePtr = App::GetApp()->GetScene<Scene>();
-		m_MaxStageNumber = 10;
+		m_MaxStageNumber = 12;
 		m_SelectFlag = true;
 		m_StageNumber = ScenePtr->GetStageNumber();
 		m_CoolTime = 0;
@@ -320,8 +301,8 @@ namespace basecross
 				if (CntlVec[0].fThumbLY < -0.5) {
 					if (onectrl == false){
 						//上の段から下の段へ行く
-						if (m_StageNumber < 6) {
-							m_StageNumber += 5;
+						if (m_StageNumber <= (m_MaxStageNumber/2)) {
+							m_StageNumber += (m_MaxStageNumber/2);
 
 							if (m_StopNowMusic != L""){
 								m_AudioObjectPtr->Stop(m_StopNowMusic);
@@ -358,8 +339,8 @@ namespace basecross
 				//左スティック上方向
 				if (CntlVec[0].fThumbLY > 0.5) {
 					if (onectrl == false){
-						if (m_StageNumber < 6) {
-							m_StageNumber += 5;
+						if (m_StageNumber <= (m_MaxStageNumber/2)) {
+							m_StageNumber += (m_MaxStageNumber/2);
 
 
 							if (m_StopNowMusic != L""){
@@ -415,11 +396,9 @@ namespace basecross
 					m_AudioObjectPtr->Start(L"opendoor", XAUDIO2_NO_LOOP_REGION, 0.45f);
 					SetNowMusic(L"opendoor");
 
-					auto FadeIn = GetSharedGameObject<SpriteFade>(L"FadeIn");
-					FadeIn->SetActionflag(true);
 					m_SelectFlag = false;
 					ScenePtr->SetRespawnFlag(false);
-					for (int i = 1; i <= 10; i++) {
+					for (int i = 1; i <= m_MaxStageNumber; i++) {
 						//auto num = GetSharedGameObject<ScoreSprite>(L"ScoreSprite" + Util::IntToWStr(i));
 						//RemoveGameObject<ScoreSprite>(num);
 						auto Door = GetSharedGameObject<StageSelectDoor>(L"Door" + Util::IntToWStr(i));
@@ -427,13 +406,14 @@ namespace basecross
 						if (i == m_StageNumber) {
 							//開くアニメーションを流す
 							Door->Open();
-							PostEvent(0.8f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameStage");
+							//ドアが開いてからシーン移行するための2.8秒
+							PostEvent(2.8f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameStage");
 						}
 					}
 				}
 			}
 			ScenePtr->SetStageNumber(m_StageNumber);
-			for (int i = 1; i <= 10; i++) {
+			for (int i = 1; i <= m_MaxStageNumber; i++) {
 				auto Door = GetSharedGameObject<StageSelectDoor>(L"Door" + Util::IntToWStr(i));
 				if (i == m_StageNumber) {
 					Door->SetSelectFlag(true);
@@ -522,20 +502,24 @@ namespace basecross
 
 	//変化
 	void StageSelectDoor::OnUpdate() {
-		float ElapsedTime = App::GetApp()->GetElapsedTime();
-		UpdateAnimeTime(ElapsedTime);
-		if (m_OpenFlag){
-
+		float ElapsedTime = 0;
+		if (m_OpenFlag) {
+			ElapsedTime = App::GetApp()->GetElapsedTime();
+			if (IsAnimeEnd()) {
+				auto FadeIn = GetStage()->GetSharedGameObject<SpriteFade>(L"FadeIn");
+				FadeIn->SetActionflag(true);
+			}
 		}
 		else if (m_SelectFlag) {
-			SetLooped(true);
+			ElapsedTime = App::GetApp()->GetElapsedTime();
 			ChangeAnimation(L"SELECT_" + m_DoorNum);
+			SetLooped(true);
 		}
-		else
-		{
-			SetLooped(false);
+		else{
+			ElapsedTime = 0;
 			ChangeAnimation(L"OPEN_"+ m_DoorNum);
 		}
+		UpdateAnimeTime(ElapsedTime);
 	}
 
 	void StageSelectDoor::OnUpdate2() {
@@ -543,7 +527,7 @@ namespace basecross
 
 	void StageSelectDoor::Open() {
 		m_OpenFlag = true;
-		SetLooped(true);
 		ChangeAnimation(L"OPEN_" + m_DoorNum);
+		SetLooped(false);
 	}
 }
