@@ -317,8 +317,8 @@ namespace basecross
 							//1‰ñ‚¾‚¯“®‚­
 							onectrl = true;
 						}
-						else if (m_StageNumber > 5) {
-							m_StageNumber -= 5;
+						else if (m_StageNumber > (m_MaxStageNumber / 2)) {
+							m_StageNumber -= (m_MaxStageNumber / 2);
 
 							if (m_StopNowMusic != L""){
 								m_AudioObjectPtr->Stop(m_StopNowMusic);
@@ -356,8 +356,8 @@ namespace basecross
 
 							onectrl = true;
 						}
-						else if (m_StageNumber > 5) {
-							m_StageNumber -= 5;
+						else if (m_StageNumber > (m_MaxStageNumber / 2)) {
+							m_StageNumber -= (m_MaxStageNumber / 2);
 
 
 							if (m_StopNowMusic != L""){

@@ -186,6 +186,7 @@ namespace basecross{
 			OBB m;
 			m.m_Center = GetComponent<Transform>()->GetWorldPosition();
 			m.m_Size = GetComponent<Transform>()->GetScale() * 0.3f;
+			m.m_Size.z = 2.0f;
 
 			//各方向のめり込みを確認
 			float diff[4] = {
@@ -343,7 +344,7 @@ namespace basecross{
 	//着地したときの演出
 	void Player::LandingDirecting() {
 		GetStage()->AddGameObject<DirectingRing>(GetComponent<Transform>()->GetWorldPosition(),
-			Vec3(1.0f, 1.0f, 0.05f), Vec3(0.0f, -0.7f, 0.0f), L"Smoke_TX");
+			Vec3(1.0f, 1.0f, 0.05f), Vec3(0.0f, -0.7f, 0.0f), L"Smoke_Black_TX");
 	}
 	//GameOverSceneに移行する
 	void Player::GoGameOverScene() {
@@ -459,11 +460,11 @@ namespace basecross{
 	void WaitState::Execute(const shared_ptr<Player>& Obj) {
 		//アニメーション更新
 		Obj->LoopedAnimeUpdateMotion();
+		auto ScenePtr = App::GetApp()->GetScene<Scene>();
 		//潰れて死んだらDiedアニメを流す
 		if (Obj->GetDeath() == 1) {
 			Obj->GetStateMachine()->ChangeState(DiedState::Instance());
 		}
-		auto ScenePtr = App::GetApp()->GetScene<Scene>();
 		//親がいなかったらFallアニメを流す
 		if (!Obj->GetParentFlag()) {
 			Obj->GetStateMachine()->ChangeState(FallState::Instance());
@@ -639,12 +640,13 @@ namespace basecross{
 	void WalkState::Execute(const shared_ptr<Player>& Obj) {
 		//アニメーション更新
 		Obj->LoopedAnimeUpdateMotion();
-		if (!Obj->GetParentFlag()) {
-			Obj->GetStateMachine()->ChangeState(FallState::Instance());
-		}
-		//潰れて死んだらDiedアニメーションを流す
+		//潰れて死んだらDiedアニメを流す
 		if (Obj->GetDeath() == 1) {
 			Obj->GetStateMachine()->ChangeState(DiedState::Instance());
+		}
+		//親が居なかったら落ちるアニメーション
+		if (!Obj->GetParentFlag()) {
+			Obj->GetStateMachine()->ChangeState(FallState::Instance());
 		}
 		//左スティックの値が0(入力されなくなった)ならWaitアニメを流す
 		if (Obj->GetMoveVector(0) == 0.0f) {
