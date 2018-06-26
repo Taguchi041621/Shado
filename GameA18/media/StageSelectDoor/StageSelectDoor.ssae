@@ -6248,12 +6248,12 @@
 						</attribute>
 						<attribute tag="SCLX">
 							<key time="0" ipType="linear">
-								<value>5</value>
+								<value>0</value>
 							</key>
 						</attribute>
 						<attribute tag="SCLY">
 							<key time="0" ipType="linear">
-								<value>5</value>
+								<value>0</value>
 							</key>
 						</attribute>
 						<attribute tag="ALPH">
@@ -25177,12 +25177,12 @@
 						</attribute>
 						<attribute tag="SCLX">
 							<key time="0" ipType="linear">
-								<value>5</value>
+								<value>0</value>
 							</key>
 						</attribute>
 						<attribute tag="SCLY">
 							<key time="0" ipType="linear">
-								<value>5</value>
+								<value>0</value>
 							</key>
 						</attribute>
 						<attribute tag="ALPH">

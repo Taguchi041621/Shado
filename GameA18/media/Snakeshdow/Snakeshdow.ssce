@@ -1,0 +1,599 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<SpriteStudioCellMap version="1.00.02">
+	<name>Snakeshdow</name>
+	<exportPath></exportPath>
+	<generator>SpriteStudio</generator>
+	<packed>0</packed>
+	<imagePath>Snakeshdow.png</imagePath>
+	<pixelSize>2048 2048</pixelSize>
+	<overrideTexSettings>0</overrideTexSettings>
+	<wrapMode>clamp</wrapMode>
+	<filterMode>linear</filterMode>
+	<imagePathAtImport></imagePathAtImport>
+	<packInfoFilePath></packInfoFilePath>
+	<texPackSettings>
+		<maxSize>4096 4096</maxSize>
+		<forcePo2>1</forcePo2>
+		<forceSquare>0</forceSquare>
+		<margin>0</margin>
+		<padding>1</padding>
+	</texPackSettings>
+	<cells>
+		<cell>
+			<name>Body60</name>
+			<pos>1964 152</pos>
+			<size>72 60</size>
+			<pivot>0.0833333358168602 0.25</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body59</name>
+			<pos>1864 576</pos>
+			<size>80 82</size>
+			<pivot>0.1875 0.26829269528389</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body58</name>
+			<pos>128 566</pos>
+			<size>86 94</size>
+			<pivot>0.151162788271904 0.287234038114548</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body57</name>
+			<pos>128 290</pos>
+			<size>94 106</size>
+			<pivot>0.170212760567665 0.264150947332382</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body56</name>
+			<pos>1864 448</pos>
+			<size>106 126</size>
+			<pivot>0.188679248094559 0.269841283559799</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>body55</name>
+			<pos>476 300</pos>
+			<size>122 146</size>
+			<pivot>0.163934424519539 0.280821919441223</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body54</name>
+			<pos>724 300</pos>
+			<size>122 146</size>
+			<pivot>0.163934424519539 0.308219164609909</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body53</name>
+			<pos>600 300</pos>
+			<size>122 146</size>
+			<pivot>0.172131150960922 0.294520556926727</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body52</name>
+			<pos>1740 448</pos>
+			<size>122 146</size>
+			<pivot>0.155737698078156 0.273972600698471</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body51</name>
+			<pos>1616 448</pos>
+			<size>122 146</size>
+			<pivot>0.163934424519539 0.280821919441223</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body50</name>
+			<pos>1492 448</pos>
+			<size>122 146</size>
+			<pivot>0.180327862501144 0.287671238183975</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body49</name>
+			<pos>1368 448</pos>
+			<size>122 146</size>
+			<pivot>0.172131150960922 0.301369875669479</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body48</name>
+			<pos>570 4</pos>
+			<size>180 146</size>
+			<pivot>-0.0388888902962208 0.301369875669479</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body47</name>
+			<pos>1120 448</pos>
+			<size>122 146</size>
+			<pivot>0.180327862501144 0.287671238183975</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body46</name>
+			<pos>996 448</pos>
+			<size>122 146</size>
+			<pivot>0.196721315383911 0.267123281955719</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body45</name>
+			<pos>872 448</pos>
+			<size>122 146</size>
+			<pivot>0.213114753365517 0.273972600698471</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body44</name>
+			<pos>748 448</pos>
+			<size>122 146</size>
+			<pivot>0.155737698078156 0.301369875669479</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body43</name>
+			<pos>624 448</pos>
+			<size>122 146</size>
+			<pivot>0.213114753365517 0.287671238183975</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body42</name>
+			<pos>500 448</pos>
+			<size>122 146</size>
+			<pivot>0.180327862501144 0.315068483352661</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body41</name>
+			<pos>376 448</pos>
+			<size>122 146</size>
+			<pivot>0.180327862501144 0.308219164609909</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body40</name>
+			<pos>4 438</pos>
+			<size>122 146</size>
+			<pivot>0.13934426009655 0.294520556926727</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body39</name>
+			<pos>252 418</pos>
+			<size>122 146</size>
+			<pivot>0.180327862501144 0.315068483352661</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body38</name>
+			<pos>128 418</pos>
+			<size>122 146</size>
+			<pivot>0.188524588942528 0.287671238183975</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body37</name>
+			<pos>1840 300</pos>
+			<size>122 146</size>
+			<pivot>0.155737698078156 0.273972600698471</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body36</name>
+			<pos>1716 300</pos>
+			<size>122 146</size>
+			<pivot>0.204918026924133 0.273972600698471</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body35</name>
+			<pos>1592 300</pos>
+			<size>122 146</size>
+			<pivot>0.180327862501144 0.287671238183975</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body34</name>
+			<pos>1468 300</pos>
+			<size>122 146</size>
+			<pivot>0.122950822114944 0.308219164609909</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body33</name>
+			<pos>1344 300</pos>
+			<size>122 146</size>
+			<pivot>0.163934424519539 0.315068483352661</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body32</name>
+			<pos>1220 300</pos>
+			<size>122 146</size>
+			<pivot>0.163934424519539 0.294520556926727</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body31</name>
+			<pos>1096 300</pos>
+			<size>122 146</size>
+			<pivot>0.188524588942528 0.301369875669479</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body30</name>
+			<pos>972 300</pos>
+			<size>122 146</size>
+			<pivot>0.147540986537933 0.301369875669479</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body29</name>
+			<pos>848 300</pos>
+			<size>122 146</size>
+			<pivot>0.155737698078156 0.294520556926727</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body28</name>
+			<pos>1244 448</pos>
+			<size>122 146</size>
+			<pivot>0.188524588942528 0.301369875669479</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>body27</name>
+			<pos>876 4</pos>
+			<size>122 146</size>
+			<pivot>0.229508191347122 0.308219164609909</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body26</name>
+			<pos>752 4</pos>
+			<size>122 146</size>
+			<pivot>0.180327862501144 0.315068483352661</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body25</name>
+			<pos>4 290</pos>
+			<size>122 146</size>
+			<pivot>0.213114753365517 0.315068483352661</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body24</name>
+			<pos>352 270</pos>
+			<size>122 146</size>
+			<pivot>0.172131150960922 0.308219164609909</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body23</name>
+			<pos>228 270</pos>
+			<size>122 146</size>
+			<pivot>0.155737698078156 0.294520556926727</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body22</name>
+			<pos>1840 152</pos>
+			<size>122 146</size>
+			<pivot>0.13934426009655 0.294520556926727</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body21</name>
+			<pos>1716 152</pos>
+			<size>122 146</size>
+			<pivot>0.163934424519539 0.280821919441223</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body20</name>
+			<pos>1592 152</pos>
+			<size>122 146</size>
+			<pivot>0.163934424519539 0.294520556926727</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body19</name>
+			<pos>1468 152</pos>
+			<size>122 146</size>
+			<pivot>0.188524588942528 0.308219164609909</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body18</name>
+			<pos>1344 152</pos>
+			<size>122 146</size>
+			<pivot>0.122950822114944 0.301369875669479</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body17</name>
+			<pos>1220 152</pos>
+			<size>122 146</size>
+			<pivot>0.163934424519539 0.294520556926727</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body16</name>
+			<pos>1096 152</pos>
+			<size>122 146</size>
+			<pivot>0.163934424519539 0.280821919441223</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body15</name>
+			<pos>972 152</pos>
+			<size>122 146</size>
+			<pivot>0.147540986537933 0.308219164609909</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body14</name>
+			<pos>848 152</pos>
+			<size>122 146</size>
+			<pivot>0.131147533655167 0.294520556926727</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body13</name>
+			<pos>724 152</pos>
+			<size>122 146</size>
+			<pivot>0.122950822114944 0.301369875669479</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body12</name>
+			<pos>600 152</pos>
+			<size>122 146</size>
+			<pivot>0.122950822114944 0.301369875669479</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body11</name>
+			<pos>476 152</pos>
+			<size>122 146</size>
+			<pivot>0.13934426009655 0.308219164609909</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body10</name>
+			<pos>352 122</pos>
+			<size>122 146</size>
+			<pivot>0.131147533655167 0.308219164609909</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body9</name>
+			<pos>228 122</pos>
+			<size>122 146</size>
+			<pivot>0.180327862501144 0.287671238183975</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body8</name>
+			<pos>1868 4</pos>
+			<size>122 146</size>
+			<pivot>0.163934424519539 0.294520556926727</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body7</name>
+			<pos>1744 4</pos>
+			<size>122 146</size>
+			<pivot>0.147540986537933 0.301369875669479</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body6</name>
+			<pos>1620 4</pos>
+			<size>122 146</size>
+			<pivot>0.147540986537933 0.301369875669479</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body5</name>
+			<pos>1496 4</pos>
+			<size>122 146</size>
+			<pivot>0.131147533655167 0.287671238183975</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body4</name>
+			<pos>1372 4</pos>
+			<size>122 146</size>
+			<pivot>0.122950822114944 0.301369875669479</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body3</name>
+			<pos>1248 4</pos>
+			<size>122 146</size>
+			<pivot>0.122950822114944 0.315068483352661</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body2</name>
+			<pos>1124 4</pos>
+			<size>122 146</size>
+			<pivot>0.0983606576919556 0.294520556926727</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Body1</name>
+			<pos>1000 4</pos>
+			<size>122 146</size>
+			<pivot>0.0573770478367805 0.308219164609909</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Kubi2</name>
+			<pos>1964 214</pos>
+			<size>72 44</size>
+			<pivot>0.416666656732559 0.0909090936183929</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Kubi1</name>
+			<pos>216 566</pos>
+			<size>122 60</size>
+			<pivot>0.286885231733322 0.133333340287209</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>Head</name>
+			<pos>228 4</pos>
+			<size>340 116</size>
+			<pivot>-0.44411763548851 0.293103456497192</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>AGO</name>
+			<pos>4 4</pos>
+			<size>222 284</size>
+			<pivot>-0.261261254549026 0.429577469825745</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+	</cells>
+</SpriteStudioCellMap>

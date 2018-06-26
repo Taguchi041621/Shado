@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <SpriteStudioProject version="1.02.02">
-	<name>StageSelectDoor</name>
+	<name>Snakeshdow</name>
 	<exportPath></exportPath>
 	<settings>
 		<animeBaseDirectory></animeBaseDirectory>
@@ -70,12 +70,12 @@
 		<filterMode>linear</filterMode>
 		<interpolationType>linear</interpolationType>
 		<renderingSettings>
-			<outputFolder></outputFolder>
-			<outputType>AVI</outputType>
+			<outputFolder>/Users/shima/Desktop/ゲーム大賞2018 Aチーム/Snake2/SNAKE/Export</outputFolder>
+			<outputType>GIF</outputType>
 			<bgColor>FF606060</bgColor>
 			<addAnimeName>0</addAnimeName>
 			<addTimeStamp>0</addTimeStamp>
-			<addAlphaChanel>1</addAlphaChanel>
+			<addAlphaChanel>0</addAlphaChanel>
 		</renderingSettings>
 		<cellTags />
 	</settings>
@@ -98,14 +98,14 @@
 		<padding>1</padding>
 	</texPackSettings>
 	<cellmapNames>
-		<value>StageSelectDoor.ssce</value>
+		<value>Snakeshdow.ssce</value>
 	</cellmapNames>
 	<animepackNames>
-		<value>StageSelectDoor.ssae</value>
+		<value>Snakeshdow.ssae</value>
 	</animepackNames>
-	<lastAnimeFile>StageSelectDoor.ssae</lastAnimeFile>
-	<lastAnimeName>OPEN_12</lastAnimeName>
-	<lastCellMapFile>StageSelectDoor.ssce</lastCellMapFile>
-	<lastCell>1</lastCell>
-	<lastPart>1</lastPart>
+	<lastAnimeFile>Snakeshdow.ssae</lastAnimeFile>
+	<lastAnimeName>Reverse_2</lastAnimeName>
+	<lastCellMapFile>Snakeshdow.ssce</lastCellMapFile>
+	<lastCell>Head</lastCell>
+	<lastPart>Head</lastPart>
 </SpriteStudioProject>
