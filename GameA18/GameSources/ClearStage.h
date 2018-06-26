@@ -26,6 +26,7 @@ namespace basecross
 
 		float m_ScaleTimer;
 		bool m_ScaleFlag;
+		int Number;
 	public:
 		//構築と破棄
 		ClearStage() :Stage() {}
@@ -34,7 +35,8 @@ namespace basecross
 		virtual void OnCreate()override;
 		//更新
 		virtual void OnUpdate()override;
-
+		//シーン遷移のセレクト
+		void Select();
 	};
 
 }

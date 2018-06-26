@@ -9,7 +9,6 @@ namespace basecross {
 		Vec3 m_Scale;
 		Vec3 m_Rotation;
 		Vec3 m_Position;
-		GameObject& m_Obj;
 		//スケールのZの固定値
 		float m_ScaleZ;
 		shared_ptr<MeshResource> m_MeshResource;
@@ -25,7 +24,7 @@ namespace basecross {
 		*/
 		//--------------------------------------------------------------------------------------
 		ShadowEnemy(const shared_ptr<Stage>& StagePtr, const wstring BaseDir,
-			const Vec3& m_Scale, const Vec3& Rotation, GameObject& Obj);
+			const Vec3& m_Scale, const Vec3& Rotation,const Vec3& Position);
 		//--------------------------------------------------------------------------------------
 		/*!
 		@brief デストラクタ
@@ -48,24 +47,6 @@ namespace basecross {
 		virtual void OnUpdate()override;
 
 		void OnTriggerEnter();
-
-		//影の場所を計算する
-		Vec3 ShadowLocation();
-	};
-
-
-	//------------------------------------------------------------------------------------------
-	///敵の実体
-	//------------------------------------------------------------------------------------------
-	class Enemy : public GameObject {
-		Vec3 m_KeyPos;
-	public:
-		Enemy(const shared_ptr<Stage>& StagePtr, const Vec3& StartPos);
-		virtual ~Enemy() {}
-		//初期化
-		virtual void OnCreate() override;
-
-		virtual void OnUpdate() override;
 	};
 
 	//--------------------------------------------------------------------------------------

@@ -6,16 +6,15 @@ namespace basecross {
 	///敵(影)
 	//------------------------------------------------------------------------------------------
 	ShadowEnemy::ShadowEnemy(const shared_ptr<Stage>& StagePtr, const wstring BaseDir,
-		const Vec3& Scale, const Vec3& Rotation, GameObject& Obj)
-		: SS5ssae(StagePtr, BaseDir, L"Snakeshdow.ssae", L"pakupaku"),
-		m_Scale(Scale), m_Rotation(Rotation), m_Obj(Obj), m_ScaleZ(0.05f)
-	{
+		const Vec3& Scale, const Vec3& Rotation,const Vec3& Position)
+		: SS5ssae(StagePtr, BaseDir, L"Snakeshdow.ssae", L"Back"),
+		m_Scale(Scale), m_Rotation(Rotation),m_Position(Position), m_ScaleZ(0.05f){
 		m_ToAnimeMatrix.affineTransformation(
-			Vec3(0.10f, 0.10f, 0.1f),
+			Vec3(0.10f, -0.10f, 0.1f),
 			Vec3(0, 0, 0),
 			Vec3(0, 0, 0),
 			Vec3(0.0f, 0.0f, 0.0f)
-		);
+			);
 	}
 
 	void ShadowEnemy::OnCreate() {
@@ -26,7 +25,7 @@ namespace basecross {
 		//影のスケール,角度,ポジションの設定
 		PtrTransform->SetScale(m_Scale);
 		PtrTransform->SetRotation(m_Rotation);
-		PtrTransform->SetPosition(ShadowLocation());
+		PtrTransform->SetPosition(m_Position);
 
 		//親クラスのクリエイトを呼ぶ
 		SS5ssae::OnCreate();
@@ -40,7 +39,10 @@ namespace basecross {
 
 	void ShadowEnemy::OnUpdate() {
 		OnTriggerEnter();
-		GetComponent<Transform>()->SetPosition(ShadowLocation());
+
+		auto pos = GetComponent<Transform>()->GetPosition();
+		pos.x += -2.0f;
+		GetComponent<Transform>()->SetPosition(pos);
 
 		float ElapsedTime = App::GetApp()->GetElapsedTime();
 		//アニメーションを更新する
@@ -57,74 +59,7 @@ namespace basecross {
 		p.m_Center = GetStage()->GetSharedGameObject<Player>(L"Player")->GetComponent<Transform>()->GetWorldPosition();
 		p.m_Center.z = 0;
 		p.m_Size = GetStage()->GetSharedGameObject<Player>(L"Player")->GetComponent<Transform>()->GetScale() * 0.5f;
-		//プレイヤーが鍵に触れたかを調べる判定
-		if (HitTest::OBB_OBB(t, p)) {
-		}
 	}
-	//物体とライトの位置から、影の位置を導き出す
-	Vec3 ShadowEnemy::ShadowLocation() {
-		//実体ブロックのポジション
-		auto ObjPos = m_Obj.GetComponent<Transform>()->GetPosition();
-		//ライトのコントローラーを持ってくる
-		auto ptrMyLight = GetStage()->GetSharedGameObject<LightController>(L"LightController");
-		//角度を取り出す
-		auto LightAngle = ptrMyLight->GetLightAngle();
-
-		//ライトの角度と対応した実態ブロックの壁までの距離から影の位置を出す
-		Vec3 m_kagePos;
-		m_kagePos.x = ObjPos.x - ObjPos.z * tanf(LightAngle.x);
-		m_kagePos.y = ObjPos.y - ObjPos.z * tanf(LightAngle.y);
-
-		m_kagePos.z = -1;
-
-		return m_kagePos;
-	}
-
-	//--------------------------------------------------------------------------------------
-	///	敵の実体
-	//--------------------------------------------------------------------------------------
-	Enemy::Enemy(const shared_ptr<Stage>& StagePtr, const Vec3& StartPos) :
-		GameObject(StagePtr),
-		m_KeyPos(StartPos)
-	{}
-	void Enemy::OnCreate() {
-		auto PtrTransform = GetComponent<Transform>();
-		PtrTransform->SetPosition(m_KeyPos);
-		PtrTransform->SetScale(0.50, 1.00, 0.50);
-
-		//タグ
-		AddTag(L"Enemy");
-		//描画コンポーネントの設定
-		auto PtrDraw = AddComponent<BcPNTStaticDraw>();
-		//描画するメッシュを設定
-		PtrDraw->SetMeshResource(L"DEFAULT_CUBE");
-		////描画するテクスチャを設定
-		//PtrDraw->SetTextureResource(L"UI_Key_TX");
-		PtrDraw->SetDrawActive(false);
-
-		/*auto group = GetStage()->GetSharedObjectGroup(L"Eeney");
-		group->IntoGroup(GetThis<Enemy>());*/
-
-		//影をつける
-		//auto ShadowPtr = AddComponent<Shadowmap>();
-		//ShadowPtr->SetMeshResource(L"DEFAULT_CUBE");
-
-		//-------------------------------------------------
-		//影の作成
-		wstring DataDir;
-		App::GetApp()->GetDataDirectory(DataDir);
-		GetStage()->AddGameObject<ShadowEnemy>(
-			DataDir + L"Enemy\\",
-			GetComponent<Transform>()->GetScale(),
-			GetComponent<Transform>()->GetRotation(),
-			*GetThis<GameObject>()
-			);
-	}
-
-	void Enemy::OnUpdate()
-	{
-	}
-
 
 	//--------------------------------------------------------------------------------------
 	//大砲
@@ -208,6 +143,15 @@ namespace basecross {
 							GetComponent<Transform>()->GetPosition() - Vec3(1, -0.4f, 0),
 							m_LR
 							);
+						//蛇
+						//wstring DataDir;
+						//App::GetApp()->GetDataDirectory(DataDir);
+						//GetStage()->AddGameObject<ShadowEnemy>(
+						//	DataDir + L"Snakeshdow\\",
+						//	GetComponent<Transform>()->GetScale(),
+						//	GetComponent<Transform>()->GetRotation(),
+						//	GetComponent<Transform>()->GetPosition() - Vec3(1, -0.4f, 0)
+						//	);
 						//煙だす
 						GetStage()->AddGameObject<DirectingRing>(GetComponent<Transform>()->GetWorldPosition(),
 							Vec3(1.5f, 1.5f, 0.05f), Vec3(-1.0f, 0.5f, 0.0f), L"Smoke_Black_TX");
@@ -396,23 +340,4 @@ namespace basecross {
 
 	}
 
-	void Bullet::OnTriggerEnter() {
-		//auto PtrPlayer = GetStage()->GetSharedGameObject<Player>(L"Player");
-
-		//SPHERE t;
-		//t.m_Center = GetComponent<Transform>()->GetWorldPosition();
-		//t.m_Center.z = 0;
-		//t.m_Radius = GetComponent<Transform>()->GetScale().x/2;
-
-		//OBB p;
-		//p.m_Center = PtrPlayer->GetComponent<Transform>()->GetWorldPosition();
-		//p.m_Center.z = 0;
-		//p.m_Size = PtrPlayer->GetComponent<Transform>()->GetScale()/2.2;
-
-		////プレイヤーが弾に触れたかを調べる判定
-		//if (HitTest::SPHERE_OBB(t, p,Vec3(0))) {
-		//	PtrPlayer->Damage();
-		//	GetStage()->RemoveGameObject<Bullet>(GetThis<Bullet>());
-		//}
-	}
 }

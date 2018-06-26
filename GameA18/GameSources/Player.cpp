@@ -113,7 +113,7 @@ namespace basecross{
 		for (auto &obj : OtherVec) {
 			//シャドウオブジェクトを検出
 			auto ShadowPtr = dynamic_pointer_cast<ShadowObject>(obj);
-			auto EnemyPtr = dynamic_pointer_cast<Enemy>(obj);
+			auto EnemyPtr = dynamic_pointer_cast<ShadowEnemy>(obj);
 			//当たったのがシャドウオブジェクトで
 			if (ShadowPtr) {
 				Extrusion(ShadowPtr);//押し出す関数
@@ -186,7 +186,7 @@ namespace basecross{
 			OBB m;
 			m.m_Center = GetComponent<Transform>()->GetWorldPosition();
 			m.m_Size = GetComponent<Transform>()->GetScale() * 0.3f;
-			m.m_Size.z = 2.0f;
+			m.m_Size.z = 1.0f;
 
 			//各方向のめり込みを確認
 			float diff[4] = {

@@ -222,8 +222,11 @@ namespace basecross {
 			if (MapVec[0] == L"Enemy") {
 				stringflag = true;
 				//Pos.z = -15.0f;
-				Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
-				AddGameObject<Enemy>(Pos);
+				App::GetApp()->GetDataDirectory(DataDir);
+				AddGameObject<ShadowEnemy>(
+					DataDir + L"Snakeshdow\\",
+					Scl,Rot,Pos
+					);
 			}
 
 			if (MapVec[0] == L"Cannon") {

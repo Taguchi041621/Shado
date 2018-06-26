@@ -46,8 +46,6 @@ namespace basecross
 
 		AddGameObject<Sprite>(L"CLEAR_NoText_TX", true,
 			Vec2(1280.0f, 800.0f), Vec3(0.0f, 0.0f, 0.1f));
-		//AddGameObject<Sprite>(L"CLEAR_ColorNoText_TX", true,
-		//	Vec2(1280.0f, 800.0f), Vec3(0.0f, 0.0f, 0.1f));
 		AddGameObject<Sprite>(L"CLEAR_STAGECLEAR_TX", true,
 			Vec2(1280.0f, 800.0f), Vec3(200.0f, 300.0f, 0.0f));
 		auto nextStage = AddGameObject<ScaleChangeSprite>(L"CLEAR_NEXTSTAGE_TX", true,
@@ -93,17 +91,24 @@ namespace basecross
 		ThumbFlag = true;
 		CreateViewLight();
 
-		//スプライトの作成
-		CreateTitleSprite();
+		auto ScenePtr = App::GetApp()->GetScene<Scene>();
+		//クリアしたステージを入れる
+		Number = ScenePtr->GetStageNumber();
+
+		if (Number == 12) {
+			AddGameObject<Sprite>(L"CLEAR_Color_TX", true,
+				Vec2(1280.0f, 800.0f), Vec3(0.0f, 0.0f, 0.1f));
+		}
+		else {
+			//スプライトの作成
+			CreateTitleSprite();
+		}
 		//CreateUI();
 		CreateFadeOutSprite();
 		CreateFadeSprite();
 	}
-
-	//更新
-	void ClearStage::OnUpdate() {
+	void ClearStage::Select() {
 		auto ScenePtr = App::GetApp()->GetScene<Scene>();
-		//auto WLight = GetSharedGameObject<ScaleChangeSprite>(L"WLight");
 		auto NextStage = GetSharedGameObject<ScaleChangeSprite>(L"NextStage");
 		auto Retry = GetSharedGameObject<ScaleChangeSprite>(L"Retry");
 		auto StageSelect = GetSharedGameObject<ScaleChangeSprite>(L"StageSelect");
@@ -136,39 +141,22 @@ namespace basecross
 			if (NowSelect < 0) {
 				NowSelect = 2;
 			}
-
 			if (NowSelect > 2) {
 				NowSelect = 0;
 			}
 
-
 			switch (NowSelect) {//現在選択中の状態によって処理を分岐
 			case 0:
-				//WLight->GetComponent<Action>()->Stop();
-				//	WLight->GetComponent<Action>()->AllActionClear();
-				//	WLight->GetComponent<Action>()->
-				//		AddMoveTo(0.2f, Vec3(150.0, 60, 0.0f));
-				//	WLight->GetComponent<Action>()->Run();
 				NextStage->SetScaleChangeFlag(true);
 				Retry->SetScaleChangeFlag(false);
 				StageSelect->SetScaleChangeFlag(false);
 				break;
 			case 1:
-				//WLight->GetComponent<Action>()->Stop();
-				//	WLight->GetComponent<Action>()->AllActionClear();
-				//	WLight->GetComponent<Action>()->
-				//		AddMoveTo(0.2f, Vec3(-100.0, -230, 0.0f));
-				//	WLight->GetComponent<Action>()->Run();
-					NextStage->SetScaleChangeFlag(false);
-					Retry->SetScaleChangeFlag(true);
-					StageSelect->SetScaleChangeFlag(false);
+				NextStage->SetScaleChangeFlag(false);
+				Retry->SetScaleChangeFlag(true);
+				StageSelect->SetScaleChangeFlag(false);
 				break;
 			case 2:
-				//WLight->GetComponent<Action>()->Stop();
-				//	WLight->GetComponent<Action>()->AllActionClear();
-				//	WLight->GetComponent<Action>()->
-				//		AddMoveTo(0.2f, Vec3(420.0, -230, 0.0f));
-				//	WLight->GetComponent<Action>()->Run();
 				NextStage->SetScaleChangeFlag(false);
 				Retry->SetScaleChangeFlag(false);
 				StageSelect->SetScaleChangeFlag(true);
@@ -176,7 +164,6 @@ namespace basecross
 			}
 
 			//Aボタン
-			auto Number = ScenePtr->GetStageNumber();
 			if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A && !SelectFlag) {
 				auto FadeIn = GetSharedGameObject<SpriteFade>(L"FadeIn");
 				FadeIn->SetActionflag(true);
@@ -196,6 +183,24 @@ namespace basecross
 					break;
 				}
 			}
+		}
+	}
+
+	//更新
+	void ClearStage::OnUpdate() {
+		auto ScenePtr = App::GetApp()->GetScene<Scene>();
+		if (Number == 12) {
+			auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
+			if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A && !SelectFlag) {
+				auto FadeIn = GetSharedGameObject<SpriteFade>(L"FadeIn");
+				FadeIn->SetActionflag(true);
+				SelectFlag = true;
+				ScenePtr->SetRespawnFlag(false);
+				PostEvent(0.8f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToStageSelect");
+			}
+		}
+		else {
+			Select();
 		}
 	}
 }
