@@ -126,26 +126,18 @@ namespace basecross {
 			}
 			if (MapVec[0] == L"Player") {
 				stringflag = true;
+				//z位置を固定
+				Pos.z = -0.1f;
+				//メディア呼び出し
 				wstring DataDir;
 				App::GetApp()->GetDataDirectory(DataDir);
 				//プレーヤーの作成
-				auto PlayerPtr = AddGameObject<Player>(DataDir + L"Idea\\");
+				auto PlayerPtr = AddGameObject<Player>(DataDir + L"Idea\\",Pos);
 				//シェア配列にプレイヤーを追加
 				SetSharedGameObject(L"Player", PlayerPtr);
-				Pos.z = -0.1f;
-				PlayerPtr->GetComponent<Transform>()->SetPosition(Pos);
+
 				//カメラのターゲットに設定
 				//dynamic_pointer_cast<MyCamera>(GetView()->GetTargetCamera())->SetTargetObject(PlayerPtr);
-
-				/*Pos += Vec3(2, 2, 0.5);
-				if (ScenePtr->GetStageNumber()==1) {
-					AddGameObject<Tutorial>(
-						DataDir + L"Tutorial\\",
-						Vec3(1),
-						Vec3(0),
-						Vec3(Pos)
-						);
-				}*/
 			}
 
 			if (MapVec[0] == L"Tutorial") {
@@ -435,7 +427,6 @@ namespace basecross {
 		auto ScenePtr = App::GetApp()->GetScene<Scene>();
 		auto Fade = GetSharedGameObject<SpriteFade>(L"FadeIn");
 		auto PtrPlayer = GetSharedGameObject<Player>(L"Player");
-
 
 		auto Pause = GetSharedGameObject<Sprite>(L"Pause");
 		auto WLight = GetSharedGameObject<ScaleChangeSprite>(L"WLight");

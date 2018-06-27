@@ -10,7 +10,7 @@ LRESULT CALLBACK	WndProc(HWND, UINT, WPARAM, LPARAM);
 
 //定数
 const wchar_t* pClassName = L"BaseCrossFullClass";
-const wchar_t* pWndTitle = L"影道-Shadow-";
+const wchar_t* pWndTitle = L"影道";
 
 
 //---------------------------------------------------------------------------//  目的: ウィンドウ クラスを登録します。 

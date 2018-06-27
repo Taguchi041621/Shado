@@ -14,8 +14,8 @@ namespace basecross{
 	//	用途: プレイヤー
 	//--------------------------------------------------------------------------------------
 	//構築と破棄
-	Player::Player(const shared_ptr<Stage>& StagePtr, const wstring& BaseDir) :
-		SS5ssae(StagePtr, BaseDir, L"Idea1.ssae", L"Wait"),
+	Player::Player(const shared_ptr<Stage>& StagePtr, const wstring& BaseDir,const Vec3 pos) :
+		SS5ssae(StagePtr, BaseDir, L"Idea1.ssae", L"Wait"),m_Position(pos),
 		m_MaxSpeed(80.0f),	//最高速度
 		m_Decel(0.65f),	//減速値
 		m_Mass(0.5f),	//質量
@@ -256,7 +256,7 @@ namespace basecross{
 		auto Ptr = GetComponent<Transform>();
 		Ptr->SetScale(0.80f, 1.60f, 0.2f);	//X,Z25、Y50の長方形
 		Ptr->SetRotation(0.0f, 0.0f, 0.0f);
-		Ptr->SetPosition(-8.0f, 5.5f, 0.0f);
+		Ptr->SetPosition(m_Position);
 
 		//親クラスのクリエイトを呼ぶ
 		SS5ssae::OnCreate();

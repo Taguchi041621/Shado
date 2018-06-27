@@ -14,10 +14,8 @@ namespace basecross{
 	class Player : public SS5ssae {
 
 		shared_ptr< StateMachine<Player> >  m_StateMachine;	//ステートマシーン
-		//カメラのZ軸の切り替え
-		float CameraPosZ;
-		//カメラの切り替えに使う
-		int m_CameraNumber;
+		//初期ポジション
+		Vec3 m_Position;
 		//プレイヤーのHP
 		int m_PlayerHP;
 		//最高速度
@@ -63,7 +61,7 @@ namespace basecross{
 		@param[in]	StagePtr	ステージ
 		*/
 		//--------------------------------------------------------------------------------------
-		Player(const shared_ptr<Stage>& StagePtr, const wstring& BaseDir);
+		Player(const shared_ptr<Stage>& StagePtr, const wstring& BaseDir,const Vec3 pos);
 		//--------------------------------------------------------------------------------------
 		/*!
 		@brief	デストラクタ

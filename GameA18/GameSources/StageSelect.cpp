@@ -275,7 +275,6 @@ namespace basecross
 							}
 							wstring DataDir;
 							App::GetApp()->GetDataDirectory(DataDir);
-
 							m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
 							m_AudioObjectPtr->AddAudioResource(L"se2");
 							m_AudioObjectPtr->Start(L"se2", XAUDIO2_NO_LOOP_REGION, 0.45f);
@@ -289,7 +288,6 @@ namespace basecross
 							//1回だけ動くフラグ
 							onectrl = true;
 						}
-
 					}
 				}
 
@@ -309,7 +307,6 @@ namespace basecross
 							}
 							wstring DataDir;
 							App::GetApp()->GetDataDirectory(DataDir);
-
 							m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
 							m_AudioObjectPtr->AddAudioResource(L"se2");
 							m_AudioObjectPtr->Start(L"se2", XAUDIO2_NO_LOOP_REGION, 0.45f);
@@ -317,6 +314,7 @@ namespace basecross
 							//1回だけ動く
 							onectrl = true;
 						}
+						//下の段から上に行く
 						else if (m_StageNumber > (m_MaxStageNumber / 2)) {
 							m_StageNumber -= (m_MaxStageNumber / 2);
 
@@ -325,7 +323,6 @@ namespace basecross
 							}
 							wstring DataDir;
 							App::GetApp()->GetDataDirectory(DataDir);
-
 							m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
 							m_AudioObjectPtr->AddAudioResource(L"se2");
 							m_AudioObjectPtr->Start(L"se2", XAUDIO2_NO_LOOP_REGION, 0.45f);
@@ -342,13 +339,11 @@ namespace basecross
 						if (m_StageNumber <= (m_MaxStageNumber/2)) {
 							m_StageNumber += (m_MaxStageNumber/2);
 
-
 							if (m_StopNowMusic != L""){
 								m_AudioObjectPtr->Stop(m_StopNowMusic);
 							}
 							wstring DataDir;
 							App::GetApp()->GetDataDirectory(DataDir);
-
 							m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
 							m_AudioObjectPtr->AddAudioResource(L"se2");
 							m_AudioObjectPtr->Start(L"se2", XAUDIO2_NO_LOOP_REGION, 0.45f);
@@ -359,13 +354,11 @@ namespace basecross
 						else if (m_StageNumber > (m_MaxStageNumber / 2)) {
 							m_StageNumber -= (m_MaxStageNumber / 2);
 
-
 							if (m_StopNowMusic != L""){
 								m_AudioObjectPtr->Stop(m_StopNowMusic);
 							}
 							wstring DataDir;
 							App::GetApp()->GetDataDirectory(DataDir);
-
 							m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
 							m_AudioObjectPtr->AddAudioResource(L"se2");
 							m_AudioObjectPtr->Start(L"se2", XAUDIO2_NO_LOOP_REGION, 0.45f);
@@ -373,7 +366,6 @@ namespace basecross
 
 							onectrl = true;
 						}
-
 					}
 				}
 
@@ -390,7 +382,6 @@ namespace basecross
 					}
 					wstring DataDir;
 					App::GetApp()->GetDataDirectory(DataDir);
-
 					m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
 					m_AudioObjectPtr->AddAudioResource(L"opendoor");
 					m_AudioObjectPtr->Start(L"opendoor", XAUDIO2_NO_LOOP_REGION, 0.45f);
@@ -418,8 +409,7 @@ namespace basecross
 				if (i == m_StageNumber) {
 					Door->SetSelectFlag(true);
 				}
-				else
-				{
+				else{
 					Door->SetSelectFlag(false);
 				}
 //<<<<<<< HEAD
