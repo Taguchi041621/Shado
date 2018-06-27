@@ -263,11 +263,6 @@ namespace basecross {
 			GetComponent<Transform>()->GetRotation(),
 			GetThis<GameObject>()
 			);
-		/*GetStage()->AddGameObject<ShadowObject2>(
-		GetComponent<Transform>()->GetScale(),
-		GetComponent<Transform>()->GetRotation(),
-		*GetThis<GameObject>()
-		);*/
 	}
 
 	void YellowCube::OnUpdate() {

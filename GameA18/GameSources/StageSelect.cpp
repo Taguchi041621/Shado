@@ -22,8 +22,7 @@ namespace basecross
 
 	}
 
-	void StageSelect::CreateTitleSprite()
-	{
+	void StageSelect::CreateTitleSprite() {
 		////ステージへのゲームオブジェクトの追加
 		//auto Ptr = AddGameObject<GameObject>();
 		//auto PtrTrans = Ptr->GetComponent<Transform>();
@@ -44,26 +43,19 @@ namespace basecross
 
 		////描画コンポーネントテクスチャの設定
 		//DrawComp->SetTextureResource(L"SELECT_TX");
-		float a = 0;
-		for (int i = 1; i <= 2; i++) {
-			auto BG = AddGameObject<Sprite>(L"STAGESELECT_BG_TX", false,
-				Vec2(1280.0f, 800.0f), Vec3(0 +a, 0.0f, 0.2f));
-			a += 1280;
-			BG->AddComponent<Action>();
-			SetSharedGameObject(L"BG" + Util::IntToWStr(i), BG);
-		}
+		AddGameObject<Sprite>(L"STAGESELECT_BG_TX", false,
+			Vec2(1280.0f, 800.0f), Vec3(0, 0.0f, 0.2f));
+
 		AddGameObject<Sprite>(L"SELECT_TEXT_TX", true,
-			Vec2(960, 200/2), Vec3(0, 330, 0.1f));
+			Vec2(960, 200 / 2), Vec3(0, 330, 0.1f));
 		AddGameObject<Sprite>(L"TITLE_SHADOW_TX", true,
 			Vec2(1280.0f*1.2, 800.0f*1.2), Vec3(0, 0, 0.1f));
 	}
 
-	void StageSelect::CreateFadeOutSprite()
-	{
+	void StageSelect::CreateFadeOutSprite() {
 		auto Fade = AddGameObject<SpriteFadeOut>(L"Shadow_TX", true,
 			Vec2(50000 / 4, 30000 / 4), Vec3(0.0f, 0.0f, 0.0f));
 		SetSharedGameObject(L"FadeOut", Fade);
-
 	}
 
 	void StageSelect::CreateFadeSprite()
@@ -76,10 +68,8 @@ namespace basecross
 	void StageSelect::CreateDoor() {
 		float interval = 0;
 		float hight = 0.88f;
-		for (int i = 1; i <= m_MaxStageNumber; i++){
+		for (int i = 1; i <= m_MaxStageNumber; i++) {
 			//ドア
-			wstring DataDir;
-			App::GetApp()->GetDataDirectory(DataDir);
 			auto Door = AddGameObject<StageSelectDoor>(
 				DataDir + L"StageSelectDoor\\",
 				Vec3(0.4f, 0.4f, 0.1f),
@@ -99,7 +89,7 @@ namespace basecross
 		//	Vec2(1000.0f, 1000), Vec3(500, -90.0f, 0.0f), 1.0f, true);
 
 	}
-	void StageSelect::StageNumberSprite(){
+	void StageSelect::StageNumberSprite() {
 		float intervalNum = 0;
 		float Paragraph = 140.0f;
 		shared_ptr<ScoreSprite> Number;
@@ -162,9 +152,9 @@ namespace basecross
 
 	}
 	void StageSelect::CreateFrame() {
-		auto frame = AddGameObject<ScaleChangeSprite>(L"pane_TX",true,
-			Vec2(150.0f,280.0f),Vec3(-512.0f, 100.0f, 0.0f),1.0f,true);
-		SetSharedGameObject(L"frame",frame);
+		auto frame = AddGameObject<ScaleChangeSprite>(L"pane_TX", true,
+			Vec2(150.0f, 280.0f), Vec3(-512.0f, 100.0f, 0.0f), 1.0f, true);
+		SetSharedGameObject(L"frame", frame);
 	}
 
 	void StageSelect::OnCreate()
@@ -174,6 +164,10 @@ namespace basecross
 		m_SelectFlag = true;
 		m_StageNumber = ScenePtr->GetStageNumber();
 		m_CoolTime = 0;
+		//ディレクトリ取得
+		App::GetApp()->GetDataDirectory(DataDir);
+		//音
+		m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
 		CreateViewLight();
 		//スプライトの作成
 		CreateTitleSprite();
@@ -187,11 +181,9 @@ namespace basecross
 	//更新
 	void StageSelect::OnUpdate() {
 		auto ScenePtr = App::GetApp()->GetScene<Scene>();
-		auto Time = App::GetApp()->GetElapsedTime();
-		if (onectrl)
-		{
-			m_CoolTime += Time;
-			if (m_CoolTime >= 0.2f){
+		if (onectrl) {
+			m_CoolTime += App::GetApp()->GetElapsedTime();
+			if (m_CoolTime >= 0.2f) {
 				onectrl = false;
 				m_CoolTime = 0;
 			}
@@ -202,7 +194,7 @@ namespace basecross
 			if (CntlVec[0].bConnected) {
 				//左スティック左方向
 				if (CntlVec[0].fThumbLX < -0.5) {
-					if (onectrl == false){
+					if (onectrl == false) {
 						if (!(m_StageNumber == 1)) {
 							//for (int i = 1; i <= m_MaxStageNumber; i++) {
 							//	auto Door = GetSharedGameObject<ScaleChangeSprite>(L"Door" + Util::IntToWStr(i));
@@ -224,13 +216,9 @@ namespace basecross
 							//}
 							m_StageNumber -= 1;
 
-							if (m_StopNowMusic != L""){
+							if (m_StopNowMusic != L"") {
 								m_AudioObjectPtr->Stop(m_StopNowMusic);
 							}
-							wstring DataDir;
-							App::GetApp()->GetDataDirectory(DataDir);
-
-							m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
 							m_AudioObjectPtr->AddAudioResource(L"se2");
 							m_AudioObjectPtr->Start(L"se2", XAUDIO2_NO_LOOP_REGION, 0.45f);
 							SetNowMusic(L"se2");
@@ -240,14 +228,14 @@ namespace basecross
 							BG->GetComponent<Action>()->AddMoveBy(0.3f, Vec3(380.0f, 0, 0));
 							BG->GetComponent<Action>()->Run();
 						}*/
-							//1回だけ動くフラグ
+						//1回だけ動くフラグ
 							onectrl = true;
 						}
 					}
 				}
 				//左スティック右方向
 				else if (CntlVec[0].fThumbLX > 0.5) {
-					if (onectrl == false){
+					if (onectrl == false) {
 						if (!(m_StageNumber == m_MaxStageNumber)) {
 							//for (int i = 1; i <= m_MaxStageNumber; i++) {
 							//	auto Door = GetSharedGameObject<ScaleChangeSprite>(L"Door" + Util::IntToWStr(i));
@@ -270,12 +258,9 @@ namespace basecross
 
 							m_StageNumber += 1;
 
-							if (m_StopNowMusic != L""){
+							if (m_StopNowMusic != L"") {
 								m_AudioObjectPtr->Stop(m_StopNowMusic);
 							}
-							wstring DataDir;
-							App::GetApp()->GetDataDirectory(DataDir);
-							m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
 							m_AudioObjectPtr->AddAudioResource(L"se2");
 							m_AudioObjectPtr->Start(L"se2", XAUDIO2_NO_LOOP_REGION, 0.45f);
 							SetNowMusic(L"se2");
@@ -297,17 +282,14 @@ namespace basecross
 				}*/
 				//左スティック下方向
 				if (CntlVec[0].fThumbLY < -0.5) {
-					if (onectrl == false){
+					if (onectrl == false) {
 						//上の段から下の段へ行く
-						if (m_StageNumber <= (m_MaxStageNumber/2)) {
-							m_StageNumber += (m_MaxStageNumber/2);
+						if (m_StageNumber <= (m_MaxStageNumber / 2)) {
+							m_StageNumber += (m_MaxStageNumber / 2);
 
-							if (m_StopNowMusic != L""){
+							if (m_StopNowMusic != L"") {
 								m_AudioObjectPtr->Stop(m_StopNowMusic);
 							}
-							wstring DataDir;
-							App::GetApp()->GetDataDirectory(DataDir);
-							m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
 							m_AudioObjectPtr->AddAudioResource(L"se2");
 							m_AudioObjectPtr->Start(L"se2", XAUDIO2_NO_LOOP_REGION, 0.45f);
 							SetNowMusic(L"se2");
@@ -318,12 +300,9 @@ namespace basecross
 						else if (m_StageNumber > (m_MaxStageNumber / 2)) {
 							m_StageNumber -= (m_MaxStageNumber / 2);
 
-							if (m_StopNowMusic != L""){
+							if (m_StopNowMusic != L"") {
 								m_AudioObjectPtr->Stop(m_StopNowMusic);
 							}
-							wstring DataDir;
-							App::GetApp()->GetDataDirectory(DataDir);
-							m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
 							m_AudioObjectPtr->AddAudioResource(L"se2");
 							m_AudioObjectPtr->Start(L"se2", XAUDIO2_NO_LOOP_REGION, 0.45f);
 							SetNowMusic(L"se2");
@@ -335,16 +314,13 @@ namespace basecross
 				}
 				//左スティック上方向
 				if (CntlVec[0].fThumbLY > 0.5) {
-					if (onectrl == false){
-						if (m_StageNumber <= (m_MaxStageNumber/2)) {
-							m_StageNumber += (m_MaxStageNumber/2);
+					if (onectrl == false) {
+						if (m_StageNumber <= (m_MaxStageNumber / 2)) {
+							m_StageNumber += (m_MaxStageNumber / 2);
 
-							if (m_StopNowMusic != L""){
+							if (m_StopNowMusic != L"") {
 								m_AudioObjectPtr->Stop(m_StopNowMusic);
 							}
-							wstring DataDir;
-							App::GetApp()->GetDataDirectory(DataDir);
-							m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
 							m_AudioObjectPtr->AddAudioResource(L"se2");
 							m_AudioObjectPtr->Start(L"se2", XAUDIO2_NO_LOOP_REGION, 0.45f);
 							SetNowMusic(L"se2");
@@ -354,12 +330,9 @@ namespace basecross
 						else if (m_StageNumber > (m_MaxStageNumber / 2)) {
 							m_StageNumber -= (m_MaxStageNumber / 2);
 
-							if (m_StopNowMusic != L""){
+							if (m_StopNowMusic != L"") {
 								m_AudioObjectPtr->Stop(m_StopNowMusic);
 							}
-							wstring DataDir;
-							App::GetApp()->GetDataDirectory(DataDir);
-							m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
 							m_AudioObjectPtr->AddAudioResource(L"se2");
 							m_AudioObjectPtr->Start(L"se2", XAUDIO2_NO_LOOP_REGION, 0.45f);
 							SetNowMusic(L"se2");
@@ -377,12 +350,9 @@ namespace basecross
 				}*/
 				//Aボタン
 				if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A) {
-					if (m_StopNowMusic != L""){
+					if (m_StopNowMusic != L"") {
 						m_AudioObjectPtr->Stop(m_StopNowMusic);
 					}
-					wstring DataDir;
-					App::GetApp()->GetDataDirectory(DataDir);
-					m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
 					m_AudioObjectPtr->AddAudioResource(L"opendoor");
 					m_AudioObjectPtr->Start(L"opendoor", XAUDIO2_NO_LOOP_REGION, 0.45f);
 					SetNowMusic(L"opendoor");
@@ -402,36 +372,38 @@ namespace basecross
 						}
 					}
 				}
+				for (int i = 1; i <= m_MaxStageNumber; i++) {
+					auto Door = GetSharedGameObject<StageSelectDoor>(L"Door" + Util::IntToWStr(i));
+					if (i == m_StageNumber) {
+						Door->SetSelectFlag(true);
+					}
+					else {
+						Door->SetSelectFlag(false);
+					}
+					Door->StyleChange();
+					//<<<<<<< HEAD
+					//=======
+					//				wstring DataDir;
+					//				//サンプルのためアセットディレクトリを取得
+					//				//App::GetApp()->GetAssetsDirectory(DataDir);
+					//				//各ゲームは以下のようにデータディレクトリを取得すべき
+					//				App::GetApp()->GetDataDirectory(DataDir);
+					//
+					//				m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
+					//				m_AudioObjectPtr->AddAudioResource(L"opendoor");
+					//				m_AudioObjectPtr->Start(L"opendoor", XAUDIO2_NO_LOOP_REGION, 0.1f);
+					//				SetNowMusic(L"opendoor");
+					//
+					//				auto FadeIn = GetSharedGameObject<SpriteFade>(L"FadeIn");
+					//				FadeIn->SetActionflag(true);
+					//				m_SelectFlag = false;
+					//				ScenePtr->SetRespawnFlag(false);
+					//				PostEvent(0.8f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameStage");
+					//>>>>>>> 461c6d109ef9a2ea6a24272b2be17499d07851d5
+				}
 			}
+			//今のステージをシーンに持たせる
 			ScenePtr->SetStageNumber(m_StageNumber);
-			for (int i = 1; i <= m_MaxStageNumber; i++) {
-				auto Door = GetSharedGameObject<StageSelectDoor>(L"Door" + Util::IntToWStr(i));
-				if (i == m_StageNumber) {
-					Door->SetSelectFlag(true);
-				}
-				else{
-					Door->SetSelectFlag(false);
-				}
-//<<<<<<< HEAD
-//=======
-//				wstring DataDir;
-//				//サンプルのためアセットディレクトリを取得
-//				//App::GetApp()->GetAssetsDirectory(DataDir);
-//				//各ゲームは以下のようにデータディレクトリを取得すべき
-//				App::GetApp()->GetDataDirectory(DataDir);
-//
-//				m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
-//				m_AudioObjectPtr->AddAudioResource(L"opendoor");
-//				m_AudioObjectPtr->Start(L"opendoor", XAUDIO2_NO_LOOP_REGION, 0.1f);
-//				SetNowMusic(L"opendoor");
-//
-//				auto FadeIn = GetSharedGameObject<SpriteFade>(L"FadeIn");
-//				FadeIn->SetActionflag(true);
-//				m_SelectFlag = false;
-//				ScenePtr->SetRespawnFlag(false);
-//				PostEvent(0.8f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameStage");
-//>>>>>>> 461c6d109ef9a2ea6a24272b2be17499d07851d5
-			}
 		}
 	}
 
@@ -439,21 +411,9 @@ namespace basecross
 	//Door
 	//--------------------------------------------------------------------------------------
 	StageSelectDoor::StageSelectDoor(const shared_ptr<Stage>& StagePtr, const wstring BaseDir,
-		const Vec3& Scale, const Vec3& Position, const Vec3& Rotation)
-		: SS5ssae(StagePtr, BaseDir, L"StageSelectDoor.ssae", L"SELECT"),
-		m_Scale(Scale), m_Position(Position), m_Rotation(Rotation), m_ScaleZ(0.05f), m_SelectFlag(false)
-	{
-		m_ToAnimeMatrix.affineTransformation(
-			Vec3(0.2f, 0.2f, 0.1f),
-			Vec3(0, 0, 0),
-			Vec3(0, 0, 0),
-			Vec3(0.0f, 0.0f, 0.0f)
-		);
-	}
-	StageSelectDoor::StageSelectDoor(const shared_ptr<Stage>& StagePtr, const wstring BaseDir,
-		const Vec3& Scale, const Vec3& Position, const Vec3& Rotation,const wstring DoorNum)
+		const Vec3& Scale, const Vec3& Position, const Vec3& Rotation, const wstring DoorNum)
 		: SS5ssae(StagePtr, BaseDir, L"StageSelectDoor.ssae", L"SELECT_" + DoorNum),
-		m_Scale(Scale), m_Position(Position), m_Rotation(Rotation), m_ScaleZ(0.05f), m_SelectFlag(false),m_DoorNum(DoorNum)
+		m_Scale(Scale), m_Position(Position), m_Rotation(Rotation), m_ScaleZ(0.05f), m_SelectFlag(false), m_DoorNum(DoorNum)
 	{
 		m_ToAnimeMatrix.affineTransformation(
 			Vec3(0.2f, 0.2f, 0.1f),
@@ -493,21 +453,31 @@ namespace basecross
 	//変化
 	void StageSelectDoor::OnUpdate() {
 		float ElapsedTime = 0;
+		//カーソルが自分のドアにある時
+		if (m_SelectFlag && !m_OpenFlag) {
+			ElapsedTime += App::GetApp()->GetElapsedTime();
+			auto pos = GetComponent<Transform>()->GetWorldPosition();
+			auto sca = GetComponent<Transform>()->GetScale();
+			if (sca.x >= 0.5f) {
+				mm = -0.001f;
+			}
+			if(sca.x < 0.4) {
+				mm = 0.001f;
+			}
+			pos.y += mm*3.0f;
+			sca.x += mm;
+			sca.y += mm;
+			GetComponent<Transform>()->SetWorldPosition(pos);
+			GetComponent<Transform>()->SetScale(sca);
+		}
+		//開いたとき
 		if (m_OpenFlag) {
-			ElapsedTime = App::GetApp()->GetElapsedTime();
+			ElapsedTime += App::GetApp()->GetElapsedTime();
+			//開くアニメーションが終わったら
 			if (IsAnimeEnd()) {
 				auto FadeIn = GetStage()->GetSharedGameObject<SpriteFade>(L"FadeIn");
 				FadeIn->SetActionflag(true);
 			}
-		}
-		else if (m_SelectFlag) {
-			ElapsedTime = App::GetApp()->GetElapsedTime();
-			ChangeAnimation(L"SELECT_" + m_DoorNum);
-			SetLooped(true);
-		}
-		else{
-			ElapsedTime = 0;
-			ChangeAnimation(L"OPEN_"+ m_DoorNum);
 		}
 		UpdateAnimeTime(ElapsedTime);
 	}
@@ -519,5 +489,19 @@ namespace basecross
 		m_OpenFlag = true;
 		ChangeAnimation(L"OPEN_" + m_DoorNum);
 		SetLooped(false);
+	}
+	void StageSelectDoor::StyleChange(){
+		if (m_OpenFlag) {
+		}
+		else if (m_SelectFlag) {
+			ChangeAnimation(L"SELECT_" + m_DoorNum);
+			SetLooped(true);
+		}
+		else {
+			GetComponent<Transform>()->SetWorldPosition(m_Position);
+			GetComponent<Transform>()->SetScale(m_Scale);
+			ChangeAnimation(L"OPEN_" + m_DoorNum);
+		}
+
 	}
 }

@@ -198,32 +198,28 @@ namespace basecross{
 	void Scene::OnEvent(const shared_ptr<Event>& event) {
 		//------------------------------------------------------
 		if (event->m_MsgStr == L"ToTitleStage") {
-
 			//最初のアクティブステージの設定
 			ResetActiveStage<TitleStage>();
 			m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
 			m_AudioObjectPtr->AddAudioResource(L"titel");
 			m_AudioObjectPtr->Start(L"titel", XAUDIO2_LOOP_INFINITE, 0.62f);
 			m_StopNowMusic = L"titel";
-
 		}
 		//------------------------------------------------------
 		else if (event->m_MsgStr == L"ToStageSelect") {
-			if (m_StopNowMusic == L"gameover", L"clear")
-			{
-			m_AudioObjectPtr->Stop(m_StopNowMusic);	
-			m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
-			m_AudioObjectPtr->AddAudioResource(L"titel");
-			m_AudioObjectPtr->Start(L"titel", XAUDIO2_NO_LOOP_REGION, 0.6f);
-			m_StopNowMusic = L"titel";
+			if (m_StopNowMusic == L"gameover", L"clear") {
+				m_AudioObjectPtr->Stop(m_StopNowMusic);
+				m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
+				m_AudioObjectPtr->AddAudioResource(L"titel");
+				m_AudioObjectPtr->Start(L"titel", XAUDIO2_NO_LOOP_REGION, 0.6f);
+				m_StopNowMusic = L"titel";
 			}
 
             ResetActiveStage<StageSelect>();
 		}
 		//------------------------------------------------------
 		else if (event->m_MsgStr == L"ToGameStage") {
-			if (m_StopNowMusic != L"")
-			{
+			if (m_StopNowMusic != L""){
 				m_AudioObjectPtr->Stop(m_StopNowMusic);
 			}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
 			ResetActiveStage<GameStage>();
@@ -235,8 +231,7 @@ namespace basecross{
 		}
 		//------------------------------------------------------
 		else if (event->m_MsgStr == L"ToGameOver") {
-			if (m_StopNowMusic != L"")
-			{
+			if (m_StopNowMusic != L""){
 				m_AudioObjectPtr->Stop(m_StopNowMusic);
 			}
 			ResetActiveStage<GameOverStage>();
@@ -249,8 +244,7 @@ namespace basecross{
 		}
 		//------------------------------------------------------
 		else if (event->m_MsgStr == L"ToClearStage") {
-			if (m_StopNowMusic != L"")
-			{
+			if (m_StopNowMusic != L""){
 				m_AudioObjectPtr->Stop(m_StopNowMusic);
 			}
 			ResetActiveStage<ClearStage>();
@@ -258,11 +252,7 @@ namespace basecross{
 			m_AudioObjectPtr->AddAudioResource(L"clear");
 			m_AudioObjectPtr->Start(L"clear", XAUDIO2_LOOP_INFINITE, 0.62f);
 			m_StopNowMusic = L"clear";
-			
-
 		}
 	}
-
-
 }
 //end basecross

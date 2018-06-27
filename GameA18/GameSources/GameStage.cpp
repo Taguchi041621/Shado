@@ -193,16 +193,10 @@ namespace basecross {
 				}
 			}
 
-
-
 			if (MapVec[0] == L"Goal") {
 				stringflag = true;
 				Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
-				auto CubePtr = AddGameObject<Goal>(
-					Vec3(0.25f, 0.5f, 0.25f),//スケール
-					Qt,					//角度
-					Pos					//ポジション
-					);
+				auto CubePtr = AddGameObject<Goal>(Vec3(0.25f, 0.5f, 0.25f),Qt,Pos);
 			}
 			if (MapVec[0] == L"Key") {
 				stringflag = true;
@@ -381,7 +375,6 @@ namespace basecross {
 			Vec3(0.0f, 0.0, -35.0f),
 			Vec3(1.5f, 0.0f, 0.0f),
 			Vec3(5.0f, 1.0f, 5.0f));
-		SetSharedGameObject(L"StageLight", PtrLight);
 	}
 
 	void GameStage::OnCreate() {
@@ -434,6 +427,7 @@ namespace basecross {
 		auto Time = App::GetApp()->GetElapsedTime();
 		ThumbTimer += Time;
 		m_ScaleTimer += Time;
+		//死んだとき
 		if (PtrPlayer->GetGameOverFlag() && PtrPlayer->GetFadeFlag() && !m_ClearFlag) {
 			Fade->SetActionflag(true);
 			//リスポーン
@@ -443,6 +437,7 @@ namespace basecross {
 			//PostEvent(0.8f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameOver");
 			m_ClearFlag = true;
 		}
+		//クリアしたとき
 		if (PtrPlayer->GetGameClearFlag() && PtrPlayer->GetFadeFlag() && !m_ClearFlag) {
 			Fade->SetActionflag(true);
 			PostEvent(0.8f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToClearStage");
@@ -462,8 +457,6 @@ namespace basecross {
 				&& ScenePtr->GetPauseFlag()) {
 				PtrPlayer->SetUpdateActive(true);
 				ScenePtr->SetPauseFlag(false);
-				auto Pause = GetSharedGameObject<Sprite>(L"Pause");
-				auto WLight = GetSharedGameObject<ScaleChangeSprite>(L"WLight");
 
 				Pause->SetDrawActive(false);
 				WLight->SetDrawActive(false);
@@ -491,15 +484,12 @@ namespace basecross {
 					}
 				}
 			}
-
 			if (NowSelect < 0) {
 				NowSelect = 2;
 			}
-
 			if (NowSelect > 2) {
 				NowSelect = 0;
 			}
-
 
 			switch (NowSelect) {//現在選択中の状態によって処理を分岐
 			case 0:
@@ -527,7 +517,6 @@ namespace basecross {
 
 			//Aボタン
 			if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A) {
-				auto FadeIn = GetSharedGameObject<SpriteFade>(L"FadeIn");
 				SelectFlag = true;
 				switch (NowSelect) {//現在選択中の状態によって処理を分岐
 				case 0:
@@ -540,12 +529,12 @@ namespace basecross {
 				case 1:
 					ScenePtr->SetRespawnFlag(true);
 					ScenePtr->SetPauseFlag(false);
-					FadeIn->SetActionflag(true);
+					Fade->SetActionflag(true);
 					PostEvent(0.8f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameStage");
 					break;
 				case 2:
 					ScenePtr->SetPauseFlag(false);
-					FadeIn->SetActionflag(true);
+					Fade->SetActionflag(true);
 					PostEvent(0.8f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToStageSelect");
 					break;
 				}

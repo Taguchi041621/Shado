@@ -30,6 +30,7 @@ namespace basecross
 		int m_MaxStageNumber;
 		
 		float m_CoolTime;
+		wstring DataDir;
 
 	public:
 		//ç\ízÇ∆îjä¸
@@ -73,12 +74,6 @@ namespace basecross
 			const wstring BaseDir,
 			const Vec3& Scale,
 			const Vec3& Position,
-			const Vec3& Rotation
-		);
-		StageSelectDoor(const shared_ptr<Stage>& StagePtr,
-			const wstring BaseDir,
-			const Vec3& Scale,
-			const Vec3& Position,
 			const Vec3& Rotation,
 			const wstring DoorNum
 			);
@@ -99,6 +94,9 @@ namespace basecross
 		void SetSelectFlag(bool f) { m_SelectFlag = f; }
 		bool GetSelectFlag() { return m_SelectFlag; }
 
+		float mm = 0.001f;
+
 		void Open();
+		void StyleChange();
 	};
 }
