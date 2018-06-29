@@ -327,15 +327,15 @@ namespace basecross {
 	}
 
 	void GameStage::CreateHaveKeys() {
-		auto group = GetSharedObjectGroup(L"KeyGroup");
-		int s = group->size();
-		for (int i = 0; i < s; i++) {
-			//鍵のグループに入ってる数、表示する
-			auto key = AddGameObject<HaveKeys>((wstring)L"UI_Key_None_TX", i);
-			if (i == 0) {
-				SetSharedGameObject(L"HaveKey", key);
-			}
-		}
+		//auto group = GetSharedObjectGroup(L"KeyGroup");
+		//int s = group->size();
+		//for (int i = 0; i < s; i++) {
+		//	//鍵のグループに入ってる数、表示する
+		//	auto key = AddGameObject<HaveKeys>((wstring)L"UI_Key_None_TX", i);
+		//	if (i == 0) {
+		//		SetSharedGameObject(L"HaveKey", key);
+		//	}
+		//}
 	}
 	void GameStage::CreateEnemy()
 	{
@@ -388,7 +388,7 @@ namespace basecross {
 			//クリエイトした鍵のグループ
 			CreateSharedObjectGroup(L"KeyGroup");
 			//ステージにある鍵の数
-			CreateSharedObjectGroup(L"HaveKeysGroup");
+			//CreateSharedObjectGroup(L"HaveKeysGroup");
 			//敵
 			//CreateEnemy();
 			//ミニマップ
@@ -483,12 +483,13 @@ namespace basecross {
 						ThumbFlag = false;
 					}
 				}
-			}
-			if (NowSelect < 0) {
-				NowSelect = 2;
-			}
-			if (NowSelect > 2) {
-				NowSelect = 0;
+				//上下端を超えたら反対側の端に行く
+				if (NowSelect < 0) {
+					NowSelect = 2;
+				}
+				if (NowSelect > 2) {
+					NowSelect = 0;
+				}
 			}
 
 			switch (NowSelect) {//現在選択中の状態によって処理を分岐
@@ -516,7 +517,7 @@ namespace basecross {
 			}
 
 			//Aボタン
-			if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A) {
+			if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A && !SelectFlag) {
 				SelectFlag = true;
 				switch (NowSelect) {//現在選択中の状態によって処理を分岐
 				case 0:
@@ -530,12 +531,12 @@ namespace basecross {
 					ScenePtr->SetRespawnFlag(true);
 					ScenePtr->SetPauseFlag(false);
 					Fade->SetActionflag(true);
-					PostEvent(0.8f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameStage");
+					PostEvent(0.8f, GetThis<ObjectInterface>(), ScenePtr, L"ToGameStage");
 					break;
 				case 2:
 					ScenePtr->SetPauseFlag(false);
 					Fade->SetActionflag(true);
-					PostEvent(0.8f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToStageSelect");
+					PostEvent(0.8f, GetThis<ObjectInterface>(), ScenePtr, L"ToStageSelect");
 					break;
 				}
 			}

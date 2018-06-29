@@ -14,8 +14,6 @@ namespace basecross {
 		PtrTransform->SetPosition(m_KeyPos);
 		PtrTransform->SetScale(0.50,1.00,0.50);
 
-		//タグ
-		AddTag(L"KeyItem");
 		//描画コンポーネントの設定
 		auto PtrDraw = AddComponent<BcPNTStaticDraw>();
 		//描画するメッシュを設定

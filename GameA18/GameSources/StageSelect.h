@@ -68,6 +68,8 @@ namespace basecross
 
 		bool m_SelectFlag;
 		bool m_OpenFlag;
+		bool m_RemoveFlag;
+		float m_RemoveTime = 0.0f;
 	public:
 		//\’z‚Æ”jŠü
 		StageSelectDoor(const shared_ptr<Stage>& StagePtr,
@@ -94,7 +96,9 @@ namespace basecross
 		void SetSelectFlag(bool f) { m_SelectFlag = f; }
 		bool GetSelectFlag() { return m_SelectFlag; }
 
-		float mm = 0.001f;
+		void SetRemoveFlag(bool f) { m_RemoveFlag = f; }
+		//”à‚Ì‘å‚«‚³•Ï‚¦
+		float deflection = 0.001f;
 
 		void Open();
 		void StyleChange();

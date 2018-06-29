@@ -44,7 +44,7 @@ namespace basecross
 		//ActionPtr->AddMoveTo(3.0f, Vec3(-5.0f, m_StartPos.y, 0.0f));
 		//ActionPtr->AddScaleTo(1.8f, Vec3(m_StartScale.x*13.0f, m_StartScale.y*13.0f, 0.0f));
 		ActionPtr->AddMoveTo(1.0f, Vec3(-500.0f, m_StartPos.y, 0.0f));
-		ActionPtr->AddScaleTo(0.6f, Vec3(m_StartScale.x*30.0f, m_StartScale.y*15.0f, 0.0f));
+		ActionPtr->AddScaleTo(0.6f, Vec3(m_StartScale.x*35.0f, m_StartScale.y*20.0f, 0.0f));
 		ActionPtr->SetLooped(true);
 		ActionPtr->Run();
 	}

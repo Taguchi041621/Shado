@@ -68,8 +68,6 @@ namespace basecross {
 
 		bool GetClearFlag() { return m_ClearFlag; }
 		void SetClearFlag(bool f) { m_ClearFlag = f; }
-
-		
 	};
 
 

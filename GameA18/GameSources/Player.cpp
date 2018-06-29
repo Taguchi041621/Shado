@@ -254,7 +254,7 @@ namespace basecross{
 		m_DamageFlag = false;
 		//初期位置などの設定
 		auto Ptr = GetComponent<Transform>();
-		Ptr->SetScale(0.80f, 1.60f, 0.2f);	//X,Z25、Y50の長方形
+		Ptr->SetScale(0.80f, 1.60f, 0.5f);	//X,Z25、Y50の長方形
 		Ptr->SetRotation(0.0f, 0.0f, 0.0f);
 		Ptr->SetPosition(m_Position);
 
@@ -506,6 +506,10 @@ namespace basecross{
 			m_FallFlag = true;
 			m_Timer = -10;
 		}
+		//潰れて死んだらDiedアニメを流す
+		if (Obj->GetDeath() == 1) {
+			Obj->GetStateMachine()->ChangeState(DiedState::Instance());
+		}
 
 		//アニメーション更新
 		Obj->LoopedAnimeUpdateMotion();
@@ -555,7 +559,6 @@ namespace basecross{
 		Obj->LoopedAnimeUpdateMotion();
 		if (Obj->IsAnimeEnd()) {
 			Obj->GetStateMachine()->ChangeState(WaitState::Instance());
-
 		}
 	}
 	//ステートから抜けるときに呼ばれる関数

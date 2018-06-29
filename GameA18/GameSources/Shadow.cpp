@@ -39,6 +39,7 @@ namespace basecross {
 	//変化
 	void ShadowObject::OnUpdate() {
 		GetComponent<Transform>()->SetPosition(ShadowLocation());
+		//if(GetStage()->GetSharedGameObject<Player>(L"Player")->)
 	}
 	void ShadowObject::OnUpdate2() {
 	}
@@ -135,7 +136,7 @@ namespace basecross {
 		float ElapsedTime = App::GetApp()->GetElapsedTime();
 		//アニメーションを更新する
 		UpdateAnimeTime(ElapsedTime);
-		if (m_LightFlag&&GetStage()->GetSharedGameObject<Player>(L"Player")->GetKey()){
+		if (m_LightFlag){
 			m_LightFlag = false;
 			SetFps(60.0f);
 			ChangeAnimation(L"Unlock");
@@ -263,7 +264,7 @@ namespace basecross {
 		OBB t;
 		t.m_Center = this->GetComponent<Transform>()->GetWorldPosition();
 		t.m_Center.z = 0;
-		t.m_Size = this->GetComponent<Transform>()->GetScale() * 0.5f;
+		t.m_Size = this->GetComponent<Transform>()->GetScale() * 0.6f;
 		//イデア
 		OBB p;
 		p.m_Center = GetStage()->GetSharedGameObject<Player>(L"Player")->GetComponent<Transform>()->GetWorldPosition();
@@ -283,17 +284,10 @@ namespace basecross {
 			p0 = GetComponent<Transform>()->GetWorldPosition();
 			//ベジエ曲線最終位置の設定
 			//p1 = GetComponent<Transform>()->GetWorldPosition() + Vec3(0.0f,20.0f, 0.0f);
-			//回す
-			m_spinB = true;
 
 			if (m_StopNowMusic != L""){
 				m_AudioObjectPtr->Stop(m_StopNowMusic);
 			}
-			wstring DataDir;
-			//サンプルのためアセットディレクトリを取得
-			//各ゲームは以下のようにデータディレクトリを取得すべき
-			App::GetApp()->GetDataDirectory(DataDir);
-
 			m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
 			m_AudioObjectPtr->AddAudioResource(L"KeySound");
 			m_AudioObjectPtr->Start(L"KeySound", XAUDIO2_NO_LOOP_REGION, 0.6f);

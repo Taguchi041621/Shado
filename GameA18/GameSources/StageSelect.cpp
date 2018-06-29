@@ -48,21 +48,21 @@ namespace basecross
 
 		AddGameObject<Sprite>(L"SELECT_TEXT_TX", true,
 			Vec2(960, 200 / 2), Vec3(0, 330, 0.1f));
+		//画面端の影
 		AddGameObject<Sprite>(L"TITLE_SHADOW_TX", true,
 			Vec2(1280.0f*1.2, 800.0f*1.2), Vec3(0, 0, 0.1f));
 	}
 
 	void StageSelect::CreateFadeOutSprite() {
 		auto Fade = AddGameObject<SpriteFadeOut>(L"Shadow_TX", true,
-			Vec2(50000 / 4, 30000 / 4), Vec3(0.0f, 0.0f, 0.0f));
+			Vec2(12500, 7500), Vec3(0.0f, 0.0f, 0.0f));
 		SetSharedGameObject(L"FadeOut", Fade);
 	}
 
-	void StageSelect::CreateFadeSprite()
-	{
+	void StageSelect::CreateFadeSprite(){
 		auto Fade = AddGameObject<SpriteFade>(L"Shadow_TX", true,
 			Vec2(840, 600), Vec3(900.0f, 0.0f, 0.0f));
-		SetSharedGameObject(L"FadeIn", Fade);
+			SetSharedGameObject(L"FadeIn", Fade);
 	}
 	//ドアを作る
 	void StageSelect::CreateDoor() {
@@ -181,6 +181,7 @@ namespace basecross
 	//更新
 	void StageSelect::OnUpdate() {
 		auto ScenePtr = App::GetApp()->GetScene<Scene>();
+		shared_ptr<StageSelectDoor> Door;
 		if (onectrl) {
 			m_CoolTime += App::GetApp()->GetElapsedTime();
 			if (m_CoolTime >= 0.2f) {
@@ -360,9 +361,7 @@ namespace basecross
 					m_SelectFlag = false;
 					ScenePtr->SetRespawnFlag(false);
 					for (int i = 1; i <= m_MaxStageNumber; i++) {
-						//auto num = GetSharedGameObject<ScoreSprite>(L"ScoreSprite" + Util::IntToWStr(i));
-						//RemoveGameObject<ScoreSprite>(num);
-						auto Door = GetSharedGameObject<StageSelectDoor>(L"Door" + Util::IntToWStr(i));
+						Door = GetSharedGameObject<StageSelectDoor>(L"Door" + Util::IntToWStr(i));
 						//選んでるステージは
 						if (i == m_StageNumber) {
 							//開くアニメーションを流す
@@ -370,10 +369,11 @@ namespace basecross
 							//ドアが開いてからシーン移行するための2.8秒
 							PostEvent(2.8f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameStage");
 						}
+						Door->SetRemoveFlag(true);
 					}
 				}
 				for (int i = 1; i <= m_MaxStageNumber; i++) {
-					auto Door = GetSharedGameObject<StageSelectDoor>(L"Door" + Util::IntToWStr(i));
+					Door = GetSharedGameObject<StageSelectDoor>(L"Door" + Util::IntToWStr(i));
 					if (i == m_StageNumber) {
 						Door->SetSelectFlag(true);
 					}
@@ -381,29 +381,10 @@ namespace basecross
 						Door->SetSelectFlag(false);
 					}
 					Door->StyleChange();
-					//<<<<<<< HEAD
-					//=======
-					//				wstring DataDir;
-					//				//サンプルのためアセットディレクトリを取得
-					//				//App::GetApp()->GetAssetsDirectory(DataDir);
-					//				//各ゲームは以下のようにデータディレクトリを取得すべき
-					//				App::GetApp()->GetDataDirectory(DataDir);
-					//
-					//				m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
-					//				m_AudioObjectPtr->AddAudioResource(L"opendoor");
-					//				m_AudioObjectPtr->Start(L"opendoor", XAUDIO2_NO_LOOP_REGION, 0.1f);
-					//				SetNowMusic(L"opendoor");
-					//
-					//				auto FadeIn = GetSharedGameObject<SpriteFade>(L"FadeIn");
-					//				FadeIn->SetActionflag(true);
-					//				m_SelectFlag = false;
-					//				ScenePtr->SetRespawnFlag(false);
-					//				PostEvent(0.8f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameStage");
-					//>>>>>>> 461c6d109ef9a2ea6a24272b2be17499d07851d5
 				}
+				//今のステージをシーンに持たせる
+				ScenePtr->SetStageNumber(m_StageNumber);
 			}
-			//今のステージをシーンに持たせる
-			ScenePtr->SetStageNumber(m_StageNumber);
 		}
 	}
 
@@ -413,8 +394,7 @@ namespace basecross
 	StageSelectDoor::StageSelectDoor(const shared_ptr<Stage>& StagePtr, const wstring BaseDir,
 		const Vec3& Scale, const Vec3& Position, const Vec3& Rotation, const wstring DoorNum)
 		: SS5ssae(StagePtr, BaseDir, L"StageSelectDoor.ssae", L"SELECT_" + DoorNum),
-		m_Scale(Scale), m_Position(Position), m_Rotation(Rotation), m_ScaleZ(0.05f), m_SelectFlag(false), m_DoorNum(DoorNum)
-	{
+		m_Scale(Scale), m_Position(Position), m_Rotation(Rotation), m_ScaleZ(0.05f), m_SelectFlag(false), m_DoorNum(DoorNum){
 		m_ToAnimeMatrix.affineTransformation(
 			Vec3(0.2f, 0.2f, 0.1f),
 			Vec3(0, 0, 0),
@@ -459,14 +439,16 @@ namespace basecross
 			auto pos = GetComponent<Transform>()->GetWorldPosition();
 			auto sca = GetComponent<Transform>()->GetScale();
 			if (sca.x >= 0.5f) {
-				mm = -0.001f;
+				deflection = -0.001f;
 			}
 			if(sca.x < 0.4) {
-				mm = 0.001f;
+				deflection = 0.001f;
 			}
-			pos.y += mm*3.0f;
-			sca.x += mm;
-			sca.y += mm;
+			//ドアの大きさを増減して、それに合わせて高さを変える
+			pos.y += deflection*3.0f;
+			sca.x += deflection;
+			sca.y += deflection;
+			//適応
 			GetComponent<Transform>()->SetWorldPosition(pos);
 			GetComponent<Transform>()->SetScale(sca);
 		}
@@ -475,10 +457,18 @@ namespace basecross
 			ElapsedTime += App::GetApp()->GetElapsedTime();
 			//開くアニメーションが終わったら
 			if (IsAnimeEnd()) {
+				//フェードを入れる
 				auto FadeIn = GetStage()->GetSharedGameObject<SpriteFade>(L"FadeIn");
 				FadeIn->SetActionflag(true);
 			}
 		}
+		if (m_RemoveFlag) {
+			m_RemoveTime += App::GetApp()->GetElapsedTime();
+			if (m_RemoveTime >= 2.5f) {
+				GetStage()->RemoveGameObject<StageSelectDoor>(GetThis<StageSelectDoor>());
+			}
+		}
+		//アニメーションの更新
 		UpdateAnimeTime(ElapsedTime);
 	}
 
@@ -492,16 +482,22 @@ namespace basecross
 	}
 	void StageSelectDoor::StyleChange(){
 		if (m_OpenFlag) {
+			//初期位置、初期サイズに戻す
+			GetComponent<Transform>()->SetWorldPosition(m_Position);
+			GetComponent<Transform>()->SetScale(m_Scale);
 		}
 		else if (m_SelectFlag) {
 			ChangeAnimation(L"SELECT_" + m_DoorNum);
 			SetLooped(true);
 		}
+		//選択されていない、開かれていない時
 		else {
+			//初期位置、初期サイズに戻す
 			GetComponent<Transform>()->SetWorldPosition(m_Position);
 			GetComponent<Transform>()->SetScale(m_Scale);
+			//赤枠をなくすための"OPEN"アニメ、
+			//アニメーションの更新を行わないため閉じた状態のまま
 			ChangeAnimation(L"OPEN_" + m_DoorNum);
 		}
-
 	}
 }
