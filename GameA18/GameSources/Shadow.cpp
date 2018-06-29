@@ -39,7 +39,12 @@ namespace basecross {
 	//•Ï‰»
 	void ShadowObject::OnUpdate() {
 		GetComponent<Transform>()->SetPosition(ShadowLocation());
-		//if(GetStage()->GetSharedGameObject<Player>(L"Player")->)
+		if (GetStage()->GetSharedGameObject<Player>(L"Player")->GetFadeFlag()) {
+			m_RemoveTime += App::GetApp()->GetElapsedTime();
+			if (m_RemoveTime >= 0.6f) {
+				GetStage()->RemoveGameObject<ShadowObject>(GetThis<ShadowObject>());
+			}
+		}
 	}
 	void ShadowObject::OnUpdate2() {
 	}

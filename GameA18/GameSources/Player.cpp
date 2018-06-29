@@ -252,6 +252,7 @@ namespace basecross{
 		m_ParentFlag = false;
 		m_StandFlag = false;
 		m_DamageFlag = false;
+		m_FadeFlag = false;
 		//‰ŠúˆÊ’u‚È‚Ç‚Ìİ’è
 		auto Ptr = GetComponent<Transform>();
 		Ptr->SetScale(0.80f, 1.60f, 0.5f);	//X,Z25AY50‚Ì’·•ûŒ`

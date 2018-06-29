@@ -14,6 +14,7 @@ namespace basecross {
 		weak_ptr<GameObject> m_Obj;
 		//スケールのZの固定値
 		float m_ScaleZ;
+		float m_RemoveTime = 0.0f;
 	public:
 		//構築と破棄
 		ShadowObject(const shared_ptr<Stage>& StagePtr,

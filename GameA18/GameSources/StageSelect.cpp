@@ -464,7 +464,7 @@ namespace basecross
 		}
 		if (m_RemoveFlag) {
 			m_RemoveTime += App::GetApp()->GetElapsedTime();
-			if (m_RemoveTime >= 2.5f) {
+			if (m_RemoveTime >= 2.0f) {
 				GetStage()->RemoveGameObject<StageSelectDoor>(GetThis<StageSelectDoor>());
 			}
 		}
