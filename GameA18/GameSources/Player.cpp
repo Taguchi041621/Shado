@@ -501,8 +501,7 @@ namespace basecross{
 		float ElapsedTime = App::GetApp()->GetElapsedTime();
 		m_Timer += ElapsedTime;
 
-		if (m_Timer >= 0.7f)
-		{
+		if (m_Timer >= 0.7f){
 			Obj->AnimeChangeMotion(L"Fall", false);
 			m_FallFlag = true;
 			m_Timer = -10;
@@ -515,7 +514,7 @@ namespace basecross{
 		//アニメーション更新
 		Obj->LoopedAnimeUpdateMotion();
 		if (Obj->GetParentFlag() && m_FallFlag) {
-			//輪っか出す
+			//煙だす
 			Obj->LandingDirecting();
 			Obj->GetStateMachine()->ChangeState(StandState::Instance());
 		}
@@ -525,7 +524,7 @@ namespace basecross{
 	}
 	//ステートから抜けるときに呼ばれる関数
 	void FallState::Exit(const shared_ptr<Player>& Obj) {
-
+		Obj->GetComponent<Rigidbody>()->SetVelocityZero();
 	}
 	//--------------------------------------------------------------------------------------
 	//	class LandingState : public ObjState<Player>;
@@ -542,12 +541,6 @@ namespace basecross{
 	//ステートに入ったときに呼ばれる関数
 	void LandingState::Enter(const shared_ptr<Player>& Obj) {
 		Obj->AnimeChangeMotion(L"Down_landing", false);
-
-			wstring DataDir;
-			//サンプルのためアセットディレクトリを取得
-			//App::GetApp()->GetAssetsDirectory(DataDir);
-			//各ゲームは以下のようにデータディレクトリを取得すべき
-			App::GetApp()->GetDataDirectory(DataDir);
 
 			m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
 			m_AudioObjectPtr->AddAudioResource(L"se5");
