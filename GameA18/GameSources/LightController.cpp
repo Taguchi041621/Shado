@@ -15,6 +15,7 @@ namespace basecross {
 		auto ScenePtr = App::GetApp()->GetScene<Scene>();
 		if (!GetStage()->GetSharedGameObject<Player>(L"Player")->GetGameOverFlag() &&
 			!GetStage()->GetSharedGameObject<Player>(L"Player")->GetGameClearFlag() &&
+			!GetStage()->GetSharedGameObject<Player>(L"Player")->GetStandFlag() &&
 			ScenePtr->GetStartFlag()&&
 			!ScenePtr->GetPauseFlag()) {
 			//&&GetStage()->GetSharedGameObject<Player>(L"Player")->GetComponent<Transform>()->GetParent()) {

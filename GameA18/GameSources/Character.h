@@ -8,20 +8,24 @@
 
 namespace basecross{
 	class WhiteCube : public GameObject {
+		//大きさ、回転、位置の初期値
 		Vec3 m_StartScale;
 		Quat m_StartQt;
 		Vec3 m_StartPos;
+		//メッシュ
 		shared_ptr<MeshResource> m_MeshResource;
-
+		//リジットボディ
 		shared_ptr<Rigidbody> m_Rigidbody;
 
+		//移動を管理するフラグ
 		bool m_MoveFlag;
-		bool m_HengMoveFlag;
-		bool m_VerticalMoveFlag;
-		Vec3 m_Speed;
+		bool m_HengMoveFlag;//横
+		bool m_VerticalMoveFlag;//縦
+		Vec3 m_Speed;//移動
 		//濃さを持つ
 		float m_alpha;
-
+		
+		//移動時間
 		float m_HengTimer;
 		float m_VerticalTimer;
 	public:
@@ -62,20 +66,24 @@ namespace basecross{
 		//}
 	};
 	class BlueCube : public GameObject {
+		//大きさ、回転、位置の初期値
 		Vec3 m_StartScale;
 		Quat m_StartQt;
 		Vec3 m_StartPos;
+		//メッシュ
 		shared_ptr<MeshResource> m_MeshResource;
-
+		//リジットボディ
 		shared_ptr<Rigidbody> m_Rigidbody;
 
+		//移動を管理するフラグ
 		bool m_MoveFlag;
-		bool m_HengMoveFlag;
-		bool m_VerticalMoveFlag;
-		Vec3 m_Speed;
+		bool m_HengMoveFlag;//横
+		bool m_VerticalMoveFlag;//縦
+		Vec3 m_Speed;//移動
 		//濃さを持つ
 		float m_alpha;
-
+		
+		//移動時間
 		float m_HengTimer;
 		float m_VerticalTimer;
 	public:
@@ -116,20 +124,24 @@ namespace basecross{
 		//}
 	};
 	class YellowCube : public GameObject {
+		//大きさ、回転、位置の初期値
 		Vec3 m_StartScale;
 		Quat m_StartQt;
 		Vec3 m_StartPos;
+		//メッシュ
 		shared_ptr<MeshResource> m_MeshResource;
-
+		//リジットボディ
 		shared_ptr<Rigidbody> m_Rigidbody;
 
+		//移動を管理するフラグ
 		bool m_MoveFlag;
-		bool m_HengMoveFlag;
-		bool m_VerticalMoveFlag;
-		Vec3 m_Speed;
-		//濃さを持つ
+		bool m_HengMoveFlag;//横
+		bool m_VerticalMoveFlag;//縦
+		Vec3 m_Speed;//移動
+					 //濃さを持つ
 		float m_alpha;
 
+		//移動時間
 		float m_HengTimer;
 		float m_VerticalTimer;
 	public:

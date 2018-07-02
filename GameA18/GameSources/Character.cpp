@@ -8,7 +8,7 @@
 
 namespace basecross {
 	//--------------------------------------------------------------------------------------
-	///	”’‚¢—§•û‘Ì
+	///	Ô‚¢ƒuƒƒbƒN
 	//--------------------------------------------------------------------------------------
 	WhiteCube::WhiteCube(const shared_ptr<Stage>& StagePtr,
 		const Vec3& StartScale, const Quat& StartQt, const Vec3& StartPos, const Vec3& StartSpeed, const bool& Move) :
