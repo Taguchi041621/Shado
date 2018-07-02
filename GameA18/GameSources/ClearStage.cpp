@@ -117,6 +117,9 @@ namespace basecross
 		m_ScaleTimer += Time;
 		//ƒRƒ“ƒgƒ[ƒ‰‚ÌŽæ“¾
 		auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
+		if ((CntlVec[0].wButtons&XINPUT_GAMEPAD_START) && (CntlVec[0].wButtons&XINPUT_GAMEPAD_BACK)) {
+			PostEvent(0.0f, GetThis<ObjectInterface>(), ScenePtr, L"ToTitleStage");
+		}
 		if (CntlVec[0].bConnected) {
 			if (ThumbTimer > 0.5f) {
 				ThumbFlag = true;
@@ -191,6 +194,9 @@ namespace basecross
 		auto ScenePtr = App::GetApp()->GetScene<Scene>();
 		if (Number == 12) {
 			auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
+			if ((CntlVec[0].wButtons&XINPUT_GAMEPAD_START) && (CntlVec[0].wButtons&XINPUT_GAMEPAD_BACK)) {
+				PostEvent(0.0f, GetThis<ObjectInterface>(), ScenePtr, L"ToTitleStage");
+			}
 			if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A && !SelectFlag) {
 				auto FadeIn = GetSharedGameObject<SpriteFade>(L"FadeIn");
 				FadeIn->SetActionflag(true);

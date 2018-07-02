@@ -446,6 +446,9 @@ namespace basecross {
 
 		//ƒRƒ“ƒgƒ[ƒ‰‚ÌŽæ“¾
 		auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
+		if ((CntlVec[0].wButtons&XINPUT_GAMEPAD_START) && (CntlVec[0].wButtons&XINPUT_GAMEPAD_BACK)) {
+			PostEvent(0.0f, GetThis<ObjectInterface>(), ScenePtr, L"ToTitleStage");
+		}
 		if (CntlVec[0].bConnected) {
 			if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_START && !ScenePtr->GetPauseFlag() && !PtrPlayer->GetGameClearFlag() && ScenePtr->GetStartFlag()) {
 				PtrPlayer->SetUpdateActive(false);
