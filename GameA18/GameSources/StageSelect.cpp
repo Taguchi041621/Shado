@@ -191,6 +191,9 @@ namespace basecross
 		}
 		//コントローラの取得
 		auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
+		if ((CntlVec[0].wButtons&XINPUT_GAMEPAD_START) && (CntlVec[0].wButtons&XINPUT_GAMEPAD_BACK)) {
+			PostEvent(0.0f, GetThis<ObjectInterface>(), ScenePtr, L"ToTitleStage");
+		}
 		if (m_SelectFlag) {
 			if (CntlVec[0].bConnected) {
 				//左スティック左方向
