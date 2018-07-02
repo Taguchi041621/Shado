@@ -675,17 +675,11 @@ namespace basecross{
 		Obj->SetGameOverFlag(true);
 		//Velocityを0にする
 		Obj->GetComponent<Rigidbody>()->SetVelocityZero();
-		//---------------------------------------------------------------
-		wstring DataDir;
-		//サンプルのためアセットディレクトリを取得
-		//App::GetApp()->GetAssetsDirectory(DataDir);
-		//各ゲームは以下のようにデータディレクトリを取得すべき
-		App::GetApp()->GetDataDirectory(DataDir);
 
 		m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
-		m_AudioObjectPtr->AddAudioResource(L"dead");
-		m_AudioObjectPtr->Start(L"dead", XAUDIO2_NO_LOOP_REGION, 0.3f);
-		Obj->SetNowMusic(L"dead");
+		m_AudioObjectPtr->AddAudioResource(L"se3");
+		m_AudioObjectPtr->Start(L"se3", XAUDIO2_NO_LOOP_REGION, 1.0f);
+		Obj->SetNowMusic(L"se3");
 		//----------------------------------------------------------------
 	}
 	//ステート実行中に毎ターン呼ばれる関数

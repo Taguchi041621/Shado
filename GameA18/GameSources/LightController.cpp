@@ -50,25 +50,19 @@ namespace basecross {
 				m_Lingering *= 0.8f;
 			}
 
-			if (m_LightAngle.x >= m_MaxAngle || m_LightAngle.x <= -m_MaxAngle ||
-				m_LightAngle.y >= m_MaxAngle || m_LightAngle.y <= -m_MaxAngle) {
-				if (SoundPlay == true) {
-					wstring DataDir;
-					//サンプルのためアセットディレクトリを取得
-					//App::GetApp()->GetAssetsDirectory(DataDir);
-					//各ゲームは以下のようにデータディレクトリを取得すべき
-					App::GetApp()->GetDataDirectory(DataDir);
-
-					m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
-					m_AudioObjectPtr->AddAudioResource(L"se3");
-					m_AudioObjectPtr->Start(L"se3", XAUDIO2_NO_LOOP_REGION, 0.5f);
-					SetNowMusic(L"se3");
-					SoundPlay = false;
-				}
-			}
-			else {
-				SoundPlay = true;
-			}
+			//if (m_LightAngle.x >= m_MaxAngle || m_LightAngle.x <= -m_MaxAngle ||
+			//	m_LightAngle.y >= m_MaxAngle || m_LightAngle.y <= -m_MaxAngle) {
+			//	if (SoundPlay == true) {
+			//		m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
+			//		m_AudioObjectPtr->AddAudioResource(L"se3");
+			//		m_AudioObjectPtr->Start(L"se3", XAUDIO2_NO_LOOP_REGION, 0.5f);
+			//		SetNowMusic(L"se3");
+			//		SoundPlay = false;
+			//	}
+			//}
+			//else {
+			//	SoundPlay = true;
+			//}
 			//マックスアングルを超えたらマックスアングルの値に戻す
 			//左
 			if (m_LightAngle.x >= m_MaxAngle - 0.3f) {
