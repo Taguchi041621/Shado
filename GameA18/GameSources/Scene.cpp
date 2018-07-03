@@ -85,6 +85,12 @@ namespace basecross{
 		//黒い煙
 		strTexture = DataDir + L"smoke_Black.png";
 		App::GetApp()->RegisterTexture(L"Smoke_Black_TX", strTexture);
+		//スプライトスタジオロゴ
+		strTexture = DataDir + L"splash512Logo.png";
+		App::GetApp()->RegisterTexture(L"splashLogo_TX", strTexture);
+		//クレジット表記
+		strTexture = DataDir + L"Credit_Link.png";
+		App::GetApp()->RegisterTexture(L"Credit_Link_TX", strTexture);
 
 		strTexture = DataDir + L"Pause.png";
 		App::GetApp()->RegisterTexture(L"PAUSE_TX", strTexture); 
@@ -154,7 +160,7 @@ namespace basecross{
 			CreateResourses();
 			//自分自身にイベントを送る
 			//これにより各ステージやオブジェクトがCreate時にシーンにアクセスできる
-			PostEvent(0.0f, GetThis<ObjectInterface>(), GetThis<Scene>(), L"ToTitleStage");
+			PostEvent(0.0f, GetThis<ObjectInterface>(), GetThis<Scene>(), L"ToBannerStage");
 		}
 		catch (...) {
 			throw;
@@ -218,6 +224,13 @@ namespace basecross{
 			m_AudioObjectPtr->AddAudioResource(L"clear");
 			m_AudioObjectPtr->Start(L"clear", XAUDIO2_LOOP_INFINITE, 0.62f);
 			m_StopNowMusic = L"clear";
+		}
+		//------------------------------------------------------
+		else if (event->m_MsgStr == L"ToBannerStage") {
+			if (m_StopNowMusic != L"") {
+				m_AudioObjectPtr->Stop(m_StopNowMusic);
+			}
+			ResetActiveStage<BannerStage>();
 		}
 	}
 }

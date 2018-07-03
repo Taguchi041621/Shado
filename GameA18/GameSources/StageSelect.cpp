@@ -395,7 +395,7 @@ namespace basecross
 	//Door
 	//--------------------------------------------------------------------------------------
 	StageSelectDoor::StageSelectDoor(const shared_ptr<Stage>& StagePtr, const wstring BaseDir,
-		const Vec3& Scale, const Vec3& Position, const Vec3& Rotation, const wstring DoorNum)
+		const Vec3& Scale, const Vec3& Position, const Vec3& Rotation, const wstring& DoorNum)
 		: SS5ssae(StagePtr, BaseDir, L"StageSelectDoor.ssae", L"SELECT_" + DoorNum),
 		m_Scale(Scale), m_Position(Position), m_Rotation(Rotation), m_ScaleZ(0.05f), m_SelectFlag(false), m_DoorNum(DoorNum){
 		m_ToAnimeMatrix.affineTransformation(
