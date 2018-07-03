@@ -24,3 +24,4 @@
 #include "Fade.h"
 #include "FadeOut.h"
 #include "Performance.h"
+#include "BannerStage.h"

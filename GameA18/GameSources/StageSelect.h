@@ -77,7 +77,7 @@ namespace basecross
 			const Vec3& Scale,
 			const Vec3& Position,
 			const Vec3& Rotation,
-			const wstring DoorNum
+			const wstring& DoorNum
 			);
 
 		virtual ~StageSelectDoor();
