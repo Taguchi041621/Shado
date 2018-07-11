@@ -12,6 +12,10 @@ namespace basecross{
 	///	プレイヤー
 	//--------------------------------------------------------------------------------------
 	class Player : public SS5ssae {
+		enum class InputType {
+			LeftStick,
+			RightStick
+		};
 
 		shared_ptr< StateMachine<Player> >  m_StateMachine;	//ステートマシーン
 		//初期ポジション
@@ -53,6 +57,7 @@ namespace basecross{
 		bool m_StandFlag;
 
 		bool m_DamageFlag;
+
 	public:
 		//構築と破棄
 		//--------------------------------------------------------------------------------------
@@ -74,7 +79,8 @@ namespace basecross{
 		コントローラから方向ベクトルを得る
 		*/
 		//--------------------------------------------------------------------------------------
-		float GetMoveVector(int LR) const;
+		float GetMoveLeftVectorX() const;//左
+		float GetMoveRightVectorX() const;//右
 		//--------------------------------------------------------------------------------------
 		/*!
 		@brief	最高速度を得る

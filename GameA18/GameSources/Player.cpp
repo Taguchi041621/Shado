@@ -37,28 +37,34 @@ namespace basecross{
 		);
 	}
 
-	//0を渡すと左、1を渡すと右のスティックのX値を返す
-	float Player::GetMoveVector(int LR) const {
+
+	float Player::GetMoveLeftVectorX() const {
 		float MoveX = 0;
+
 		//コントローラの取得
-		auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
-		if (CntlVec[0].bConnected) {
-			switch (LR){
-			case 0:
-				if (CntlVec[0].fThumbLX != 0) {
-					//コントローラの向き計算
-					MoveX = CntlVec[0].fThumbLX;
-				}
-				break;
-			case 1:
-				if (CntlVec[0].fThumbRX != 0) {
-					//コントローラの向き計算
-					MoveX = CntlVec[0].fThumbRX;
-				}
-				break;
-			default:
-				break;
-			}
+		auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec()[0];
+		//接続してなかったら0返す
+		if (!CntlVec.bConnected) {
+			return 0;
+		}
+		if (CntlVec.fThumbLX != 0) {
+			//コントローラの向き計算
+			MoveX = CntlVec.fThumbLX;
+		}
+		return MoveX;
+	}
+	float Player::GetMoveRightVectorX() const{
+		float MoveX = 0;
+
+		//コントローラの取得
+		auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec()[0];
+		//接続してなかったら0返す
+		if (!CntlVec.bConnected) {
+			return 0;
+		}
+		if (CntlVec.fThumbRX != 0) {
+			//コントローラの向き計算
+			MoveX = CntlVec.fThumbRX;
 		}
 		return MoveX;
 	}
@@ -68,7 +74,7 @@ namespace basecross{
 	//移動距離を返す
 	float  Player::MoveRotationMotion() {
 		float ElapsedTime = App::GetApp()->GetElapsedTime();
-		auto MoveX = GetMoveVector(0);
+		auto MoveX = GetMoveLeftVectorX();
 		//Transform
 		auto PtrTransform = GetComponent<Transform>();
 		//Rigidbodyを取り出す
@@ -206,7 +212,7 @@ namespace basecross{
 			switch (min) {
 			case 0:
 				//段差があったら登る
-				if (diff[2] < 0.4f && diff[2] >0.0f && GetMoveVector(0) < -0.6f) {
+				if (diff[2] < 0.4f && diff[2] >0.0f && GetMoveLeftVectorX() < -0.6f) {
 					playerPos.y += diff[2];
 					break;
 				}
@@ -218,7 +224,7 @@ namespace basecross{
 				break;
 			case 1:
 				//段差があったら登る
-				if (diff[2] < 0.4f && diff[2] > 0.0f && GetMoveVector(0) > 0.6f) {
+				if (diff[2] < 0.4f && diff[2] > 0.0f && GetMoveLeftVectorX() > 0.6f) {
 					playerPos.y += diff[2];
 					break;
 				}
@@ -313,7 +319,6 @@ namespace basecross{
 		if (m_ParentFlag && !m_GameOverFlag && !m_GameClearFlag && ScenePtr->GetStartFlag() && !m_StandFlag && !m_DamageFlag) {
 			//プレイヤーの移動
 			MoveRotationMotion();
-			//文字列の表示
 		}
 		else if (!m_ParentFlag) {
 			
@@ -321,12 +326,10 @@ namespace basecross{
 			GetComponent<Rigidbody>()->SetVelocity(Vec3(0.0f, m_FallSpeed, 0.0f));
 			m_FallSpeed += -0.08f;
 		}
-	    else if (m_DamageFlag)
-		{
+	    else if (m_DamageFlag){
 			//PtrRedit->SetVelocityZero();
 		}
 		PlayerHP();
-		//DrawStrings();
 	}
 	//
 	void Player::PlayerHP() {
@@ -429,12 +432,7 @@ namespace basecross{
 			else {
 				//右に飛ぶ
 				GetComponent<Rigidbody>()->SetVelocity(Vec3(3.0f, 0, 0.0f));
-				if (m_RightOrLeft == true) {
-					m_RightOrLeft = false;
-				}
-				else {
-					m_RightOrLeft = true;
-				}
+				m_RightOrLeft = !m_RightOrLeft;
 			}
 			GetStateMachine()->ChangeState(DamageState1::Instance());
 		}
@@ -471,7 +469,7 @@ namespace basecross{
 			Obj->GetStateMachine()->ChangeState(FallState::Instance());
 		}
 		//左スティックの値が0以外ならWalkアニメを流す
-		if (Obj->GetParentFlag() && Obj->GetMoveVector(0)&& ScenePtr->GetStartFlag()) {
+		if (Obj->GetParentFlag() && Obj->GetMoveLeftVectorX()&& ScenePtr->GetStartFlag()) {
 			Obj->GetStateMachine()->ChangeState(WalkState::Instance());
 		}
 	}
@@ -578,12 +576,6 @@ namespace basecross{
 		Obj->SetFps(45.0f);
 		Obj->SetStandFlag(true);
 
-		wstring DataDir;
-		//サンプルのためアセットディレクトリを取得
-		//App::GetApp()->GetAssetsDirectory(DataDir);
-		//各ゲームは以下のようにデータディレクトリを取得すべき
-		App::GetApp()->GetDataDirectory(DataDir);
-
 		m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
 		m_AudioObjectPtr->AddAudioResource(L"se6");
 		m_AudioObjectPtr->Start(L"se6", XAUDIO2_NO_LOOP_REGION, 0.32f);
@@ -620,12 +612,6 @@ namespace basecross{
 	void WalkState::Enter(const shared_ptr<Player>& Obj) {
 		Obj->SetFps(49.0f);
 		Obj->AnimeChangeMotion(L"Walk", true);
-		//---------------------------------------------------------------
-		wstring DataDir;
-		//サンプルのためアセットディレクトリを取得
-		//App::GetApp()->GetAssetsDirectory(DataDir);
-		//各ゲームは以下のようにデータディレクトリを取得すべき
-		App::GetApp()->GetDataDirectory(DataDir);
 
 		m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
 		m_AudioObjectPtr->AddAudioResource(L"walk");
@@ -646,7 +632,7 @@ namespace basecross{
 			Obj->GetStateMachine()->ChangeState(FallState::Instance());
 		}
 		//左スティックの値が0(入力されなくなった)ならWaitアニメを流す
-		if (Obj->GetMoveVector(0) == 0.0f) {
+		if (Obj->GetMoveLeftVectorX() == 0.0f) {
 			Obj->GetStateMachine()->ChangeState(WaitState::Instance());
 		}
 	}

@@ -40,26 +40,12 @@ namespace basecross
 		PtrDraw->SetTextureResource(m_TextureKey);
 		SetAlphaActive(true);
 		auto ActionPtr = AddComponent<Action>();
-		/*ActionPtr->AddMoveTo(0.1f, Vec3(m_StartPos.x*0.0f, m_StartPos.y, 0.0f));
-		ActionPtr->AddScaleTo(0.1f, Vec3(m_StartScale.x*2.0f, m_StartScale.y*2.0f, 0.0f));
-		ActionPtr->AddScaleTo(0.5f, Vec3(m_StartScale.x, m_StartScale.y, 0.0f));
-		ActionPtr->SetLooped(true);
-		ActionPtr->Run();*/
 	}
 
 	void Sprite::OnUpdate() {
 		auto ActionPtr = AddComponent<Action>();
 		auto PtrTransform = GetComponent<Transform>();
 		float ElapsedTime = App::GetApp()->GetElapsedTime();
-		/*if (m_Actionflag == true) {
-			ActionPtr->Run();
-		}
-		if (m_Actionflag == false) {
-			ActionPtr->Stop();
-			PtrTransform->SetPosition(m_StartPos.x, m_StartPos.y, m_StartPos.z);
-			PtrTransform->SetScale(m_StartScale.x, m_StartScale.y, 1.0f);
-		}*/
-
 	};
 	//-------------------------------------------------------------------------------------
 	///ステージ上の鍵の数と現在取得した鍵の数を表示する
@@ -441,26 +427,6 @@ namespace basecross
 	}
 
 	void Tutorial::OnCreate() {
-		////スケールのZを固定の大きさに
-		//m_Scale.z = m_ScaleZ;
-
-		//auto PtrTransform = GetComponent<Transform>();
-		////影のスケール,角度,ポジションの設定
-		//PtrTransform->SetScale(m_Scale);
-		//PtrTransform->SetRotation(m_Rotation);
-		//PtrTransform->SetPosition(ShadowLocation());
-
-		//auto PtrDraw = AddComponent<BcPNTStaticDraw>();
-		//PtrDraw->SetFogEnabled(true);
-		////実体から形を持ってくる
-		//PtrDraw->SetMeshResource(m_Obj.GetComponent<BcPNTStaticDraw>()->GetMeshResource());
-		//PtrDraw->SetOwnShadowActive(true);
-
-		////真っ赤
-		//PtrDraw->SetColorAndAlpha(Col4(1.0f, 0.4f, 0.0f, 1.0f));
-
-		//flag = false;
-
 		//スケールのZを固定の大きさに
 		m_Scale.z = m_ScaleZ;
 
@@ -508,21 +474,6 @@ namespace basecross
 		PtrTransform->SetRotation(m_Rotation);
 		PtrTransform->SetPosition(m_Position);
 
-		//auto PtrDraw = AddComponent<BcPNTStaticDraw>();
-		//PtrDraw->SetMeshResource(m_Obj.GetComponent<BcPNTStaticDraw>()->GetMeshResource());
-		////真っ黒
-		//PtrDraw->SetColorAndAlpha(Col4(1.0f, 1.0f, 1.0f, 0.0f));
-		////Mat4x4 au;
-		///*au.affineTransformation(
-		//	Vec3(1.0f, 1.0f, 0.1f),
-		//	Vec3(0, 0, 0),
-		//	Vec3(0, 0, 0),
-		//	Vec3(0.0f, 0.0f, 0.0f)
-		//	);
-		//PtrDraw->SetMeshToTransformMatrix(au);*/
-		//PtrDraw->SetTextureResource(L"Shadow_Blur_TX");
-		//PtrDraw->SetAlpha(1.0f);
-		//PtrDraw->SetPerPixelLighting(false);
 		//頂点配列
 		vector<VertexPositionNormalTexture> vertices;
 		//インデックスを作成するための配列

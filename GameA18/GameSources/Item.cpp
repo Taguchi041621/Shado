@@ -25,9 +25,6 @@ namespace basecross {
 		auto group = GetStage()->GetSharedObjectGroup(L"KeyGroup");
 		group->IntoGroup(GetThis<KeyItem>());
 
-		//‰e‚ğ‚Â‚¯‚é
-		//auto ShadowPtr = AddComponent<Shadowmap>();
-		//ShadowPtr->SetMeshResource(L"DEFAULT_CUBE");
 
 		//-------------------------------------------------
 		//‰e‚Ìì¬
@@ -41,8 +38,7 @@ namespace basecross {
 			);
 	}
 
-	void KeyItem::OnUpdate()
-	{
+	void KeyItem::OnUpdate(){
 		//OnTriggerEnter();
 	}
 	//Œ®‚ª“–‚½‚Á‚½‚Æ‚«

@@ -5,16 +5,6 @@ namespace basecross
 {
 	void TitleStage::CreateViewLight()
 	{
-		//auto PtrView = CreateView<SingleView>();
-		////ビューのカメラの設定
-		//auto PtrCamera = ObjectFactory::Create<Camera>();
-		//PtrView->SetCamera(PtrCamera);
-		//PtrCamera->SetEye(Vec3(0.0f, 2.0f, -4.0f));
-		//PtrCamera->SetAt(Vec3(0.0f, 0.0f, 0.0f));
-		////マルチライトの作成
-		//auto PtrMultiLight = CreateLight<MultiLight>();
-		////デフォルトのライティングを指定
-		//PtrMultiLight->SetDefaultLighting();
 		auto PtrView = CreateView<SingleView>();
 		//シャドウマップは使用しない
 		SetShadowmapDraw(false);
@@ -22,26 +12,6 @@ namespace basecross
 
 	void TitleStage::CreateTitleSprite()
 	{
-		////ステージへのゲームオブジェクトの追加
-		//auto Ptr = AddGameObject<GameObject>();
-		//auto PtrTrans = Ptr->GetComponent<Transform>();
-		//Quat Qt;
-		//Qt.rotationRollPitchYawFromVector(Vec3(0.75, 0, 0));
-		//PtrTrans->SetScale(7.0f, 6.0f, 1.0f);
-		//PtrTrans->SetQuaternion(Qt);
-		//PtrTrans->SetPosition(0.0f, 0.0f, 0.0f);
-		//auto ColPtr = Ptr->AddComponent<CollisionRect>();
-		////描画コンポーネントの追加
-		//auto DrawComp = Ptr->AddComponent<BcPNTStaticDraw>();
-		////描画コンポーネントに形状（メッシュ）を設定
-		//DrawComp->SetMeshResource(L"DEFAULT_SQUARE");
-		//DrawComp->SetFogEnabled(true);
-		////自分に影が映りこむようにする
-		//DrawComp->SetOwnShadowActive(true);
-
-		////描画コンポーネントテクスチャの設定
-		//DrawComp->SetTextureResource(L"TITLE_TX");
-
 		AddGameObject<Sprite>(L"TITLE_TX", false,
 			Vec2(1280.0f*1.8, 800.0f*1.8), Vec3(0, 50.0f, 0.1f));
 		AddGameObject<ScaleChangeSprite>(L"TITLE_TEXT_TX", true,
@@ -84,15 +54,9 @@ namespace basecross
 		if (CntlVec[0].bConnected) {
 			//Aボタン
 			if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A&&!m_SelectFlag) {
-				if (m_StopNowMusic != L"")
-				{
+				if (m_StopNowMusic != L""){
 					m_AudioObjectPtr->Stop(m_StopNowMusic);
 				}
-				wstring DataDir;
-				//サンプルのためアセットディレクトリを取得
-				//App::GetApp()->GetAssetsDirectory(DataDir);
-				//各ゲームは以下のようにデータディレクトリを取得すべき
-				App::GetApp()->GetDataDirectory(DataDir);
 
 				m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
 				m_AudioObjectPtr->AddAudioResource(L"se");

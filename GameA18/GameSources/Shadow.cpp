@@ -103,14 +103,6 @@ namespace basecross {
 	}
 
 	void ShadowGoal::OnCreate() {
-		//auto PtrDraw = AddComponent<BcPNTStaticDraw>();
-		//PtrDraw->SetFogEnabled(true);
-		////実体から形を持ってくる
-		//PtrDraw->SetMeshResource(m_Obj.GetComponent<BcPNTStaticDraw>()->GetMeshResource());
-		//PtrDraw->SetOwnShadowActive(true);
-
-		//flag = false;
-
 		//スケールのZを固定の大きさに
 		m_Scale.z = m_ScaleZ;
 
@@ -163,8 +155,10 @@ namespace basecross {
 		//プレイヤーがゴールに触れたかを調べる判定
 		if (HitTest::OBB_OBB(t, p)&&!flag){
 			if (!GetStage()->GetSharedGameObject<Player>(L"Player")->GetGameOverFlag()) {
-				if (GetStage()->GetSharedGameObject<Player>(L"Player")->GetKey() >=
-					GetStage()->GetSharedObjectGroup(L"KeyGroup")->size()) {
+				//鍵の数を取得する
+				int keyGroupSize = GetStage()->GetSharedObjectGroup(L"KeyGroup")->size();
+				//鍵を全部取っていて、ゴールしていたら
+				if (GetStage()->GetSharedGameObject<Player>(L"Player")->GetKey() >=keyGroupSize) {
 					GetStage()->GetSharedGameObject<Player>(L"Player")->InGoal();
 					flag = true;
 					//PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToClearStage");
@@ -277,18 +271,12 @@ namespace basecross {
 		p.m_Size = GetStage()->GetSharedGameObject<Player>(L"Player")->GetComponent<Transform>()->GetScale() * 0.5f;
 		//プレイヤーが鍵に触れたかを調べる判定
 		if (HitTest::OBB_OBB(t, p) && !m_GoGoal) {
-			//鍵の所持数の表示を変える
-			/*GetStage()->AddGameObject<HaveKeys>((wstring)L"UI_Key_TX",
-				GetStage()->GetSharedGameObject<Player>(L"Player")->GetKey()
-			);*/
 			//プレイヤーの所持鍵数を増やす
 			GetStage()->GetSharedGameObject<Player>(L"Player")->AddKey();
 			//ゴールに向かうフラグを立てる
 			m_GoGoal = true;
 			//ベジエ曲線初期位置の設定
 			p0 = GetComponent<Transform>()->GetWorldPosition();
-			//ベジエ曲線最終位置の設定
-			//p1 = GetComponent<Transform>()->GetWorldPosition() + Vec3(0.0f,20.0f, 0.0f);
 
 			if (m_StopNowMusic != L""){
 				m_AudioObjectPtr->Stop(m_StopNowMusic);

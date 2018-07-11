@@ -23,21 +23,26 @@ namespace basecross{
 		/*strTexture = DataDir + L"Select.png";
 		App::GetApp()->RegisterTexture(L"SELECT_TX", strTexture);*/
 
-		//クリア画面
-		strTexture = DataDir + L"Clear_Image.png";
-		App::GetApp()->RegisterTexture(L"CLEAR_NoText_TX", strTexture);
-		strTexture = DataDir + L"GAMECLEAR_NoText.png";
-		App::GetApp()->RegisterTexture(L"CLEAR_ColorNoText_TX", strTexture);
-		strTexture = DataDir + L"GAMECLEAR.png";
-		App::GetApp()->RegisterTexture(L"CLEAR_Color_TX", strTexture);
-		strTexture = DataDir + L"STAGESELECT.png";
-		App::GetApp()->RegisterTexture(L"CLEAR_STAGESELECT_TX", strTexture);
-		strTexture = DataDir + L"NEXTSTAGE.png";
-		App::GetApp()->RegisterTexture(L"CLEAR_NEXTSTAGE_TX", strTexture);
-		strTexture = DataDir + L"RETRY.png";
-		App::GetApp()->RegisterTexture(L"CLEAR_RETRY_TX", strTexture);
-		strTexture = DataDir + L"STAGECLEAR.png";
-		App::GetApp()->RegisterTexture(L"CLEAR_STAGECLEAR_TX", strTexture);
+		//キー名,ファイル名を持った構造体
+		struct TexPair {
+			std::wstring key;
+			std::wstring filename;
+		};
+		//キー名,ファイル名を入れる
+		TexPair pairs[] = { 
+			{L"CLEAR_NoText_TX",		L"Clear_Image.png"},
+			{L"CLEAR_ColorNoText_TX",	L"GAMECLEAR_NoText.png"},
+			{L"CLEAR_Color_TX",			L"GAMECLEAR.png"},
+			{L"CLEAR_STAGESELECT_TX",	L"STAGESELECT.png"},
+			{L"CLEAR_NEXTSTAGE_TX",		L"NEXTSTAGE.png"},
+			{L"CLEAR_RETRY_TX",			L"RETRY.png"},
+			{L"CLEAR_STAGECLEAR_TX",	L"STAGECLEAR.png"}
+		};
+		//読み込む
+		for (auto& pair : pairs) {
+			strTexture = DataDir + pair.filename;
+			App::GetApp()->RegisterTexture(pair.key, strTexture);
+		}
 
 		//ゲームオーバー画面
 		strTexture = DataDir + L"GameOver1.png";

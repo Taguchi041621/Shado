@@ -1,7 +1,0 @@
-Objects,PosX,PosY,PosZ,Rot.X,Rot.Y,Rot.Z,Scl.X,Scl.Y,Scl.Z
-Player,-1.31,6.96,-7,0,0,0,1,1,1
-Goal,10.31,0.31,-7,0,0,0,1,1,1
-Cube,9,-1,-7,0,0,0,7,1,1
-Cube,0,4,-7,0,0,0,7,1,1
-Key,4.5,3,-7,0,0,0,1,1,1
-end,,,,,,,,,

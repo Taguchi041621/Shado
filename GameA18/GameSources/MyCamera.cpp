@@ -48,22 +48,8 @@ namespace basecross {
 					}
 				}
 			}
-
-				/*if (CntlVec[0].bConnected) {
-					if (CntlVec[0].wButtons & XINPUT_GAMEPAD_X) {
-						CameraAngle += 0.2;
-						if (CameraAngle >= 12) {
-							CameraAngle = 12;
-						}
-					}
-					else if (CntlVec[0].wButtons & XINPUT_GAMEPAD_Y) {
-						CameraAngle -= 0.2;
-						if (CameraAngle <= 0) {
-							CameraAngle = 0;
-						}
-					}
-				}*/
 		}
+
 		//ステージ開始時(リスタート時はやらない)
 		else if(!m_StartFlag) {
 			//壁の方に近寄る

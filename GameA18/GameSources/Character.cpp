@@ -40,9 +40,7 @@ namespace basecross {
 		PtrDraw->SetTextureResource(L"Red_TX");
 
 		SetAlphaActive(true);
-		//影をつける
-		//auto ShadowPtr = AddComponent<Shadowmap>();
-		//ShadowPtr->SetMeshResource(L"DEFAULT_SQUARE");
+
 		//--------------------------------------------------------
 		//オブジェクトの影のコンストラクタ呼び出し
 		GetStage()->AddGameObject<ShadowObject>(
@@ -50,11 +48,6 @@ namespace basecross {
 			GetComponent<Transform>()->GetRotation(),
 			GetThis<GameObject>()
 			);
-		/*GetStage()->AddGameObject<ShadowObject2>(
-			GetComponent<Transform>()->GetScale(),
-			GetComponent<Transform>()->GetRotation(),
-			*GetThis<GameObject>()
-			);*/
 	}
 
 	void WhiteCube::OnUpdate() {
@@ -79,25 +72,11 @@ namespace basecross {
 					m_HengMoveFlag = true;
 					m_HengTimer = 0;
 				}
-
-				/*if (m_VerticalMoveFlag)
-					m_Rigidbody->SetVelocity(Vec3(0, m_Speed.y, 0));
-				if (!m_VerticalMoveFlag)
-					m_Rigidbody->SetVelocity(Vec3(0, -m_Speed.y, 0));
-
-				if (m_VerticalTimer >= 3 && m_VerticalMoveFlag) {
-					m_VerticalMoveFlag = false;
-					m_VerticalTimer = 0;
-				}
-				if (m_VerticalTimer >= 3 && !m_VerticalMoveFlag) {
-					m_VerticalMoveFlag = true;
-					m_VerticalTimer = 0;
-				}*/
 			}
 			if (ScenePtr->GetStartFlag()) {
 				//スティックを操作してたら濃くする
-				if (!GetStage()->GetSharedGameObject<Player>(L"Player")->GetMoveVector(1)
-					&& !GetStage()->GetSharedGameObject<Player>(L"Player")->GetMoveVector(0)) {
+				if (!GetStage()->GetSharedGameObject<Player>(L"Player")->GetMoveRightVectorX()
+					&& !GetStage()->GetSharedGameObject<Player>(L"Player")->GetMoveLeftVectorX()) {
 					if (m_alpha <= 0.7f) {
 						m_alpha += 0.05f;
 					}
@@ -144,9 +123,6 @@ namespace basecross {
 		PtrDraw->SetTextureResource(L"Blue_TX");
 
 		SetAlphaActive(true);
-		//影をつける
-		//auto ShadowPtr = AddComponent<Shadowmap>();
-		//ShadowPtr->SetMeshResource(L"DEFAULT_SQUARE");
 		//--------------------------------------------------------
 		//オブジェクトの影のコンストラクタ呼び出し
 		GetStage()->AddGameObject<ShadowObject>(
@@ -154,11 +130,6 @@ namespace basecross {
 			GetComponent<Transform>()->GetRotation(),
 			GetThis<GameObject>()
 			);
-		/*GetStage()->AddGameObject<ShadowObject2>(
-		GetComponent<Transform>()->GetScale(),
-		GetComponent<Transform>()->GetRotation(),
-		*GetThis<GameObject>()
-		);*/
 	}
 
 	void BlueCube::OnUpdate() {
@@ -183,25 +154,11 @@ namespace basecross {
 					m_HengMoveFlag = true;
 					m_HengTimer = 0;
 				}
-
-				/*if (m_VerticalMoveFlag)
-				m_Rigidbody->SetVelocity(Vec3(0, m_Speed.y, 0));
-				if (!m_VerticalMoveFlag)
-				m_Rigidbody->SetVelocity(Vec3(0, -m_Speed.y, 0));
-
-				if (m_VerticalTimer >= 3 && m_VerticalMoveFlag) {
-				m_VerticalMoveFlag = false;
-				m_VerticalTimer = 0;
-				}
-				if (m_VerticalTimer >= 3 && !m_VerticalMoveFlag) {
-				m_VerticalMoveFlag = true;
-				m_VerticalTimer = 0;
-				}*/
 			}
 			//右スティックを操作してたら濃くする
 			if (ScenePtr->GetStartFlag()) {
-				if (!GetStage()->GetSharedGameObject<Player>(L"Player")->GetMoveVector(1) 
-					&& !GetStage()->GetSharedGameObject<Player>(L"Player")->GetMoveVector(0)) {
+				if (!GetStage()->GetSharedGameObject<Player>(L"Player")->GetMoveRightVectorX()
+					&& !GetStage()->GetSharedGameObject<Player>(L"Player")->GetMoveLeftVectorX()) {
 					if (m_alpha <= 0.7f) {
 						m_alpha += 0.05f;
 					}
@@ -253,9 +210,7 @@ namespace basecross {
 		PtrDraw->SetTextureResource(L"Yellow_TX");
 
 		SetAlphaActive(true);
-		//影をつける
-		//auto ShadowPtr = AddComponent<Shadowmap>();
-		//ShadowPtr->SetMeshResource(L"DEFAULT_SQUARE");
+
 		//--------------------------------------------------------
 		//オブジェクトの影のコンストラクタ呼び出し
 		GetStage()->AddGameObject<ShadowObject>(
@@ -286,25 +241,11 @@ namespace basecross {
 					m_HengMoveFlag = true;
 					m_HengTimer = 0;
 				}
-
-				/*if (m_VerticalMoveFlag)
-				m_Rigidbody->SetVelocity(Vec3(0, m_Speed.y, 0));
-				if (!m_VerticalMoveFlag)
-				m_Rigidbody->SetVelocity(Vec3(0, -m_Speed.y, 0));
-
-				if (m_VerticalTimer >= 3 && m_VerticalMoveFlag) {
-				m_VerticalMoveFlag = false;
-				m_VerticalTimer = 0;
-				}
-				if (m_VerticalTimer >= 3 && !m_VerticalMoveFlag) {
-				m_VerticalMoveFlag = true;
-				m_VerticalTimer = 0;
-				}*/
 			}
 			if (ScenePtr->GetStartFlag()) {
-				//右スティックを操作してたら濃くする
-				if (!GetStage()->GetSharedGameObject<Player>(L"Player")->GetMoveVector(1)
-					&& !GetStage()->GetSharedGameObject<Player>(L"Player")->GetMoveVector(0)) {
+				//スティックを操作してたら濃くする
+				if (!GetStage()->GetSharedGameObject<Player>(L"Player")->GetMoveRightVectorX()
+					&& !GetStage()->GetSharedGameObject<Player>(L"Player")->GetMoveLeftVectorX()) {
 					if (m_alpha <= 0.7f) {
 						m_alpha += 0.05f;
 					}
@@ -448,14 +389,6 @@ namespace basecross {
 			Vec3(0.0f, 0.0f, 0.0f),
 			Vec3(0.0f, 0.0f, 0.0f)
 		);
-
-		//衝突判定
-		//auto PtrColl = AddComponent<CollisionObb>();
-		/*PtrColl->SetFixed(true);
-		PtrColl->SetDrawActive(true);*/
-
-		//物理
-		//auto PtrRigidB = AddComponent<Rigidbody>();
 
 		//モデル反映
 		auto PtrDraw = AddComponent<PNTStaticModelDraw>();
