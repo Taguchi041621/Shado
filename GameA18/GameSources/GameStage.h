@@ -19,12 +19,8 @@ namespace basecross {
 		void CreateViewLight();
 		//かべ
 		void CreateWall();
-		//鍵の取得状況表示
-		void CreateHaveKeys();
 		//敵
 		void CreateEnemy();
-		//ミニマップ
-		void CreateMiniMap();
 		//画面端を知らせる演出
 		void CreateMoveEnd();
 		//ライトの位置を知らせる演出

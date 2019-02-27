@@ -122,6 +122,8 @@ namespace basecross {
 		PtrDraw->SetAlpha(1.0f);
 		PtrDraw->SetTextureResource(L"Blue_TX");
 
+		
+
 		SetAlphaActive(true);
 		//--------------------------------------------------------
 		//オブジェクトの影のコンストラクタ呼び出し
@@ -296,13 +298,9 @@ namespace basecross {
 			);
 	}
 
-	void CannonBase::OnUpdate() {
-	}
-
 	//--------------------------------------------------------------------------------------
-	///	ゴールオブジェ
+	///	現実のゴールオブジェ
 	//--------------------------------------------------------------------------------------
-
 	Goal::Goal(const shared_ptr<Stage>& StagePtr,
 		const Vec3& StartScale, const Quat& StartQt, const Vec3& StartPos) :
 		GameObject(StagePtr),
@@ -330,12 +328,6 @@ namespace basecross {
 		PtrTransform->SetQuaternion(m_StartQt);
 		PtrTransform->SetPosition(m_StartPos);
 
-		//auto PtrDraw = AddComponent<BcPNTStaticDraw>();
-		//PtrDraw->SetMeshResource(m_MeshResource);
-
-		//影をつける
-		//auto ShadowPtr = AddComponent<Shadowmap>();
-		//ShadowPtr->SetMeshResource(m_MeshResource);
 		//------------------------------------------------------------------
 		//オブジェクトの影のコンストラクタ呼び出し
 		wstring DataDir;
@@ -348,14 +340,6 @@ namespace basecross {
 			);
 
 	}
-
-	void Goal::OnUpdate() {
-		//OnTriggerEnter();
-	}
-
-	void Goal::OnTriggerEnter(){
-	}
-
 
 	//--------------------------------------------------------------------------------------
 	///　懐中電灯

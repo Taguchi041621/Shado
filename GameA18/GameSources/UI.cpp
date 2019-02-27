@@ -47,86 +47,6 @@ namespace basecross
 		auto PtrTransform = GetComponent<Transform>();
 		float ElapsedTime = App::GetApp()->GetElapsedTime();
 	};
-	//-------------------------------------------------------------------------------------
-	///ステージ上の鍵の数と現在取得した鍵の数を表示する
-	//-------------------------------------------------------------------------------------
-	HaveKeys::HaveKeys(const shared_ptr<Stage>& StagePtr,wstring& TextureKey,int order)
-		: GameObject(StagePtr),m_TextureKey(TextureKey),m_order(order)
-	{
-	};
-	//--------------------------------------------------------------------------------------
-	/*!
-	@brief デストラクタ
-	*/
-	//--------------------------------------------------------------------------------------
-	HaveKeys::~HaveKeys() {};
-	//--------------------------------------------------------------------------------------
-	/*!
-	@brief 初期化
-	@return	なし
-	*/
-	//--------------------------------------------------------------------------------------
-	void HaveKeys::OnCreate() {
-		//鍵を取った時に行うクリエイト
-		if (m_TextureKey == (wstring)L"Key_TX") {
-			GetStage()->AddGameObject<Sprite>(m_TextureKey, true,
-				Vec2(60.0f, 120.0f), Vec3(-600.0f + (50.0f * m_order), 330.0f, 0.0f));
-			return;
-		}
-		//ステージができたときに行うクリエイト
-		GetStage()->AddGameObject<Sprite>(m_TextureKey, true,
-			Vec2(60.0f, 120.0f),Vec3(-600.0f + (50.0f * m_order), 330.0f, 0.1f));
-		//最初からある方をグループに登録する
-		auto group = GetStage()->GetSharedObjectGroup(L"HaveKeysGroup");
-		group->IntoGroup(GetThis<HaveKeys>());
-	};
-	//--------------------------------------------------------------------------------------
-	/*!
-	@brief 更新
-	@return	なし
-	*/
-	//--------------------------------------------------------------------------------------
-	void HaveKeys::OnUpdate() {};
-
-	//-------------------------------------------------------------------------------------
-	///ライトの位置を表示するミニマップ
-	//-------------------------------------------------------------------------------------
-	MiniMap::MiniMap(const shared_ptr<Stage>& StagePtr)
-		: GameObject(StagePtr)
-	{
-	};
-	//--------------------------------------------------------------------------------------
-	/*!
-	@brief デストラクタ
-	*/
-	//--------------------------------------------------------------------------------------
-	MiniMap::~MiniMap() {};
-	//--------------------------------------------------------------------------------------
-	/*!
-	@brief 初期化
-	@return	なし
-	*/
-	//--------------------------------------------------------------------------------------
-	void MiniMap::OnCreate() {
-		GetStage()->AddGameObject<Sprite>(L"pane_TX", true, Vec2(160.0f, 160.0f), Vec3(-540.0f, -300.0f, 0.1f));
-		auto light = GetStage()->AddGameObject<Sprite>(L"ball_yellow_TX", true, Vec2(30.0f,30.0f), Vec3(-540.0f, -300.0f, 0.1f));
-		light->AddComponent<Action>();
-		light->GetComponent<Action>()->AllActionClear();
-		GetStage()->SetSharedGameObject(L"MiniMapLight", light);
-	};
-	//--------------------------------------------------------------------------------------
-	/*!
-	@brief 更新
-	@return	なし
-	*/
-	//--------------------------------------------------------------------------------------
-	void MiniMap::OnUpdate() {
-		auto ptrMyLight = GetStage()->GetSharedGameObject<LightController>(L"LightController");
-		auto LightAngle = ptrMyLight->GetLightAngle();
-		auto MiniMapLight = GetStage()->GetSharedGameObject<Sprite>(L"MiniMapLight");
-		MiniMapLight->GetComponent<Transform>()->
-			SetPosition(Vec3(-540.0f + -90*sinf(LightAngle.x), -300.0f + -90*sinf(LightAngle.y), 0.1f));
-	};
 
 	//-------------------------------------------------------------------------------------
 	///ライトの位置を表示する光
@@ -163,12 +83,12 @@ namespace basecross
 		auto LightAngle = GetStage()->GetSharedGameObject<LightController>(L"LightController")->GetLightAngle();
 		auto MiniMapLight = GetStage()->GetSharedGameObject<Sprite>(L"LightSign");
 		//画面端でだけ出るようにする
-		if (LightAngle.x < 0.5f && LightAngle.x > -0.5f && LightAngle.y <0.5f && LightAngle.y > -0.5f) {
-			MiniMapLight->SetDrawActive(false);
-		}
-		else {
+		//if (LightAngle.x < 0.5f && LightAngle.x > -0.5f && LightAngle.y <0.5f && LightAngle.y > -0.5f) {
+		//	MiniMapLight->SetDrawActive(false);
+		//}
+		//else {
 			MiniMapLight->SetDrawActive(true);
-		}
+		//}
 		Vec3 LightPos;
 		//ポジションの計算
 		LightPos.z = 0.1f;
@@ -195,6 +115,7 @@ namespace basecross
 		if (AlphaLight < angle.y) {
 			AlphaLight = angle.y;
 		}
+		AlphaLight = 1.0f;
 		//透明度を変える
 		MiniMapLight->GetComponent<PCTSpriteDraw>()->SetDiffuse(Col4(1.0f, 1.0f, 1.0f, AlphaLight));
 	};
@@ -274,7 +195,7 @@ namespace basecross
 	//--------------------------------------------------------------------------------------
 	ScoreSprite::ScoreSprite(const shared_ptr<Stage>& StagePtr, UINT NumberOfDigits,
 		const wstring& TextureKey, bool Trace,
-		const Vec2& StartScale, const Vec3& StartPos,float Score, bool ScaleChange, float ChangeFloat) :
+		const Vec2& StartScale, const Vec3& StartPos,int Score, bool ScaleChange, float ChangeFloat) :
 		GameObject(StagePtr),
 		m_NumberOfDigits(NumberOfDigits),
 		m_TextureKey(TextureKey),

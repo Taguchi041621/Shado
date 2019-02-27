@@ -326,17 +326,6 @@ namespace basecross {
 		DrawComp->SetColorAndAlpha(Color);
 	}
 
-	void GameStage::CreateHaveKeys() {
-		//auto group = GetSharedObjectGroup(L"KeyGroup");
-		//int s = group->size();
-		//for (int i = 0; i < s; i++) {
-		//	//鍵のグループに入ってる数、表示する
-		//	auto key = AddGameObject<HaveKeys>((wstring)L"UI_Key_None_TX", i);
-		//	if (i == 0) {
-		//		SetSharedGameObject(L"HaveKey", key);
-		//	}
-		//}
-	}
 	void GameStage::CreateEnemy()
 	{
 		//ステージへのゲームオブジェクトの追加
@@ -353,10 +342,6 @@ namespace basecross {
 		//描画コンポーネントに形状（メッシュ）を設定
 		DrawComp->SetMeshResource(L"DEFAULT_CUBE");
 		DrawComp->SetFogEnabled(true);
-	}
-	//左下のやつ
-	void GameStage::CreateMiniMap() {
-		AddGameObject<MiniMap>();
 	}
 	//画面内を動き回っているライトイラスト
 	void GameStage::CreateLightSign() {

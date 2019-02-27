@@ -91,7 +91,6 @@ namespace basecross {
 			auto mainIndex = PtrLight->GetMainIndex();
 			//変更したライトのポジションを反映
 			PtrLight->GetLight(mainIndex).SetPositionToDirectional(m_LightPosition);
-			//	}
 		}
 	}
 

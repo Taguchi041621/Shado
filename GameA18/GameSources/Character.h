@@ -217,9 +217,7 @@ namespace basecross{
 		@return	‚È‚µ
 		*/
 		//--------------------------------------------------------------------------------------
-		virtual void OnUpdate()override;
-
-		void OnTriggerEnter();
+		virtual void OnUpdate()override {};
 
 		//virtual  const Light& OnGetDrawLight() const override {
 
@@ -267,11 +265,8 @@ namespace basecross{
 		@return	‚È‚µ
 		*/
 		//--------------------------------------------------------------------------------------
-		virtual void OnUpdate()override;
+		virtual void OnUpdate()override {};
 
-		//virtual  const Light& OnGetDrawLight() const override {
-
-		//}
 	};
 
 	//--------------------------------------------------------------------------------------

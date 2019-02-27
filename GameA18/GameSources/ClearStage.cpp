@@ -18,13 +18,13 @@ namespace basecross
 		AddGameObject<Sprite>(L"CLEAR_STAGECLEAR_TX", true,
 			Vec2(1280.0f, 800.0f), Vec3(200.0f, 300.0f, 0.0f));
 		auto nextStage = AddGameObject<ScaleChangeSprite>(L"CLEAR_NEXTSTAGE_TX", true,
-			Vec2(1600.0f, 1000.0f), Vec3(130.0f, 100.0f, 0.0f),3,true);
+			Vec2(1600.0f, 1000.0f), Vec3(130.0f, 100.0f, 0.0f),3.0f,true);
 		SetSharedGameObject(L"NextStage", nextStage);
 		auto retry = AddGameObject<ScaleChangeSprite>(L"CLEAR_RETRY_TX", true,
-			Vec2(1600.0f, 1000.0f), Vec3(40.0f, -70.0f, 0.0f),6,false);
+			Vec2(1600.0f, 1000.0f), Vec3(40.0f, -70.0f, 0.0f),6.0f,false);
 		SetSharedGameObject(L"Retry", retry);
 		auto StageSelect = AddGameObject<ScaleChangeSprite>(L"CLEAR_STAGESELECT_TX", true,
-			Vec2(1600.0f, 1000.0f), Vec3(210.0f, -250.0f, 0.0f),3,false);
+			Vec2(1600.0f, 1000.0f), Vec3(210.0f, -250.0f, 0.0f),3.0f,false);
 		SetSharedGameObject(L"StageSelect", StageSelect);
 	}
 	void ClearStage::CreateFadeOutSprite()
