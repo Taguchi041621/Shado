@@ -2,57 +2,11 @@
 #include "stdafx.h"
 
 namespace basecross {
-	//------------------------------------------------------------------------------------------
-	///敵(影)
-	//------------------------------------------------------------------------------------------
-	class ShadowEnemy : public SS5ssae {
-		Vec3 m_Scale;
-		Vec3 m_Rotation;
-		Vec3 m_Position;
-		//スケールのZの固定値
-		float m_ScaleZ;
-		shared_ptr<MeshResource> m_MeshResource;
-		Mat4x4 m_ToAnimeMatrix;
-	public:
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief コンストラクタ
-		@param[in]	StagePtr	ステージ
-		@param[in]	StartScale	初期スケール
-		@param[in]	StartQt	初期回転
-		@param[in]	StartPos	初期位置
-		*/
-		//--------------------------------------------------------------------------------------
-		ShadowEnemy(const shared_ptr<Stage>& StagePtr, const wstring BaseDir,
-			const Vec3& m_Scale, const Vec3& Rotation,const Vec3& Position);
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief デストラクタ
-		*/
-		//--------------------------------------------------------------------------------------
-		virtual ~ShadowEnemy() {}
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief 初期化
-		@return	なし
-		*/
-		//--------------------------------------------------------------------------------------
-		virtual void OnCreate() override;
-		//--------------------------------------------------------------------------------------
-		/*!
-		@brief 更新
-		@return	なし
-		*/
-		//--------------------------------------------------------------------------------------
-		virtual void OnUpdate()override;
-
-		void OnTriggerEnter();
-	};
-
 	//--------------------------------------------------------------------------------------
 	//	大砲
 	//--------------------------------------------------------------------------------------
 	class Cannon : public SS5ssae {
+
 		Vec3 m_Scale;
 		Vec3 m_Rotation;
 		Vec3 m_Position;
@@ -65,8 +19,6 @@ namespace basecross {
 
 		float m_CoolTime;
 		bool m_BulletFlag;
-		//Lがfalse,Rがtrue
-		bool m_LR;
 
 		//データとゲームとの変換行列
 		Mat4x4 m_ToAnimeMatrixLeft;
@@ -76,13 +28,15 @@ namespace basecross {
 		wstring m_StopNowMusic;
 
 	public:
+		CannonBase::CanonDirection m_LR;
+
 		//構築と破棄
 		Cannon(const shared_ptr<Stage>& StagePtr,
 			const wstring BaseDir,
 			const Vec3& Scale,
 			const Vec3& Rotation,
 			weak_ptr<GameObject> Obj,
-			bool LR
+			CannonBase::CanonDirection LR
 		);
 
 		virtual ~Cannon();
@@ -113,15 +67,14 @@ namespace basecross {
 		float m_ScaleZ;
 		//このオブジェクトのみで使用するスクエアメッシュ
 		shared_ptr<MeshResource> m_SquareMeshResource;
-		//Lがfalse,Rがtrue
-		bool m_LR;
+		CannonBase::CanonDirection m_LR;
 	public:
 		//構築と破棄
 		Bullet(const shared_ptr<Stage>& StagePtr,
 			const Vec3& Scale,
 			const Vec3& Rotation,
 			const Vec3& Position,
-			bool LR
+			CannonBase::CanonDirection LR
 		);
 
 		virtual ~Bullet();

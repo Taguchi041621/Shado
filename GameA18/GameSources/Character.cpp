@@ -270,7 +270,7 @@ namespace basecross {
 	///	ëÂñCÇÃå≥(ç∂false,âEtrue)
 	//--------------------------------------------------------------------------------------
 	CannonBase::CannonBase(const shared_ptr<Stage>& StagePtr,
-		const Vec3& StartScale, const Quat& StartQt, const Vec3& StartPos, bool LR) :
+		const Vec3& StartScale, const Quat& StartQt, const Vec3& StartPos, CanonDirection LR) :
 		GameObject(StagePtr),
 		m_StartScale(StartScale),
 		m_StartQt(StartQt),

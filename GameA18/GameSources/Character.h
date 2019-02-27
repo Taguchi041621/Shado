@@ -231,10 +231,15 @@ namespace basecross{
 		Vec3 m_StartScale;
 		Quat m_StartQt;
 		Vec3 m_StartPos;
-		bool m_LR;
 		shared_ptr<MeshResource> m_MeshResource;
 
 	public:
+		enum class CanonDirection {
+			LEFT,
+			RIGTH
+		};
+		CanonDirection m_LR;
+
 		//--------------------------------------------------------------------------------------
 		/*!
 		@brief コンストラクタ
@@ -245,7 +250,7 @@ namespace basecross{
 		*/
 		//--------------------------------------------------------------------------------------
 		CannonBase(const shared_ptr<Stage>& StagePtr,
-			const Vec3& StartScale, const Quat& StartQt, const Vec3& StartPos,bool LR);
+			const Vec3& StartScale, const Quat& StartQt, const Vec3& StartPos,CanonDirection LR);
 		//--------------------------------------------------------------------------------------
 		/*!
 		@brief デストラクタ

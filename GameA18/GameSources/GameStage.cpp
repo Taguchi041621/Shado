@@ -205,29 +205,19 @@ namespace basecross {
 				AddGameObject<KeyItem>(Pos);
 			}
 
-			if (MapVec[0] == L"Enemy") {
-				stringflag = true;
-				//Pos.z = -15.0f;
-				App::GetApp()->GetDataDirectory(DataDir);
-				AddGameObject<ShadowEnemy>(
-					DataDir + L"Snakeshdow\\",
-					Scl,Rot,Pos
-					);
-			}
-
 			if (MapVec[0] == L"Cannon") {
 				//それぞれの値を入れる
 				//固定する値を設定
 				stringflag = true;
 				Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
-				AddGameObject<CannonBase>(Scl, Qt, Pos,false);
+				AddGameObject<CannonBase>(Scl, Qt, Pos,CannonBase::CanonDirection::LEFT);
 			}
 			if (MapVec[0] == L"CannonR") {
 				//それぞれの値を入れる
 				//固定する値を設定
 				stringflag = true;
 				Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
-				AddGameObject<CannonBase>(Scl, Qt, Pos,true);
+				AddGameObject<CannonBase>(Scl, Qt, Pos,CannonBase::CanonDirection::RIGTH);
 			}
 
 			if (!stringflag) {

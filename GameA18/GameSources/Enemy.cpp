@@ -2,70 +2,11 @@
 #include "Project.h"
 
 namespace basecross {
-	//------------------------------------------------------------------------------------------
-	///敵(影)
-	//------------------------------------------------------------------------------------------
-	ShadowEnemy::ShadowEnemy(const shared_ptr<Stage>& StagePtr, const wstring BaseDir,
-		const Vec3& Scale, const Vec3& Rotation,const Vec3& Position)
-		: SS5ssae(StagePtr, BaseDir, L"Snakeshdow.ssae", L"Back"),
-		m_Scale(Scale), m_Rotation(Rotation),m_Position(Position), m_ScaleZ(0.05f){
-		m_ToAnimeMatrix.affineTransformation(
-			Vec3(0.10f, -0.10f, 0.1f),
-			Vec3(0, 0, 0),
-			Vec3(0, 0, 0),
-			Vec3(0.0f, 0.0f, 0.0f)
-			);
-	}
-
-	void ShadowEnemy::OnCreate() {
-		//スケールのZを固定の大きさに
-		m_Scale.z = m_ScaleZ;
-
-		auto PtrTransform = GetComponent<Transform>();
-		//影のスケール,角度,ポジションの設定
-		PtrTransform->SetScale(m_Scale);
-		PtrTransform->SetRotation(m_Rotation);
-		PtrTransform->SetPosition(m_Position);
-
-		//親クラスのクリエイトを呼ぶ
-		SS5ssae::OnCreate();
-		//値は秒あたりのフレーム数
-		SetFps(49.0f);
-		//アニメーションのループ設定
-		SetLooped(true);
-		//アニメーションにかけるメトリックスの設定
-		SetToAnimeMatrix(m_ToAnimeMatrix);
-	}
-
-	void ShadowEnemy::OnUpdate() {
-		OnTriggerEnter();
-
-		auto pos = GetComponent<Transform>()->GetPosition();
-		pos.x += -2.0f;
-		GetComponent<Transform>()->SetPosition(pos);
-
-		float ElapsedTime = App::GetApp()->GetElapsedTime();
-		//アニメーションを更新する
-		UpdateAnimeTime(ElapsedTime);
-	}
-
-	void ShadowEnemy::OnTriggerEnter() {
-		OBB t;
-		t.m_Center = this->GetComponent<Transform>()->GetWorldPosition();
-		t.m_Center.z = 0;
-		t.m_Size = this->GetComponent<Transform>()->GetScale() * 0.5f;
-
-		OBB p;
-		p.m_Center = GetStage()->GetSharedGameObject<Player>(L"Player")->GetComponent<Transform>()->GetWorldPosition();
-		p.m_Center.z = 0;
-		p.m_Size = GetStage()->GetSharedGameObject<Player>(L"Player")->GetComponent<Transform>()->GetScale() * 0.5f;
-	}
-
 	//--------------------------------------------------------------------------------------
 	//大砲
 	//--------------------------------------------------------------------------------------
 	Cannon::Cannon(const shared_ptr<Stage>& StagePtr, const wstring BaseDir,
-		const Vec3& Scale, const Vec3& Rotation, weak_ptr<GameObject> Obj,bool LR)
+		const Vec3& Scale, const Vec3& Rotation, weak_ptr<GameObject> Obj, CannonBase::CanonDirection LR)
 		: SS5ssae(StagePtr, BaseDir, L"Cannon.ssae", L"Fire"),
 		m_Scale(Scale), m_Rotation(Rotation), m_Obj(Obj), m_ScaleZ(0.05f), m_CoolTime(0), m_BulletFlag(false),m_LR(LR)
 	{
@@ -101,7 +42,7 @@ namespace basecross {
 		SetFps(60);
 		//アニメーションのループ設定
 		SetLooped(false);
-		if (m_LR == false) {
+		if (m_LR == CannonBase::CanonDirection::LEFT) {
 			//アニメーションにかけるメトリックスの設定
 			SetToAnimeMatrix(m_ToAnimeMatrixLeft);
 		}
@@ -136,22 +77,13 @@ namespace basecross {
 
 				if (IsAnimeEnd()) {
 					//左向き
-					if (m_LR == false) {
+					if (m_LR == CannonBase::CanonDirection::LEFT) {
 						GetStage()->AddGameObject<Bullet>(
 							GetComponent<Transform>()->GetScale(),
 							GetComponent<Transform>()->GetRotation(),
 							GetComponent<Transform>()->GetPosition() - Vec3(1, -0.4f, 0),
 							m_LR
 							);
-						//蛇
-						//wstring DataDir;
-						//App::GetApp()->GetDataDirectory(DataDir);
-						//GetStage()->AddGameObject<ShadowEnemy>(
-						//	DataDir + L"Snakeshdow\\",
-						//	GetComponent<Transform>()->GetScale(),
-						//	GetComponent<Transform>()->GetRotation(),
-						//	GetComponent<Transform>()->GetPosition() - Vec3(1, -0.4f, 0)
-						//	);
 						//煙だす
 						GetStage()->AddGameObject<DirectingRing>(GetComponent<Transform>()->GetWorldPosition(),
 							Vec3(1.5f, 1.5f, 0.05f), Vec3(-1.0f, 0.5f, 0.0f), L"Smoke_Black_TX");
@@ -221,7 +153,7 @@ namespace basecross {
 	//弾
 	//--------------------------------------------------------------------------------------
 	Bullet::Bullet(const shared_ptr<Stage>& StagePtr,
-		const Vec3& Scale, const Vec3& Rotation, const Vec3& Position,bool LR)
+		const Vec3& Scale, const Vec3& Rotation, const Vec3& Position,CannonBase::CanonDirection LR)
 		: GameObject(StagePtr),
 		m_Scale(Scale), m_Rotation(Rotation), m_Position(Position), m_ScaleZ(0.05f),m_LR(LR)
 	{
@@ -230,7 +162,7 @@ namespace basecross {
 	Bullet::~Bullet() {}
 	//初期化
 	void Bullet::OnCreate() {
-		if (m_LR == true) {
+		if (m_LR == CannonBase::CanonDirection::RIGTH) {
 			m_Scale *= -1.0f;
 		}
 		//スケールのZを固定の大きさに
@@ -318,7 +250,7 @@ namespace basecross {
 		auto Pos = PtrTransform->GetPosition();
 		auto ScenePtr = App::GetApp()->GetScene<Scene>();
 		if (!ScenePtr->GetPauseFlag()) {
-			if (m_LR == false) {
+			if (m_LR == CannonBase::CanonDirection::LEFT) {
 				Pos.x -= 7.0f*ElapsedTime;
 				PtrTransform->SetPosition(Pos);
 

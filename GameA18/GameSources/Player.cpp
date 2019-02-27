@@ -103,11 +103,11 @@ namespace basecross{
 		//SpriteStdioの部分だけ変更する
 		if (MoveX > 0.0f) {
 			SetToAnimeMatrix(m_ToAnimeMatrixRight);
-			m_RightOrLeft = true;
+			m_RightOrLeft = PlayerDirection::RIGHT;
 		}
 		else if (MoveX < 0.0f) {
 			SetToAnimeMatrix(m_ToAnimeMatrixLeft);
-			m_RightOrLeft = false;
+			m_RightOrLeft = PlayerDirection::LEFT;
 		}
 		//MoveXを返す
 		return MoveX;
@@ -119,17 +119,10 @@ namespace basecross{
 		for (auto &obj : OtherVec) {
 			//シャドウオブジェクトを検出
 			auto ShadowPtr = dynamic_pointer_cast<ShadowObject>(obj);
-			auto EnemyPtr = dynamic_pointer_cast<ShadowEnemy>(obj);
 			//当たったのがシャドウオブジェクトで
 			if (ShadowPtr) {
 				Extrusion(ShadowPtr);//押し出す関数
 				FindParent(ShadowPtr);//親にするか調べる関数
-			}
-			else if (EnemyPtr) {
-				m_PlayerHP = 0;
-				if (m_PlayerHP == 0) {
-					PostEvent(0.0f, GetThis<Player>(), App::GetApp()->GetSceneInterface(), L"ToGameOverStage");
-				}
 			}
 		}
 	}
@@ -420,19 +413,24 @@ namespace basecross{
 		SetLooped(looped);
 	}
 
-	void Player::Damage(bool LR) {
+	void Player::Damage(CannonBase::CanonDirection LR) {
 		if (!m_DamageFlag) {
 			m_DamageFlag = true;
 			auto PtrRedit = GetComponent<Rigidbody>();
 			PtrRedit->SetVelocityZero();
-			if (LR == false) {
+			if (LR == CannonBase::CanonDirection::LEFT) {
 				//左に飛ぶ
 				GetComponent<Rigidbody>()->SetVelocity(Vec3(-3.0f, 0, 0.0f));
 			}
 			else {
 				//右に飛ぶ
 				GetComponent<Rigidbody>()->SetVelocity(Vec3(3.0f, 0, 0.0f));
-				m_RightOrLeft = !m_RightOrLeft;
+				if (m_RightOrLeft == PlayerDirection::LEFT) {
+					m_RightOrLeft = PlayerDirection::RIGHT;
+				}
+				else {
+					m_RightOrLeft = PlayerDirection::LEFT;
+				}
 			}
 			GetStateMachine()->ChangeState(DamageState1::Instance());
 		}
@@ -727,7 +725,7 @@ namespace basecross{
 	//ステートに入ったときに呼ばれる関数
 	void DamageState1::Enter(const shared_ptr<Player>& Obj) {
 		Obj->SetFps(60.0f);
-		if (Obj->GetRightOrLeft()) {
+		if (Obj->GetRightOrLeft() == Player::PlayerDirection::RIGHT) {
 			Obj->AnimeChangeMotion(L"Knockdown", false);
 		}
 		else {
@@ -762,7 +760,7 @@ namespace basecross{
 	//ステートに入ったときに呼ばれる関数
 	void DamageState2::Enter(const shared_ptr<Player>& Obj) {
 		Obj->SetFps(60.0f);
-		if (Obj->GetRightOrLeft()) {
+		if (Obj->GetRightOrLeft() == Player::PlayerDirection::RIGHT) {
 			Obj->AnimeChangeMotion(L"StandUp", false);
 		}
 		else {

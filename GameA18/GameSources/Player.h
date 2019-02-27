@@ -12,10 +12,6 @@ namespace basecross{
 	///	プレイヤー
 	//--------------------------------------------------------------------------------------
 	class Player : public SS5ssae {
-		enum class InputType {
-			LeftStick,
-			RightStick
-		};
 
 		shared_ptr< StateMachine<Player> >  m_StateMachine;	//ステートマシーン
 		//初期ポジション
@@ -46,8 +42,6 @@ namespace basecross{
 		bool m_GameOverFlag;
 		bool m_FadeFlag;
 
-		//true::Right false::Left
-		bool m_RightOrLeft;
 
 		shared_ptr<MultiAudioObject> m_AudioObjectPtr;
 		wstring m_StopNowMusic;
@@ -59,6 +53,17 @@ namespace basecross{
 		bool m_DamageFlag;
 
 	public:
+		enum class InputType {
+			LeftStick,
+			RightStick
+		};
+		enum class PlayerDirection {
+			LEFT,
+			RIGHT
+		};
+		PlayerDirection m_RightOrLeft;
+
+
 		//構築と破棄
 		//--------------------------------------------------------------------------------------
 		/*!
@@ -159,7 +164,7 @@ namespace basecross{
 		//ゴールに入った時に呼ぶ、クリア演出をする
 		void InGoal();
 
-		void Damage(bool LR);
+		void Damage(CannonBase::CanonDirection LR);
 
 		///音声
 		void SetNowMusic(wstring NowMusic) {
@@ -200,8 +205,8 @@ namespace basecross{
 		void SetDamageFlag(bool f) { m_DamageFlag = f; }
 		bool GetDamageFlag() { return m_DamageFlag; }
 
-		void SetRightOrLeft(bool f) { m_RightOrLeft = f; }
-		bool GetRightOrLeft() { return m_RightOrLeft; }
+		void SetRightOrLeft(PlayerDirection f) { m_RightOrLeft = f; }
+		PlayerDirection GetRightOrLeft() { return m_RightOrLeft; }
 	};
 
 	//--------------------------------------------------------------------------------------
