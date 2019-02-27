@@ -387,12 +387,6 @@ namespace basecross {
 			CreateWall();
 			//クリエイトした鍵のグループ
 			CreateSharedObjectGroup(L"KeyGroup");
-			//ステージにある鍵の数
-			//CreateSharedObjectGroup(L"HaveKeysGroup");
-			//敵
-			//CreateEnemy();
-			//ミニマップ
-			//CreateMiniMap();
 			//ライトの位置を知らせる演出
 			CreateLightSign();
 			//ライトの駆動限界を教える
@@ -400,8 +394,6 @@ namespace basecross {
 			//ライト代わりのオブジェクト
 			CreateLightObject();
 			Csv();
-			//鍵の数に応じて作るため、鍵ができてから呼び出す
-			//CreateHaveKeys();
 			CreatePause();
 			//フェード
 			CreateFadeOutSprite();
@@ -433,8 +425,6 @@ namespace basecross {
 			//リスポーン
 			ScenePtr->SetRespawnFlag(true);
 			PostEvent(0.8f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameStage");
-			//ゲームオーバー
-			//PostEvent(0.8f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameOver");
 			m_ClearFlag = true;
 		}
 		//クリアしたとき

@@ -63,8 +63,8 @@ HWND InitInstance(HINSTANCE hInstance, int nCmdShow, bool isFullScreen, int iCli
 			pClassName,			// 登録されているクラス名
 			pWndTitle,			// ウインドウ名
 			WS_POPUP,			// ウインドウスタイル（ポップアップウインドウを作成）
-			0,					// ウインドウの横方向の位置
-			0,					// ウインドウの縦方向の位置
+			100,				// ウインドウの横方向の位置
+			100,				// ウインドウの縦方向の位置
 			iClientWidth,		// フルスクリーンウインドウの幅
 			iClientHeight,		// フルスクリーンウインドウの高さ
 			nullptr,				// 親ウインドウのハンドル（なし）
@@ -232,7 +232,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 	int iClientHeight = 800;
 	// フルスクリーンにするかどうかの判定
 	// コマンドラインに/fが設定されていたらフルスクリーンにする
-	bool isFullScreen = false;
+	bool isFullScreen = true;
 	wstring wstrcmd = lpCmdLine;
 	if (wstrcmd == L"/f" || wstrcmd == L"/F") {
 		isFullScreen = true;     // フラグをtrueに設定

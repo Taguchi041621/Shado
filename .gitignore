@@ -9,3 +9,6 @@ ipch/
 *.suo
 *.vcxproj
 *.pdb
+GameA18/Release/Shadow.ipdb
+GameA18/Release/Shadow.iobj
+GameA18/Release/Shadow.exe
