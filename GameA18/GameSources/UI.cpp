@@ -71,6 +71,7 @@ namespace basecross
 		auto light = GetStage()->AddGameObject<Sprite>(L"LIGHT_Illust_TX", true, Vec2(160.0f, 160.0f), Vec3(0.0f, 0.0f, 0.1f));
 		light->AddComponent<Action>();
 		light->GetComponent<Action>()->AllActionClear();
+		light->SetDrawActive(false);
 		GetStage()->SetSharedGameObject(L"LightSign", light);
 	};
 	//--------------------------------------------------------------------------------------
@@ -87,7 +88,9 @@ namespace basecross
 		//	MiniMapLight->SetDrawActive(false);
 		//}
 		//else {
+		if (App::GetApp()->GetScene<Scene>()->GetStartFlag()) {
 			MiniMapLight->SetDrawActive(true);
+		}
 		//}
 		Vec3 LightPos;
 		//ポジションの計算
