@@ -7,6 +7,9 @@
 #include "stdafx.h"
 
 namespace basecross{
+	///--------------------------------------------------------------------------------------------
+	/// 動かない赤いブロック
+	///--------------------------------------------------------------------------------------------
 	class RedCube : public GameObject {
 		//大きさ、回転、位置の初期値
 		Vec3 m_StartScale;
@@ -14,13 +17,9 @@ namespace basecross{
 		Vec3 m_StartPos;
 		//メッシュ
 		shared_ptr<MeshResource> m_MeshResource;
-		//リジットボディ
-		shared_ptr<Rigidbody> m_Rigidbody;
 
 		//移動を管理するフラグ
 		bool m_MoveFlag;
-		bool m_HengMoveFlag;//横
-		bool m_VerticalMoveFlag;//縦
 		Vec3 m_Speed;//移動
 		//濃さを持つ
 		float m_alpha;
@@ -61,11 +60,11 @@ namespace basecross{
 		//--------------------------------------------------------------------------------------
 		virtual void OnUpdate()override;
 
-		//virtual  const Light& OnGetDrawLight() const override {
-
-		//}
 	};
 	class BlueCube : public GameObject {
+		enum MoveLR {
+			L,R
+		};
 		//大きさ、回転、位置の初期値
 		Vec3 m_StartScale;
 		Quat m_StartQt;
@@ -77,15 +76,13 @@ namespace basecross{
 
 		//移動を管理するフラグ
 		bool m_MoveFlag;
-		bool m_HengMoveFlag;//横
-		bool m_VerticalMoveFlag;//縦
+		MoveLR m_HengMove;//横
 		Vec3 m_Speed;//移動
 		//濃さを持つ
 		float m_alpha;
 		
 		//移動時間
 		float m_HengTimer;
-		float m_VerticalTimer;
 	public:
 		//--------------------------------------------------------------------------------------
 		/*!
@@ -124,6 +121,9 @@ namespace basecross{
 		//}
 	};
 	class YellowCube : public GameObject {
+		enum MoveUpDown {
+			UP,DOWN
+		};
 		//大きさ、回転、位置の初期値
 		Vec3 m_StartScale;
 		Quat m_StartQt;
@@ -135,14 +135,12 @@ namespace basecross{
 
 		//移動を管理するフラグ
 		bool m_MoveFlag;
-		bool m_HengMoveFlag;//横
-		bool m_VerticalMoveFlag;//縦
+		MoveUpDown m_VerticalMove;//縦
 		Vec3 m_Speed;//移動
-					 //濃さを持つ
+		//濃さを持つ
 		float m_alpha;
 
 		//移動時間
-		float m_HengTimer;
 		float m_VerticalTimer;
 	public:
 		//--------------------------------------------------------------------------------------

@@ -11,14 +11,13 @@ namespace basecross {
 	///	赤いブロック
 	//--------------------------------------------------------------------------------------
 	RedCube::RedCube(const shared_ptr<Stage>& StagePtr,
-		const Vec3& StartScale, const Quat& StartQt, const Vec3& StartPos, const Vec3& StartSpeed, const bool& Move) :
+		const Vec3& StartScale, const Quat& StartQt, const Vec3& StartPos, const Vec3& StartSpeed, const bool& Move) 
+		:
 		GameObject(StagePtr),
 		m_StartScale(StartScale),
 		m_StartQt(StartQt),
 		m_StartPos(StartPos),
 		m_MoveFlag(Move),
-		m_HengMoveFlag(true),
-		m_VerticalMoveFlag(true),
 		m_Speed(StartSpeed),
 		m_HengTimer(0),
 		m_VerticalTimer(0),
@@ -30,8 +29,6 @@ namespace basecross {
 		PtrTransform->SetScale(m_StartScale);
 		PtrTransform->SetQuaternion(m_StartQt);
 		PtrTransform->SetPosition(m_StartPos);
-
-		m_Rigidbody = AddComponent<Rigidbody>();
 
 		auto PtrDraw = AddComponent<BcPNTStaticDraw>();
 		PtrDraw->SetMeshResource(L"DEFAULT_CUBE");
@@ -51,28 +48,8 @@ namespace basecross {
 	}
 
 	void RedCube::OnUpdate() {
-
-		float ElapsedTime = App::GetApp()->GetElapsedTime();
-
-		m_HengTimer += ElapsedTime;
-		m_VerticalTimer += ElapsedTime;
 		auto ScenePtr = App::GetApp()->GetScene<Scene>();
 		if (!ScenePtr->GetPauseFlag()) {
-			if (m_MoveFlag) {
-				if (m_HengMoveFlag)
-					m_Rigidbody->SetVelocity(Vec3(-m_Speed.x, m_Speed.y, 0));
-				if (!m_HengMoveFlag)
-					m_Rigidbody->SetVelocity(Vec3(m_Speed.x, m_Speed.y, 0));
-
-				if (m_HengTimer >= 3 && m_HengMoveFlag) {
-					m_HengMoveFlag = false;
-					m_HengTimer = 0;
-				}
-				if (m_HengTimer >= 3 && !m_HengMoveFlag) {
-					m_HengMoveFlag = true;
-					m_HengTimer = 0;
-				}
-			}
 			if (ScenePtr->GetStartFlag()) {
 				//スティックを操作してないなら濃くする
 				if (!GetStage()->GetSharedGameObject<Player>(L"Player")->GetMoveRightVectorX()
@@ -100,11 +77,9 @@ namespace basecross {
 		m_StartQt(StartQt),
 		m_StartPos(StartPos),
 		m_MoveFlag(Move),
-		m_HengMoveFlag(true),
-		m_VerticalMoveFlag(true),
+		m_HengMove(MoveLR::R),
 		m_Speed(StartSpeed),
 		m_HengTimer(0),
-		m_VerticalTimer(0),
 		m_alpha(0.7f)
 	{}
 
@@ -138,22 +113,25 @@ namespace basecross {
 
 		float ElapsedTime = App::GetApp()->GetElapsedTime();
 
-		m_HengTimer += ElapsedTime;
-		m_VerticalTimer += ElapsedTime;
 		auto ScenePtr = App::GetApp()->GetScene<Scene>();
 		if (!ScenePtr->GetPauseFlag()) {
+			m_HengTimer += ElapsedTime;
 			if (m_MoveFlag) {
-				if (m_HengMoveFlag)
+				//左右移動する
+				if (m_HengMove == MoveLR::L) {
 					m_Rigidbody->SetVelocity(Vec3(-m_Speed.x, m_Speed.y, 0));
-				if (!m_HengMoveFlag)
-					m_Rigidbody->SetVelocity(Vec3(m_Speed.x, m_Speed.y, 0));
-
-				if (m_HengTimer >= 3 && m_HengMoveFlag) {
-					m_HengMoveFlag = false;
-					m_HengTimer = 0;
 				}
-				if (m_HengTimer >= 3 && !m_HengMoveFlag) {
-					m_HengMoveFlag = true;
+				else {
+					m_Rigidbody->SetVelocity(Vec3(m_Speed.x, m_Speed.y, 0));
+				}
+				//3秒ごとに移動する方向が変わる
+				if (m_HengTimer >= 3.0f) {
+					if (m_HengMoveFlag == MoveLR::L) {
+						m_HengMoveFlag = MoveLR::R;
+					}
+					else {
+						m_HengMoveFlag = MoveLR::L;
+					}
 					m_HengTimer = 0;
 				}
 			}
@@ -188,10 +166,8 @@ namespace basecross {
 		m_StartQt(StartQt),
 		m_StartPos(StartPos),
 		m_MoveFlag(Move),
-		m_HengMoveFlag(true),
-		m_VerticalMoveFlag(true),
+		m_VerticalMove(MoveUpDown::DOWN),
 		m_Speed(StartSpeed),
-		m_HengTimer(0),
 		m_VerticalTimer(0),
 		m_alpha(0.7f)
 	{}
@@ -223,25 +199,25 @@ namespace basecross {
 	}
 
 	void YellowCube::OnUpdate() {
-
 		float ElapsedTime = App::GetApp()->GetElapsedTime();
 		auto ScenePtr = App::GetApp()->GetScene<Scene>();
 		if (!ScenePtr->GetPauseFlag()) {
-			m_HengTimer += ElapsedTime;
 			m_VerticalTimer += ElapsedTime;
 			if (m_MoveFlag) {
-				if (m_HengMoveFlag)
+				if (m_VerticalMove == MoveUpDown::DOWN) {
 					m_Rigidbody->SetVelocity(Vec3(0, -m_Speed.y, 0));
-				if (!m_HengMoveFlag)
-					m_Rigidbody->SetVelocity(Vec3(0, m_Speed.y, 0));
-
-				if (m_HengTimer >= 3 && m_HengMoveFlag) {
-					m_HengMoveFlag = false;
-					m_HengTimer = 0;
 				}
-				if (m_HengTimer >= 3 && !m_HengMoveFlag) {
-					m_HengMoveFlag = true;
-					m_HengTimer = 0;
+				else{
+					m_Rigidbody->SetVelocity(Vec3(0, m_Speed.y, 0));
+				}
+				if (m_VerticalTimer >= 3.0f) {
+					if (m_VerticalMove == MoveUpDown::DOWN) {
+						m_VerticalMove = MoveUpDown::UP;
+					}
+					else {
+						m_VerticalMove = MoveUpDown::DOWN;
+					}
+					m_VerticalTimer = 0.0f;
 				}
 			}
 			if (ScenePtr->GetStartFlag()) {
