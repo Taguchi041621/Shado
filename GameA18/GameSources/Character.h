@@ -7,7 +7,7 @@
 #include "stdafx.h"
 
 namespace basecross{
-	class WhiteCube : public GameObject {
+	class RedCube : public GameObject {
 		//大きさ、回転、位置の初期値
 		Vec3 m_StartScale;
 		Quat m_StartQt;
@@ -38,14 +38,14 @@ namespace basecross{
 		@param[in]	StartPos	初期位置
 		*/
 		//--------------------------------------------------------------------------------------
-		WhiteCube(const shared_ptr<Stage>& StagePtr,
+		RedCube(const shared_ptr<Stage>& StagePtr,
 			const Vec3& StartScale, const Quat& StartQt, const Vec3& StartPos, const Vec3& StartSpeed, const bool& Move);
 		//--------------------------------------------------------------------------------------
 		/*!
 		@brief デストラクタ
 		*/
 		//--------------------------------------------------------------------------------------
-		virtual ~WhiteCube() {}
+		virtual ~RedCube() {}
 		//--------------------------------------------------------------------------------------
 		/*!
 		@brief 初期化

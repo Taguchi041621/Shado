@@ -10,7 +10,7 @@ namespace basecross {
 	//--------------------------------------------------------------------------------------
 	///	ê‘Ç¢ÉuÉçÉbÉN
 	//--------------------------------------------------------------------------------------
-	WhiteCube::WhiteCube(const shared_ptr<Stage>& StagePtr,
+	RedCube::RedCube(const shared_ptr<Stage>& StagePtr,
 		const Vec3& StartScale, const Quat& StartQt, const Vec3& StartPos, const Vec3& StartSpeed, const bool& Move) :
 		GameObject(StagePtr),
 		m_StartScale(StartScale),
@@ -25,7 +25,7 @@ namespace basecross {
 		m_alpha(0.7f)
 	{}
 
-	void WhiteCube::OnCreate() {
+	void RedCube::OnCreate() {
 		auto PtrTransform = GetComponent<Transform>();
 		PtrTransform->SetScale(m_StartScale);
 		PtrTransform->SetQuaternion(m_StartQt);
@@ -50,7 +50,7 @@ namespace basecross {
 			);
 	}
 
-	void WhiteCube::OnUpdate() {
+	void RedCube::OnUpdate() {
 
 		float ElapsedTime = App::GetApp()->GetElapsedTime();
 
