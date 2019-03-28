@@ -58,23 +58,21 @@ namespace basecross {
 
 	//変化
 	void Cannon::OnUpdate() {
-		float ElapsedTime = App::GetApp()->GetElapsedTime();
-		if (!m_BulletFlag) {
-			m_CoolTime += ElapsedTime;
-			UpdateAnimeTime(0);
-		}
-
 		auto ScenePtr = App::GetApp()->GetScene<Scene>();
 		if (!ScenePtr->GetPauseFlag()) {
-			if (m_CoolTime >= 5)
-			{
+			float ElapsedTime = App::GetApp()->GetElapsedTime();
+			if (!m_BulletFlag) {
+				m_CoolTime += ElapsedTime;
+				UpdateAnimeTime(0);
+			}
+
+			if (m_CoolTime >= 5){
 				m_BulletFlag = true;
 				ChangeAnimation(L"Fire");
 				m_CoolTime = 0;
 			}
 			if (m_BulletFlag) {
 				UpdateAnimeTime(ElapsedTime);
-
 				if (IsAnimeEnd()) {
 					//左向き
 					if (m_LR == CannonBase::CanonDirection::LEFT) {
@@ -102,17 +100,6 @@ namespace basecross {
 
 					}
 					m_BulletFlag = false;
-
-
-					if (m_StopNowMusic != L"")
-					{
-						m_AudioObjectPtr->Stop(m_StopNowMusic);
-					}
-					wstring DataDir;
-					//サンプルのためアセットディレクトリを取得
-					//App::GetApp()->GetAssetsDirectory(DataDir);
-					//各ゲームは以下のようにデータディレクトリを取得すべき
-					App::GetApp()->GetDataDirectory(DataDir);
 
 					m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
 					m_AudioObjectPtr->AddAudioResource(L"se4");
@@ -207,7 +194,6 @@ namespace basecross {
 		DrawComp->SetTextureResource(L"BULLET_TX");
 		//透明処理
 		SetAlphaActive(true);
-		auto PtrRedid = AddComponent<Rigidbody>();
 		auto PtrCol = AddComponent<CollisionObb>();
 	}
 	//当たり判定
