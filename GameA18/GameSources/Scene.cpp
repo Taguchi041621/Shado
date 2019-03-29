@@ -36,70 +36,32 @@ namespace basecross{
 			{L"CLEAR_STAGESELECT_TX",	L"STAGESELECT.png"},
 			{L"CLEAR_NEXTSTAGE_TX",		L"NEXTSTAGE.png"},
 			{L"CLEAR_RETRY_TX",			L"RETRY.png"},
-			{L"CLEAR_STAGECLEAR_TX",	L"STAGECLEAR.png"}
+			{L"CLEAR_STAGECLEAR_TX",	L"STAGECLEAR.png"},
+			{L"WallTexture_TX",		L"WallTexture.png"},
+			{L"Red_TX",		L"Red.tga"},
+			{L"Blue_TX",	L"Blue.tga"},
+			{L"yellow_TX",	L"yellow.tga"},
+			{L"shadow_frame_TX",	L"shadow_frame.png"},
+			{L"Shadow_Blur_TX",		L"Shadow_Blur.png"},
+			{L"RETRY_OFF_TX",		L"RETRY_OFF.png"},
+			{L"STAGE_SELECT_OFF_TX",	L"STAGE_SELECT_OFF.png"},
+			{L"TITLE_TEXT_TX",		L"PressAStart.png"},
+			{L"SELECT_TEXT_TX",		L"StageSlect.png"},
+			{L"STAGESELECT_BG_TX",		L"Background2.png"},
+			{L"Shadow_TX",		L"shadow.png"},
+			{L"BULLET_TX",		L"Bullet.png"},
+			{L"Smoke_Black_TX",		L"smoke_Black.png"},
+			{L"Ring_TX",		L"ring.png"},
+			{L"splashLogo_TX",		L"splash512Logo.png"},
+			{L"Credit_Link_TX",		L"Credit_Link.png"},
+			{L"PAUSE_TX",		L"Pause.png"},
+
 		};
 		//読み込む
 		for (auto& pair : pairs) {
 			strTexture = DataDir + pair.filename;
 			App::GetApp()->RegisterTexture(pair.key, strTexture);
 		}
-
-		//ゲームオーバー画面
-		strTexture = DataDir + L"GameOver1.png";
-		App::GetApp()->RegisterTexture(L"GAMEOVER_TX", strTexture);
-		strTexture = DataDir + L"GameOverMoji.png";
-		App::GetApp()->RegisterTexture(L"GameOverMoji_TX", strTexture);
-		//壁
-		strTexture = DataDir + L"WallTexture.png";
-		App::GetApp()->RegisterTexture(L"WallTexture_TX", strTexture);
-		strTexture = DataDir + L"Red.tga";
-		App::GetApp()->RegisterTexture(L"Red_TX", strTexture);
-		strTexture = DataDir + L"Blue.tga";
-		App::GetApp()->RegisterTexture(L"Blue_TX", strTexture);
-		strTexture = DataDir + L"yellow.tga";
-		App::GetApp()->RegisterTexture(L"Yellow_TX", strTexture);
-		strTexture = DataDir + L"shadow.png";
-		App::GetApp()->RegisterTexture(L"Shadow_TX", strTexture);
-		strTexture = DataDir + L"shadow_frame.png";
-		App::GetApp()->RegisterTexture(L"Shadowframe_TX", strTexture);
-		strTexture = DataDir + L"Shadow_Blur4.png";
-		App::GetApp()->RegisterTexture(L"Shadow_Blur_TX", strTexture);
-		strTexture = DataDir + L"LIGHT2.png";
-		App::GetApp()->RegisterTexture(L"GameOver_WhiteLight_TX", strTexture);
-		strTexture = DataDir + L"RETRY_OFF.png";
-		App::GetApp()->RegisterTexture(L"RETRY_OFF_TX", strTexture);
-		strTexture = DataDir + L"STAGE_SELECT_OFF.png";
-		App::GetApp()->RegisterTexture(L"STAGE_SELECT_OFF_TX", strTexture);
-		strTexture = DataDir + L"PressAStart_0424.png";
-		App::GetApp()->RegisterTexture(L"TITLE_TEXT_TX", strTexture);
-		strTexture = DataDir + L"StageSlect.png";
-		App::GetApp()->RegisterTexture(L"SELECT_TEXT_TX", strTexture); 
-
-			strTexture = DataDir + L"StageSlect.png";
-		App::GetApp()->RegisterTexture(L"SELECT_TEXT_TX", strTexture);
-
-		strTexture = DataDir + L"Background2.png";
-		App::GetApp()->RegisterTexture(L"STAGESELECT_BG_TX", strTexture);
-		strTexture = DataDir + L"Arrow.png";
-		App::GetApp()->RegisterTexture(L"ARROW_TX", strTexture);
-		
-		strTexture = DataDir + L"Bullet.png";
-		App::GetApp()->RegisterTexture(L"BULLET_TX", strTexture);
-		strTexture = DataDir + L"ring.png"; 
-		App::GetApp()->RegisterTexture(L"Ring_TX", strTexture);
-		//黒い煙
-		strTexture = DataDir + L"smoke_Black.png";
-		App::GetApp()->RegisterTexture(L"Smoke_Black_TX", strTexture);
-		//スプライトスタジオロゴ
-		strTexture = DataDir + L"splash512Logo.png";
-		App::GetApp()->RegisterTexture(L"splashLogo_TX", strTexture);
-		//クレジット表記
-		strTexture = DataDir + L"Credit_Link.png";
-		App::GetApp()->RegisterTexture(L"Credit_Link_TX", strTexture);
-
-		strTexture = DataDir + L"Pause.png";
-		App::GetApp()->RegisterTexture(L"PAUSE_TX", strTexture); 
-
 
 		strTexture = DataDir + L"Door.png";
 		App::GetApp()->RegisterTexture(L"Door_TX", strTexture);
@@ -173,6 +135,10 @@ namespace basecross{
 	}
 
 	void Scene::OnEvent(const shared_ptr<Event>& event) {
+		if (m_StopNowMusic != L"") {
+			m_AudioObjectPtr->Stop(m_StopNowMusic);
+		}
+
 		//------------------------------------------------------
 		if (event->m_MsgStr == L"ToTitleStage") {
 			//最初のアクティブステージの設定
@@ -196,9 +162,6 @@ namespace basecross{
 		}
 		//------------------------------------------------------
 		else if (event->m_MsgStr == L"ToGameStage") {
-			if (m_StopNowMusic != L""){
-				m_AudioObjectPtr->Stop(m_StopNowMusic);
-			}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
 			ResetActiveStage<GameStage>();
 
 			m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
@@ -207,23 +170,7 @@ namespace basecross{
 			m_StopNowMusic = L"gamestage";
 		}
 		//------------------------------------------------------
-		else if (event->m_MsgStr == L"ToGameOver") {
-			if (m_StopNowMusic != L""){
-				m_AudioObjectPtr->Stop(m_StopNowMusic);
-			}
-			ResetActiveStage<GameOverStage>();
-			
-			m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
-			m_AudioObjectPtr->AddAudioResource(L"gameover");
-			m_AudioObjectPtr->Start(L"gameover", XAUDIO2_LOOP_INFINITE, 0.62f);
-			m_StopNowMusic = L"gameover";
-			
-		}
-		//------------------------------------------------------
 		else if (event->m_MsgStr == L"ToClearStage") {
-			if (m_StopNowMusic != L""){
-				m_AudioObjectPtr->Stop(m_StopNowMusic);
-			}
 			ResetActiveStage<ClearStage>();
 			m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
 			m_AudioObjectPtr->AddAudioResource(L"clear");
@@ -232,9 +179,6 @@ namespace basecross{
 		}
 		//------------------------------------------------------
 		else if (event->m_MsgStr == L"ToBannerStage") {
-			if (m_StopNowMusic != L"") {
-				m_AudioObjectPtr->Stop(m_StopNowMusic);
-			}
 			ResetActiveStage<BannerStage>();
 		}
 	}
