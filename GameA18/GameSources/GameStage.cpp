@@ -275,7 +275,7 @@ namespace basecross {
 	}
 	//‰æ–Ê’[‚Ì‚â‚Â
 	void GameStage::CreateMoveEnd() {
-		auto frame = AddGameObject<Sprite>(L"Shadowframe_TX", true, Vec2(1330.0f, 870.0f), Vec3(0.3f, 0.0f, 0));
+		auto frame = AddGameObject<Sprite>(L"shadow_frame_TX", true, Vec2(1330.0f, 870.0f), Vec3(0.3f, 0.0f, 0));
 		frame->GetComponent<Action>()->AllActionClear();
 		frame->SetActionflag(true);
 	}

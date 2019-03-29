@@ -40,7 +40,7 @@ namespace basecross{
 			{L"WallTexture_TX",		L"WallTexture.png"},
 			{L"Red_TX",		L"Red.tga"},
 			{L"Blue_TX",	L"Blue.tga"},
-			{L"yellow_TX",	L"yellow.tga"},
+			{L"Yellow_TX",	L"yellow.tga"},
 			{L"shadow_frame_TX",	L"shadow_frame.png"},
 			{L"Shadow_Blur_TX",		L"Shadow_Blur.png"},
 			{L"RETRY_OFF_TX",		L"RETRY_OFF.png"},
@@ -55,6 +55,8 @@ namespace basecross{
 			{L"splashLogo_TX",		L"splash512Logo.png"},
 			{L"Credit_Link_TX",		L"Credit_Link.png"},
 			{L"PAUSE_TX",		L"Pause.png"},
+			{L"TITLE_SHADOW_TX",		L"TiteleShadow.png"},
+			{L"GameOver_WhiteLight_TX",	L"LIGHT2.png"}
 
 		};
 		//“Ç‚Ýž‚Þ
@@ -62,17 +64,6 @@ namespace basecross{
 			strTexture = DataDir + pair.filename;
 			App::GetApp()->RegisterTexture(pair.key, strTexture);
 		}
-
-		strTexture = DataDir + L"Door.png";
-		App::GetApp()->RegisterTexture(L"Door_TX", strTexture);
-
-		//”Žš
-		strTexture = DataDir + L"Number2.png";
-		App::GetApp()->RegisterTexture(L"NUMBER_TX", strTexture);
-
-		strTexture = DataDir + L"TiteleShadow.png";
-		App::GetApp()->RegisterTexture(L"TITLE_SHADOW_TX", strTexture);
-
 		//ƒ‰ƒCƒg‚Ìƒ‚ƒfƒ‹
 		auto StaticModelMesh = MeshResource::CreateStaticModelMesh(DataDir + L"Light\\", L"LIGHT1.bmf");
 		App::GetApp()->RegisterResource(L"LIGHT_MESH", StaticModelMesh);
