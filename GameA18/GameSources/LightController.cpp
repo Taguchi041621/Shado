@@ -18,7 +18,6 @@ namespace basecross {
 			!GetStage()->GetSharedGameObject<Player>(L"Player")->GetStandFlag() &&
 			ScenePtr->GetStartFlag()&&
 			!ScenePtr->GetPauseFlag()) {
-			//&&GetStage()->GetSharedGameObject<Player>(L"Player")->GetComponent<Transform>()->GetParent()) {
 			auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
 			//Elapsedƒ^ƒCƒ€‚ÌŽæ“¾
 			auto ElapsedTime = App::GetApp()->GetElapsedTime();

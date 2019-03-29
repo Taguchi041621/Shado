@@ -254,7 +254,7 @@ namespace basecross{
 		m_FadeFlag = false;
 		//初期位置などの設定
 		auto Ptr = GetComponent<Transform>();
-		Ptr->SetScale(0.80f, 1.60f, 0.5f);	//X,Z25、Y50の長方形
+		Ptr->SetScale(0.80f, 1.60f, 0.5f);
 		Ptr->SetRotation(0.0f, 0.0f, 0.0f);
 		Ptr->SetPosition(m_Position);
 
@@ -270,10 +270,7 @@ namespace basecross{
 		auto PtrRedid = AddComponent<Rigidbody>();
 		//衝突判定をつける
 		auto PtrCol = AddComponent<CollisionObb>();
-		//auto PtrCol = AddComponent<CollisionSphere>();
 		PtrCol->SetIsHitAction(IsHitAction::None);
-		//コリジョンを表示する場合は以下を設定
-		//PtrCol->SetDrawActive(true);
 		//デバッグ用文字列をつける
 		auto PtrString = AddComponent<StringSprite>();
 		PtrString->SetText(L"");
@@ -319,21 +316,13 @@ namespace basecross{
 			GetComponent<Rigidbody>()->SetVelocity(Vec3(0.0f, m_FallSpeed, 0.0f));
 			m_FallSpeed += -0.08f;
 		}
-	    else if (m_DamageFlag){
-			//PtrRedit->SetVelocityZero();
-		}
 		PlayerHP();
 	}
 	//
 	void Player::PlayerHP() {
-		m_PlayerHP = 3;
 		auto PlayerPos = this->GetComponent<Transform>()->GetWorldPosition();
 		//落下死
-		if (PlayerPos.y < -25.0f){
-			m_PlayerHP = 0;
-		}
-		
-		if (m_PlayerHP == 0 && !m_GameOverFlag){
+		if (PlayerPos.y < -25.0f && !m_GameOverFlag){
 			m_GameOverFlag = true;
 			m_FadeFlag = true;
 		}

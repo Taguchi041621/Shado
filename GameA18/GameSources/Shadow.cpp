@@ -121,8 +121,6 @@ namespace basecross {
 		//アニメーションにかけるメトリックスの設定
 		SetToAnimeMatrix(m_ToAnimeMatrixDark);
 		SetAlphaActive(true);
-		//auto PtrCol = AddComponent<CollisionObb>();
-		//PtrCol->SetDrawActive(true);
 		GetStage()->SetSharedGameObject(L"ShadowGoal", GetThis<ShadowGoal>());
 	}
 
@@ -138,7 +136,6 @@ namespace basecross {
 			SetFps(60.0f);
 			ChangeAnimation(L"Unlock");
 			SetLooped(false);
-			//SetToAnimeMatrix(m_ToAnimeMatrixLight);
 		}
 	}
 
@@ -161,7 +158,6 @@ namespace basecross {
 				if (GetStage()->GetSharedGameObject<Player>(L"Player")->GetKey() >=keyGroupSize) {
 					GetStage()->GetSharedGameObject<Player>(L"Player")->InGoal();
 					flag = true;
-					//PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToClearStage");
 				}
 			}
 		}

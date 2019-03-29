@@ -14,7 +14,6 @@ namespace basecross {
 		auto PtrMultiLight = CreateLight<MultiLight>();
 		//デフォルトのライティングを指定
 		PtrMultiLight->SetDefaultLighting();
-		//auto PtrView = CreateView<SingleView>();
 	}
 	void BannerStage::CreateBanner() {
 		wstring DateDir;
@@ -67,7 +66,6 @@ namespace basecross {
 		SetFps(60);
 		//アニメーションのループ設定
 		SetLooped(false);
-		//SetSpriteDraw(true);
 	}
 	void SpriteStudioBanner::OnUpdate() {
 		if (IsAnimeEnd()) {
