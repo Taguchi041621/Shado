@@ -33,36 +33,31 @@ namespace basecross {
 	void MyCamera::CameraChanger() {
 		auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
 		auto ScenePtr = App::GetApp()->GetScene<Scene>();
-		if (m_StartFlag && !ScenePtr->GetPauseFlag()) {
-			if (CntlVec[0].bConnected) {
-				if (CntlVec[0].wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) {
-					m_CameraPosZ += 0.2;
-					if (m_CameraPosZ >= -10) {
-						m_CameraPosZ = -10;
+		if (m_StartFlag) {
+			if (!ScenePtr->GetPauseFlag()) {
+				if (CntlVec[0].bConnected) {
+					if (CntlVec[0].wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) {
+						m_CameraPosZ += 0.2;
+						if (m_CameraPosZ >= -10) {
+							m_CameraPosZ = -10;
+						}
 					}
-				}
-				else if (CntlVec[0].wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) {
-					m_CameraPosZ -= 0.2;
-					if (m_CameraPosZ <= -30) {
-						m_CameraPosZ = -30;
+					else if (CntlVec[0].wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) {
+						m_CameraPosZ -= 0.2;
+						if (m_CameraPosZ <= -30) {
+							m_CameraPosZ = -30;
+						}
 					}
 				}
 			}
 		}
-
 		//ステージ開始時(リスタート時はやらない)
-		else if(!m_StartFlag) {
+		else{
 			//壁の方に近寄る
 			//ゴールに寄り終わるのと同タイミングでスタートZ位置まで動き終わる
 			m_CameraPosZ += (-m_FarstPosZ + m_StartPosZ) / 180.0f;
 			if (m_CameraPosZ >= m_StartPosZ) {
 				m_CameraPosZ = m_StartPosZ;
-			}
-		}
-		if (CntlVec[0].bConnected) {
-			if (CntlVec[0].fThumbLX != 0 || CntlVec[0].fThumbLY != 0) {
-				//CameraPos.x += CntlVec[0].fThumbLX;
-				//CameraPos.y += CntlVec[0].fThumbLY;
 			}
 		}
 		//XINPUT_GAMEPAD_DPAD_DOWN
