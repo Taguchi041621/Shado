@@ -49,7 +49,7 @@ namespace basecross
 	};
 
 	//-------------------------------------------------------------------------------------
-	///ライトの位置を表示する光
+	///ライトの位置を表示するライト
 	//-------------------------------------------------------------------------------------
 	LightSign::LightSign(const shared_ptr<Stage>& StagePtr)
 		: GameObject(StagePtr)
@@ -83,15 +83,12 @@ namespace basecross
 	void LightSign::OnUpdate() {
 		auto LightAngle = GetStage()->GetSharedGameObject<LightController>(L"LightController")->GetLightAngle();
 		auto MiniMapLight = GetStage()->GetSharedGameObject<Sprite>(L"LightSign");
-		//画面端でだけ出るようにする
-		//if (LightAngle.x < 0.5f && LightAngle.x > -0.5f && LightAngle.y <0.5f && LightAngle.y > -0.5f) {
-		//	MiniMapLight->SetDrawActive(false);
-		//}
-		//else {
 		if (App::GetApp()->GetScene<Scene>()->GetStartFlag()) {
 			MiniMapLight->SetDrawActive(true);
+			if (App::GetApp()->GetScene<Scene>()->GetPauseFlag()) {
+				MiniMapLight->SetDrawActive(false);
+			}
 		}
-		//}
 		Vec3 LightPos;
 		//ポジションの計算
 		LightPos.z = 0.1f;
@@ -104,23 +101,6 @@ namespace basecross
 		auto an = atan2f(LightAngle.x, LightAngle.y);
 		MiniMapLight->GetComponent<Transform>()->SetRotation(Vec3(0.0f,0.0f,-an));
 
-		//ステージのライトを別で持って
-		Vec3 angle = LightAngle;
-		//正の数にする
-		if (LightAngle.x < 0) {
-			angle.x = -LightAngle.x;
-		}
-		if (LightAngle.y < 0) {
-			angle.y = -LightAngle.y;
-		}
-		//ライトアングルの値に応じてアルファ値を変える
-		float AlphaLight = angle.x;
-		if (AlphaLight < angle.y) {
-			AlphaLight = angle.y;
-		}
-		AlphaLight = 1.0f;
-		//透明度を変える
-		MiniMapLight->GetComponent<PCTSpriteDraw>()->SetDiffuse(Col4(1.0f, 1.0f, 1.0f, AlphaLight));
 	};
 
 	//--------------------------------------------------------------------------------------
