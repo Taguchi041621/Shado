@@ -234,7 +234,6 @@ namespace basecross {
 		//ビューのカメラの設定
 		auto PtrLookAtCamera = ObjectFactory::Create<MyCamera>(GetThis<GameStage>());
 		PtrView->SetCamera(PtrLookAtCamera);
-		//PtrLookAtCamera->SetEye(Vec3(0.0f, 5.0f, -5.0f));
 		PtrLookAtCamera->SetAt(Vec3(0.0f, 0.0f, 0.0f));
 		//マルチライトの作成
 		auto PtrMultiLight = CreateLight<MultiLight>();
@@ -297,8 +296,6 @@ namespace basecross {
 			CreateViewLight();
 			//壁
 			CreateWall();
-			//クリエイトした鍵のグループ
-			CreateSharedObjectGroup(L"KeyGroup");
 			//ライトの位置を知らせる演出
 			CreateLightSign();
 			//ライトの駆動限界を教える

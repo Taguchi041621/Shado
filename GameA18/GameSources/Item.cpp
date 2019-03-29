@@ -18,13 +18,7 @@ namespace basecross {
 		auto PtrDraw = AddComponent<BcPNTStaticDraw>();
 		//描画するメッシュを設定
 		PtrDraw->SetMeshResource(L"DEFAULT_CUBE");
-		////描画するテクスチャを設定
-		//PtrDraw->SetTextureResource(L"UI_Key_TX");
 		PtrDraw->SetDrawActive(false);
-
-		auto group = GetStage()->GetSharedObjectGroup(L"KeyGroup");
-		group->IntoGroup(GetThis<KeyItem>());
-
 
 		//-------------------------------------------------
 		//影の作成
@@ -39,7 +33,6 @@ namespace basecross {
 	}
 
 	void KeyItem::OnUpdate(){
-		//OnTriggerEnter();
 	}
 	//鍵が当たったとき
 	void KeyItem::OnTriggerEnter() {

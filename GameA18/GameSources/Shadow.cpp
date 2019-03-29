@@ -150,15 +150,10 @@ namespace basecross {
 		p.m_Center.z = 0;
 		p.m_Size = GetStage()->GetSharedGameObject<Player>(L"Player")->GetComponent<Transform>()->GetScale() * 0.5f;
 		//プレイヤーがゴールに触れたかを調べる判定
-		if (HitTest::OBB_OBB(t, p)&&!flag){
+		if (HitTest::OBB_OBB(t, p) && !flag) {
 			if (!GetStage()->GetSharedGameObject<Player>(L"Player")->GetGameOverFlag()) {
-				//鍵の数を取得する
-				int keyGroupSize = GetStage()->GetSharedObjectGroup(L"KeyGroup")->size();
-				//鍵を全部取っていて、ゴールしていたら
-				if (GetStage()->GetSharedGameObject<Player>(L"Player")->GetKey() >=keyGroupSize) {
-					GetStage()->GetSharedGameObject<Player>(L"Player")->InGoal();
-					flag = true;
-				}
+				GetStage()->GetSharedGameObject<Player>(L"Player")->InGoal();
+				flag = true;
 			}
 		}
 	}
@@ -274,13 +269,9 @@ namespace basecross {
 			//ベジエ曲線初期位置の設定
 			p0 = GetComponent<Transform>()->GetWorldPosition();
 
-			if (m_StopNowMusic != L""){
-				m_AudioObjectPtr->Stop(m_StopNowMusic);
-			}
 			m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
 			m_AudioObjectPtr->AddAudioResource(L"KeySound");
 			m_AudioObjectPtr->Start(L"KeySound", XAUDIO2_NO_LOOP_REGION, 0.6f);
-			SetNowMusic(L"KeySound");
 		}
 	}
 	//物体とライトの位置から、影の位置を導き出す
