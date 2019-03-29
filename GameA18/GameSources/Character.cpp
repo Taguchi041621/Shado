@@ -126,11 +126,11 @@ namespace basecross {
 				}
 				//3秒ごとに移動する方向が変わる
 				if (m_HengTimer >= 3.0f) {
-					if (m_HengMoveFlag == MoveLR::L) {
-						m_HengMoveFlag = MoveLR::R;
+					if (m_HengMove == MoveLR::L) {
+						m_HengMove = MoveLR::R;
 					}
 					else {
-						m_HengMoveFlag = MoveLR::L;
+						m_HengMove = MoveLR::L;
 					}
 					m_HengTimer = 0;
 				}
@@ -243,7 +243,7 @@ namespace basecross {
 		}
 	}
 	//--------------------------------------------------------------------------------------
-	///	大砲の元(左false,右true)
+	///	大砲の元
 	//--------------------------------------------------------------------------------------
 	CannonBase::CannonBase(const shared_ptr<Stage>& StagePtr,
 		const Vec3& StartScale, const Quat& StartQt, const Vec3& StartPos, CanonDirection LR) :
@@ -261,10 +261,10 @@ namespace basecross {
 		PtrTransform->SetPosition(m_StartPos);
 
 		SetAlphaActive(true);
+		//---------------------------------------------------------------------------
 		//オブジェクトの影のコンストラクタ呼び出し
 		wstring DataDir;
 		App::GetApp()->GetDataDirectory(DataDir);
-		//左向き
 		GetStage()->AddGameObject<Cannon>(
 			DataDir+L"Cannon\\",
 			GetComponent<Transform>()->GetScale(),
@@ -286,19 +286,6 @@ namespace basecross {
 	{}
 
 	void Goal::OnCreate() {
-		vector<VertexPositionNormalTexture> vertices;
-		vector<VertexPositionNormal> new_vertices;
-
-		vector<uint16_t> indices;
-		MeshUtill::CreateCube(1.0f, vertices, indices);
-		for (size_t i = 0; i < vertices.size(); i++) {
-			VertexPositionNormal new_v;
-			new_v.position = vertices[i].position;
-			new_v.normal = vertices[i].normal;
-			new_vertices.push_back(new_v);
-		}
-		m_MeshResource = MeshResource::CreateMeshResource(new_vertices, indices, false);
-
 		auto PtrTransform = GetComponent<Transform>();
 		PtrTransform->SetScale(0.80f, 1.60f, 1);
 		PtrTransform->SetQuaternion(m_StartQt);
@@ -338,7 +325,6 @@ namespace basecross {
 		auto PtrTransform = GetComponent<Transform>();
 
 		PtrTransform->SetPosition(m_Position);
-		//m_Rotation = m_Rotation*(DegToRad);
 		PtrTransform->SetRotation(m_Rotation);
 		PtrTransform->SetScale(m_Scale);
 
