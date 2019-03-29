@@ -62,9 +62,6 @@ namespace basecross{
 
 	};
 	class BlueCube : public GameObject {
-		enum MoveLR {
-			L,R
-		};
 		//大きさ、回転、位置の初期値
 		Vec3 m_StartScale;
 		Quat m_StartQt;
@@ -76,7 +73,6 @@ namespace basecross{
 
 		//移動を管理するフラグ
 		bool m_MoveFlag;
-		MoveLR m_HengMove;//横
 		Vec3 m_Speed;//移動
 		//濃さを持つ
 		float m_alpha;
@@ -84,6 +80,11 @@ namespace basecross{
 		//移動時間
 		float m_HengTimer;
 	public:
+		enum MoveLR {
+			L, R
+		};		
+		MoveLR m_HengMove;//横
+
 		//--------------------------------------------------------------------------------------
 		/*!
 		@brief コンストラクタ
@@ -121,9 +122,6 @@ namespace basecross{
 		//}
 	};
 	class YellowCube : public GameObject {
-		enum MoveUpDown {
-			UP,DOWN
-		};
 		//大きさ、回転、位置の初期値
 		Vec3 m_StartScale;
 		Quat m_StartQt;
@@ -135,7 +133,6 @@ namespace basecross{
 
 		//移動を管理するフラグ
 		bool m_MoveFlag;
-		MoveUpDown m_VerticalMove;//縦
 		Vec3 m_Speed;//移動
 		//濃さを持つ
 		float m_alpha;
@@ -143,6 +140,10 @@ namespace basecross{
 		//移動時間
 		float m_VerticalTimer;
 	public:
+		enum MoveUpDown {
+			UP, DOWN
+		};
+		MoveUpDown m_VerticalMove;//縦
 		//--------------------------------------------------------------------------------------
 		/*!
 		@brief コンストラクタ

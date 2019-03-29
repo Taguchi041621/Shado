@@ -77,7 +77,7 @@ namespace basecross {
 		m_StartQt(StartQt),
 		m_StartPos(StartPos),
 		m_MoveFlag(Move),
-		m_HengMove(MoveLR::R),
+		m_HengMove(MoveLR::L),
 		m_Speed(StartSpeed),
 		m_HengTimer(0),
 		m_alpha(0.7f)
