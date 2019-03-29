@@ -23,8 +23,6 @@ namespace basecross {
 		App::GetApp()->GetDataDirectory(DataDir);
 
 		//ファイル名の設定
-		//wstring Map = Path + L"Stage_" + Util::IntToWStr(ScenePtr->GetStageNumber()) + L".csv";
-		//wstring Map = DataDir + L"Stage_" + Util::IntToWStr(ScenePtr->GetStageNumber()) + L".csv";
 		wstring Map = DataDir + L"CSV\\" + L"Stage_" + Util::IntToWStr(ScenePtr->GetStageNumber()) + L".csv";
 
 		//ファイルの指定
@@ -82,8 +80,6 @@ namespace basecross {
 				//それぞれの値を入れる
 				//固定する値を設定
 				stringflag = true;
-				//Scl = Vector3(1, 1, 1);
-				//Rot = Vector3(0, 0, 0);
 				Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
 				auto PtrCube = AddGameObject<RedCube>(Scl, Qt, Pos,Vec3(0,0,0),false);
 			}
@@ -93,8 +89,6 @@ namespace basecross {
 				//それぞれの値を入れる
 				//固定する値を設定
 				stringflag = true;
-				//Scl = Vector3(1, 1, 1);
-				//Rot = Vector3(0, 0, 0);
 				Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
 				auto PtrCube = AddGameObject<BlueCube>(Scl, Qt, Pos, Vec3(1,0,0), true);
 			}
@@ -136,8 +130,6 @@ namespace basecross {
 				//シェア配列にプレイヤーを追加
 				SetSharedGameObject(L"Player", PlayerPtr);
 
-				//カメラのターゲットに設定
-				//dynamic_pointer_cast<MyCamera>(GetView()->GetTargetCamera())->SetTargetObject(PlayerPtr);
 			}
 
 			if (MapVec[0] == L"Tutorial") {
@@ -200,7 +192,6 @@ namespace basecross {
 			}
 			if (MapVec[0] == L"Key") {
 				stringflag = true;
-				//Pos.z = -15.0f;
 				Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
 				AddGameObject<KeyItem>(Pos);
 			}
@@ -262,18 +253,6 @@ namespace basecross {
 		SetSharedGameObject(L"WLight", WLight);
 	}
 
-	void GameStage::CreateTutorial() {
-		wstring DataDir;
-		App::GetApp()->GetDataDirectory(DataDir);
-		/*AddGameObject<Tutorial>(
-			DataDir + L"Tutorial\\",
-			Vec3(1),
-			Vec3(0),
-			Vec3(0)
-			);*/
-	}
-
-
 	//ビューとライトの作成
 	void GameStage::CreateViewLight() {
 		auto PtrView = CreateView<SingleView>();
@@ -316,23 +295,6 @@ namespace basecross {
 		DrawComp->SetColorAndAlpha(Color);
 	}
 
-	void GameStage::CreateEnemy()
-	{
-		//ステージへのゲームオブジェクトの追加
-		auto Ptr = AddGameObject<GameObject>();
-		auto PtrTrans = Ptr->GetComponent<Transform>();
-		Quat Qt;
-		Qt.rotationRollPitchYawFromVector(Vec3(0, 0, 0));
-		PtrTrans->SetScale(1.0f, 1.0f, 2.0f);
-		PtrTrans->SetQuaternion(Qt);
-		PtrTrans->SetPosition(0.0f, 5.0f, 0.5f);
-
-		//描画コンポーネントの追加
-		auto DrawComp = Ptr->AddComponent<BcPNTStaticDraw>();
-		//描画コンポーネントに形状（メッシュ）を設定
-		DrawComp->SetMeshResource(L"DEFAULT_CUBE");
-		DrawComp->SetFogEnabled(true);
-	}
 	//画面内を動き回っているライトイラスト
 	void GameStage::CreateLightSign() {
 		AddGameObject<LightSign>();
@@ -375,8 +337,6 @@ namespace basecross {
 			CreateFadeSprite();
 			auto Target = AddGameObject<TargetObjectToStart>();
 			dynamic_pointer_cast<MyCamera>(GetView()->GetTargetCamera())->SetTargetObject(Target);
-
-			//CreateTutorial();
 		}
 		catch (...) {
 			throw;

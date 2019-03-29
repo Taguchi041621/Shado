@@ -19,8 +19,6 @@ namespace basecross {
 		void CreateViewLight();
 		//かべ
 		void CreateWall();
-		//敵
-		void CreateEnemy();
 		//画面端を知らせる演出
 		void CreateMoveEnd();
 		//ライトの位置を知らせる演出
@@ -38,8 +36,6 @@ namespace basecross {
 		void CreateFadeSprite();
 
 		void CreatePause();
-
-		void CreateTutorial();
 
 		//選択関係
 		bool ActionFlag;
