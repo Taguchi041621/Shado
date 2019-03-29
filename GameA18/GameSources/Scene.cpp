@@ -56,7 +56,9 @@ namespace basecross{
 			{L"Credit_Link_TX",		L"Credit_Link.png"},
 			{L"PAUSE_TX",		L"Pause.png"},
 			{L"TITLE_SHADOW_TX",		L"TiteleShadow.png"},
-			{L"GameOver_WhiteLight_TX",	L"LIGHT2.png"}
+			{L"TUTORIAL_LIGHT_MOVE_TX",	L"Tutorial_LightMove_Mono.png"},
+			{L"TUTORIAL_CHARA_MOVE_TX",	L"Tutorial_CharaMove_Mono.png"},
+			{L"TUTORIAL_CAMERA_MOVE_TX",	L"Tutorial_cameraMove_Mono.png"}
 
 		};
 		//読み込む
@@ -70,15 +72,6 @@ namespace basecross{
 		//ライトのイラスト
 		strTexture = DataDir + L"Light\\LIGHT_Illust.png";
 		App::GetApp()->RegisterTexture(L"LIGHT_Illust_TX", strTexture);
-
-
-		//Tutorial　
-		strTexture = DataDir + L"Tutorial_cameraMove_Mono.png";
-		App::GetApp()->RegisterTexture(L"TUTORIAL_CAMERA_MOVE_TX", strTexture);
-		strTexture = DataDir + L"Tutorial_CharaMove_Mono.png";
-		App::GetApp()->RegisterTexture(L"TUTORIAL_CHARA_MOVE_TX", strTexture);
-		strTexture = DataDir + L"Tutorial_LightMove_Mono.png";
-		App::GetApp()->RegisterTexture(L"TUTORIAL_LIGHT_MOVE_TX", strTexture);
 
 		/*BGM・SE関連*/
 		//ゲームオーバーBGM
