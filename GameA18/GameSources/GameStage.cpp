@@ -48,9 +48,6 @@ namespace basecross {
 		//最初の行を配列へ保存
 		m_Csv.GetRowVec(RowNum, MapVec);
 
-		//角度のラジアン変換用
-		//float DegToRad = 3.14159265f / 180.0f;
-
 		int Wcount = 0;
 
 
@@ -73,27 +70,19 @@ namespace basecross {
 			Vec3 Rot = Vec3((float)_wtof(MapVec[4].c_str()), (float)_wtof(MapVec[5].c_str()), (float)_wtof(MapVec[6].c_str()))*DegToRad;
 			//スケールを格納
 			Vec3 Scl = Vec3((float)_wtof(MapVec[7].c_str()), (float)_wtof(MapVec[8].c_str()), (float)_wtof(MapVec[9].c_str()));
-			//auto UpGroup = GetSharedObjectGroup(L"UpdateObjectGroup");
 
 			if (MapVec[0] == L"Cube") {
-				//FixedBox(const Vector3& Scale,const Vector3& Rotation,const Vector3& Position
-				//それぞれの値を入れる
-				//固定する値を設定
 				stringflag = true;
 				Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
 				auto PtrCube = AddGameObject<RedCube>(Scl, Qt, Pos,Vec3(0,0,0),false);
 			}
 
 			if (MapVec[0] == L"MoveCube") {
-				//FixedBox(const Vector3& Scale,const Vector3& Rotation,const Vector3& Position
-				//それぞれの値を入れる
-				//固定する値を設定
 				stringflag = true;
 				Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
 				auto PtrCube = AddGameObject<BlueCube>(Scl, Qt, Pos, Vec3(1,0,0), true);
 			}
 			if (MapVec[0] == L"CustomMoveCube") {
-				//それぞれの値を入れる
 				stringflag = true;
 				Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
 				//移動幅を取ってくる
@@ -101,12 +90,7 @@ namespace basecross {
 				auto PtrCube = AddGameObject<BlueCube>(Scl, Qt, Pos, Vec3(MoveX, 0, 0), true);
 			}
 			if (MapVec[0] == L"VMoveCube") {
-				//FixedBox(const Vector3& Scale,const Vector3& Rotation,const Vector3& Position
-				//それぞれの値を入れる
-				//固定する値を設定
 				stringflag = true;
-				//Scl = Vector3(1, 1, 1);
-				//Rot = Vector3(0, 0, 0);
 				Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
 				auto PtrCube = AddGameObject<YellowCube>(Scl, Qt, Pos, Vec3(0, 1, 0), true);
 			}
@@ -122,9 +106,6 @@ namespace basecross {
 				stringflag = true;
 				//z位置を固定
 				Pos.z = -0.1f;
-				//メディア呼び出し
-				wstring DataDir;
-				App::GetApp()->GetDataDirectory(DataDir);
 				//プレーヤーの作成
 				auto PlayerPtr = AddGameObject<Player>(DataDir + L"Idea\\",Pos);
 				//シェア配列にプレイヤーを追加
@@ -134,8 +115,6 @@ namespace basecross {
 
 			if (MapVec[0] == L"Tutorial") {
 				stringflag = true;
-				wstring DataDir;
-				App::GetApp()->GetDataDirectory(DataDir);
 				if (ScenePtr->GetStageNumber() == 1) {
 					AddGameObject<Tutorial>(
 						DataDir + L"Tutorial\\",
@@ -197,15 +176,11 @@ namespace basecross {
 			}
 
 			if (MapVec[0] == L"Cannon") {
-				//それぞれの値を入れる
-				//固定する値を設定
 				stringflag = true;
 				Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
 				AddGameObject<CannonBase>(Scl, Qt, Pos,CannonBase::CanonDirection::LEFT);
 			}
 			if (MapVec[0] == L"CannonR") {
-				//それぞれの値を入れる
-				//固定する値を設定
 				stringflag = true;
 				Quat Qt(Vec3(0.0f, 1.0, 1.0), 0);
 				AddGameObject<CannonBase>(Scl, Qt, Pos,CannonBase::CanonDirection::RIGTH);
