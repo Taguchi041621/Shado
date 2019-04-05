@@ -14,14 +14,8 @@ namespace basecross{
 	//--------------------------------------------------------------------------------------
 	void Scene::CreateResourses() {
 		wstring DataDir;
-		//サンプルのためアセットディレクトリを取得
-		//App::GetApp()->GetAssetsDirectory(DataDir);
-		//各ゲームは以下のようにデータディレクトリを取得すべき
 		App::GetApp()->GetDataDirectory(DataDir);
-		wstring strTexture = DataDir + L"Title.png";
-		App::GetApp()->RegisterTexture(L"TITLE_TX", strTexture);
-		/*strTexture = DataDir + L"Select.png";
-		App::GetApp()->RegisterTexture(L"SELECT_TX", strTexture);*/
+		wstring strTexture;
 
 		//キー名,ファイル名を持った構造体
 		struct TexPair {
@@ -30,6 +24,7 @@ namespace basecross{
 		};
 		//キー名,ファイル名を入れる
 		TexPair pairs[] = { 
+			{L"TITLE_TX",L"Title.png"},
 			{L"CLEAR_NoText_TX",		L"Clear_Image.png"},
 			{L"CLEAR_ColorNoText_TX",	L"GAMECLEAR_NoText.png"},
 			{L"CLEAR_Color_TX",			L"GAMECLEAR.png"},
@@ -59,8 +54,8 @@ namespace basecross{
 			{L"GameOver_WhiteLight_TX",	L"LIGHT2.png"},
 			{L"TUTORIAL_LIGHT_MOVE_TX",	L"Tutorial_LightMove_Mono.png"},
 			{L"TUTORIAL_CHARA_MOVE_TX",	L"Tutorial_CharaMove_Mono.png"},
-			{L"TUTORIAL_CAMERA_MOVE_TX",	L"Tutorial_cameraMove_Mono.png"}
-
+			{L"TUTORIAL_CAMERA_MOVE_TX",	L"Tutorial_cameraMove_Mono.png"},
+			{L"LIGHT_Illust_TX",L"Light\\LIGHT_Illust.png"}
 		};
 		//読み込む
 		for (auto& pair : pairs) {
@@ -70,9 +65,6 @@ namespace basecross{
 		//ライトのモデル
 		auto StaticModelMesh = MeshResource::CreateStaticModelMesh(DataDir + L"Light\\", L"LIGHT1.bmf");
 		App::GetApp()->RegisterResource(L"LIGHT_MESH", StaticModelMesh);
-		//ライトのイラスト
-		strTexture = DataDir + L"Light\\LIGHT_Illust.png";
-		App::GetApp()->RegisterTexture(L"LIGHT_Illust_TX", strTexture);
 
 		/*BGM・SE関連*/
 		//ゲームオーバーBGM

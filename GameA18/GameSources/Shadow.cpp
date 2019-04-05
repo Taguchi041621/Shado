@@ -151,7 +151,8 @@ namespace basecross {
 		p.m_Size = GetStage()->GetSharedGameObject<Player>(L"Player")->GetComponent<Transform>()->GetScale() * 0.5f;
 		//ƒvƒŒƒCƒ„[‚ªƒS[ƒ‹‚ÉG‚ê‚½‚©‚ð’²‚×‚é”»’è
 		if (HitTest::OBB_OBB(t, p) && !flag) {
-			if (!GetStage()->GetSharedGameObject<Player>(L"Player")->GetGameOverFlag()) {
+			if (!GetStage()->GetSharedGameObject<Player>(L"Player")->GetGameOverFlag() && 
+				GetStage()->GetSharedGameObject<Player>(L"Player")->GetKey() >= 1) {
 				GetStage()->GetSharedGameObject<Player>(L"Player")->InGoal();
 				flag = true;
 			}
