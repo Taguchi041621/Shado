@@ -10,8 +10,6 @@ namespace basecross
 		void CreateViewLight();
 		//スプライトの作成
 		void CreateTitleSprite();
-		//枠の作成
-		void CreateFrame();
 
 		//フェードの作成
 		void CreateFadeOutSprite();
@@ -20,8 +18,6 @@ namespace basecross
 
 		//ドア
 		void CreateDoor();
-		//ステージ番号の作成
-		void StageNumberSprite();
 
 		int m_StageNumber;
 		bool onectrl;

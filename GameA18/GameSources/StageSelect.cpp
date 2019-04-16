@@ -62,43 +62,6 @@ namespace basecross
 			}
 		}
 	}
-	void StageSelect::StageNumberSprite() {
-		float intervalNum = 0;
-		float Paragraph = 140.0f;
-		shared_ptr<ScoreSprite> Number;
-		for (int i = 1; i <= 12; i++) {
-			//”Žš
-			if (i < 10) {
-				Number = AddGameObject<ScoreSprite>(1,
-					L"NUMBER_TX",
-					true,
-					Vec2(50.0f, 50.0f),
-					Vec3(-512.0f + intervalNum, Paragraph, 0.0f),
-					i,
-					false, 0.3f);
-			}
-			else {
-				Number = AddGameObject<ScoreSprite>(2,
-					L"NUMBER_TX",
-					true,
-					Vec2(50.0f, 50.0f),
-					Vec3(-512.0f + intervalNum, -210.0f, 0.0f),
-					i,
-					false, 0.3f);
-			}
-			SetSharedGameObject(L"ScoreSprite" + Util::IntToWStr(i), Number);
-			if (i % 6 == 0) {
-				Paragraph = -210.0f;
-				intervalNum = 0;
-			}
-			intervalNum += 210;
-		}
-	}
-	void StageSelect::CreateFrame() {
-		auto frame = AddGameObject<ScaleChangeSprite>(L"pane_TX", true,
-			Vec2(150.0f, 280.0f), Vec3(-512.0f, 100.0f, 0.0f), 1.0f, true);
-		SetSharedGameObject(L"frame", frame);
-	}
 
 	void StageSelect::OnCreate()
 	{
