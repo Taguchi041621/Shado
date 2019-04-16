@@ -145,12 +145,8 @@ namespace basecross
 						if (!(m_StageNumber == 1)) {
 							m_StageNumber -= 1;
 
-							if (m_StopNowMusic != L"") {
-								m_AudioObjectPtr->Stop(m_StopNowMusic);
-							}
 							m_AudioObjectPtr->AddAudioResource(L"se2");
 							m_AudioObjectPtr->Start(L"se2", XAUDIO2_NO_LOOP_REGION, 0.45f);
-							SetNowMusic(L"se2");
 						//1回だけ動くフラグ
 							onectrl = true;
 						}
@@ -163,12 +159,8 @@ namespace basecross
 
 							m_StageNumber += 1;
 
-							if (m_StopNowMusic != L"") {
-								m_AudioObjectPtr->Stop(m_StopNowMusic);
-							}
 							m_AudioObjectPtr->AddAudioResource(L"se2");
 							m_AudioObjectPtr->Start(L"se2", XAUDIO2_NO_LOOP_REGION, 0.45f);
-							SetNowMusic(L"se2");
 							//1回だけ動くフラグ
 							onectrl = true;
 						}
@@ -181,12 +173,8 @@ namespace basecross
 						if (m_StageNumber <= (m_MaxStageNumber / 2)) {
 							m_StageNumber += (m_MaxStageNumber / 2);
 
-							if (m_StopNowMusic != L"") {
-								m_AudioObjectPtr->Stop(m_StopNowMusic);
-							}
 							m_AudioObjectPtr->AddAudioResource(L"se2");
 							m_AudioObjectPtr->Start(L"se2", XAUDIO2_NO_LOOP_REGION, 0.45f);
-							SetNowMusic(L"se2");
 							//1回だけ動く
 							onectrl = true;
 						}
@@ -194,12 +182,8 @@ namespace basecross
 						else if (m_StageNumber > (m_MaxStageNumber / 2)) {
 							m_StageNumber -= (m_MaxStageNumber / 2);
 
-							if (m_StopNowMusic != L"") {
-								m_AudioObjectPtr->Stop(m_StopNowMusic);
-							}
 							m_AudioObjectPtr->AddAudioResource(L"se2");
 							m_AudioObjectPtr->Start(L"se2", XAUDIO2_NO_LOOP_REGION, 0.45f);
-							SetNowMusic(L"se2");
 
 							onectrl = true;
 						}
@@ -212,24 +196,16 @@ namespace basecross
 						if (m_StageNumber <= (m_MaxStageNumber / 2)) {
 							m_StageNumber += (m_MaxStageNumber / 2);
 
-							if (m_StopNowMusic != L"") {
-								m_AudioObjectPtr->Stop(m_StopNowMusic);
-							}
 							m_AudioObjectPtr->AddAudioResource(L"se2");
 							m_AudioObjectPtr->Start(L"se2", XAUDIO2_NO_LOOP_REGION, 0.45f);
-							SetNowMusic(L"se2");
 
 							onectrl = true;
 						}
 						else if (m_StageNumber > (m_MaxStageNumber / 2)) {
 							m_StageNumber -= (m_MaxStageNumber / 2);
 
-							if (m_StopNowMusic != L"") {
-								m_AudioObjectPtr->Stop(m_StopNowMusic);
-							}
 							m_AudioObjectPtr->AddAudioResource(L"se2");
 							m_AudioObjectPtr->Start(L"se2", XAUDIO2_NO_LOOP_REGION, 0.45f);
-							SetNowMusic(L"se2");
 
 							onectrl = true;
 						}
@@ -238,12 +214,8 @@ namespace basecross
 
 				//Aボタン
 				if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A) {
-					if (m_StopNowMusic != L"") {
-						m_AudioObjectPtr->Stop(m_StopNowMusic);
-					}
 					m_AudioObjectPtr->AddAudioResource(L"opendoor");
 					m_AudioObjectPtr->Start(L"opendoor", XAUDIO2_NO_LOOP_REGION, 0.45f);
-					SetNowMusic(L"opendoor");
 
 					m_SelectFlag = false;
 					ScenePtr->SetRespawnFlag(false);

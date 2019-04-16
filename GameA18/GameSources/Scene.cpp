@@ -128,7 +128,6 @@ namespace basecross{
 		//------------------------------------------------------
 		else if (event->m_MsgStr == L"ToStageSelect") {
 			if (m_StopNowMusic == L"gameover", L"clear") {
-				m_AudioObjectPtr->Stop(m_StopNowMusic);
 				m_AudioObjectPtr = ObjectFactory::Create<MultiAudioObject>();
 				m_AudioObjectPtr->AddAudioResource(L"titel");
 				m_AudioObjectPtr->Start(L"titel", XAUDIO2_NO_LOOP_REGION, 0.6f);
