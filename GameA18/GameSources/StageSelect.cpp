@@ -102,22 +102,20 @@ namespace basecross
 		}
 		if (m_SelectFlag) {
 			if (CntlVec[0].bConnected) {
-				//左スティック左方向
-				if (CntlVec[0].fThumbLX < -0.5) {
-					if (onectrl == false) {
+				if (onectrl == false) {
+					//左スティック左方向
+					if (CntlVec[0].fThumbLX < -0.5) {
 						if (!(m_StageNumber == 1)) {
 							m_StageNumber -= 1;
 
 							m_AudioObjectPtr->AddAudioResource(L"se2");
 							m_AudioObjectPtr->Start(L"se2", XAUDIO2_NO_LOOP_REGION, 0.45f);
-						//1回だけ動くフラグ
+							//1回だけ動くフラグ
 							onectrl = true;
 						}
 					}
-				}
-				//左スティック右方向
-				else if (CntlVec[0].fThumbLX > 0.5) {
-					if (onectrl == false) {
+					//左スティック右方向
+					else if (CntlVec[0].fThumbLX > 0.5) {
 						if (!(m_StageNumber == m_MaxStageNumber)) {
 
 							m_StageNumber += 1;
@@ -128,10 +126,8 @@ namespace basecross
 							onectrl = true;
 						}
 					}
-				}
-				//左スティック下方向
-				if (CntlVec[0].fThumbLY < -0.5) {
-					if (onectrl == false) {
+					//左スティック下方向
+					if (CntlVec[0].fThumbLY < -0.5) {
 						//上の段から下の段へ行く
 						if (m_StageNumber <= (m_MaxStageNumber / 2)) {
 							m_StageNumber += (m_MaxStageNumber / 2);
@@ -150,12 +146,9 @@ namespace basecross
 
 							onectrl = true;
 						}
-
 					}
-				}
-				//左スティック上方向
-				if (CntlVec[0].fThumbLY > 0.5) {
-					if (onectrl == false) {
+					//左スティック上方向
+					if (CntlVec[0].fThumbLY > 0.5) {
 						if (m_StageNumber <= (m_MaxStageNumber / 2)) {
 							m_StageNumber += (m_MaxStageNumber / 2);
 
@@ -172,9 +165,9 @@ namespace basecross
 
 							onectrl = true;
 						}
+
 					}
 				}
-
 				//Aボタン
 				if (CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A) {
 					m_AudioObjectPtr->AddAudioResource(L"opendoor");
