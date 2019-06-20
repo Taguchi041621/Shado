@@ -2,15 +2,20 @@
 #include "Project.h"
 
 namespace basecross {
+	//--------------------------------------------------------------------------------
+	//--------------------------------------------------------------------------------
 	LightController::LightController(const shared_ptr<Stage>&StagePtr) :
 		GameObject(StagePtr),
 		m_LightAngle(0.0f, 0.0f, -0.1f), m_LightDistance(0.1f), m_MaxAngle(0.8f), m_Speed(0.4f)
 	{}
-	LightController::~LightController() {}
+	//--------------------------------------------------------------------------------
+	//--------------------------------------------------------------------------------
 	void LightController::OnCreate() {
 
 	}
+	//--------------------------------------------------------------------------------
 	//アップデート
+	//--------------------------------------------------------------------------------
 	void LightController::OnUpdate() {
 		auto ScenePtr = App::GetApp()->GetScene<Scene>();
 		if (!GetStage()->GetSharedGameObject<Player>(L"Player")->GetGameOverFlag() &&
@@ -55,7 +60,6 @@ namespace basecross {
 			if (m_LightAngle.x >= m_MaxAngle - 0.3f) {
 				if (m_LightAngle.x >= m_MaxAngle) {
 					m_LightAngle.x = m_MaxAngle;
-
 				}
 			}
 			//右
@@ -93,6 +97,9 @@ namespace basecross {
 		}
 	}
 
+	//--------------------------------------------------------------------------------
+	//現在のライトの角度を返す
+	//--------------------------------------------------------------------------------
 	Vec3 LightController::GetLightAngle() {
 		return m_LightAngle;
 	}

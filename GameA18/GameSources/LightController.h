@@ -23,7 +23,7 @@ namespace basecross {
 
 	public:
 		LightController(const shared_ptr<Stage>& StagePtr);
-		virtual ~LightController();
+		virtual ~LightController() {};
 		virtual void OnCreate()override;
 		virtual void OnUpdate()override;
 
