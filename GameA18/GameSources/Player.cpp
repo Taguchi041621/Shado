@@ -36,8 +36,88 @@ namespace basecross{
 			Vec3(0.5f, 0.03f, 0.0f)
 		);
 	}
+	//----------------------------------------------------------------------------------------------------------
+	//初期化
+	//----------------------------------------------------------------------------------------------------------
+	void Player::OnCreate() {
+		m_GameClearFlag = false;
+		m_GameOverFlag = false;
+		m_ParentFlag = false;
+		m_StandFlag = false;
+		m_DamageFlag = false;
+		m_FadeFlag = false;
+		//初期位置などの設定
+		auto Ptr = GetComponent<Transform>();
+		Ptr->SetScale(0.80f, 1.60f, 0.5f);
+		Ptr->SetRotation(0.0f, 0.0f, 0.0f);
+		Ptr->SetPosition(m_Position);
 
+		//親クラスのクリエイトを呼ぶ
+		SS5ssae::OnCreate();
+		//値は秒あたりのフレーム数
+		SetFps(49.0f);
 
+		//元となるオブジェクトからアニメーションオブジェクトへの行列の設定
+		SetToAnimeMatrix(m_ToAnimeMatrixRight);
+
+		//Rigidbodyをつける
+		auto PtrRedid = AddComponent<Rigidbody>();
+		//衝突判定をつける
+		auto PtrCol = AddComponent<CollisionObb>();
+		PtrCol->SetIsHitAction(IsHitAction::None);
+		//デバッグ用文字列をつける
+		auto PtrString = AddComponent<StringSprite>();
+		PtrString->SetText(L"");
+		PtrString->SetTextRect(Rect2D<float>(16.0f, 16.0f, 640.0f, 480.0f));
+
+		//Actionをつける
+		//レイヤー変更用
+		auto PtrAction = AddComponent<Action>();
+		//アクションは無効にしておく
+		PtrAction->SetUpdateActive(false);
+
+		//ステートマシンの構築
+		m_StateMachine = make_shared< StateMachine<Player> >(GetThis<Player>());
+		//最初のステートをWaitStateに設定
+		m_StateMachine->SetCurrentState(WaitState::Instance());
+		auto ScenePtr = App::GetApp()->GetScene<Scene>();
+		if (ScenePtr->GetRespawnFlag())
+		{
+			m_StateMachine->ChangeState(StandState::Instance());
+		}
+		//WaitStateの初期化実行を行う
+		m_StateMachine->GetCurrentState()->Enter(GetThis<Player>());
+
+	}
+
+	//----------------------------------------------------------------------------------------------------------
+	//更新
+	//----------------------------------------------------------------------------------------------------------
+	void Player::OnUpdate() {
+		//ステートマシンのUpdateを行う
+		//この中でステートの切り替えが行われる
+		m_StateMachine->Update();
+	}
+
+	void Player::OnUpdate2() {
+		auto ScenePtr = App::GetApp()->GetScene<Scene>();
+		auto PtrRedit = GetComponent<Rigidbody>();
+		if (m_ParentFlag && !m_GameOverFlag && !m_GameClearFlag && ScenePtr->GetStartFlag() && !m_StandFlag && !m_DamageFlag) {
+			//プレイヤーの移動
+			MoveRotationMotion();
+		}
+		//影に乗っていないから落ちる
+		else if (!m_ParentFlag) {
+			PtrRedit->SetVelocityZero();
+			GetComponent<Rigidbody>()->SetVelocity(Vec3(0.0f, m_FallSpeed, 0.0f));
+			m_FallSpeed += -0.08f;
+		}
+		PlayerHP();
+	}
+
+	//----------------------------------------------------------------------------------------------------------
+	//左スティック
+	//----------------------------------------------------------------------------------------------------------
 	float Player::GetMoveLeftVectorX() const {
 		float MoveX = 0;
 
@@ -53,6 +133,9 @@ namespace basecross{
 		}
 		return MoveX;
 	}
+	//----------------------------------------------------------------------------------------------------------
+	//右スティック
+	//----------------------------------------------------------------------------------------------------------
 	float Player::GetMoveRightVectorX() const{
 		float MoveX = 0;
 
@@ -69,9 +152,10 @@ namespace basecross{
 		return MoveX;
 	}
 
-	//モーションを実装する関数群
+	//----------------------------------------------------------------------------------------------------------
 	//移動して向きを移動方向にする
 	//移動距離を返す
+	//----------------------------------------------------------------------------------------------------------
 	float  Player::MoveRotationMotion() {
 		float ElapsedTime = App::GetApp()->GetElapsedTime();
 		auto MoveX = GetMoveLeftVectorX();
@@ -113,7 +197,9 @@ namespace basecross{
 		return MoveX;
 	}
 
+	//----------------------------------------------------------------------------------------------------------
 	//衝突時
+	//----------------------------------------------------------------------------------------------------------
 	void Player::OnCollision(vector<shared_ptr<GameObject>>& OtherVec) {
 		auto playerTrans = GetComponent<Transform>();
 		for (auto &obj : OtherVec) {
@@ -127,7 +213,9 @@ namespace basecross{
 		}
 	}
 
+	//----------------------------------------------------------------------------------------------------------
 	//衝突している時
+	//----------------------------------------------------------------------------------------------------------
 	void Player::OnCollisionExcute(vector<shared_ptr<GameObject>>& OtherVec) {
 		for (auto &obj : OtherVec) {
 			auto ShadowPtr = dynamic_pointer_cast<ShadowObject>(obj);
@@ -138,7 +226,9 @@ namespace basecross{
 		}
 	}
 
+	//----------------------------------------------------------------------------------------------------------
 	//衝突しなくなった時
+	//----------------------------------------------------------------------------------------------------------
 	void Player::OnCollisionExit(vector<shared_ptr<GameObject>>& OtherVec) {
 		for (auto &obj : OtherVec) {
 			if (obj == GetComponent<Transform>()->GetParent()) {
@@ -150,7 +240,9 @@ namespace basecross{
 			}
 		}
 	}
+	//----------------------------------------------------------------------------------------------------------
 	//親になる条件を満たしているかを調べて、満たしていたら親にする
+	//----------------------------------------------------------------------------------------------------------
 	void Player::FindParent(const shared_ptr<GameObject>& OtherVec) {
 		auto playerTrans = GetComponent<Transform>();
 		auto playerPos = playerTrans->GetWorldPosition();
@@ -167,7 +259,9 @@ namespace basecross{
 			}
 		}
 	}
-
+	//----------------------------------------------------------------------------------------------------------
+	//押し出し
+	//----------------------------------------------------------------------------------------------------------
 	void Player::Extrusion(const shared_ptr<GameObject>& OtherVec) {
 		auto playerPos = GetComponent<Transform>()->GetWorldPosition();
 		auto playerScale = GetComponent<Transform>()->GetScale() * 0.5f;
@@ -244,81 +338,9 @@ namespace basecross{
 		}
 	}
 
-	//初期化
-	void Player::OnCreate() {
-		m_GameClearFlag = false;
-		m_GameOverFlag = false;
-		m_ParentFlag = false;
-		m_StandFlag = false;
-		m_DamageFlag = false;
-		m_FadeFlag = false;
-		//初期位置などの設定
-		auto Ptr = GetComponent<Transform>();
-		Ptr->SetScale(0.80f, 1.60f, 0.5f);
-		Ptr->SetRotation(0.0f, 0.0f, 0.0f);
-		Ptr->SetPosition(m_Position);
-
-		//親クラスのクリエイトを呼ぶ
-		SS5ssae::OnCreate();
-		//値は秒あたりのフレーム数
-		SetFps(49.0f);
-
-		//元となるオブジェクトからアニメーションオブジェクトへの行列の設定
-		SetToAnimeMatrix(m_ToAnimeMatrixRight);
-
-		//Rigidbodyをつける
-		auto PtrRedid = AddComponent<Rigidbody>();
-		//衝突判定をつける
-		auto PtrCol = AddComponent<CollisionObb>();
-		PtrCol->SetIsHitAction(IsHitAction::None);
-		//デバッグ用文字列をつける
-		auto PtrString = AddComponent<StringSprite>();
-		PtrString->SetText(L"");
-		PtrString->SetTextRect(Rect2D<float>(16.0f, 16.0f, 640.0f, 480.0f));
-
-		//Actionをつける
-		//レイヤー変更用
-		auto PtrAction = AddComponent<Action>();
-		//アクションは無効にしておく
-		PtrAction->SetUpdateActive(false);
-
-		//ステートマシンの構築
-		m_StateMachine = make_shared< StateMachine<Player> >(GetThis<Player>());
-		//最初のステートをWaitStateに設定
-		m_StateMachine->SetCurrentState(WaitState::Instance());
-		auto ScenePtr = App::GetApp()->GetScene<Scene>();
-		if (ScenePtr->GetRespawnFlag())
-		{
-			m_StateMachine->ChangeState(StandState::Instance());
-		}
-		//WaitStateの初期化実行を行う
-		m_StateMachine->GetCurrentState()->Enter(GetThis<Player>());
-		
-	}
-
-	//更新
-	void Player::OnUpdate() {
-			//ステートマシンのUpdateを行う
-			//この中でステートの切り替えが行われる
-			m_StateMachine->Update();
-	}
-
-	void Player::OnUpdate2() {
-		auto ScenePtr = App::GetApp()->GetScene<Scene>();
-		auto PtrRedit = GetComponent<Rigidbody>();
-		if (m_ParentFlag && !m_GameOverFlag && !m_GameClearFlag && ScenePtr->GetStartFlag() && !m_StandFlag && !m_DamageFlag) {
-			//プレイヤーの移動
-			MoveRotationMotion();
-		}
-		else if (!m_ParentFlag) {
-			
-			PtrRedit->SetVelocityZero();
-			GetComponent<Rigidbody>()->SetVelocity(Vec3(0.0f, m_FallSpeed, 0.0f));
-			m_FallSpeed += -0.08f;
-		}
-		PlayerHP();
-	}
-	//
+	//----------------------------------------------------------------------------------------------------------
+	// 死亡の判定
+	//----------------------------------------------------------------------------------------------------------
 	void Player::PlayerHP() {
 		auto PlayerPos = this->GetComponent<Transform>()->GetWorldPosition();
 		//落下死
@@ -327,81 +349,49 @@ namespace basecross{
 			m_FadeFlag = true;
 		}
 	}
+	//----------------------------------------------------------------------------------------------------------
 	//着地したときの演出
+	//----------------------------------------------------------------------------------------------------------
 	void Player::LandingDirecting() {
 		GetStage()->AddGameObject<DirectingRing>(GetComponent<Transform>()->GetWorldPosition(),
 			Vec3(1.0f, 1.0f, 0.05f), Vec3(0.0f, -0.7f, 0.0f), L"Smoke_Black_TX");
 	}
+	//----------------------------------------------------------------------------------------------------------
 	//GameOverSceneに移行する
+	//----------------------------------------------------------------------------------------------------------
 	void Player::GoGameOverScene() {
 		m_GameOverFlag = true;
 	}
+	//----------------------------------------------------------------------------------------------------------
 	//GameOverSceneに移行する
+	//----------------------------------------------------------------------------------------------------------
 	void Player::GoGameClearScene() {
 		m_GameClearFlag = true;
 	}
+	//----------------------------------------------------------------------------------------------------------
+	// ステートをゴールステートに切り替える
+	//----------------------------------------------------------------------------------------------------------
 	void Player::InGoal() {
 		GetStateMachine()->ChangeState(GoalState::Instance());
 	}
-
-	//文字列の表示
-	void Player::DrawStrings() {
-
-		auto fps = App::GetApp()->GetStepTimer().GetFramesPerSecond();
-		wstring FPS(L"FPS: ");
-		FPS += Util::UintToWStr(fps);
-		FPS += L"\nElapsedTime: ";
-		float ElapsedTime = App::GetApp()->GetElapsedTime();
-		FPS += Util::FloatToWStr(ElapsedTime);
-		FPS += L"\n";
-
-		auto Pos = GetComponent<Transform>()->GetPosition();
-		wstring PositionStr(L"Position:\t");
-		PositionStr += L"X=" + Util::FloatToWStr(Pos.x, 6, Util::FloatModify::Fixed) + L",\t";
-		PositionStr += L"Y=" + Util::FloatToWStr(Pos.y, 6, Util::FloatModify::Fixed) + L",\t";
-		PositionStr += L"Z=" + Util::FloatToWStr(Pos.z, 6, Util::FloatModify::Fixed) + L"\n";
-
-		auto WPos = GetComponent<Transform>()->GetWorldPosition();
-		wstring WPositionStr(L"WPosition:");
-		WPositionStr += L"X=" + Util::FloatToWStr(WPos.x, 6, Util::FloatModify::Fixed) + L",\t";
-		WPositionStr += L"Y=" + Util::FloatToWStr(WPos.y, 6, Util::FloatModify::Fixed) + L",\t";
-		WPositionStr += L"Z=" + Util::FloatToWStr(WPos.z, 6, Util::FloatModify::Fixed) + L"\n";
-
-
-		wstring RididStr(L"Velocity:\t");
-		auto Velocity = GetComponent<Rigidbody>()->GetVelocity();
-		RididStr += L"X=" + Util::FloatToWStr(Velocity.x, 6, Util::FloatModify::Fixed) + L",\t";
-		RididStr += L"Y=" + Util::FloatToWStr(Velocity.y, 6, Util::FloatModify::Fixed) + L",\t";
-		RididStr += L"Z=" + Util::FloatToWStr(Velocity.z, 6, Util::FloatModify::Fixed) + L"\n";
-
-
-		wstring HitObjectStr(L"HitObject: ");
-		if (GetComponent<Collision>()->GetHitObjectVec().size() > 0) {
-			for (auto&v : GetComponent<Collision>()->GetHitObjectVec()) {
-				HitObjectStr += Util::UintToWStr((UINT)v.get()) + L",";
-			}
-			HitObjectStr += L"\n";
-		}
-		else {
-			HitObjectStr += L"NULL\n";
-		}
-		wstring str = FPS + PositionStr +WPositionStr + RididStr +  HitObjectStr;
-		//文字列をつける
-		auto PtrString = GetComponent<StringSprite>();
-		PtrString->SetText(str);
-	}
-
+	//----------------------------------------------------------------------------------------------------------
+	//アニメーションを更新する
+	//----------------------------------------------------------------------------------------------------------
 	void Player::LoopedAnimeUpdateMotion() {
 		float ElapsedTime = App::GetApp()->GetElapsedTime();
 		//アニメーションを更新する
 		UpdateAnimeTime(ElapsedTime);
 	}
-
+	//----------------------------------------------------------------------------------------------------------
+	//アニメーションを切り替える
+	//----------------------------------------------------------------------------------------------------------
 	void Player::AnimeChangeMotion(const wstring& key, bool looped) {
 		ChangeAnimation(key);
 		SetLooped(looped);
 	}
-
+	//----------------------------------------------------------------------------------------------------------
+	//攻撃を受けたときの演出
+	//----------------------------------------------------------------------------------------------------------
 	void Player::Damage(CannonBase::CanonDirection LR) {
 		if (!m_DamageFlag) {
 			m_DamageFlag = true;
@@ -429,7 +419,6 @@ namespace basecross{
 	//	class WaitState : public ObjState<Player>;
 	//	用途: 待機状態
 	//--------------------------------------------------------------------------------------
-	//ステートのインスタンス取得
 	shared_ptr<WaitState> WaitState::Instance() {
 		static shared_ptr<WaitState> instance;
 		if (!instance) {
@@ -437,12 +426,10 @@ namespace basecross{
 		}
 		return instance;
 	}
-	//ステートに入ったときに呼ばれる関数
 	void WaitState::Enter(const shared_ptr<Player>& Obj) {
 		Obj->AnimeChangeMotion(L"Wait_1", true);
 		Obj->SetFps(49.0f);
 	}
-	//ステート実行中に毎ターン呼ばれる関数
 	void WaitState::Execute(const shared_ptr<Player>& Obj) {
 		//アニメーション更新
 		Obj->LoopedAnimeUpdateMotion();
@@ -460,14 +447,12 @@ namespace basecross{
 			Obj->GetStateMachine()->ChangeState(WalkState::Instance());
 		}
 	}
-	//ステートにから抜けるときに呼ばれる関数
 	void WaitState::Exit(const shared_ptr<Player>& Obj) {
 	}
 	//--------------------------------------------------------------------------------------
 	//	class FallState : public ObjState<Player>;
 	//	用途: 落ちてるとき
 	//--------------------------------------------------------------------------------------
-	//ステートのインスタンス取得
 	shared_ptr<FallState> FallState::Instance() {
 		static shared_ptr<FallState> instance;
 		if (!instance) {
@@ -475,13 +460,11 @@ namespace basecross{
 		}
 		return instance;
 	}
-	//ステートに入ったときに呼ばれる関数
 	void FallState::Enter(const shared_ptr<Player>& Obj) {
 		Obj->AnimeChangeMotion(L"Down_loop", true);
 		m_Timer = 0;
 		m_FallFlag = false;
 	}
-	//ステート実行中に毎ターン呼ばれる関数
 	void FallState::Execute(const shared_ptr<Player>& Obj) {
 		float ElapsedTime = App::GetApp()->GetElapsedTime();
 		m_Timer += ElapsedTime;
@@ -507,7 +490,6 @@ namespace basecross{
 			Obj->GetStateMachine()->ChangeState(LandingState::Instance());
 		}
 	}
-	//ステートから抜けるときに呼ばれる関数
 	void FallState::Exit(const shared_ptr<Player>& Obj) {
 		Obj->GetComponent<Rigidbody>()->SetVelocityZero();
 	}
@@ -515,7 +497,6 @@ namespace basecross{
 	//	class LandingState : public ObjState<Player>;
 	//	用途: 着地
 	//--------------------------------------------------------------------------------------
-	//ステートのインスタンス取得
 	shared_ptr<LandingState> LandingState::Instance() {
 		static shared_ptr<LandingState> instance;
 		if (!instance) {
@@ -523,7 +504,6 @@ namespace basecross{
 		}
 		return instance;
 	}
-	//ステートに入ったときに呼ばれる関数
 	void LandingState::Enter(const shared_ptr<Player>& Obj) {
 		Obj->AnimeChangeMotion(L"Down_landing", false);
 
@@ -532,7 +512,6 @@ namespace basecross{
 			m_AudioObjectPtr->Start(L"se5", XAUDIO2_NO_LOOP_REGION, 0.32f);
 			Obj->SetNowMusic(L"se5");
 	}
-	//ステート実行中に毎ターン呼ばれる関数
 	void LandingState::Execute(const shared_ptr<Player>& Obj) {
 		//アニメーション更新
 		Obj->LoopedAnimeUpdateMotion();
@@ -540,16 +519,13 @@ namespace basecross{
 			Obj->GetStateMachine()->ChangeState(WaitState::Instance());
 		}
 	}
-	//ステートから抜けるときに呼ばれる関数
 	void LandingState::Exit(const shared_ptr<Player>& Obj) {
-
 	}
 
 	//--------------------------------------------------------------------------------------
 	//	class StandState : public ObjState<Player>;
 	//	用途: 起き上がり
 	//--------------------------------------------------------------------------------------
-	//ステートのインスタンス取得
 	shared_ptr<StandState> StandState::Instance() {
 		static shared_ptr<StandState> instance;
 		if (!instance) {
@@ -557,7 +533,6 @@ namespace basecross{
 		}
 		return instance;
 	}
-	//ステートに入ったときに呼ばれる関数
 	void StandState::Enter(const shared_ptr<Player>& Obj) {
 		Obj->AnimeChangeMotion(L"Stand", false);
 		Obj->SetFps(45.0f);
@@ -568,7 +543,6 @@ namespace basecross{
 		m_AudioObjectPtr->Start(L"se6", XAUDIO2_NO_LOOP_REGION, 0.32f);
 		Obj->SetNowMusic(L"se6");
 	}
-	//ステート実行中に毎ターン呼ばれる関数
 	void StandState::Execute(const shared_ptr<Player>& Obj) {
 		//アニメーション更新
 		Obj->LoopedAnimeUpdateMotion();
@@ -577,7 +551,6 @@ namespace basecross{
 			Obj->SetStandFlag(false);
 		}
 	}
-	//ステートから抜けるときに呼ばれる関数
 	void StandState::Exit(const shared_ptr<Player>& Obj) {
 
 	}
@@ -586,7 +559,6 @@ namespace basecross{
 	//	class WalkState : public ObjState<Player>;
 	//	用途: 歩き状態
 	//--------------------------------------------------------------------------------------
-	//ステートのインスタンス取得
 	shared_ptr<WalkState> WalkState::Instance() {
 		static shared_ptr<WalkState> instance;
 		if (!instance) {
@@ -595,7 +567,6 @@ namespace basecross{
 		}
 		return instance;
 	}
-	//ステートに入ったときに呼ばれる関数
 	void WalkState::Enter(const shared_ptr<Player>& Obj) {
 		Obj->SetFps(49.0f);
 		Obj->AnimeChangeMotion(L"Walk", true);
@@ -604,9 +575,7 @@ namespace basecross{
 		m_AudioObjectPtr->AddAudioResource(L"walk");
 		m_AudioObjectPtr->Start(L"walk", XAUDIO2_LOOP_INFINITE, 0.28f);
 		Obj->SetNowMusic(L"walk");
-		//----------------------------------------------------------------
 	}
-	//ステート実行中に毎ターン呼ばれる関数
 	void WalkState::Execute(const shared_ptr<Player>& Obj) {
 		//アニメーション更新
 		Obj->LoopedAnimeUpdateMotion();
@@ -623,7 +592,6 @@ namespace basecross{
 			Obj->GetStateMachine()->ChangeState(WaitState::Instance());
 		}
 	}
-	//ステートにから抜けるときに呼ばれる関数
 	void WalkState::Exit(const shared_ptr<Player>& Obj) {
 		m_AudioObjectPtr->Stop(Obj->GetNowMusic());
 	}
@@ -632,7 +600,6 @@ namespace basecross{
 	//	class DiedState : public ObjState<Player>;
 	//	用途: 死亡状態
 	//--------------------------------------------------------------------------------------
-	//ステートのインスタンス取得
 	shared_ptr<DiedState> DiedState::Instance() {
 		static shared_ptr<DiedState> instance;
 		if (!instance) {
@@ -640,7 +607,6 @@ namespace basecross{
 		}
 		return instance;
 	}
-	//ステートに入ったときに呼ばれる関数
 	void DiedState::Enter(const shared_ptr<Player>& Obj) {
 		//死亡アニメを呼び出す
 		Obj->AnimeChangeMotion(L"Died_1", false);
@@ -653,9 +619,7 @@ namespace basecross{
 		m_AudioObjectPtr->AddAudioResource(L"se3");
 		m_AudioObjectPtr->Start(L"se3", XAUDIO2_NO_LOOP_REGION, 1.0f);
 		Obj->SetNowMusic(L"se3");
-		//----------------------------------------------------------------
 	}
-	//ステート実行中に毎ターン呼ばれる関数
 	void DiedState::Execute(const shared_ptr<Player>& Obj) {
 		//アニメーション更新
 		Obj->LoopedAnimeUpdateMotion();
@@ -665,14 +629,12 @@ namespace basecross{
 			Obj->SetFadeFlag(true);
 		}
 	}
-	//ステートにから抜けるときに呼ばれる関数
 	void DiedState::Exit(const shared_ptr<Player>& Obj) {
 	}
 	//--------------------------------------------------------------------------------------
 	//	class GoalState : public ObjState<Player>;
 	//	用途: ゴール到達状態
 	//--------------------------------------------------------------------------------------
-	//ステートのインスタンス取得
 	shared_ptr<GoalState> GoalState::Instance() {
 		static shared_ptr<GoalState> instance;
 		if (!instance) {
@@ -680,14 +642,12 @@ namespace basecross{
 		}
 		return instance;
 	}
-	//ステートに入ったときに呼ばれる関数
 	void GoalState::Enter(const shared_ptr<Player>& Obj) {
 		Obj->SetFps(60.0f);
 		Obj->AnimeChangeMotion(L"curtsey", false);
 		Obj->SetGameClearFlag(true);
 		Obj->GetComponent<Rigidbody>()->SetVelocityZero();
 	}
-	//ステート実行中に毎ターン呼ばれる関数
 	void GoalState::Execute(const shared_ptr<Player>& Obj) {
 		//アニメーション更新
 		Obj->LoopedAnimeUpdateMotion();
@@ -695,7 +655,6 @@ namespace basecross{
 			Obj->SetFadeFlag(true);
 		}
 	}
-	//ステートにから抜けるときに呼ばれる関数
 	void GoalState::Exit(const shared_ptr<Player>& Obj) {
 	}
 
@@ -703,7 +662,6 @@ namespace basecross{
 	//	class DamageState1 : public ObjState<Player>;
 	//	用途: Damage状態
 	//--------------------------------------------------------------------------------------
-	//ステートのインスタンス取得
 	shared_ptr<DamageState1> DamageState1::Instance() {
 		static shared_ptr<DamageState1> instance;
 		if (!instance) {
@@ -711,7 +669,6 @@ namespace basecross{
 		}
 		return instance;
 	}
-	//ステートに入ったときに呼ばれる関数
 	void DamageState1::Enter(const shared_ptr<Player>& Obj) {
 		Obj->SetFps(60.0f);
 		if (Obj->GetRightOrLeft() == Player::PlayerDirection::RIGHT) {
@@ -721,7 +678,6 @@ namespace basecross{
 			Obj->AnimeChangeMotion(L"Knockdown_front", false);
 		}
 	}
-	//ステート実行中に毎ターン呼ばれる関数
 	void DamageState1::Execute(const shared_ptr<Player>& Obj) {
 		//アニメーション更新
 		Obj->LoopedAnimeUpdateMotion();
@@ -729,16 +685,13 @@ namespace basecross{
 			Obj->GetStateMachine()->ChangeState(DamageState2::Instance());
 		}
 	}
-	//ステートにから抜けるときに呼ばれる関数
 	void DamageState1::Exit(const shared_ptr<Player>& Obj) {
-		//Obj->SetDamageFlag(false);
 	}
 
 	//--------------------------------------------------------------------------------------
 	//	class DamageState2 : public ObjState<Player>;
 	//	用途: Damage状態
 	//--------------------------------------------------------------------------------------
-	//ステートのインスタンス取得
 	shared_ptr<DamageState2> DamageState2::Instance() {
 		static shared_ptr<DamageState2> instance;
 		if (!instance) {
@@ -746,7 +699,6 @@ namespace basecross{
 		}
 		return instance;
 	}
-	//ステートに入ったときに呼ばれる関数
 	void DamageState2::Enter(const shared_ptr<Player>& Obj) {
 		Obj->SetFps(60.0f);
 		if (Obj->GetRightOrLeft() == Player::PlayerDirection::RIGHT) {
@@ -759,7 +711,6 @@ namespace basecross{
 		PtrRedit->SetVelocityZero();
 		Obj->SetStandFlag(true);
 	}
-	//ステート実行中に毎ターン呼ばれる関数
 	void DamageState2::Execute(const shared_ptr<Player>& Obj) {
 		//アニメーション更新
 		Obj->LoopedAnimeUpdateMotion();
@@ -767,12 +718,10 @@ namespace basecross{
 			Obj->GetStateMachine()->ChangeState(WaitState::Instance());
 		}
 	}
-	//ステートにから抜けるときに呼ばれる関数
 	void DamageState2::Exit(const shared_ptr<Player>& Obj) {
 		Obj->SetDamageFlag(false);
 		Obj->SetStandFlag(false);
 	}
-
 }
 //end basecross
 
